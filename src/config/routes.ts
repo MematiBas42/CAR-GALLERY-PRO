@@ -18,6 +18,7 @@ export const routes = {
         cars: "/admin/cars",
         newCar: "/admin/cars/new",
         customers: "/admin/customers",
+        newCustomer: "/admin/customers/new",
         settings: "/admin/settings",
         editCar: (id:number ) => `/admin/cars/edit/${id}`,
         editCustomer: (id:number) => `/admin/customers/edit/${id}`,

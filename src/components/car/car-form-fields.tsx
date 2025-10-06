@@ -1,15 +1,13 @@
-"use client";
+'use client';
 
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent } from "react";
 import { useFormContext } from "react-hook-form";
 import dynamic from "next/dynamic";
 import {
   BodyType, Colour, CurrencyCode, FuelType, OdoUnit, Transmission, ULEZCompliance
 } from "@prisma/client";
 
-import { api } from "@/lib/api-client";
 import { formatBodyType, formatColour, formatFuelType, formatTransmission, generateYears } from "@/lib/utils";
-import { endpoints } from "@/config/endpoints";
 import { FilterOptions } from "@/config/types";
 
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
@@ -34,40 +32,15 @@ const RichTextEditor = dynamic(
 
 const years = generateYears(1925);
 
-const CarFormField = () => {
+interface CarFormFieldProps {
+  makes: FilterOptions<string, string>;
+  models: FilterOptions<string, string>;
+  modelVariants: FilterOptions<string, string>;
+  isLoading: boolean;
+}
+
+const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldProps) => {
   const form = useFormContext();
-
-  // Logic from TaxonomySelect starts here
-  const defaultmake = form.getValues("make");
-  const defaultmodel = form.getValues("model");
-
-  const [make, setMake] = useState<string | null>(defaultmake);
-  const [makes, setMakes] = useState<FilterOptions<string, string>>([]);
-  const [model, setModel] = useState<string | null>(defaultmodel);
-  const [models, setModels] = useState<FilterOptions<string, string>>([]);
-  const [modelvariant, setModelvariant] = useState<FilterOptions<string, string>>([]);
-
-  useEffect(() => {
-    (async function fetchTaxonomyOptions() {
-      const url = new URL(endpoints.taxonomy, window.location.origin);
-      if (make) url.searchParams.append("make", make);
-      if (model) url.searchParams.append("model", model);
-
-      try {
-        const data = await api.get<{
-          makes: FilterOptions<string, string>;
-          models: FilterOptions<string, string>;
-          modelVariants: FilterOptions<string, string>;
-        }>(url.toString());
-
-        setMakes(data.makes);
-        setModels(data.models);
-        setModelvariant(data.modelVariants);
-      } catch (error) {
-        console.error("Error fetching taxonomy options:", error);
-      }
-    })();
-  }, [make, model]);
 
   const handleChange = (
     e: ChangeEvent<HTMLSelectElement>,
@@ -75,18 +48,15 @@ const CarFormField = () => {
   ) => {
     switch (e.target.name) {
       case "make":
-        setMake(e.target.value);
-        form.setValue("model", ""); // Reset model on make change
-        form.setValue("modelVariant", ""); // Reset variant on make change
+        form.setValue("model", "");
+        form.setValue("modelVariant", "");
         break;
       case "model":
-        setModel(e.target.value);
-        form.setValue("modelVariant", ""); // Reset variant on model change
+        form.setValue("modelVariant", "");
         break;
     }
     return onChange(e);
   };
-  // Logic from TaxonomySelect ends here
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-white">
@@ -107,7 +77,6 @@ const CarFormField = () => {
         )}
       />
 
-      {/* Inlined Taxonomy Fields Start */}
       <FormField
         control={form.control}
         name="make"
@@ -115,11 +84,11 @@ const CarFormField = () => {
           <FormItem>
             <FormLabel htmlFor="make">Make</FormLabel>
             <FormControl>
-              <Select
+              {isLoading ? <Skeleton className="h-10" /> : <Select
                 {...rest}
                 options={makes}
                 onChange={(e) => handleChange(e, onChange)}
-              />
+              />}
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -132,11 +101,11 @@ const CarFormField = () => {
           <FormItem>
             <FormLabel htmlFor="model">Model</FormLabel>
             <FormControl>
-              <Select
+              {isLoading ? <Skeleton className="h-10" /> : <Select
                 {...rest}
                 options={models}
                 onChange={(e) => handleChange(e, onChange)}
-              />
+              />}
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -149,17 +118,16 @@ const CarFormField = () => {
           <FormItem>
             <FormLabel htmlFor="modelVariant">Model Variant</FormLabel>
             <FormControl>
-              <Select
+              {isLoading ? <Skeleton className="h-10" /> : <Select
                 {...rest}
-                options={modelvariant}
+                options={modelVariants}
                 onChange={(e) => handleChange(e, onChange)}
-              />
+              />}
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
-      {/* Inlined Taxonomy Fields End */}
 
       <InputSelect
         options={Object.values(CurrencyCode).map((currency) => ({ label: currency, value: currency }))}
