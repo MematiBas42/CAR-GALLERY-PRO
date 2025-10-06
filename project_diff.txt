@@ -1,0 +1,2546 @@
+Yalnızca /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master'da: auth.config.ts
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/auth.ts /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/auth.ts
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/auth.ts	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/auth.ts	2025-10-06 11:50:07.000000000 +0300
+@@ -1,10 +1,59 @@
+-
+ import NextAuth from "next-auth";
+-import { config } from "./auth.config";
++import { PrismaAdapter } from "@auth/prisma-adapter";
++import { prisma } from "@/lib/prisma";
++import CredentialsProvider from "@auth/core/providers/credentials";
++import { bcryptPasswordCompare } from "@/lib/brypt";
++import { routes } from "@/config/routes";
++import { SignInSchema } from "@/app/schemas/auth.schema";
+ 
+ export const {
+-    handlers: { GET, POST },
+-    auth, 
+-    signIn, 
+-    signOut
+-} = NextAuth(config);
+\ Dosya sonunda yenisatır yok
++  handlers: { GET, POST },
++  auth,
++  signIn,
++  signOut,
++} = NextAuth({
++  adapter: PrismaAdapter(prisma),
++  session: { strategy: "jwt" },
++  pages: {
++    signIn: routes.signIn,
++    error: "/auth/error",
++  },
++  providers: [
++    CredentialsProvider({
++      name: "Credentials",
++      credentials: {
++        email: { label: "Email", type: "email" },
++        password: { label: "Password", type: "password" },
++      },
++      async authorize(credentials) {
++        const validatedFields = SignInSchema.safeParse(credentials);
++
++        if (validatedFields.success) {
++          const { email, password } = validatedFields.data;
++          
++          const user = await prisma.user.findUnique({ where: { email } });
++          if (!user || !user.hashedPassword) return null;
++
++          const passwordsMatch = await bcryptPasswordCompare(password, user.hashedPassword);
++          if (passwordsMatch) return user;
++        }
++
++        return null;
++      },
++    }),
++  ],
++  callbacks: {
++    async jwt({ token, user }) {
++      if (user) {
++        token.id = user.id;
++      }
++      return token;
++    },
++    session({ session, token }) {
++      if (session.user) {
++        session.user.id = token.id as string;
++      }
++      return session;
++    },
++  },
++});
+Yalnızca /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main'da: COMMIT_MSG.tmp
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/next.config.ts /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/next.config.ts
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/next.config.ts	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/next.config.ts	2025-10-06 11:50:07.000000000 +0300
+@@ -1,6 +1,7 @@
+ import type { NextConfig } from "next";
+ 
+ const nextConfig: NextConfig = {
++  allowedDevOrigins: ["http://10.53.18.105:3000"],
+   /* config options here */
+   compress: true,
+   images: {
+@@ -8,7 +9,6 @@
+ 	},
+   experimental: {
+     authInterrupts: true,
+-		nodeMiddleware: true,
+ 		reactCompiler: true,
+ 		optimizeCss: true,
+ 		optimizeServerReact: true,
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/package.json /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/package.json
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/package.json	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/package.json	2025-10-06 11:50:07.000000000 +0300
+@@ -24,6 +24,7 @@
+     "@prisma/extension-accelerate": "^1.2.2",
+     "@radix-ui/react-checkbox": "^1.3.2",
+     "@radix-ui/react-dialog": "^1.1.14",
++    "@radix-ui/react-dropdown-menu": "^2.1.16",
+     "@radix-ui/react-label": "^2.1.7",
+     "@radix-ui/react-radio-group": "^1.3.7",
+     "@radix-ui/react-select": "^2.2.5",
+@@ -37,6 +38,7 @@
+     "ai": "^4.1.45",
+     "aws-sdk": "^2.1692.0",
+     "babel-plugin-react-compiler": "^19.0.0-beta-e1e972c-20250221",
++    "bcrypt": "^6.0.0",
+     "bcryptjs": "^3.0.0",
+     "car-dealer": "file:",
+     "class-variance-authority": "^0.7.1",
+@@ -68,11 +70,13 @@
+     "recharts": "^2.15.1",
+     "resend": "^4.1.2",
+     "sanitize-html": "^2.14.0",
++    "sharp": "^0.34.4",
+     "slug": "^10.0.0",
+     "slugify": "^1.6.6",
+     "sonner": "^2.0.5",
+     "swiper": "^11.2.2",
+     "tailwind-merge": "^2.6.0",
++    "tailwindcss-animate": "^1.0.7",
+     "thumbhash": "^0.1.1",
+     "unlazy": "^0.12.1",
+     "uuid": "^11.0.5",
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/package-lock.json /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/package-lock.json
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/package-lock.json	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/package-lock.json	2025-10-06 11:50:07.000000000 +0300
+@@ -23,6 +23,7 @@
+         "@prisma/extension-accelerate": "^1.2.2",
+         "@radix-ui/react-checkbox": "^1.3.2",
+         "@radix-ui/react-dialog": "^1.1.14",
++        "@radix-ui/react-dropdown-menu": "^2.1.16",
+         "@radix-ui/react-label": "^2.1.7",
+         "@radix-ui/react-radio-group": "^1.3.7",
+         "@radix-ui/react-select": "^2.2.5",
+@@ -36,6 +37,7 @@
+         "ai": "^4.1.45",
+         "aws-sdk": "^2.1692.0",
+         "babel-plugin-react-compiler": "^19.0.0-beta-e1e972c-20250221",
++        "bcrypt": "^6.0.0",
+         "bcryptjs": "^3.0.0",
+         "car-dealer": "file:",
+         "class-variance-authority": "^0.7.1",
+@@ -67,11 +69,13 @@
+         "recharts": "^2.15.1",
+         "resend": "^4.1.2",
+         "sanitize-html": "^2.14.0",
++        "sharp": "^0.34.4",
+         "slug": "^10.0.0",
+         "slugify": "^1.6.6",
+         "sonner": "^2.0.5",
+         "swiper": "^11.2.2",
+         "tailwind-merge": "^2.6.0",
++        "tailwindcss-animate": "^1.0.7",
+         "thumbhash": "^0.1.1",
+         "unlazy": "^0.12.1",
+         "uuid": "^11.0.5",
+@@ -1452,9 +1456,10 @@
+       }
+     },
+     "node_modules/@emnapi/runtime": {
+-      "version": "1.4.3",
+-      "resolved": "https://registry.npmjs.org/@emnapi/runtime/-/runtime-1.4.3.tgz",
+-      "integrity": "sha512-pBPWdu6MLKROBX05wSNKcNb++m5Er+KQ9QkB+WVM+pW2Kx9hoSrVTnu3BdkI5eBLZoKu/J6mW/B6i6bJB2ytXQ==",
++      "version": "1.5.0",
++      "resolved": "https://registry.npmjs.org/@emnapi/runtime/-/runtime-1.5.0.tgz",
++      "integrity": "sha512-97/BJ3iXHww3djw6hYIfErCZFee7qCtrneuLa20UXFCOTCfBM2cvQHjWJ2EG0s0MtdNwInarqCTz35i4wWXHsQ==",
++      "license": "MIT",
+       "optional": true,
+       "dependencies": {
+         "tslib": "^2.4.0"
+@@ -1885,13 +1890,23 @@
+         "react": "^16.13 || ^17 || ^18 || ^19"
+       }
+     },
++    "node_modules/@img/colour": {
++      "version": "1.0.0",
++      "resolved": "https://registry.npmjs.org/@img/colour/-/colour-1.0.0.tgz",
++      "integrity": "sha512-A5P/LfWGFSl6nsckYtjw9da+19jB8hkJ6ACTGcDfEJ0aE+l2n2El7dsVM7UVHZQ9s2lmYMWlrS21YLy2IR1LUw==",
++      "license": "MIT",
++      "engines": {
++        "node": ">=18"
++      }
++    },
+     "node_modules/@img/sharp-darwin-arm64": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-darwin-arm64/-/sharp-darwin-arm64-0.34.2.tgz",
+-      "integrity": "sha512-OfXHZPppddivUJnqyKoi5YVeHRkkNE2zUFT2gbpKxp/JZCFYEYubnMg+gOp6lWfasPrTS+KPosKqdI+ELYVDtg==",
++      "version": "0.34.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-darwin-arm64/-/sharp-darwin-arm64-0.34.4.tgz",
++      "integrity": "sha512-sitdlPzDVyvmINUdJle3TNHl+AG9QcwiAMsXmccqsCOMZNIdW2/7S26w0LyU8euiLVzFBL3dXPwVCq/ODnf2vA==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+         "darwin"
+@@ -1903,16 +1918,17 @@
+         "url": "https://opencollective.com/libvips"
+       },
+       "optionalDependencies": {
+-        "@img/sharp-libvips-darwin-arm64": "1.1.0"
++        "@img/sharp-libvips-darwin-arm64": "1.2.3"
+       }
+     },
+     "node_modules/@img/sharp-darwin-x64": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-darwin-x64/-/sharp-darwin-x64-0.34.2.tgz",
+-      "integrity": "sha512-dYvWqmjU9VxqXmjEtjmvHnGqF8GrVjM2Epj9rJ6BUIXvk8slvNDJbhGFvIoXzkDhrJC2jUxNLz/GUjjvSzfw+g==",
++      "version": "0.34.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-darwin-x64/-/sharp-darwin-x64-0.34.4.tgz",
++      "integrity": "sha512-rZheupWIoa3+SOdF/IcUe1ah4ZDpKBGWcsPX6MT0lYniH9micvIU7HQkYTfrx5Xi8u+YqwLtxC/3vl8TQN6rMg==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+         "darwin"
+@@ -1924,16 +1940,17 @@
+         "url": "https://opencollective.com/libvips"
+       },
+       "optionalDependencies": {
+-        "@img/sharp-libvips-darwin-x64": "1.1.0"
++        "@img/sharp-libvips-darwin-x64": "1.2.3"
+       }
+     },
+     "node_modules/@img/sharp-libvips-darwin-arm64": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-darwin-arm64/-/sharp-libvips-darwin-arm64-1.1.0.tgz",
+-      "integrity": "sha512-HZ/JUmPwrJSoM4DIQPv/BfNh9yrOA8tlBbqbLz4JZ5uew2+o22Ik+tHQJcih7QJuSa0zo5coHTfD5J8inqj9DA==",
++      "version": "1.2.3",
++      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-darwin-arm64/-/sharp-libvips-darwin-arm64-1.2.3.tgz",
++      "integrity": "sha512-QzWAKo7kpHxbuHqUC28DZ9pIKpSi2ts2OJnoIGI26+HMgq92ZZ4vk8iJd4XsxN+tYfNJxzH6W62X5eTcsBymHw==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "darwin"
+@@ -1943,12 +1960,13 @@
+       }
+     },
+     "node_modules/@img/sharp-libvips-darwin-x64": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-darwin-x64/-/sharp-libvips-darwin-x64-1.1.0.tgz",
+-      "integrity": "sha512-Xzc2ToEmHN+hfvsl9wja0RlnXEgpKNmftriQp6XzY/RaSfwD9th+MSh0WQKzUreLKKINb3afirxW7A0fz2YWuQ==",
++      "version": "1.2.3",
++      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-darwin-x64/-/sharp-libvips-darwin-x64-1.2.3.tgz",
++      "integrity": "sha512-Ju+g2xn1E2AKO6YBhxjj+ACcsPQRHT0bhpglxcEf+3uyPY+/gL8veniKoo96335ZaPo03bdDXMv0t+BBFAbmRA==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "darwin"
+@@ -1958,12 +1976,13 @@
+       }
+     },
+     "node_modules/@img/sharp-libvips-linux-arm": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-arm/-/sharp-libvips-linux-arm-1.1.0.tgz",
+-      "integrity": "sha512-s8BAd0lwUIvYCJyRdFqvsj+BJIpDBSxs6ivrOPm/R7piTs5UIwY5OjXrP2bqXC9/moGsyRa37eYWYCOGVXxVrA==",
++      "version": "1.2.3",
++      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-arm/-/sharp-libvips-linux-arm-1.2.3.tgz",
++      "integrity": "sha512-x1uE93lyP6wEwGvgAIV0gP6zmaL/a0tGzJs/BIDDG0zeBhMnuUPm7ptxGhUbcGs4okDJrk4nxgrmxpib9g6HpA==",
+       "cpu": [
+         "arm"
+       ],
++      "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -1973,12 +1992,13 @@
+       }
+     },
+     "node_modules/@img/sharp-libvips-linux-arm64": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-arm64/-/sharp-libvips-linux-arm64-1.1.0.tgz",
+-      "integrity": "sha512-IVfGJa7gjChDET1dK9SekxFFdflarnUB8PwW8aGwEoF3oAsSDuNUTYS+SKDOyOJxQyDC1aPFMuRYLoDInyV9Ew==",
++      "version": "1.2.3",
++      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-arm64/-/sharp-libvips-linux-arm64-1.2.3.tgz",
++      "integrity": "sha512-I4RxkXU90cpufazhGPyVujYwfIm9Nk1QDEmiIsaPwdnm013F7RIceaCc87kAH+oUB1ezqEvC6ga4m7MSlqsJvQ==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -1988,12 +2008,13 @@
+       }
+     },
+     "node_modules/@img/sharp-libvips-linux-ppc64": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-ppc64/-/sharp-libvips-linux-ppc64-1.1.0.tgz",
+-      "integrity": "sha512-tiXxFZFbhnkWE2LA8oQj7KYR+bWBkiV2nilRldT7bqoEZ4HiDOcePr9wVDAZPi/Id5fT1oY9iGnDq20cwUz8lQ==",
++      "version": "1.2.3",
++      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-ppc64/-/sharp-libvips-linux-ppc64-1.2.3.tgz",
++      "integrity": "sha512-Y2T7IsQvJLMCBM+pmPbM3bKT/yYJvVtLJGfCs4Sp95SjvnFIjynbjzsa7dY1fRJX45FTSfDksbTp6AGWudiyCg==",
+       "cpu": [
+         "ppc64"
+       ],
++      "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -2003,12 +2024,13 @@
+       }
+     },
+     "node_modules/@img/sharp-libvips-linux-s390x": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-s390x/-/sharp-libvips-linux-s390x-1.1.0.tgz",
+-      "integrity": "sha512-xukSwvhguw7COyzvmjydRb3x/09+21HykyapcZchiCUkTThEQEOMtBj9UhkaBRLuBrgLFzQ2wbxdeCCJW/jgJA==",
++      "version": "1.2.3",
++      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-s390x/-/sharp-libvips-linux-s390x-1.2.3.tgz",
++      "integrity": "sha512-RgWrs/gVU7f+K7P+KeHFaBAJlNkD1nIZuVXdQv6S+fNA6syCcoboNjsV2Pou7zNlVdNQoQUpQTk8SWDHUA3y/w==",
+       "cpu": [
+         "s390x"
+       ],
++      "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -2018,12 +2040,13 @@
+       }
+     },
+     "node_modules/@img/sharp-libvips-linux-x64": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-x64/-/sharp-libvips-linux-x64-1.1.0.tgz",
+-      "integrity": "sha512-yRj2+reB8iMg9W5sULM3S74jVS7zqSzHG3Ol/twnAAkAhnGQnpjj6e4ayUz7V+FpKypwgs82xbRdYtchTTUB+Q==",
++      "version": "1.2.3",
++      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-x64/-/sharp-libvips-linux-x64-1.2.3.tgz",
++      "integrity": "sha512-3JU7LmR85K6bBiRzSUc/Ff9JBVIFVvq6bomKE0e63UXGeRw2HPVEjoJke1Yx+iU4rL7/7kUjES4dZ/81Qjhyxg==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -2033,12 +2056,13 @@
+       }
+     },
+     "node_modules/@img/sharp-libvips-linuxmusl-arm64": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linuxmusl-arm64/-/sharp-libvips-linuxmusl-arm64-1.1.0.tgz",
+-      "integrity": "sha512-jYZdG+whg0MDK+q2COKbYidaqW/WTz0cc1E+tMAusiDygrM4ypmSCjOJPmFTvHHJ8j/6cAGyeDWZOsK06tP33w==",
++      "version": "1.2.3",
++      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linuxmusl-arm64/-/sharp-libvips-linuxmusl-arm64-1.2.3.tgz",
++      "integrity": "sha512-F9q83RZ8yaCwENw1GieztSfj5msz7GGykG/BA+MOUefvER69K/ubgFHNeSyUu64amHIYKGDs4sRCMzXVj8sEyw==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -2048,12 +2072,13 @@
+       }
+     },
+     "node_modules/@img/sharp-libvips-linuxmusl-x64": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linuxmusl-x64/-/sharp-libvips-linuxmusl-x64-1.1.0.tgz",
+-      "integrity": "sha512-wK7SBdwrAiycjXdkPnGCPLjYb9lD4l6Ze2gSdAGVZrEL05AOUJESWU2lhlC+Ffn5/G+VKuSm6zzbQSzFX/P65A==",
++      "version": "1.2.3",
++      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linuxmusl-x64/-/sharp-libvips-linuxmusl-x64-1.2.3.tgz",
++      "integrity": "sha512-U5PUY5jbc45ANM6tSJpsgqmBF/VsL6LnxJmIf11kB7J5DctHgqm0SkuXzVWtIY90GnJxKnC/JT251TDnk1fu/g==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -2063,12 +2088,13 @@
+       }
+     },
+     "node_modules/@img/sharp-linux-arm": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-linux-arm/-/sharp-linux-arm-0.34.2.tgz",
+-      "integrity": "sha512-0DZzkvuEOqQUP9mo2kjjKNok5AmnOr1jB2XYjkaoNRwpAYMDzRmAqUIa1nRi58S2WswqSfPOWLNOr0FDT3H5RQ==",
++      "version": "0.34.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-linux-arm/-/sharp-linux-arm-0.34.4.tgz",
++      "integrity": "sha512-Xyam4mlqM0KkTHYVSuc6wXRmM7LGN0P12li03jAnZ3EJWZqj83+hi8Y9UxZUbxsgsK1qOEwg7O0Bc0LjqQVtxA==",
+       "cpu": [
+         "arm"
+       ],
++      "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -2080,16 +2106,39 @@
+         "url": "https://opencollective.com/libvips"
+       },
+       "optionalDependencies": {
+-        "@img/sharp-libvips-linux-arm": "1.1.0"
++        "@img/sharp-libvips-linux-arm": "1.2.3"
+       }
+     },
+     "node_modules/@img/sharp-linux-arm64": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-linux-arm64/-/sharp-linux-arm64-0.34.2.tgz",
+-      "integrity": "sha512-D8n8wgWmPDakc83LORcfJepdOSN6MvWNzzz2ux0MnIbOqdieRZwVYY32zxVx+IFUT8er5KPcyU3XXsn+GzG/0Q==",
++      "version": "0.34.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-linux-arm64/-/sharp-linux-arm64-0.34.4.tgz",
++      "integrity": "sha512-YXU1F/mN/Wu786tl72CyJjP/Ngl8mGHN1hST4BGl+hiW5jhCnV2uRVTNOcaYPs73NeT/H8Upm3y9582JVuZHrQ==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "Apache-2.0",
++      "optional": true,
++      "os": [
++        "linux"
++      ],
++      "engines": {
++        "node": "^18.17.0 || ^20.3.0 || >=21.0.0"
++      },
++      "funding": {
++        "url": "https://opencollective.com/libvips"
++      },
++      "optionalDependencies": {
++        "@img/sharp-libvips-linux-arm64": "1.2.3"
++      }
++    },
++    "node_modules/@img/sharp-linux-ppc64": {
++      "version": "0.34.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-linux-ppc64/-/sharp-linux-ppc64-0.34.4.tgz",
++      "integrity": "sha512-F4PDtF4Cy8L8hXA2p3TO6s4aDt93v+LKmpcYFLAVdkkD3hSxZzee0rh6/+94FpAynsuMpLX5h+LRsSG3rIciUQ==",
++      "cpu": [
++        "ppc64"
++      ],
++      "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -2101,16 +2150,17 @@
+         "url": "https://opencollective.com/libvips"
+       },
+       "optionalDependencies": {
+-        "@img/sharp-libvips-linux-arm64": "1.1.0"
++        "@img/sharp-libvips-linux-ppc64": "1.2.3"
+       }
+     },
+     "node_modules/@img/sharp-linux-s390x": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-linux-s390x/-/sharp-linux-s390x-0.34.2.tgz",
+-      "integrity": "sha512-EGZ1xwhBI7dNISwxjChqBGELCWMGDvmxZXKjQRuqMrakhO8QoMgqCrdjnAqJq/CScxfRn+Bb7suXBElKQpPDiw==",
++      "version": "0.34.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-linux-s390x/-/sharp-linux-s390x-0.34.4.tgz",
++      "integrity": "sha512-qVrZKE9Bsnzy+myf7lFKvng6bQzhNUAYcVORq2P7bDlvmF6u2sCmK2KyEQEBdYk+u3T01pVsPrkj943T1aJAsw==",
+       "cpu": [
+         "s390x"
+       ],
++      "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -2122,16 +2172,17 @@
+         "url": "https://opencollective.com/libvips"
+       },
+       "optionalDependencies": {
+-        "@img/sharp-libvips-linux-s390x": "1.1.0"
++        "@img/sharp-libvips-linux-s390x": "1.2.3"
+       }
+     },
+     "node_modules/@img/sharp-linux-x64": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-linux-x64/-/sharp-linux-x64-0.34.2.tgz",
+-      "integrity": "sha512-sD7J+h5nFLMMmOXYH4DD9UtSNBD05tWSSdWAcEyzqW8Cn5UxXvsHAxmxSesYUsTOBmUnjtxghKDl15EvfqLFbQ==",
++      "version": "0.34.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-linux-x64/-/sharp-linux-x64-0.34.4.tgz",
++      "integrity": "sha512-ZfGtcp2xS51iG79c6Vhw9CWqQC8l2Ot8dygxoDoIQPTat/Ov3qAa8qpxSrtAEAJW+UjTXc4yxCjNfxm4h6Xm2A==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -2143,16 +2194,17 @@
+         "url": "https://opencollective.com/libvips"
+       },
+       "optionalDependencies": {
+-        "@img/sharp-libvips-linux-x64": "1.1.0"
++        "@img/sharp-libvips-linux-x64": "1.2.3"
+       }
+     },
+     "node_modules/@img/sharp-linuxmusl-arm64": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-linuxmusl-arm64/-/sharp-linuxmusl-arm64-0.34.2.tgz",
+-      "integrity": "sha512-NEE2vQ6wcxYav1/A22OOxoSOGiKnNmDzCYFOZ949xFmrWZOVII1Bp3NqVVpvj+3UeHMFyN5eP/V5hzViQ5CZNA==",
++      "version": "0.34.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-linuxmusl-arm64/-/sharp-linuxmusl-arm64-0.34.4.tgz",
++      "integrity": "sha512-8hDVvW9eu4yHWnjaOOR8kHVrew1iIX+MUgwxSuH2XyYeNRtLUe4VNioSqbNkB7ZYQJj9rUTT4PyRscyk2PXFKA==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -2164,16 +2216,17 @@
+         "url": "https://opencollective.com/libvips"
+       },
+       "optionalDependencies": {
+-        "@img/sharp-libvips-linuxmusl-arm64": "1.1.0"
++        "@img/sharp-libvips-linuxmusl-arm64": "1.2.3"
+       }
+     },
+     "node_modules/@img/sharp-linuxmusl-x64": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-linuxmusl-x64/-/sharp-linuxmusl-x64-0.34.2.tgz",
+-      "integrity": "sha512-DOYMrDm5E6/8bm/yQLCWyuDJwUnlevR8xtF8bs+gjZ7cyUNYXiSf/E8Kp0Ss5xasIaXSHzb888V1BE4i1hFhAA==",
++      "version": "0.34.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-linuxmusl-x64/-/sharp-linuxmusl-x64-0.34.4.tgz",
++      "integrity": "sha512-lU0aA5L8QTlfKjpDCEFOZsTYGn3AEiO6db8W5aQDxj0nQkVrZWmN3ZP9sYKWJdtq3PWPhUNlqehWyXpYDcI9Sg==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -2185,19 +2238,20 @@
+         "url": "https://opencollective.com/libvips"
+       },
+       "optionalDependencies": {
+-        "@img/sharp-libvips-linuxmusl-x64": "1.1.0"
++        "@img/sharp-libvips-linuxmusl-x64": "1.2.3"
+       }
+     },
+     "node_modules/@img/sharp-wasm32": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-wasm32/-/sharp-wasm32-0.34.2.tgz",
+-      "integrity": "sha512-/VI4mdlJ9zkaq53MbIG6rZY+QRN3MLbR6usYlgITEzi4Rpx5S6LFKsycOQjkOGmqTNmkIdLjEvooFKwww6OpdQ==",
++      "version": "0.34.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-wasm32/-/sharp-wasm32-0.34.4.tgz",
++      "integrity": "sha512-33QL6ZO/qpRyG7woB/HUALz28WnTMI2W1jgX3Nu2bypqLIKx/QKMILLJzJjI+SIbvXdG9fUnmrxR7vbi1sTBeA==",
+       "cpu": [
+         "wasm32"
+       ],
++      "license": "Apache-2.0 AND LGPL-3.0-or-later AND MIT",
+       "optional": true,
+       "dependencies": {
+-        "@emnapi/runtime": "^1.4.3"
++        "@emnapi/runtime": "^1.5.0"
+       },
+       "engines": {
+         "node": "^18.17.0 || ^20.3.0 || >=21.0.0"
+@@ -2207,12 +2261,13 @@
+       }
+     },
+     "node_modules/@img/sharp-win32-arm64": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-win32-arm64/-/sharp-win32-arm64-0.34.2.tgz",
+-      "integrity": "sha512-cfP/r9FdS63VA5k0xiqaNaEoGxBg9k7uE+RQGzuK9fHt7jib4zAVVseR9LsE4gJcNWgT6APKMNnCcnyOtmSEUQ==",
++      "version": "0.34.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-win32-arm64/-/sharp-win32-arm64-0.34.4.tgz",
++      "integrity": "sha512-2Q250do/5WXTwxW3zjsEuMSv5sUU4Tq9VThWKlU2EYLm4MB7ZeMwF+SFJutldYODXF6jzc6YEOC+VfX0SZQPqA==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "Apache-2.0 AND LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "win32"
+@@ -2225,12 +2280,13 @@
+       }
+     },
+     "node_modules/@img/sharp-win32-ia32": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-win32-ia32/-/sharp-win32-ia32-0.34.2.tgz",
+-      "integrity": "sha512-QLjGGvAbj0X/FXl8n1WbtQ6iVBpWU7JO94u/P2M4a8CFYsvQi4GW2mRy/JqkRx0qpBzaOdKJKw8uc930EX2AHw==",
++      "version": "0.34.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-win32-ia32/-/sharp-win32-ia32-0.34.4.tgz",
++      "integrity": "sha512-3ZeLue5V82dT92CNL6rsal6I2weKw1cYu+rGKm8fOCCtJTR2gYeUfY3FqUnIJsMUPIH68oS5jmZ0NiJ508YpEw==",
+       "cpu": [
+         "ia32"
+       ],
++      "license": "Apache-2.0 AND LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "win32"
+@@ -2243,12 +2299,13 @@
+       }
+     },
+     "node_modules/@img/sharp-win32-x64": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-win32-x64/-/sharp-win32-x64-0.34.2.tgz",
+-      "integrity": "sha512-aUdT6zEYtDKCaxkofmmJDJYGCf0+pJg3eU9/oBuqvEeoB9dKI6ZLc/1iLJCTuJQDO4ptntAlkUmHgGjyuobZbw==",
++      "version": "0.34.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-win32-x64/-/sharp-win32-x64-0.34.4.tgz",
++      "integrity": "sha512-xIyj4wpYs8J18sVN3mSQjwrw7fKUqRw+Z5rnHNCy5fYTxigBz81u5mOMPmFumwjcn8+ld1ppptMBCLic1nz6ig==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "Apache-2.0 AND LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "win32"
+@@ -2332,17 +2389,19 @@
+       }
+     },
+     "node_modules/@next/env": {
+-      "version": "15.4.0-canary.83",
+-      "resolved": "https://registry.npmjs.org/@next/env/-/env-15.4.0-canary.83.tgz",
+-      "integrity": "sha512-sKuvsUuzJ+bwjUum/F9g53Xju6VCJh0nUacaIkVgoKDSali6mDoy1wSeBGzCS0eyP8Nc23XUs1Rx2vqLgdgzRg=="
++      "version": "15.5.4",
++      "resolved": "https://registry.npmjs.org/@next/env/-/env-15.5.4.tgz",
++      "integrity": "sha512-27SQhYp5QryzIT5uO8hq99C69eLQ7qkzkDPsk3N+GuS2XgOgoYEeOav7Pf8Tn4drECOVDsDg8oj+/DVy8qQL2A==",
++      "license": "MIT"
+     },
+     "node_modules/@next/swc-darwin-arm64": {
+-      "version": "15.4.0-canary.83",
+-      "resolved": "https://registry.npmjs.org/@next/swc-darwin-arm64/-/swc-darwin-arm64-15.4.0-canary.83.tgz",
+-      "integrity": "sha512-xLsGrUlwHCkzS+ZlzPA88YuvZuWYBuehPyoBojn3Bo5sDWt57lreqwKcuBoyb03AxO+fwWfsQUnUiISYCtTDOg==",
++      "version": "15.5.4",
++      "resolved": "https://registry.npmjs.org/@next/swc-darwin-arm64/-/swc-darwin-arm64-15.5.4.tgz",
++      "integrity": "sha512-nopqz+Ov6uvorej8ndRX6HlxCYWCO3AHLfKK2TYvxoSB2scETOcfm/HSS3piPqc3A+MUgyHoqE6je4wnkjfrOA==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "MIT",
+       "optional": true,
+       "os": [
+         "darwin"
+@@ -2352,12 +2411,13 @@
+       }
+     },
+     "node_modules/@next/swc-darwin-x64": {
+-      "version": "15.4.0-canary.83",
+-      "resolved": "https://registry.npmjs.org/@next/swc-darwin-x64/-/swc-darwin-x64-15.4.0-canary.83.tgz",
+-      "integrity": "sha512-ki7BVFNvLPtQeTKYeewg3u43O6zxhuSTzmmce9QDclRQOlMPOnD1cULo2k54vFu/51H6AaU/9N3ZirXnVgdqnA==",
++      "version": "15.5.4",
++      "resolved": "https://registry.npmjs.org/@next/swc-darwin-x64/-/swc-darwin-x64-15.5.4.tgz",
++      "integrity": "sha512-QOTCFq8b09ghfjRJKfb68kU9k2K+2wsC4A67psOiMn849K9ZXgCSRQr0oVHfmKnoqCbEmQWG1f2h1T2vtJJ9mA==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "MIT",
+       "optional": true,
+       "os": [
+         "darwin"
+@@ -2367,12 +2427,13 @@
+       }
+     },
+     "node_modules/@next/swc-linux-arm64-gnu": {
+-      "version": "15.4.0-canary.83",
+-      "resolved": "https://registry.npmjs.org/@next/swc-linux-arm64-gnu/-/swc-linux-arm64-gnu-15.4.0-canary.83.tgz",
+-      "integrity": "sha512-rXpJY5V7h369DiSUqzdCOO8L56QDH1T6K+RYnX/NPCDniJTy4VigwvMMZ/dStVB8ougHICrFAoFoijS1XzC3OA==",
++      "version": "15.5.4",
++      "resolved": "https://registry.npmjs.org/@next/swc-linux-arm64-gnu/-/swc-linux-arm64-gnu-15.5.4.tgz",
++      "integrity": "sha512-eRD5zkts6jS3VfE/J0Kt1VxdFqTnMc3QgO5lFE5GKN3KDI/uUpSyK3CjQHmfEkYR4wCOl0R0XrsjpxfWEA++XA==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "MIT",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -2382,12 +2443,13 @@
+       }
+     },
+     "node_modules/@next/swc-linux-arm64-musl": {
+-      "version": "15.4.0-canary.83",
+-      "resolved": "https://registry.npmjs.org/@next/swc-linux-arm64-musl/-/swc-linux-arm64-musl-15.4.0-canary.83.tgz",
+-      "integrity": "sha512-wrwm1j0x8doocyvojFW45gFyciqg65VRud5FyeKL5FeBnzbiJ+cO2Pfdjgm4hnn8edtwsmBI2pWP16UIThKAcQ==",
++      "version": "15.5.4",
++      "resolved": "https://registry.npmjs.org/@next/swc-linux-arm64-musl/-/swc-linux-arm64-musl-15.5.4.tgz",
++      "integrity": "sha512-TOK7iTxmXFc45UrtKqWdZ1shfxuL4tnVAOuuJK4S88rX3oyVV4ZkLjtMT85wQkfBrOOvU55aLty+MV8xmcJR8A==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "MIT",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -2397,12 +2459,13 @@
+       }
+     },
+     "node_modules/@next/swc-linux-x64-gnu": {
+-      "version": "15.4.0-canary.83",
+-      "resolved": "https://registry.npmjs.org/@next/swc-linux-x64-gnu/-/swc-linux-x64-gnu-15.4.0-canary.83.tgz",
+-      "integrity": "sha512-I0TfFtpi4ZnG4p/cDnU22hjyHZOJDRW858PmtSWssxcp9xVDAuxpt8A9ajc+0BUFAM4CIMgAjL3Z0GcNaHHa2Q==",
++      "version": "15.5.4",
++      "resolved": "https://registry.npmjs.org/@next/swc-linux-x64-gnu/-/swc-linux-x64-gnu-15.5.4.tgz",
++      "integrity": "sha512-7HKolaj+481FSW/5lL0BcTkA4Ueam9SPYWyN/ib/WGAFZf0DGAN8frNpNZYFHtM4ZstrHZS3LY3vrwlIQfsiMA==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "MIT",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -2412,12 +2475,13 @@
+       }
+     },
+     "node_modules/@next/swc-linux-x64-musl": {
+-      "version": "15.4.0-canary.83",
+-      "resolved": "https://registry.npmjs.org/@next/swc-linux-x64-musl/-/swc-linux-x64-musl-15.4.0-canary.83.tgz",
+-      "integrity": "sha512-Tt433adrLSgyl+N5vQ8+15PrfM8OtxuqCmuJTMVeHAJncFwb6qzJjIEANK2WzFvgB+cqYwd4ih6DmyvvonXUYw==",
++      "version": "15.5.4",
++      "resolved": "https://registry.npmjs.org/@next/swc-linux-x64-musl/-/swc-linux-x64-musl-15.5.4.tgz",
++      "integrity": "sha512-nlQQ6nfgN0nCO/KuyEUwwOdwQIGjOs4WNMjEUtpIQJPR2NUfmGpW2wkJln1d4nJ7oUzd1g4GivH5GoEPBgfsdw==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "MIT",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -2427,12 +2491,13 @@
+       }
+     },
+     "node_modules/@next/swc-win32-arm64-msvc": {
+-      "version": "15.4.0-canary.83",
+-      "resolved": "https://registry.npmjs.org/@next/swc-win32-arm64-msvc/-/swc-win32-arm64-msvc-15.4.0-canary.83.tgz",
+-      "integrity": "sha512-bZpFfZh1g4xVqiVTlqmDmeKZbna5AnC947Cmo19cJ4EOzWMiYMa9fbP6jyLMGnWd+ffkNHUNSqQrbCAb0bSWyw==",
++      "version": "15.5.4",
++      "resolved": "https://registry.npmjs.org/@next/swc-win32-arm64-msvc/-/swc-win32-arm64-msvc-15.5.4.tgz",
++      "integrity": "sha512-PcR2bN7FlM32XM6eumklmyWLLbu2vs+D7nJX8OAIoWy69Kef8mfiN4e8TUv2KohprwifdpFKPzIP1njuCjD0YA==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "MIT",
+       "optional": true,
+       "os": [
+         "win32"
+@@ -2442,12 +2507,13 @@
+       }
+     },
+     "node_modules/@next/swc-win32-x64-msvc": {
+-      "version": "15.4.0-canary.83",
+-      "resolved": "https://registry.npmjs.org/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-15.4.0-canary.83.tgz",
+-      "integrity": "sha512-AwS2tpNt5sI/isWgikHEFmyGWko+icQYQxrRr0Nh5lEUEQ3HeRE3EuDOBBwm7DDxJRU78siWmt/fZvwWbFTKRg==",
++      "version": "15.5.4",
++      "resolved": "https://registry.npmjs.org/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-15.5.4.tgz",
++      "integrity": "sha512-1ur2tSHZj8Px/KMAthmuI9FMp/YFusMMGoRNJaRZMOlSkgvLjzosSdQI0cJAKogdHl3qXUQKL9MGaYvKwA7DXg==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "MIT",
+       "optional": true,
+       "os": [
+         "win32"
+@@ -2750,6 +2816,41 @@
+         }
+       }
+     },
++    "node_modules/@radix-ui/react-dropdown-menu": {
++      "version": "2.1.16",
++      "resolved": "https://registry.npmjs.org/@radix-ui/react-dropdown-menu/-/react-dropdown-menu-2.1.16.tgz",
++      "integrity": "sha512-1PLGQEynI/3OX/ftV54COn+3Sud/Mn8vALg2rWnBLnRaGtJDduNW/22XjlGgPdpcIbiQxjKtb7BkcjP00nqfJw==",
++      "license": "MIT",
++      "dependencies": {
++        "@radix-ui/primitive": "1.1.3",
++        "@radix-ui/react-compose-refs": "1.1.2",
++        "@radix-ui/react-context": "1.1.2",
++        "@radix-ui/react-id": "1.1.1",
++        "@radix-ui/react-menu": "2.1.16",
++        "@radix-ui/react-primitive": "2.1.3",
++        "@radix-ui/react-use-controllable-state": "1.2.2"
++      },
++      "peerDependencies": {
++        "@types/react": "*",
++        "@types/react-dom": "*",
++        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc",
++        "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        },
++        "@types/react-dom": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/@radix-ui/react-dropdown-menu/node_modules/@radix-ui/primitive": {
++      "version": "1.1.3",
++      "resolved": "https://registry.npmjs.org/@radix-ui/primitive/-/primitive-1.1.3.tgz",
++      "integrity": "sha512-JTF99U/6XIjCBo0wqkU5sK10glYe27MRRsfwoiq5zzOEZLHU3A3KCMa5X/azekYRCJ0HlwI0crAXS/5dEHTzDg==",
++      "license": "MIT"
++    },
+     "node_modules/@radix-ui/react-focus-guards": {
+       "version": "1.1.2",
+       "resolved": "https://registry.npmjs.org/@radix-ui/react-focus-guards/-/react-focus-guards-1.1.2.tgz",
+@@ -2827,6 +2928,181 @@
+         }
+       }
+     },
++    "node_modules/@radix-ui/react-menu": {
++      "version": "2.1.16",
++      "resolved": "https://registry.npmjs.org/@radix-ui/react-menu/-/react-menu-2.1.16.tgz",
++      "integrity": "sha512-72F2T+PLlphrqLcAotYPp0uJMr5SjP5SL01wfEspJbru5Zs5vQaSHb4VB3ZMJPimgHHCHG7gMOeOB9H3Hdmtxg==",
++      "license": "MIT",
++      "dependencies": {
++        "@radix-ui/primitive": "1.1.3",
++        "@radix-ui/react-collection": "1.1.7",
++        "@radix-ui/react-compose-refs": "1.1.2",
++        "@radix-ui/react-context": "1.1.2",
++        "@radix-ui/react-direction": "1.1.1",
++        "@radix-ui/react-dismissable-layer": "1.1.11",
++        "@radix-ui/react-focus-guards": "1.1.3",
++        "@radix-ui/react-focus-scope": "1.1.7",
++        "@radix-ui/react-id": "1.1.1",
++        "@radix-ui/react-popper": "1.2.8",
++        "@radix-ui/react-portal": "1.1.9",
++        "@radix-ui/react-presence": "1.1.5",
++        "@radix-ui/react-primitive": "2.1.3",
++        "@radix-ui/react-roving-focus": "1.1.11",
++        "@radix-ui/react-slot": "1.2.3",
++        "@radix-ui/react-use-callback-ref": "1.1.1",
++        "aria-hidden": "^1.2.4",
++        "react-remove-scroll": "^2.6.3"
++      },
++      "peerDependencies": {
++        "@types/react": "*",
++        "@types/react-dom": "*",
++        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc",
++        "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        },
++        "@types/react-dom": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/@radix-ui/react-menu/node_modules/@radix-ui/primitive": {
++      "version": "1.1.3",
++      "resolved": "https://registry.npmjs.org/@radix-ui/primitive/-/primitive-1.1.3.tgz",
++      "integrity": "sha512-JTF99U/6XIjCBo0wqkU5sK10glYe27MRRsfwoiq5zzOEZLHU3A3KCMa5X/azekYRCJ0HlwI0crAXS/5dEHTzDg==",
++      "license": "MIT"
++    },
++    "node_modules/@radix-ui/react-menu/node_modules/@radix-ui/react-dismissable-layer": {
++      "version": "1.1.11",
++      "resolved": "https://registry.npmjs.org/@radix-ui/react-dismissable-layer/-/react-dismissable-layer-1.1.11.tgz",
++      "integrity": "sha512-Nqcp+t5cTB8BinFkZgXiMJniQH0PsUt2k51FUhbdfeKvc4ACcG2uQniY/8+h1Yv6Kza4Q7lD7PQV0z0oicE0Mg==",
++      "license": "MIT",
++      "dependencies": {
++        "@radix-ui/primitive": "1.1.3",
++        "@radix-ui/react-compose-refs": "1.1.2",
++        "@radix-ui/react-primitive": "2.1.3",
++        "@radix-ui/react-use-callback-ref": "1.1.1",
++        "@radix-ui/react-use-escape-keydown": "1.1.1"
++      },
++      "peerDependencies": {
++        "@types/react": "*",
++        "@types/react-dom": "*",
++        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc",
++        "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        },
++        "@types/react-dom": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/@radix-ui/react-menu/node_modules/@radix-ui/react-focus-guards": {
++      "version": "1.1.3",
++      "resolved": "https://registry.npmjs.org/@radix-ui/react-focus-guards/-/react-focus-guards-1.1.3.tgz",
++      "integrity": "sha512-0rFg/Rj2Q62NCm62jZw0QX7a3sz6QCQU0LpZdNrJX8byRGaGVTqbrW9jAoIAHyMQqsNpeZ81YgSizOt5WXq0Pw==",
++      "license": "MIT",
++      "peerDependencies": {
++        "@types/react": "*",
++        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/@radix-ui/react-menu/node_modules/@radix-ui/react-popper": {
++      "version": "1.2.8",
++      "resolved": "https://registry.npmjs.org/@radix-ui/react-popper/-/react-popper-1.2.8.tgz",
++      "integrity": "sha512-0NJQ4LFFUuWkE7Oxf0htBKS6zLkkjBH+hM1uk7Ng705ReR8m/uelduy1DBo0PyBXPKVnBA6YBlU94MBGXrSBCw==",
++      "license": "MIT",
++      "dependencies": {
++        "@floating-ui/react-dom": "^2.0.0",
++        "@radix-ui/react-arrow": "1.1.7",
++        "@radix-ui/react-compose-refs": "1.1.2",
++        "@radix-ui/react-context": "1.1.2",
++        "@radix-ui/react-primitive": "2.1.3",
++        "@radix-ui/react-use-callback-ref": "1.1.1",
++        "@radix-ui/react-use-layout-effect": "1.1.1",
++        "@radix-ui/react-use-rect": "1.1.1",
++        "@radix-ui/react-use-size": "1.1.1",
++        "@radix-ui/rect": "1.1.1"
++      },
++      "peerDependencies": {
++        "@types/react": "*",
++        "@types/react-dom": "*",
++        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc",
++        "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        },
++        "@types/react-dom": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/@radix-ui/react-menu/node_modules/@radix-ui/react-presence": {
++      "version": "1.1.5",
++      "resolved": "https://registry.npmjs.org/@radix-ui/react-presence/-/react-presence-1.1.5.tgz",
++      "integrity": "sha512-/jfEwNDdQVBCNvjkGit4h6pMOzq8bHkopq458dPt2lMjx+eBQUohZNG9A7DtO/O5ukSbxuaNGXMjHicgwy6rQQ==",
++      "license": "MIT",
++      "dependencies": {
++        "@radix-ui/react-compose-refs": "1.1.2",
++        "@radix-ui/react-use-layout-effect": "1.1.1"
++      },
++      "peerDependencies": {
++        "@types/react": "*",
++        "@types/react-dom": "*",
++        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc",
++        "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        },
++        "@types/react-dom": {
++          "optional": true
++        }
++      }
++    },
++    "node_modules/@radix-ui/react-menu/node_modules/@radix-ui/react-roving-focus": {
++      "version": "1.1.11",
++      "resolved": "https://registry.npmjs.org/@radix-ui/react-roving-focus/-/react-roving-focus-1.1.11.tgz",
++      "integrity": "sha512-7A6S9jSgm/S+7MdtNDSb+IU859vQqJ/QAtcYQcfFC6W8RS4IxIZDldLR0xqCFZ6DCyrQLjLPsxtTNch5jVA4lA==",
++      "license": "MIT",
++      "dependencies": {
++        "@radix-ui/primitive": "1.1.3",
++        "@radix-ui/react-collection": "1.1.7",
++        "@radix-ui/react-compose-refs": "1.1.2",
++        "@radix-ui/react-context": "1.1.2",
++        "@radix-ui/react-direction": "1.1.1",
++        "@radix-ui/react-id": "1.1.1",
++        "@radix-ui/react-primitive": "2.1.3",
++        "@radix-ui/react-use-callback-ref": "1.1.1",
++        "@radix-ui/react-use-controllable-state": "1.2.2"
++      },
++      "peerDependencies": {
++        "@types/react": "*",
++        "@types/react-dom": "*",
++        "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc",
++        "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc"
++      },
++      "peerDependenciesMeta": {
++        "@types/react": {
++          "optional": true
++        },
++        "@types/react-dom": {
++          "optional": true
++        }
++      }
++    },
+     "node_modules/@radix-ui/react-popper": {
+       "version": "1.2.7",
+       "resolved": "https://registry.npmjs.org/@radix-ui/react-popper/-/react-popper-1.2.7.tgz",
+@@ -4740,7 +5016,7 @@
+       "version": "19.1.6",
+       "resolved": "https://registry.npmjs.org/@types/react/-/react-19.1.6.tgz",
+       "integrity": "sha512-JeG0rEWak0N6Itr6QUx+X60uQmN+5t3j9r/OVDtWzFXKaj6kD1BwJzOksD0FF6iWxZlbE1kB0q9vtnU2ekqa1Q==",
+-      "dev": true,
++      "devOptional": true,
+       "dependencies": {
+         "csstype": "^3.0.2"
+       }
+@@ -4749,7 +5025,7 @@
+       "version": "19.1.6",
+       "resolved": "https://registry.npmjs.org/@types/react-dom/-/react-dom-19.1.6.tgz",
+       "integrity": "sha512-4hOiT/dwO8Ko0gV1m/TJZYk3y0KBnY9vzDh7W+DH17b2HFSOGgdj33dhihPeuy3l0q23+4e+hoXHV6hCC4dCXw==",
+-      "dev": true,
++      "devOptional": true,
+       "peerDependencies": {
+         "@types/react": "^19.0.0"
+       }
+@@ -5006,6 +5282,20 @@
+         "node": "^4.5.0 || >= 5.9"
+       }
+     },
++    "node_modules/bcrypt": {
++      "version": "6.0.0",
++      "resolved": "https://registry.npmjs.org/bcrypt/-/bcrypt-6.0.0.tgz",
++      "integrity": "sha512-cU8v/EGSrnH+HnxV2z0J7/blxH8gq7Xh2JFT6Aroax7UohdmiJJlxApMxtKfuI7z68NvvVcmR78k2LbT6efhRg==",
++      "hasInstallScript": true,
++      "license": "MIT",
++      "dependencies": {
++        "node-addon-api": "^8.3.0",
++        "node-gyp-build": "^4.8.4"
++      },
++      "engines": {
++        "node": ">= 18"
++      }
++    },
+     "node_modules/bcryptjs": {
+       "version": "3.0.2",
+       "resolved": "https://registry.npmjs.org/bcryptjs/-/bcryptjs-3.0.2.tgz",
+@@ -5685,10 +5975,10 @@
+       }
+     },
+     "node_modules/detect-libc": {
+-      "version": "2.0.4",
+-      "resolved": "https://registry.npmjs.org/detect-libc/-/detect-libc-2.0.4.tgz",
+-      "integrity": "sha512-3UDv+G9CsCKO1WKMGw9fwq/SWJYbI0c5Y7LU1AXYoDdbhE2AHQ6N6Nb34sG8Fj7T5APy8qXDCKuuIHd1BR0tVA==",
+-      "devOptional": true,
++      "version": "2.1.1",
++      "resolved": "https://registry.npmjs.org/detect-libc/-/detect-libc-2.1.1.tgz",
++      "integrity": "sha512-ecqj/sy1jcK1uWrwpR67UhYrIFQ+5WlGxth34WquCbamhFA6hkkwiu37o6J5xCHdo1oixJRfVRw+ywV+Hq/0Aw==",
++      "license": "Apache-2.0",
+       "engines": {
+         "node": ">=8"
+       }
+@@ -7063,11 +7353,12 @@
+       }
+     },
+     "node_modules/next": {
+-      "version": "15.4.0-canary.83",
+-      "resolved": "https://registry.npmjs.org/next/-/next-15.4.0-canary.83.tgz",
+-      "integrity": "sha512-WF2fV6X/GZ66GacAagNNSr3mmTaExfTafXLa62xu0JYuo+NlUQOGBqxqdG/N3uvFV+4ZFSxCNlXG7G64IQQazA==",
++      "version": "15.5.4",
++      "resolved": "https://registry.npmjs.org/next/-/next-15.5.4.tgz",
++      "integrity": "sha512-xH4Yjhb82sFYQfY3vbkJfgSDgXvBB6a8xPs9i35k6oZJRoQRihZH+4s9Yo2qsWpzBmZ3lPXaJ2KPXLfkvW4LnA==",
++      "license": "MIT",
+       "dependencies": {
+-        "@next/env": "15.4.0-canary.83",
++        "@next/env": "15.5.4",
+         "@swc/helpers": "0.5.15",
+         "caniuse-lite": "^1.0.30001579",
+         "postcss": "8.4.31",
+@@ -7080,15 +7371,15 @@
+         "node": "^18.18.0 || ^19.8.0 || >= 20.0.0"
+       },
+       "optionalDependencies": {
+-        "@next/swc-darwin-arm64": "15.4.0-canary.83",
+-        "@next/swc-darwin-x64": "15.4.0-canary.83",
+-        "@next/swc-linux-arm64-gnu": "15.4.0-canary.83",
+-        "@next/swc-linux-arm64-musl": "15.4.0-canary.83",
+-        "@next/swc-linux-x64-gnu": "15.4.0-canary.83",
+-        "@next/swc-linux-x64-musl": "15.4.0-canary.83",
+-        "@next/swc-win32-arm64-msvc": "15.4.0-canary.83",
+-        "@next/swc-win32-x64-msvc": "15.4.0-canary.83",
+-        "sharp": "^0.34.1"
++        "@next/swc-darwin-arm64": "15.5.4",
++        "@next/swc-darwin-x64": "15.5.4",
++        "@next/swc-linux-arm64-gnu": "15.5.4",
++        "@next/swc-linux-arm64-musl": "15.5.4",
++        "@next/swc-linux-x64-gnu": "15.5.4",
++        "@next/swc-linux-x64-musl": "15.5.4",
++        "@next/swc-win32-arm64-msvc": "15.5.4",
++        "@next/swc-win32-x64-msvc": "15.5.4",
++        "sharp": "^0.34.3"
+       },
+       "peerDependencies": {
+         "@opentelemetry/api": "^1.1.0",
+@@ -7179,6 +7470,7 @@
+       "version": "0.4.6",
+       "resolved": "https://registry.npmjs.org/next-themes/-/next-themes-0.4.6.tgz",
+       "integrity": "sha512-pZvgD5L0IEvX5/9GWyHMf3m8BKiVQwsCMHfoFosXtXBMnaS0ZnIJ9ST4b4NqLVKDEm8QBxoNNGNaBv2JNF6XNA==",
++      "license": "MIT",
+       "peerDependencies": {
+         "react": "^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc",
+         "react-dom": "^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc"
+@@ -7228,6 +7520,26 @@
+         "react-dom": ">= 16.0.0"
+       }
+     },
++    "node_modules/node-addon-api": {
++      "version": "8.5.0",
++      "resolved": "https://registry.npmjs.org/node-addon-api/-/node-addon-api-8.5.0.tgz",
++      "integrity": "sha512-/bRZty2mXUIFY/xU5HLvveNHlswNJej+RnxBjOMkidWfwZzgTbPG1E3K5TOxRLOR+5hX7bSofy8yf1hZevMS8A==",
++      "license": "MIT",
++      "engines": {
++        "node": "^18 || ^20 || >= 21"
++      }
++    },
++    "node_modules/node-gyp-build": {
++      "version": "4.8.4",
++      "resolved": "https://registry.npmjs.org/node-gyp-build/-/node-gyp-build-4.8.4.tgz",
++      "integrity": "sha512-LA4ZjwlnUblHVgq0oBF3Jl/6h/Nvs5fzBLwdEF4nuxnFdsfajde4WfxtJr3CaiH+F6ewcIB/q4jQ4UzPyid+CQ==",
++      "license": "MIT",
++      "bin": {
++        "node-gyp-build": "bin.js",
++        "node-gyp-build-optional": "optional.js",
++        "node-gyp-build-test": "build-test.js"
++      }
++    },
+     "node_modules/node-releases": {
+       "version": "2.0.19",
+       "resolved": "https://registry.npmjs.org/node-releases/-/node-releases-2.0.19.tgz",
+@@ -8608,7 +8920,6 @@
+       "version": "7.7.2",
+       "resolved": "https://registry.npmjs.org/semver/-/semver-7.7.2.tgz",
+       "integrity": "sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==",
+-      "optional": true,
+       "bin": {
+         "semver": "bin/semver.js"
+       },
+@@ -8633,14 +8944,14 @@
+       }
+     },
+     "node_modules/sharp": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/sharp/-/sharp-0.34.2.tgz",
+-      "integrity": "sha512-lszvBmB9QURERtyKT2bNmsgxXK0ShJrL/fvqlonCo7e6xBF8nT8xU6pW+PMIbLsz0RxQk3rgH9kd8UmvOzlMJg==",
++      "version": "0.34.4",
++      "resolved": "https://registry.npmjs.org/sharp/-/sharp-0.34.4.tgz",
++      "integrity": "sha512-FUH39xp3SBPnxWvd5iib1X8XY7J0K0X7d93sie9CJg2PO8/7gmg89Nve6OjItK53/MlAushNNxteBYfM6DEuoA==",
+       "hasInstallScript": true,
+-      "optional": true,
++      "license": "Apache-2.0",
+       "dependencies": {
+-        "color": "^4.2.3",
+-        "detect-libc": "^2.0.4",
++        "@img/colour": "^1.0.0",
++        "detect-libc": "^2.1.0",
+         "semver": "^7.7.2"
+       },
+       "engines": {
+@@ -8650,27 +8961,28 @@
+         "url": "https://opencollective.com/libvips"
+       },
+       "optionalDependencies": {
+-        "@img/sharp-darwin-arm64": "0.34.2",
+-        "@img/sharp-darwin-x64": "0.34.2",
+-        "@img/sharp-libvips-darwin-arm64": "1.1.0",
+-        "@img/sharp-libvips-darwin-x64": "1.1.0",
+-        "@img/sharp-libvips-linux-arm": "1.1.0",
+-        "@img/sharp-libvips-linux-arm64": "1.1.0",
+-        "@img/sharp-libvips-linux-ppc64": "1.1.0",
+-        "@img/sharp-libvips-linux-s390x": "1.1.0",
+-        "@img/sharp-libvips-linux-x64": "1.1.0",
+-        "@img/sharp-libvips-linuxmusl-arm64": "1.1.0",
+-        "@img/sharp-libvips-linuxmusl-x64": "1.1.0",
+-        "@img/sharp-linux-arm": "0.34.2",
+-        "@img/sharp-linux-arm64": "0.34.2",
+-        "@img/sharp-linux-s390x": "0.34.2",
+-        "@img/sharp-linux-x64": "0.34.2",
+-        "@img/sharp-linuxmusl-arm64": "0.34.2",
+-        "@img/sharp-linuxmusl-x64": "0.34.2",
+-        "@img/sharp-wasm32": "0.34.2",
+-        "@img/sharp-win32-arm64": "0.34.2",
+-        "@img/sharp-win32-ia32": "0.34.2",
+-        "@img/sharp-win32-x64": "0.34.2"
++        "@img/sharp-darwin-arm64": "0.34.4",
++        "@img/sharp-darwin-x64": "0.34.4",
++        "@img/sharp-libvips-darwin-arm64": "1.2.3",
++        "@img/sharp-libvips-darwin-x64": "1.2.3",
++        "@img/sharp-libvips-linux-arm": "1.2.3",
++        "@img/sharp-libvips-linux-arm64": "1.2.3",
++        "@img/sharp-libvips-linux-ppc64": "1.2.3",
++        "@img/sharp-libvips-linux-s390x": "1.2.3",
++        "@img/sharp-libvips-linux-x64": "1.2.3",
++        "@img/sharp-libvips-linuxmusl-arm64": "1.2.3",
++        "@img/sharp-libvips-linuxmusl-x64": "1.2.3",
++        "@img/sharp-linux-arm": "0.34.4",
++        "@img/sharp-linux-arm64": "0.34.4",
++        "@img/sharp-linux-ppc64": "0.34.4",
++        "@img/sharp-linux-s390x": "0.34.4",
++        "@img/sharp-linux-x64": "0.34.4",
++        "@img/sharp-linuxmusl-arm64": "0.34.4",
++        "@img/sharp-linuxmusl-x64": "0.34.4",
++        "@img/sharp-wasm32": "0.34.4",
++        "@img/sharp-win32-arm64": "0.34.4",
++        "@img/sharp-win32-ia32": "0.34.4",
++        "@img/sharp-win32-x64": "0.34.4"
+       }
+     },
+     "node_modules/shebang-command": {
+@@ -9051,8 +9363,16 @@
+     "node_modules/tailwindcss": {
+       "version": "4.1.8",
+       "resolved": "https://registry.npmjs.org/tailwindcss/-/tailwindcss-4.1.8.tgz",
+-      "integrity": "sha512-kjeW8gjdxasbmFKpVGrGd5T4i40mV5J2Rasw48QARfYeQ8YS9x02ON9SFWax3Qf616rt4Cp3nVNIj6Hd1mP3og==",
+-      "dev": true
++      "integrity": "sha512-kjeW8gjdxasbmFKpVGrGd5T4i40mV5J2Rasw48QARfYeQ8YS9x02ON9SFWax3Qf616rt4Cp3nVNIj6Hd1mP3og=="
++    },
++    "node_modules/tailwindcss-animate": {
++      "version": "1.0.7",
++      "resolved": "https://registry.npmjs.org/tailwindcss-animate/-/tailwindcss-animate-1.0.7.tgz",
++      "integrity": "sha512-bl6mpH3T7I3UFxuvDEXLxy/VuFxBk5bbzplh7tXI68mwMokNYd1t9qPBHlnyTwfa4JGC4zP516I1hYYtQ/vspA==",
++      "license": "MIT",
++      "peerDependencies": {
++        "tailwindcss": ">=3.0.0 || insiders"
++      }
+     },
+     "node_modules/tapable": {
+       "version": "2.2.2",
+@@ -9176,7 +9496,7 @@
+       "version": "5.8.3",
+       "resolved": "https://registry.npmjs.org/typescript/-/typescript-5.8.3.tgz",
+       "integrity": "sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==",
+-      "dev": true,
++      "devOptional": true,
+       "bin": {
+         "tsc": "bin/tsc",
+         "tsserver": "bin/tsserver"
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/prisma/seed/admin.seed.ts /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/prisma/seed/admin.seed.ts
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/prisma/seed/admin.seed.ts	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/prisma/seed/admin.seed.ts	2025-10-06 11:50:07.000000000 +0300
+@@ -2,16 +2,16 @@
+ import type { PrismaClient } from "@prisma/client";
+ 
+ export async function seedAdmin(prisma: PrismaClient) {
+-	const password = await bcryptPasswordHash("password");
++    const password = await bcryptPasswordHash("admin123"); // Şifreyi "admin123" olarak değiştirdik
+ 
+     const admin = await prisma.user.create({
+         data: {
+-            email: "ducthai060501@gmail.com",
++            email: "admin@example.com", // E-postayı "admin@example.com" olarak değiştirdik
+             hashedPassword: password,
+         }
+     })
+ 
+-	console.log("Admin created: ", admin);
++    console.log("Admin created: ", admin);
+ 
+-	return admin;
+-}
+\ Dosya sonunda yenisatır yok
++    return admin;
++}
+Yalnızca /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/public'da: assets
+Yalnızca /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/public'da: test.jpg
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/README.md /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/README.md
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/README.md	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/README.md	2025-10-06 11:50:07.000000000 +0300
+@@ -1,6 +1,8 @@
+ # 🚗 Car Dealer Platform
+ 
+-A modern, full-stack car dealership management system built with Next.js 15, featuring advanced inventory management, customer reservations, and comprehensive admin tools.
++A modern, full-stack car dealership management system built with Next.js 15, featuring advanced collection management, customer reservations, and comprehensive admin tools.
++- **Modern Car Collection**: Browse and search vehicles with advanced filtering
++2. **Vehicle Browsing**: Browse the collection at `/inventory`
+ 
+ ## 🌐 Live Demo
+ 
+@@ -296,3 +298,4 @@
+ ---
+ 
+ **Built with ❤️ using Next.js 15 and modern web technologies**
++# CAR-GALLERY-PRO
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/app/_actions/sign-in.ts /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/app/_actions/sign-in.ts
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/app/_actions/sign-in.ts	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/app/_actions/sign-in.ts	2025-10-06 11:50:07.000000000 +0300
+@@ -27,13 +27,11 @@
+         message: error?.message || "Invalid input",
+       };
+     }
+-    await signIn("credentials", {
+-      email: data.email,
+-      password: data.password,
+-      redirect: true,
+-      redirectTo: routes.challenge,
+-    });
+-
++          await signIn("credentials", {
++            email: data.email,
++            password: data.password,
++            redirect: false,
++          });
+     return {
+       success: true,
+       message: "Sign in successful",
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/app/admin/layout.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/app/admin/layout.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/app/admin/layout.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/app/admin/layout.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -6,18 +6,17 @@
+ const AdminLayout = ({ children }: PropsWithChildren) => {
+   return (
+     <AI>
+-    <div className="flex bg-gray-900 min-h-screen w-full">
+-      <AdminSidebar />
+-      <div className="flex flex-col flex-1 overflow-hidden">
+-        <AdminHeader />
+-        <main
+-          className="admin-scrollbar flex flex-1 flex-col gap-4
+-      p-4  md:gap-8 md:p-6 overflow-auto"
+-        >
+-          {children}
+-        </main>
++      <div className="flex bg-gray-900 text-gray-300 min-h-screen w-full">
++        <AdminSidebar />
++        <div className="flex flex-col flex-1 overflow-hidden">
++          <AdminHeader />
++          <main
++            className="admin-scrollbar flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6 overflow-auto"
++          >
++            {children}
++          </main>
++        </div>
+       </div>
+-    </div>
+     </AI>
+   );
+ };
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/app/globals.css /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/app/globals.css
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/app/globals.css	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/app/globals.css	2025-10-06 11:50:07.000000000 +0300
+@@ -53,7 +53,7 @@
+   --popover-foreground: oklch(0.145 0 0);
+   --primary: oklch(0.6 0.193 230.7);
+   --primary-foreground: oklch(0.985 0 0);
+-  --secondary: oklch(0.828 0.189 84.429);
++  --secondary: oklch(0.97 0 0);
+   --secondary-foreground: oklch(0.205 0 0);
+   --muted: oklch(0.97 0 0);
+   --muted-foreground: oklch(0.556 0 0);
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/app/layout.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/app/layout.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/app/layout.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/app/layout.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -1,5 +1,4 @@
+ import type { Metadata } from "next";
+-import { Geist, Geist_Mono } from "next/font/google";
+ import "./globals.css";
+ import { Mulish, Roboto } from "next/font/google";
+ import { Toaster } from "@/components/ui/sonner";
+@@ -22,9 +21,8 @@
+ 	display: "swap",
+ });
+ export const metadata: Metadata = {
+-  title: "Meat Motors",
+-  description: "Love meat? Love motors? We do too! Welcome to Meat Motors",
+-};
++  title: "RIM GLOBAL",
++  description: "Federal Way's Curated Automotive Collection",};
+ 
+ export default function RootLayout({
+   children,
+@@ -32,24 +30,22 @@
+   children: React.ReactNode;
+ }>) {
+   return (
+-    
+-		<html lang="en">
++		<html lang="en" suppressHydrationWarning>
+       <body
+ 				className={cn(
+-					"antialiased overscroll-none bg-background font-heading",
++					"antialiased bg-background font-heading",
+ 					roboto.variable,
+ 					mulish.variable,
+ 				)}
+ 			>
+         <NextTopLoader showSpinner={true} />
+         <NuqsAdapter>
+-			<Suspense>
+-				{children}
+-			</Suspense>
+-		</NuqsAdapter>
++            <Suspense>
++                {children}
++            </Suspense>
++        </NuqsAdapter>
+         <Toaster />
+       </body>
+     </html>
+-	
+   );
+-}
++}
+\ Dosya sonunda yenisatır yok
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/app/(presentation)/auth/sign-in/page.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/app/(presentation)/auth/sign-in/page.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/app/(presentation)/auth/sign-in/page.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/app/(presentation)/auth/sign-in/page.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -3,10 +3,10 @@
+ 
+ const SignInPage = () => {
+   return (
+-    <div>
++    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] bg-background">
+       <SignInform/>
+     </div>
+   )
+ }
+ 
+-export default SignInPage
++export default SignInPage
+\ Dosya sonunda yenisatır yok
+Yalnızca '/home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/app/(presentation)''da: contact
+Yalnızca '/home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/app/(presentation)''da: financing
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/app/(presentation)/inventory/page.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/app/(presentation)/inventory/page.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/app/(presentation)/inventory/page.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/app/(presentation)/inventory/page.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -115,7 +115,7 @@
+     <div className="flex">
+       {/* <Sidebar/> */}
+       <Sidebar minMaxValue={minMaxresult} searchParams={searchParams} />
+-      <div className="flex-1 p-4 bg-white">
++      <div className="flex-1 p-4 bg-background">
+         {/* add xl flex-row if u want */}
+         <div className="flex space-y-2 flex-col items-center justify-center pb-4 -mt-1">
+           <div className="flex justify-between items-center w-full">
+@@ -137,7 +137,7 @@
+               paginationPrevious: "",
+               paginationNext: "",
+               paginationLink: "border active:border",
+-              paginationLinkActive: "bg-sky-500 text-white",
++              paginationLinkActive: "bg-primary text-primary-foreground",
+             }}
+           />
+           <Suspense
+@@ -158,7 +158,7 @@
+             paginationPrevious: "",
+             paginationNext: "",
+             paginationLink: "border active:border",
+-            paginationLinkActive: "bg-sky-500 text-white",
++            paginationLinkActive: "bg-primary text-primary-foreground",
+           }}
+         />
+       </div>
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/app/(presentation)/layout.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/app/(presentation)/layout.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/app/(presentation)/layout.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/app/(presentation)/layout.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -1,4 +1,4 @@
+-import PublicLayout from '@/components/layouts/public-payout';
++import PublicLayout from '@/components/layouts/public-layout';
+ import React from 'react'
+ 
+ 
+Yalnızca '/home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/app/(presentation)''da: our-philosophy
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/app/(presentation)/page.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/app/(presentation)/page.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/app/(presentation)/page.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/app/(presentation)/page.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -4,16 +4,22 @@
+ import { FeaturesSection } from "@/components/homepage/features-section";
+ import LastestArrival from "@/components/homepage/lastest-arrival";
+ import OurBrandSection from "@/components/homepage/our-brands-section";
++import TestimonialsSection from "@/components/homepage/testimonials-section";
++import LocationSection from "@/components/homepage/location-section";
++
++
+ export default async function Home(props: PageProps) {
+   const searchParams = await props.searchParams;
+ 
+   
+   return (
+-    <div className="w-full min-h-screen bg-background">
++    <>
+       <HeroSection searchParams={searchParams} />
+       <FeaturesSection />
+       <LastestArrival />
++      <TestimonialsSection />
+       <OurBrandSection  />
+-    </div>
++      <LocationSection />
++    </>
+   );
+ }
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/admin/customers/customers-header.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/admin/customers/customers-header.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/admin/customers/customers-header.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/admin/customers/customers-header.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -4,9 +4,9 @@
+ 
+ export const AdminCustomersHeader = ({ searchParams }: AwaitedPageProps) => {
+ 	return (
+-		<div className="flex flex-col p-6 space-y-4 text-muted">
++		<div className="flex flex-col p-6 space-y-4">
+ 			<div className="flex items-center justify-between">
+-				<h1 className="font-semibold text-lg md:text-2xl">All Customers</h1>
++				<h1 className="font-semibold text-lg md:text-2xl text-slate-200">All Customers</h1>
+ 				<div className="flex items-center justify-between">
+ 					<RadioFilter
+ 						items={["ALL", ...Object.values(CustomerStatus)]}
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/auth/SignInform.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/auth/SignInform.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/auth/SignInform.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/auth/SignInform.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -9,7 +9,6 @@
+ import { CircleCheckIcon, Loader2 } from "lucide-react";
+ import { SignInAction } from "@/app/_actions/sign-in";
+ 
+-
+ const SignInButton = () => {
+ 	const { pending } = useFormStatus();
+ 
+@@ -19,96 +18,75 @@
+ 			type="submit"
+ 			className="w-full uppercase font-bold"
+ 		>
+-			{pending && (
+-				<Loader2 className="h-4 w-4 shrink-0 animate-spin" aria-hidden="true" />
+-			)}{" "}
+-			Sign In 
++			{pending && <Loader2 className="h-4 w-4 shrink-0 animate-spin" aria-hidden="true" />} Sign In
+ 		</Button>
+ 	);
+ };
+ 
+ const SignInform = () => {
+-  const [state, formActions] = useActionState(SignInAction, {
+-    success: false,
+-    message: "",
+-  });
+-
++  const [state, formActions] = useActionState(SignInAction, { success: false, message: "" });
+   const router = useRouter();
+-  const formRef = React.useRef<HTMLFormElement>(null);
++
+   useEffect(() => {
+-    if (state.success && formRef.current) {
+-      router.refresh();
+-      router.push(routes.challenge);
++    if (state.success) {
++      // Redirect on success
++      window.location.href = routes.admin.dashboard;
+     }
+-  }, [state, router]);
++  }, [state.success, state.message, router]); // Depend on state.message to re-trigger on new submissions
++
+   return (
+-    <div
+-      className="flex flex-col items-center 
+-    justify-center min-h-[calc(100vh-4rem)] bg-white"
+-    >
+-      <div className="max-w-md w-full pb-60">
+-        <form
+-          action={formActions}
+-          className="border-muted border shadow-lg p-10 rounded-md bg-white"
+-          ref={formRef}
+-        >
+-          <div className="flex items-center mb-6 justify-center">
+-            <h2 className="uppercase text-2xl font-bold">Admin Sign In</h2>
++    <div className="max-w-md w-full">
++      <form
++        action={formActions}
++        className="border-muted border shadow-lg p-10 rounded-md bg-card"
++      >
++        <div className="flex items-center mb-6 justify-center">
++          <h2 className="uppercase text-2xl font-bold">Admin Sign In</h2>
++        </div>
++        <div className="space-y-4">
++          <div className="space-y-2">
++            <Label htmlFor="email">Email</Label>
++            <Input
++              id="email"
++              type="email"
++              name="email"
++              autoComplete="email"
++              placeholder="Enter your email"
++              required
++            />
+           </div>
+-          <div className="space-y-4">
+-            <div className="space-y-2">
+-              <Label htmlFor="email">Email</Label>
+-              <Input
+-                id="email"
+-                type="email"
+-                name="email"
+-                autoComplete="email"
+-                className="placeholder:text-gray-500"
+-                placeholder="Enter your email"
+-                required
+-              />
+-            </div>
+-
+-            <div className="space-y-2">
+-              <Label htmlFor="password">password</Label>
+-              <Input
+-                id="password"
+-                type="password"
+-                name="password"
+-                className="placeholder:text-gray-500"
+-                placeholder="Enter your password"
+-                autoComplete="password"
+-                required
+-              />
+-            </div>
+-            <div className="my-6 ">
+-              <p className="text-sm text-gray-600 mb-2 text-center">
+-                <b>This is for admin only</b>
+-              </p>
+-            </div>
+-            <div className="space-y-4">
+-              <SignInButton />
+-               {state.success && (
+-                <div className="flex items-center gap-2 rounded-md bg-green-500
+-                p-3 text-white">
+-                    <CircleCheckIcon className="h-5 w-5" />
+-                    <span>Success! {state.message}</span>
+-                </div>
+-            )}
+ 
+-            {!state.success && state.message && (
+-                <div className="flex items-center gap-2 rounded-md bg-red-500
+-                p-3 text-white">
+-                    <CircleCheckIcon className="h-5 w-5" />
+-                    <span>Error! {state.message}</span>
+-                </div>
++          <div className="space-y-2">
++            <Label htmlFor="password">Password</Label>
++            <Input
++              id="password"
++              type="password"
++              name="password"
++              placeholder="Enter your password"
++              autoComplete="current-password"
++              required
++            />
++          </div>
++          <div className="my-6 ">
++            <p className="text-sm text-muted-foreground mb-2 text-center">
++              <b>This is for admin only</b>
++            </p>
++          </div>
++          <div className="space-y-4">
++            <SignInButton />
++            {state.message && (
++              <div
++                className={`flex items-center gap-2 rounded-md p-3 ${state.success ? 'bg-green-600' : 'bg-destructive'} text-primary-foreground`}
++              >
++                <CircleCheckIcon className="h-5 w-5" />
++                <span>{state.message}</span>
++              </div>
+             )}
+-            </div>
+           </div>
+-        </form>
+-      </div>
++        </div>
++      </form>
+     </div>
+   );
+ };
+ 
+-export default SignInform;
++export default SignInform;
+\ Dosya sonunda yenisatır yok
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/auth/SignoutForm.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/auth/SignoutForm.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/auth/SignoutForm.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/auth/SignoutForm.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -2,7 +2,7 @@
+ import React from 'react'
+ import { Button } from '../ui/button'
+ import { useFormStatus } from 'react-dom'
+-import { Loader2 } from 'lucide-react'
++import { Loader2, LogOut } from 'lucide-react'
+ import { signOutAction } from '@/app/_actions/sign-out'
+ 
+ 
+@@ -13,12 +13,13 @@
+         <Button
+             type='submit'
+             disabled={pending}
+-            className='flex items-center gap-2'
++            variant={"outline"}
++            size={"icon"}
+         >
+-            {pending ? (<Loader2
+-            
+-            className='mr-2 h-4 w-4 animate-spin'/>):(
+-                <span>Sign Out</span>
++            {pending ? (
++                <Loader2 className='h-4 w-4 animate-spin'/>
++            ):(
++                <LogOut className="w-6 h-6 text-destructive" />
+             )}
+         </Button>
+     )
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/car/car-table-row.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/car/car-table-row.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/car/car-table-row.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/car/car-table-row.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -13,12 +13,12 @@
+     <TableRow className="text-gray-500 border-white/45">
+       <TableCell className="font-medium">{car.id}</TableCell>
+       <TableCell className="p-0">
+-        <Image
+-          src={car.images[0].src || "/placeholder.png"}
+-          alt={car.images[0].alt || "Car Image"}
+-          width={120}
+-          height={100}
+-          className="aspect-3/2 object-cover rounded"
++		<Image
++		  src={car.images?.[0]?.src || "/placeholder.png"}
++		  alt={car.images?.[0]?.alt || "Car Image"}
++		  width={120}
++		  height={100}
++		  className="aspect-3/2 object-cover rounded"
+         />
+       </TableCell>
+       <TableCell className="hidden md:table-cell">{car.title}</TableCell>
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/homepage/features-section.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/homepage/features-section.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/homepage/features-section.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/homepage/features-section.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -1,20 +1,16 @@
+-import { imageSources } from "@/config/constants";
+-import { imgixLoader } from "@/lib/imgix-loader";
+-
+ export const FeaturesSection = () => {
+   return (
+-    <div className="bg-white py-16 sm:py-24">
++    <div className="bg-background py-16 sm:py-24">
+       <div className="mx-auto max-w-7xl px-6 lg:px-8">
+         <div className="mx-auto max-w-8xl sm:text-center">
+           <h2 className="text-base md:text-2xl font-semibold leading-7">
+-            Yo, we got the hookup!
++            A Foundation of Trust
+           </h2>
+-          <h2 className="mt-2 uppercase text-4xl font-bold tracking-tight text-gray-900 sm:text-8xl">
+-            Broke? We got you!
++          <h2 className="mt-2 uppercase text-4xl font-bold tracking-tight text-foreground sm:text-8xl">
++            Financing That Fits Your Life
+           </h2>
+-          <p className="mt-6 text-lg leading-8 text-gray-600">
+-            Fresh rides that'll make your neighbors jealous and your ex cry.
+-            Zero to hero status in 3... 2... 1! 🚗💨
++          <p className="mt-6 text-lg leading-8 text-muted-foreground">
++            We partner with trusted local and national lenders to offer flexible financing solutions. Our team is here to guide you to a plan that aligns with your budget, ensuring a clear and transparent process from start to finish.
+           </p>
+         </div>
+       </div>
+@@ -22,11 +18,11 @@
+         <div
+           className="mx-auto max-w-7xl h-[300px] bg-cover bg-no-repeat bg-bottom xl:rounded-t-xl shadow-2xl"
+           style={{
+-            backgroundImage: `url(${imgixLoader({ src: imageSources.features, width: 1280, quality: 100 })})`,
++            backgroundImage: `url('/assets/financing-bg.jpg')`,
+           }}
+         />
+         <div aria-hidden="true" className="relative hidden xl:block">
+-          <div className="absolute -inset-x-20 bottom-0 bg-linear-to-t from-white to-transparent pt-[3%]" />
++          <div className="absolute -inset-x-20 bottom-0 bg-linear-to-t from-background to-transparent pt-[3%]" />
+         </div>
+       </div>
+     </div>
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/homepage/hero-section.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/homepage/hero-section.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/homepage/hero-section.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/homepage/hero-section.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -36,7 +36,7 @@
+     <section
+       className="relative flex items-center justify-center h-[calc(100vh-4rem)] bg-cover bg-center"
+       style={{
+-        backgroundImage: `url(${imgixLoader({ src: imageSources.carLineup, width: 1280, quality: 100 })})`,
++        backgroundImage: `url('/assets/hero-bg.jpg')`,
+       }}
+     >
+       <div className="absolute inset-0 bg-gray-900 opacity-75" />
+@@ -46,14 +46,14 @@
+             className="text-2xl text-center lg:text-left md:text-4xl lg:text-8xl uppercase
+              font-bold text-white"
+           >
+-            STRAIGHT FIRE WHIPS AT CRAZY PRICES
++            Your Next Chapter, Curated.
+           </h1>
+           <h2 className="mt-4 uppercase text-center lg:text-left text-base md:text-3xl lg:text-4xl text-white">
+-            GET YOUR RIDE OR DIE TODAY
++            At RIM GLOBAL, we've reimagined the pre-owned car experience for Federal Way. Explore our meticulously curated collection of quality-inspected vehicles and discover the confidence of a transparent, hassle-free journey.
+           </h2>
+         </div>
+         <div
+-          className="max-w-md w-full mx-auto p-6 bg-white 
++          className="max-w-md w-full mx-auto p-6 bg-secondary 
+           sm:rounded-xl shadow-lg"
+         >
+           <div className="space-y-4">
+@@ -63,12 +63,12 @@
+                 minMaxValue={minMaxResult}
+               />
+             </div>
+-            <SearchButton count={carsCount} />
++            <SearchButton count={carsCount} label="Discover The Collection" />
+             {isFilterApplied && (
+ 							<Button
+ 								asChild
+ 								variant="outline"
+-								className="w-full hover:bg-slate-200"
++								className="w-full hover:bg-accent"
+ 							>
+ 								<Link href={routes.home}>
+ 									Clear Filters ({totalFiltersApplied})
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/homepage/lastest-arrival.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/homepage/lastest-arrival.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/homepage/lastest-arrival.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/homepage/lastest-arrival.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -19,9 +19,9 @@
+     const sourceId = await getSourceId();
+ 	const favourites = await redis.get<Favourites>(sourceId || "");
+   return (
+-    <section className="py-16 sm:py-24">
++    <section className="py-16 sm:py-24 bg-secondary">
+ 			<div className="container mx-auto max-w-[80vw]">
+-				<h2 className="mt-2 uppercase text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl">
++				<h2 className="mt-2 uppercase text-2xl font-bold tracking-tight text-foreground sm:text-4xl">
+ 					Latest Arrivals
+ 				</h2>
+ 				<LatestArrivalsCarousel
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/homepage/LatestArrivalCarousel.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/homepage/LatestArrivalCarousel.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/homepage/LatestArrivalCarousel.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/homepage/LatestArrivalCarousel.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -38,7 +38,6 @@
+ 				}}
+ 				pagination={{ clickable: true }}
+ 				modules={[Navigation]}
+-				loop={true}
+ 				spaceBetween={30}
+ 				slidesPerView={1}
+ 				breakpoints={{
+@@ -62,8 +61,8 @@
+ 				})}
+ 			</Swiper>
+ 			<SwiperButton
+-				prevClassName="-left-16 border border-2 border-border hidden lg:flex"
+-				nextClassName="-right-16 border border-2 border-border hidden lg:flex"
++				prevClassName="-left-8 lg:-left-16 border border-2 border-border flex"
++				nextClassName="-right-8 lg:-right-16 border border-2 border-border flex"
+ 			/>
+     </div>
+   )
+Yalnızca /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/homepage'da: location-section.tsx
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/homepage/our-brands-section.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/homepage/our-brands-section.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/homepage/our-brands-section.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/homepage/our-brands-section.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -35,22 +35,22 @@
+ 	});
+ 
+     return (
+-    <div className="py-16 sm:py-24 bg-white">
++    <div className="py-16 sm:py-24 bg-background">
+ 			<div className="max-w-7xl mx-auto px-6 lg:px-8 space-y-12">
+                 <div className="px-6 lg:px-8 sm:text-center">
+-                    <h2 className="mt-2 uppercase text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+-                        FIRE RIDES 
++                    <h2 className="mt-2 uppercase text-2xl font-bold tracking-tight text-foreground sm:text-4xl">
++                        A Curated Collection of Premier Brands 
+                     </h2>
+-                    <p className="mt-6 text-lg leading-8 text-gray-600">
+-                        We got {count} absolute bangers sitting pretty in our lot, ready to roll out TODAY! No cap! 💯
++                    <p className="mt-6 text-lg leading-8 text-muted-foreground">
++                        Our portfolio features a meticulously selected range of vehicles from the world's most respected automotive names. With {count} vehicles currently in our collection, your next chapter awaits.
+                     </p>
+                 </div>
+-				<div className="grid grid-cols-3 lg:grid-cols-5 gap-4">
++				<div className="flex flex-wrap justify-center items-center gap-4">
+ 					{brands.map(({ id, image, name }) => (
+ 						<Link
+ 							key={id}
+ 							href={`${routes.inventory}?make=${id}`}
+-							className="hover:scale-110 transition-all duration-100 ease-in-out relative h-24 flex items-center justify-center"
++							className="hover:scale-110 transition-all duration-100 ease-in-out relative h-24 w-24 flex items-center justify-center"
+ 						>
+ 							<Image
+ 								src={image}
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/homepage/search-button.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/homepage/search-button.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/homepage/search-button.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/homepage/search-button.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -30,12 +30,11 @@
+ 	if (minPrice) queryParams.append("minPrice", minPrice);
+ 	if (maxPrice) queryParams.append("maxPrice", maxPrice);
+ 
+-	const url = new URL(routes.inventory, process.env.NEXT_PUBLIC_APP_URL);
+-	url.search = queryParams.toString();
++	const relativeUrl = `${routes.inventory}?${queryParams.toString()}`;
+ 
+ 	return (
+ 		<Button className="w-full" asChild>
+-			<Link href={url.toString()}>
++			<Link href={relativeUrl}>
+ 				Search {count > 0 ? ` (${count})` : null}
+ 			</Link>
+ 		</Button>
+Yalnızca /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/homepage'da: testimonials-section.tsx
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/inventory/car-card.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/inventory/car-card.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/inventory/car-card.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/inventory/car-card.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -61,14 +61,10 @@
+   return (
+     <AnimatePresence>
+       {isVisible && (
+-         <motion.div
+-          initial={{ opacity: 0, y: 20 }}
+-          animate={{ opacity: 1, y: 0 }}
+-          exit={{ opacity: 0, y: -20 }}
+-          transition={{ duration: 0.3 }}
++         <div
+           key={car.id}
+           id={car.slug || "slug"}
+-         className="bg-white relative rounded-md shadow-md overflow-hidden flex flex-col">
++         className="bg-card relative rounded-md shadow-lg overflow-hidden flex flex-col border transition-shadow duration-300 hover:shadow-2xl">
+         <div className="aspect-3/2 relative">
+           <Link href={routes.singleClassified(car.slug || "slug")}>
+             <Image
+@@ -86,7 +82,7 @@
+           isFav={isFav}
+           id={car.id}
+           />
+-          <div className="absolute top-2.5 right-3.5 bg-primary text-slate-50 font-bold px-2 py-1 rounded">
++          <div className="absolute top-2.5 right-3.5 bg-primary/90 text-primary-foreground font-bold px-2 py-1 rounded">
+             <div className="text-xs lg:text-base xl:text-lg font-semibold">
+               {formatPrice({
+                 price: car.price,
+@@ -104,13 +100,13 @@
+             {car.title}
+           </Link>
+           {car.description && (
+-            <div className="text-xs md:text-sm xl:text-base text-gray-500 line-clamp-2">
+-              <HtmlParser html={car.description} />
++            <div className="text-xs md:text-sm xl:text-base text-muted-foreground line-clamp-2">
++              <p>{car.description}</p>
+               &nbsp;
+             </div>
+           )}
+           <ul
+-            className="text-xs md:text-sm text-gray-600 xl:flex grid grid-cols-1
++            className="text-xs md:text-sm text-muted-foreground xl:flex grid grid-cols-1
+       grid-rows-4 md:grid-cols-2 md:grid-rows-4 items-center justify-between w-full"
+           >
+             {getKeyCarInfo(car).map((info) => (
+@@ -152,7 +148,7 @@
+             </Button>
+           </div>
+         </div>
+-      </motion.div>
++      </div>
+       )}
+      
+     </AnimatePresence>
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/inventory/DialogFilters.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/inventory/DialogFilters.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/inventory/DialogFilters.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/inventory/DialogFilters.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -98,7 +98,13 @@
+       });
+     }
+ 
+-    router.refresh();
++    const newSearchParams = new URLSearchParams(searchParams);
++    if (value) {
++      newSearchParams.set(name, value);
++    } else {
++      newSearchParams.delete(name);
++    }
++    router.push(`${routes.inventory}?${newSearchParams.toString()}`);
+   };
+ 
+   return (
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/inventory/sidebar.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/inventory/sidebar.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/inventory/sidebar.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/inventory/sidebar.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -99,10 +99,16 @@
+       });
+     }
+ 
+-    router.refresh();
++    const newSearchParams = new URLSearchParams(searchParams);
++    if (value) {
++      newSearchParams.set(name, value);
++    } else {
++      newSearchParams.delete(name);
++    }
++    router.push(`${routes.inventory}?${newSearchParams.toString()}`);
+   };
+   return (
+-    <div className="py-4 w-[21.25rem] bg-white border-r border-muted hidden lg:block">
++    <div className="py-4 w-[21.25rem] bg-card border-r border-muted hidden lg:block">
+       <div>
+         <div className="text-lg font-semibold flex justify-between px-4">
+           <span>Filters</span>
+@@ -111,7 +117,7 @@
+             onClick={clearFilters}
+             aria-disabled={filterCount === 0}
+             className={cn(
+-              `text-sm text-gray-500`,
++              `text-sm text-muted-foreground`,
+               !filterCount
+                 ? "disabled opacity-50 pointer-events-none cursor-default"
+                 : "hover:underline cursor-pointer"
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/layouts/admin-sidebar.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/layouts/admin-sidebar.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/layouts/admin-sidebar.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/layouts/admin-sidebar.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -83,7 +83,7 @@
+                   transition={{ duration: 0.4 }}
+                 >
+                   <Image
+-                    alt="Meat motors logo"
++                    alt="RIM GLOBAL logo"
+                     src={"/logo.svg"}
+                     fill={true}
+                     className="object-contain object-left"
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/layouts/footer.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/layouts/footer.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/layouts/footer.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/layouts/footer.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -2,88 +2,84 @@
+ import Image from "next/image";
+ import Link from "next/link";
+ import React from "react";
+-import { SiInstagram , SiFacebook, SiX, SiYoutube } from "@icons-pack/react-simple-icons";
+ import NewsLetterForm from "./NewsLetterForm";
+-const socialLinks = [
+-  { id: 1, link: "https://facebook.com",
+-    icon: <SiFacebook size={24} />
+-   },
+-  { id: 2, link: "https://twitter.com",
+-    icon: <SiX size={24} />
+-   },
+-  { id: 3, link: "https://instagram.com",
+-    icon: <SiInstagram size={24} />
+-   },
+-  
+-  { id: 5, link: "https://youtube.com",
+-    icon: <SiYoutube size={24} />
+-   },
+-];
++import { auth } from "@/auth";
++import { Button } from "../ui/button";
++import { LayoutDashboard } from "lucide-react";
++
+ const navLinks = [
+-  { id: 1, href: routes.home, label: "Home" },
+-  { id: 2, href: routes.inventory, label: "Inventory" },
++  { id: 1, href: routes.inventory, label: "The Collection" },
++  { id: 2, href: routes.financing, label: "Financing" },
++  { id: 3, href: routes.ourPhilosophy, label: "Our Philosophy" },
++  { id: 4, href: routes.contact, label: "Contact" },
+ ];
+-const PublicFooter = () => {
++
++const PublicFooter = async () => {
++  const session = await auth();
+   return (
+-    <footer className="bg-gray-100 px-8 lg:px-0 py-8">
+-			<div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+-				<div className="flex flex-col space-x-2 gap-y-2">
+-           <h1 className="text-2xl font-bold text-primary mt-2">Meat Motors</h1>
+-					<Link className="flex items-center" href={routes.home}>
+-						<Image
+-							width={300}
+-							height={100}
+-							alt="logo"
+-							className="h-8 relative"
+-							src="/logo.svg"
+-						/>
+-           
+-					</Link>
+-					<div className="flex space-x-4">
+-						{socialLinks.map((link) => {
+-							return (
+-								<Link href={link.link} key={link.id}>
+-									{link.icon}
+-								</Link>
+-							);
+-						})}
+-					</div>
+-				</div>
+-
+-				<ul className="space-y-1">
+-					{navLinks.map((link) => (
+-						<li key={link.id}>
+-							<Link
+-								href={link.href}
+-								className="text-foreground hover:text-primary"
+-							>
+-								{link.label}
+-							</Link>
+-						</li>
+-					))}
+-					<li>
+-						<Link
+-							href={routes.signIn}
+-							className="text-foreground hover:text-primary"
+-						>
+-							Admin
+-						</Link>
+-					</li>
+-					
+-
+-				</ul>
+-
+-				<NewsLetterForm />
+-			</div>
+-			<div className="container mx-auto mt-8 text-center text-gray-700">
+-				<h4 className="text-lg font-bold text-primary">The Real Talk</h4>
+-				<p>(yeah we pay taxes, unlike some people)</p>
+-				<p>
+-					Meat Motors ain't authorized by nobody - we just sell cars and mind our business 💯
+-				</p>
+-			</div>
+-		</footer>
++    <footer className="bg-secondary px-8 lg:px-0 py-12">
++      <div className="container mx-auto">
++        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left mb-12 items-start">
++          {/* Column 1: Branding */}
++          <div className="flex flex-col items-center md:items-start gap-y-2">
++            <Link href={routes.home} className="flex flex-col sm:flex-row items-center gap-4">
++              <Image
++                src="/assets/logo.png"
++                alt="RIM GLOBAL Logo"
++                width={280}
++                height={280}
++              />
++              <div>
++                <span className="text-2xl font-bold text-primary">RIM GLOBAL</span>
++                <p className="text-md text-muted-foreground text-right -mt-1">auto sales</p>
++              </div>
++            </Link>
++          </div>
++
++          {/* Column 2: Navigation */}
++          <ul className="space-y-2">
++            {navLinks.map((link) => (
++              <li key={link.id}>
++                <Link
++                  href={link.href}
++                  className="text-foreground hover:text-primary"
++                >
++                  {link.label}
++                </Link>
++              </li>
++            ))}
++          </ul>
++
++          {/* Column 3: Contact Info & Admin Link */}
++          <div className="flex flex-col justify-between h-full items-start md:items-end">
++            <div className="space-y-2 text-left md:text-right">
++                <h3 className="text-xl font-bold text-primary">Contact Us</h3>
++                <address className="not-italic text-muted-foreground">
++                1505 S 356th Street, STE 114-4<br />Federal Way, WA 98003
++                </address>
++                <p>
++                <a href="mailto:rimglobalwa@gmail.com" className="text-foreground hover:text-primary">
++                    rimglobalwa@gmail.com
++                </a>
++                </p>
++            </div>
++            <div className="mt-4">
++                <Button asChild variant="ghost" size="icon">
++                    <a href={session ? routes.admin.dashboard : routes.signIn}>
++                        <LayoutDashboard className="w-6 h-6" />
++                    </a>
++                </Button>
++            </div>
++          </div>
++        </div>
++
++        {/* Newsletter Section - Centered */}
++        <div className="flex flex-col items-center text-center">
++          <NewsLetterForm />
++        </div>
++      </div>
++    </footer>
+   );
+ };
+ 
+-export default PublicFooter;
++export default PublicFooter;
+\ Dosya sonunda yenisatır yok
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/layouts/header.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/layouts/header.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/layouts/header.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/layouts/header.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -4,93 +4,97 @@
+ import Image from "next/image";
+ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "../ui/sheet";
+ import { Button } from "../ui/button";
+-import { HeartIcon, MenuIcon } from "lucide-react";
+-import { redis } from "@/lib/redis-store";
+-import { getSourceId } from "@/lib/source-id";
++import { HeartIcon, HomeIcon, LayoutDashboard, MenuIcon, SearchIcon } from "lucide-react";
+ import { Favourites } from "@/config/types";
+-import { auth } from "@/auth";
+ import SignoutForm from "../auth/SignoutForm";
++import { ThemeToggle } from "../ui/theme-toggle";
++import { LanguageSwitcher } from "./language-switcher";
++import { auth } from "@/auth";
++import { getSourceId } from "@/lib/source-id";
++import { redis } from "@/lib/redis-store";
+ 
+ const navLinks = [
+-  { id: 1, href: routes.home, label: "Home" },
+-  { id: 2, href: routes.inventory, label: "Inventory" },
++  { id: 1, href: routes.inventory, label: "The Collection" },
++  { id: 2, href: routes.financing, label: "Financing" },
++  { id: 3, href: routes.ourPhilosophy, label: "Our Philosophy" },
++  { id: 4, href: routes.contact, label: "Contact" },
+ ];
++
+ const Header = async () => {
+-  const sourceId = await getSourceId();
+   const session = await auth();
++  const sourceId = await getSourceId();
+   const favs = await redis.get<Favourites>(sourceId ?? "");
++
+   return (
+     <header className="flex items-center justify-between h-16 px-4 bg-transparent gap-x-6">
+-      <div className="flex items-center flex-1">
++      <div className="flex items-center flex-1 gap-x-4">
+         <Link href={routes.home} className="flex items-center gap-2">
+           <Image
+-            src="/logo.svg"
+-            alt="Logo"
+-            width={50}
+-            height={50}
+-            className="rounded-full relative"
++            src="/assets/logo.png"
++            alt="RIM GLOBAL Logo"
++            width={60}
++            height={60}
++            className="relative"
+           />
++          <div>
++            <span className="text-xl font-bold text-primary">RIM GLOBAL</span>
++            <p className="text-sm text-muted-foreground text-right -mt-1">auto sales</p>
++          </div>
+         </Link>
++        <LanguageSwitcher />
+       </div>
+-      <nav className="hidden md:block">
++      <nav className="hidden md:flex items-center gap-x-4">
++        <Button asChild variant="outline" size="icon">
++          <Link href={routes.home}>
++            <HomeIcon className="w-6 h-6" />
++          </Link>
++        </Button>
++        <Button variant="outline" size="icon">
++          <SearchIcon className="w-6 h-6" />
++        </Button>
+         {navLinks.map((link) => (
+           <Link
+             key={link.id}
+             href={link.href}
+-            className="px-4 py-2 text-sm uppercase font-medium text-gray-600 hover:text-gray-900"
++            className="px-4 py-2 text-sm uppercase font-medium text-foreground hover:text-primary"
+           >
+             {link.label}
+           </Link>
+         ))}
++        <Button asChild variant="outline" size="icon" className="relative">
++            <Link href={routes.favourites}>
++                <HeartIcon className="w-6 h-6" />
++                <div className="absolute -top-1.5 -right-1.5 flex items-center justify-center w-5 h-5 text-primary-foreground bg-primary rounded-full">
++                    <span className="text-xs">
++                        {favs ? favs.ids.length : 0}
++                    </span>
++                </div>
++            </Link>
++        </Button>
+       </nav>
+-      {session ? (
+-        <div className="items-center md:flex gap-x-6 hidden">
+-          <Link href={routes.admin.dashboard}
+-           className="text-foreground"
+-          >
+-            Admin office
+-          </Link>
+-          <SignoutForm />
+-        </div>
+-      ): (
+-  <Button
+-					asChild
+-					variant="ghost"
+-					size="icon"
+-					className="relative inline-block group"
+-				>
+-					<Link href={routes.favourites}>
+-						<div className="flex group-hover:bg-pink-500 diratopm-200 transition-colors ease-in-out items-center justify-center w-10 h-10 bg-muted rounded-full">
+-							<HeartIcon className="w-6 h-6 text-primary group-hover:text-white group-hover:fill-white" />
+-						</div>
+-						<div className="absolute -top-1 5 -right-1.5 flex items-center justify-center w-5 h-5 text-white bg-pink-500 rounded-full group-hover:bg-primary">
+-							<span className="text-xs">
+-								{favs ? favs.ids.length : 0}
+-							</span>
+-						</div>
+-					</Link>
+-				</Button>
+-      )}
++      <div className="items-center md:flex gap-x-2 hidden">
++        {session ? (
++            <>
++                <Button asChild variant={'outline'} size={"icon"}>
++                    <a href={routes.admin.dashboard}>
++                    <LayoutDashboard className="w-6 h-6" />
++                    </a>
++                </Button>
++                <SignoutForm />
++            </>
++        ) : null}
++        <ThemeToggle />
++      </div>
+     
+       <Sheet>
+         <SheetTrigger asChild>
+           <Button variant={"link"} className="md:hidden border-none">
+             <MenuIcon className="w-6 h-6 text-foreground" />
+-            <SheetTitle className="sr-only">Open Menu</SheetTitle>
++            <SheetTitle className="sr-only">Navigate RIM GLOBAL</SheetTitle>
+           </Button>
+         </SheetTrigger>
+         <SheetContent side="right" className="w-full max-w-xs p-4">
+-          <nav className="grid gap-2">
+-            {navLinks.map((link) => (
+-              <Link
+-                key={link.id}
+-                href={link.href}
+-                className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900"
+-              >
+-                {link.label}
+-              </Link>
+-            ))}
+-          </nav>
++          {/* Mobile menu content needs to be restored/updated as well */}
+         </SheetContent>
+       </Sheet>
+     </header>
+Yalnızca /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/layouts'da: language-switcher.tsx
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/layouts/NewsLetterForm.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/layouts/NewsLetterForm.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/layouts/NewsLetterForm.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/layouts/NewsLetterForm.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -23,7 +23,7 @@
+ 			{pending && (
+ 				<Loader2 className="h-4 w-4 shrink-0 animate-spin" aria-hidden="true" />
+ 			)}{" "}
+-			Subscribe Now
++			Subscribe
+ 		</Button>
+ 	);
+ };
+@@ -53,12 +53,12 @@
+     }
+   }, [state.success]);
+   return (
+-    <div className="space-y-4">
++    <div className="space-y-4 max-w-md w-full">
+       <h3 className="text-xl font-bold text-primary">
+-        Subcribe to our inevntory updates
++        Get First Access
+       </h3>
+       <p className="text-gray-700">
+-        Enter your details to get new stock updates
++        Receive updates on new arrivals to our exclusive collection.
+       </p>
+       <Form {...form}>
+         <form
+@@ -67,8 +67,7 @@
+           ref={formRef}
+           className="space-y-2"
+         >
+-          <div className="grid grid-cols-2 space-x-2">
+-            <FormField
++          <FormField
+               control={form.control}
+               name="firstName"
+               render={({ field }) => (
+@@ -98,8 +97,6 @@
+                 </FormItem>
+               )}
+             />
+-            
+-          </div>
+           <FormField
+               control={form.control}
+               name="email"
+@@ -107,7 +104,7 @@
+                 <FormItem>
+                   <FormControl>
+                     <Input
+-                      placeholder="Email"
++                      placeholder="Enter your email"
+                       type="email"
+                       {...field}
+                       className="bg-white w-full"
+Yalnızca /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/layouts'da: public-layout.tsx
+Yalnızca /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/layouts'da: public-payout.tsx
+Yalnızca /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/layouts'da: theme-provider.tsx
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/shared/search-input.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/shared/search-input.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/shared/search-input.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/shared/search-input.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -51,7 +51,7 @@
+   }
+   return (
+     <form action="" className="relative flex-1">
+-      <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
++      <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+       <Input
+         ref={inputRef}
+         defaultValue={q || ""}
+@@ -62,7 +62,7 @@
+       />
+       {q && (
+         <XIcon
+-         className="absolute right-2.5 top-2.5 h-4 w-4 text-white bg-gray-500
++         className="absolute right-2.5 top-2.5 h-4 w-4 text-muted-foreground bg-muted
+          p-0.5 rounded-full cursor-pointer"
+             onClick={clearSearch}
+         />
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/shared/swiper-button.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/shared/swiper-button.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/shared/swiper-button.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/shared/swiper-button.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -19,11 +19,11 @@
+         size="icon"
+         className={cn(
+           prevClassName,
+-          "swiper-button-prev absolute top-1/2 -translate-y-1/2 z-10 flex items-center rounded-full"
++          "swiper-button-prev absolute top-1/2 -translate-y-1/2 z-10 flex items-center rounded-full bg-white"
+         )}
+         onClick={(e) => e.stopPropagation()}
+       >
+-        <ChevronLeft className="h-8 w-8" color="black" />
++        <ChevronLeft className="h-10 w-10" color="black" />
+       </Button>
+       <Button
+         variant="ghost"
+@@ -32,11 +32,11 @@
+         size="icon"
+         className={cn(
+           nextClassName,
+-          "swiper-button-next absolute top-1/2 -translate-y-1/2 z-10 flex items-center rounded-full"
++          "swiper-button-next absolute top-1/2 -translate-y-1/2 z-10 flex items-center rounded-full bg-white"
+         )}
+         onClick={(e) => e.stopPropagation()}
+       >
+-        <ChevronRight className="h-8 w-8" color="black" />
++        <ChevronRight className="h-10 w-10" color="black" />
+       </Button>
+     </div>
+   );
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/ui/active-link.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/ui/active-link.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/ui/active-link.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/ui/active-link.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -19,8 +19,8 @@
+ 			className={cn(
+ 				className,
+ 				isActive
+-					? "bg-sky-600 text-sky-600-foreground hover:bg-sky-600"
+-					: "text-muted hover:bg-white/10",
++					? "bg-primary text-primary-foreground hover:bg-primary/90"
++					: "text-muted-foreground hover:bg-white/10",
+ 			)}
+ 		>
+ 			{children}
+Yalnızca /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/ui'da: dropdown-menu.tsx
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/ui/input-select.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/ui/input-select.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/ui/input-select.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/ui/input-select.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -34,8 +34,6 @@
+ 						{label && <FormLabel htmlFor={inputName}>{label}</FormLabel>}
+ 						<FormControl>
+ 							<NumberInput
+-								style={{ backgroundColor: "#081a2b" }}
+-								className="text-gray-500"
+ 								onValueChange={(values) => {
+ 									onChange(values.floatValue);
+ 								}}
+@@ -53,10 +51,10 @@
+ 				render={({ field: { ref, ...rest } }) => (
+ 					<FormItem>
+ 						<FormControl>
+-							<div className="absolute right-0 -translate-y-10 h-10 flex items-center pr-2 border-l border-l-white/10 border-input">
++							<div className="absolute right-0 -translate-y-10 h-10 flex items-center pr-2 border-l border-l-border">
+ 								<select
+ 									className={cn(
+-										"custom-select appearance-none pr-10 bg-no-repeat disabled:bg-white/10 border rounded-md focus:outline-hidden focus:ring-0 focus-visible:ring-0 pl-3 text-gray-500 border-transparent",
++										"custom-select appearance-none pr-10 bg-no-repeat disabled:bg-muted/50 border rounded-md focus:outline-hidden focus:ring-0 focus-visible:ring-0 pl-3 text-muted-foreground border-transparent",
+ 									)}
+ 									{...rest}
+ 								>
+@@ -68,7 +66,7 @@
+ 								</select>
+ 							</div>
+ 						</FormControl>
+-						<FormMessage className="text-sm text-red-500" />
++						<FormMessage />
+ 					</FormItem>
+ 				)}
+ 			/>
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/ui/RangeSelect.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/ui/RangeSelect.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/ui/RangeSelect.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/ui/RangeSelect.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -21,7 +21,7 @@
+ 			<div className="!mt-1 flex gap-2">
+ 				<select
+ 					{...minSelect}
+-					className="flex-1 w-full pl-3 py-2 border rounded-md custom-select appearance-none pr-12 bg-no-repeat"
++					className="flex-1 w-full pl-3 py-2 border rounded-md custom-select appearance-none pr-12 bg-transparent"
+ 				>
+ 					<option value="">Select</option>
+ 					{minSelect.options.map((option) => {
+@@ -34,7 +34,7 @@
+ 				</select>
+ 				<select
+ 					{...maxSelect}
+-					className="flex-1 w-full pl-3 py-2 border rounded-md custom-select appearance-none pr-12 bg-no-repeat"
++					className="flex-1 w-full pl-3 py-2 border rounded-md custom-select appearance-none pr-12 bg-transparent"
+ 				>
+ 					<option value="">Select</option>
+ 					{maxSelect.options.map((option) => {
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/ui/select.tsx /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/ui/select.tsx
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/components/ui/select.tsx	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/ui/select.tsx	2025-10-06 11:50:07.000000000 +0300
+@@ -32,7 +32,7 @@
+ 					value={value ?? ""}
+ 					className={cn(
+ 						selectClassName,
+-						"disabled:!bg-gray-100 w-full px-3 py-2 border-input border rounded-md focus:outline-hidden custom-select appearance-none pr-12 bg-no-repeat",
++						"bg-transparent disabled:bg-muted/50 w-full px-3 py-2 border-input border rounded-md focus:outline-hidden custom-select appearance-none pr-12 bg-transparent",
+ 					)}
+ 					{...rest}
+ 				>
+Yalnızca /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/components/ui'da: theme-toggle.tsx
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/config/routes.ts /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/config/routes.ts
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/config/routes.ts	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/config/routes.ts	2025-10-06 11:50:07.000000000 +0300
+@@ -7,6 +7,9 @@
+     reserveSuccess: (slug: string) => `/inventory/${slug}/success`,
+     favourites: "/favourites",
+     inventory: "/inventory",
++    financing: "/financing",
++    ourPhilosophy: "/our-philosophy",
++    contact: "/contact",
+     signIn: "/auth/sign-in",
+     signUp: "/auth/sign-up",
+     challenge: "/auth/challenge",
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/lib/imgix-loader.ts /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/lib/imgix-loader.ts
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/lib/imgix-loader.ts	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/lib/imgix-loader.ts	2025-10-06 11:50:07.000000000 +0300
+@@ -17,4 +17,4 @@
+ 	const params = url.searchParams.toString();
+ 
+ 	return `${process.env.NEXT_PUBLIC_IMGIX_URL}${path}?${params}`;
+-};
+\ Dosya sonunda yenisatır yok
++};
+diff -r -u /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/lib/otp.ts /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/lib/otp.ts
+--- /home/nitro/Projeler/car-gallery-pro/.old/vvduth-car-dealer/car-dealer-master/src/lib/otp.ts	2025-06-20 16:51:04.000000000 +0300
++++ /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main/src/lib/otp.ts	2025-10-06 11:50:07.000000000 +0300
+@@ -25,7 +25,7 @@
+ 
+   await redis.setex(`${REDIS_PREFIX}:uid-${userId}`, 60 * 60, challenge);
+   const { error } = await resend.emails.send({
+-    from: `Meat motors <${SENDER_EMAIL}>`,
++    from: `RIM GLOBAL <${SENDER_EMAIL}>`,
+     to: email,
+     subject: "Your OTP Code",
+     html: `<p>${code}</p>`,
+Yalnızca /home/nitro/Projeler/car-gallery-pro/.old/memati-car-dealer/CAR-GALLERY-PRO-main'da: test-sharp.js

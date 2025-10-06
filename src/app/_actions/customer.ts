@@ -77,58 +77,41 @@ export const deleteCustomerAction = async (id: number) => {
 	}
 };
 
-export const updateCustomerAction = async ({
-  id,
-  status,
-}: {
+export const updateCustomerAction = async (data: {
   id: number;
   status: CustomerStatus;
+  name: string;
+  email: string;
+  phone?: string;
+  carTitle?: string;
+  notes?: string;
 }) => {
+  const session = await auth();
+  if (!session) {
+    return forbidden();
+  }
+
   try {
-    const validProps = UpdateCustomerSchema.safeParse({ id, status });
-    if (!validProps.success) return {
-      success: false,
-      message: "Invalid data",
-    }
-
-    const customer = await prisma.customer.findUnique({
-      where: {
-        id: validProps.data?.id,
-      }
-    })
-
-    if (!customer) {
-      return {
-        success: false,
-        message: "Customer not found",
-      };
-    }
-
-    await prisma.customer.update({
-      where: {
-        id: validProps.data?.id,
-      },
+    const updatedCustomer = await prisma.customer.update({
+      where: { id: data.id },
       data: {
-        status: validProps.data?.status,
-        lifecycle: {
-          create: {
-            oldStatus: customer.status,
-            newStatus: validProps.data.status,
-          }
-        }
-      }
-    })
-    revalidatePath(routes.admin.editCustomer(customer.id));
+        status: data.status,
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        carTitle: data.carTitle,
+        notes: data.notes,
+      },
+    });
     revalidatePath(routes.admin.customers);
     return {
       success: true,
-      message: "Customer updated successfully",
+      message: `Customer ${updatedCustomer.name} updated`,
     };
   } catch (error) {
-    console.log("Error updating customer: ", { error });
     return {
       success: false,
-      message: "Something went wrong updating customer",
-    }
+      message: "Failed to update customer",
+    };
   }
-}
+};

@@ -1,0 +1,5 @@
+fix(theme): Suppress hydration warning in root layout
+
+Adds the `suppressHydrationWarning` prop to the <html> tag in the root layout.
+
+This resolves the common hydration mismatch error caused by the `next-themes` library, which dynamically adds `class` and `style` attributes on the client side for theme detection. This is the recommended solution by the library.

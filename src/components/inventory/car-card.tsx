@@ -16,6 +16,7 @@ import {
   formatTransmission,
 } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
+import parse from "html-react-parser";
 import { Button } from "../ui/button";
 import FavButton from "./fav-button";
 import { usePathname } from "next/navigation";
@@ -61,14 +62,10 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
   return (
     <AnimatePresence>
       {isVisible && (
-         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3 }}
+         <div
           key={car.id}
           id={car.slug || "slug"}
-         className="bg-white relative rounded-md shadow-md overflow-hidden flex flex-col">
+         className="bg-card relative rounded-md shadow-lg overflow-hidden flex flex-col border transition-shadow duration-300 hover:shadow-2xl">
         <div className="aspect-3/2 relative">
           <Link href={routes.singleClassified(car.slug || "slug")}>
             <Image
@@ -86,7 +83,7 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
           isFav={isFav}
           id={car.id}
           />
-          <div className="absolute top-2.5 right-3.5 bg-primary text-slate-50 font-bold px-2 py-1 rounded">
+          <div className="absolute top-2.5 right-3.5 bg-primary/90 text-primary-foreground font-bold px-2 py-1 rounded">
             <div className="text-xs lg:text-base xl:text-lg font-semibold">
               {formatPrice({
                 price: car.price,
@@ -95,23 +92,27 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
             </div>
           </div>
         </div>
-        <div className="p-4 flex flex-col space-y-3">
+        <div className="p-4 flex flex-col space-y-3 flex-grow">
           <Link
             href={routes.singleClassified(car.slug || "slug")}
             className="text-sm md:text-base lg:text-lg font-semibold line-clamp-1 
         transition-colors hover:text-primary"
           >
             {car.title}
+import parse from "html-react-parser";
+
+// ... (rest of the imports)
+
+// ... (inside the CarCard component)
           </Link>
           {car.description && (
-            <div className="text-xs md:text-sm xl:text-base text-gray-500 line-clamp-2">
-              <HtmlParser html={car.description} />
-              &nbsp;
+            <div className="text-xs md:text-sm xl:text-base text-muted-foreground line-clamp-2 prose dark:prose-invert max-w-none flex-grow">
+              {parse(car.description)}
             </div>
           )}
           <ul
-            className="text-xs md:text-sm text-gray-600 xl:flex grid grid-cols-1
-      grid-rows-4 md:grid-cols-2 md:grid-rows-4 items-center justify-between w-full"
+            className="text-xs md:text-sm text-muted-foreground xl:flex grid grid-cols-1
+      grid-rows-4 md:grid-cols-2 md:grid-rows-4 items-center justify-between w-full mt-auto"
           >
             {getKeyCarInfo(car).map((info) => (
               <li
@@ -152,7 +153,7 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
             </Button>
           </div>
         </div>
-      </motion.div>
+      </div>
       )}
      
     </AnimatePresence>
