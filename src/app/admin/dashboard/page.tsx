@@ -114,7 +114,6 @@ async function getDashBoardData() {
 	const totalSales = salesThisMonth._sum.price || 0;
 	const previousTotalSales = salesPreviousMonth._sum.price || 0;
 
-	console.log({ totalSales, previousTotalSales });
   const conversionRatePercentageChange = calculatePercentageChange(
 		conversionRate,
 		previousConversionRate,

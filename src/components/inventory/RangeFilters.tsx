@@ -1,7 +1,7 @@
 import type { FilterOptions, TaxonomyFiltersProps } from "@/config/types";
 import { formatNumber, formatPrice } from "@/lib/utils";
 import type { CurrencyCode } from "@prisma/client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { RangeSelect } from "../ui/RangeSelect";
 
 interface RangeFilterProps extends TaxonomyFiltersProps {
@@ -15,6 +15,7 @@ interface RangeFilterProps extends TaxonomyFiltersProps {
 	currency?: {
 		currencyCode: CurrencyCode;
 	};
+	placeholder?: string;
 }
 
 export const RangeFilter = (props: RangeFilterProps) => {
@@ -29,9 +30,10 @@ export const RangeFilter = (props: RangeFilterProps) => {
 		currency,
 		handleChange,
 		searchParams,
+		placeholder,
 	} = props;
 
-	const getInitialState = () => {
+	const initialState = useMemo(() => {
 		const state: FilterOptions<string, number> = [];
 		let iterator = defaultMin - (increment ?? 1);
 
@@ -59,9 +61,7 @@ export const RangeFilter = (props: RangeFilterProps) => {
 		} while (iterator < defaultMax);
 
 		return state;
-	};
-
-	const initialState = getInitialState();
+	}, [defaultMin, defaultMax, increment, currency, thousandSeparator]);
 
 	const [minOptions, setMinOptions] =
 		useState<FilterOptions<string, number>>(initialState);
@@ -69,27 +69,29 @@ export const RangeFilter = (props: RangeFilterProps) => {
 		initialState.toReversed(),
 	);
 
-	// biome-ignore lint:
 	useEffect(() => {
+		let currentMinOptions = initialState;
+		let currentMaxOptions = [...initialState].reverse();
+
 		if (searchParams?.[minName]) {
-			setMaxOptions(
-				initialState.filter(
-					({ value }) => value > Number(searchParams[minName]),
-				),
-			);
+			currentMaxOptions = initialState.filter(
+				({ value }) => value > Number(searchParams[minName]),
+			).reverse();
 		}
 		if (searchParams?.[maxName]) {
-			setMinOptions(
-				initialState.filter(
-					({ value }) => value < Number(searchParams[maxName]),
-				),
+			currentMinOptions = initialState.filter(
+				({ value }) => value < Number(searchParams[maxName]),
 			);
 		}
-	}, [searchParams?.[minName], searchParams?.[maxName]]);
+
+		setMinOptions(currentMinOptions);
+		setMaxOptions(currentMaxOptions);
+	}, [searchParams?.[minName], searchParams?.[maxName], initialState, minName, maxName]);
 
 	return (
 		<RangeSelect
 			label={label}
+			placeholder={placeholder}
 			minSelect={{
 				name: minName,
 				value: Number(searchParams?.[minName]) || "",

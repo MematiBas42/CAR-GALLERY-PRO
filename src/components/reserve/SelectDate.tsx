@@ -15,7 +15,8 @@ import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
 import { routes } from "@/config/routes";
 import { generataTimeOptions, generateDateOptions } from "@/lib/utils";
-import { env } from "process";
+import { useTranslations } from "next-intl";
+
 const SelectDateSchema = z.object({
   handoverDate: z.string({
     message: "Handover date is required",
@@ -27,6 +28,7 @@ const SelectDateSchema = z.object({
 });
 type SelectDateType = z.infer<typeof SelectDateSchema>;
 const SelectDate = (props: MultiStepsFormComponentProps) => {
+  const t = useTranslations("Reserve.selectDate");
   const { searchParams } = props;
   const handoverDate = (searchParams?.handoverDate as string) || undefined;
   const handoverTime = (searchParams?.handoverTime as string) || undefined;
@@ -92,7 +94,7 @@ const SelectDate = (props: MultiStepsFormComponentProps) => {
             render={({ field: { ref, ...rest } }) => (
               <FormItem>
                 <FormLabel htmlFor="handoverDate">
-                  Select Handover Date
+                  {t("dateLabel")}
                 </FormLabel>
                 <FormControl>
                   <Select options={generateDateOptions()} {...rest} />
@@ -106,7 +108,7 @@ const SelectDate = (props: MultiStepsFormComponentProps) => {
             render={({ field: { ref, ...rest } }) => (
               <FormItem>
                 <FormLabel htmlFor="handoverTime">
-                  Select Handover Time
+                  {t("timeLabel")}
                 </FormLabel>
                 <FormControl>
                   <Select options={generataTimeOptions()} {...rest} />
@@ -125,7 +127,7 @@ const SelectDate = (props: MultiStepsFormComponentProps) => {
             {isPreviousPending ? (
               <Loader2 className="w-4 h-4 shrink-0 animate-spin" />
             ) : null}{" "}
-            BACK
+            {t("back")}
           </Button>
           <Button
             type="submit"
@@ -135,7 +137,7 @@ const SelectDate = (props: MultiStepsFormComponentProps) => {
             {isPending ? (
               <Loader2 className="w-4 h-4 shrink-0 animate-spin" />
             ) : null}{" "}
-            Continue 🎯
+            {t("continue")} 🎯
           </Button>
         </div>
       </form>

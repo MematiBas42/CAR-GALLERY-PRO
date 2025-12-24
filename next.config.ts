@@ -1,11 +1,15 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from 'next-intl/plugin';
+
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ["http://10.53.18.105:3000"],
+  allowedDevOrigins: ["localhost:3000", "192.168.1.7:3000", "192.168.1.5:3000", "192.168.1.5"],
   /* config options here */
   compress: true,
   images: {
 		remotePatterns: [{ hostname: "*" }],
+        qualities: [25, 50, 75, 100],
 	},
   experimental: {
     authInterrupts: true,
@@ -45,4 +49,4 @@ const nextConfig: NextConfig = {
   }
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

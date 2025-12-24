@@ -38,12 +38,14 @@ import MultiImageUploader from "./mutil-image-uploader";
 import { v4 as uuidv4 } from "uuid";
 import { endpoints } from "@/config/endpoints";
 import { api } from "@/lib/api-client";
+import { useTranslations } from "next-intl";
 
 interface CarFormProps {
   car?: CarWithImages;
 }
 
 const CarForm = ({ car }: CarFormProps) => {
+  const t = useTranslations("Admin.cars");
   const [isPending, startTransition] = useTransition();
   const isEditMode = !!car;
 
@@ -58,7 +60,7 @@ const CarForm = ({ car }: CarFormProps) => {
       ? { id: car.id }
       : {
           images: [], year: "", make: "", model: "", modelVariant: "",
-          description: "", vrm: "", odoReading: null, price: null, doors: null, seats: null,
+          description: "", vrm: "", odoReading: undefined, price: undefined, doors: undefined, seats: undefined,
           fuelType: FuelType.PETROL, bodyType: BodyType.SEDAN, transmission: Transmission.AUTOMATIC,
           colour: Colour.BLACK, ulezCompliance: ULEZCompliance.EXEMPT, odoUnit: OdoUnit.MILES,
           status: ClassifiedStatus.DRAFT, currency: CurrencyCode.GBP,
@@ -113,10 +115,10 @@ const CarForm = ({ car }: CarFormProps) => {
         colour: car.colour,
         ulezCompliance: car.ulezCompliance,
         status: car.status,
-        odoReading: car.odoReading ?? null,
-        seats: car.seats ?? null,
-        doors: car.doors ?? null,
-        price: car.price ? (car.price / 100) : null,
+        odoReading: car.odoReading ?? undefined,
+        seats: car.seats ?? undefined,
+        doors: car.doors ?? undefined,
+        price: car.price ? (car.price / 100) : undefined,
       });
     }
   }, [car, isEditMode, form.reset]);
@@ -126,18 +128,18 @@ const CarForm = ({ car }: CarFormProps) => {
       const action = isEditMode ? updateCarAction : createCarAction;
       const result = await action(data as any); // Casting to any to avoid type conflicts
       if (result?.success) {
-        toast.success(isEditMode ? "Car updated" : "Car created");
+        toast.success(isEditMode ? t("successUpdated") : t("successCreated"));
       } else {
-        toast.error(`Error: ${result?.message}`);
+        toast.error(`${t("error")}: ${result?.message}`);
       }
     });
   };
 
   return (
     <Form {...form}>
-      <form action="" onSubmit={form.handleSubmit(carformSubmit)}>
+      <form action="" onSubmit={form.handleSubmit(carformSubmit as any)}>
         <h1 className="text-3xl font-bold mb-6">
-          {isEditMode ? "Edit Vehicle Details" : "Create New Vehicle"}
+          {isEditMode ? t("editTitle") : t("createTitle")}
         </h1>
         <div className="w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
           <CarFormField 
@@ -152,7 +154,7 @@ const CarForm = ({ car }: CarFormProps) => {
               name="images"
               render={({ field: { name, onChange, value } }) => (
                 <FormItem>
-                  <FormLabel htmlFor="images">Images (up to 8)</FormLabel>
+                  <FormLabel htmlFor="images">{t("imagesLabel")}</FormLabel>
                   <FormControl>
                     <MultiImageUploader name={name} onChange={onChange} value={value} />
                   </FormControl>
@@ -165,7 +167,7 @@ const CarForm = ({ car }: CarFormProps) => {
               name="status"
               render={({ field: { ref, ...rest } }) => (
                 <FormItem>
-                  <FormLabel htmlFor="status">Status</FormLabel>
+                  <FormLabel htmlFor="status">{t("statusLabel")}</FormLabel>
                   <FormControl>
                     <Select
                       options={Object.values(ClassifiedStatus).map((value) => ({
@@ -186,7 +188,7 @@ const CarForm = ({ car }: CarFormProps) => {
               className="w-full flex gap-x-2"
             >
               {isPending && <Loader2 className="animate-spin h-4 w-4" />}
-              {isEditMode ? "Update Car" : "Create Car"}
+              {isEditMode ? t("updateButton") : t("createButton")}
             </Button>
           </div>
         </div>

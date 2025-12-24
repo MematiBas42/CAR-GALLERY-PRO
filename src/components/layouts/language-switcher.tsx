@@ -8,6 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useLocale } from "next-intl"
 
 const FlagUSA = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 3" {...props}>
@@ -36,24 +37,33 @@ const FlagSA = (props: React.SVGProps<SVGSVGElement>) => (
 
 
 export function LanguageSwitcher() {
+  const locale = useLocale();
+
+  const handleLocaleChange = (newLocale: string) => {
+    document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`;
+    window.location.reload();
+  };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon">
-            <FlagUSA className="h-6 w-6 rounded-full" />
+            {locale === 'en' && <FlagUSA className="h-6 w-6 rounded-full" />}
+            {locale === 'tr' && <FlagTR className="h-6 w-6 rounded-full" />}
+            {locale === 'ar' && <FlagSA className="h-6 w-6 rounded-full" />}
+            {!['en', 'tr', 'ar'].includes(locale) && <FlagUSA className="h-6 w-6 rounded-full" />}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleLocaleChange('en')}>
             <FlagUSA className="h-4 w-4 mr-2" />
             <span>English</span>
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleLocaleChange('tr')}>
             <FlagTR className="h-4 w-4 mr-2" />
             <span>Türkçe</span>
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleLocaleChange('ar')}>
             <FlagSA className="h-4 w-4 mr-2" />
             <span>العربية</span>
         </DropdownMenuItem>

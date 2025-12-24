@@ -20,6 +20,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { cn, formatNumber, formatPrice } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface DashboardItem {
   id: number;
@@ -31,7 +32,7 @@ interface DashboardItem {
   style: Intl.NumberFormatOptions["style"];
 }
 
-const KpiCard = (props: DashboardItem[][number]) => {
+const KpiCard = (props: DashboardItem) => {
   const { icon: Icon, ...rest } = props;
   return (
     <Card key={rest.id} className="bg-gray-800 border-gray-700">
@@ -78,6 +79,7 @@ const KpiCard = (props: DashboardItem[][number]) => {
 const KPIcards = ({
   data, // This will be the data fetched from the dashboard
 }: KPIcardsProps) => {
+  const t = useTranslations("Admin.dashboard");
   const {
     totalSales,
     carSoldThisMonth,
@@ -91,8 +93,8 @@ const KPIcards = ({
   const dashboardData: DashboardItem[] = [
     {
       id: 1,
-      title: "Total Sales",
-      description: "Total sales revenue in the last 30 days",
+      title: t("totalSales"),
+      description: t("totalSalesDesc"),
       icon: PoundSterling,
       amount: totalSales,
       percentage: Math.round(salesPercentageChange),
@@ -100,8 +102,8 @@ const KPIcards = ({
     },
     {
       id: 2,
-      title: "Cars Sold",
-      description: "Total number of cars sold in the last 30 days",
+      title: t("carsSold"),
+      description: t("carsSoldDesc"),
       icon: CarIcon,
       amount: carSoldThisMonth,
       percentage: Math.round(carSoldPercentageChange),
@@ -109,8 +111,8 @@ const KPIcards = ({
     },
     {
       id: 3,
-      title: "New Customers",
-      description: "Total number of new customers in the last 30 days",
+      title: t("newCustomers"),
+      description: t("newCustomersDesc"),
       icon: UsersIcon,
       amount: newCustomersThisMonth,
       percentage: Math.round(newCustomerPercentageChange),
@@ -118,8 +120,8 @@ const KPIcards = ({
     },
     {
       id: 4,
-      title: "Conversion Rate",
-      description: "% of sales in the last 30 days",
+      title: t("conversionRate"),
+      description: t("conversionRateDesc"),
       icon: TrendingUpIcon,
       amount: conversionRate,
       percentage: Math.round(conversionRatePercentageChange),

@@ -5,8 +5,10 @@ import { Loader2 } from "lucide-react";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "../ui/button";
+import { useTranslations } from "next-intl";
 
 const LogoutButton = () => {
+	const t = useTranslations("Admin.settings");
 	const { pending } = useFormStatus();
 
 	return (
@@ -18,13 +20,14 @@ const LogoutButton = () => {
 				type="submit"
 			>
 				{pending && <Loader2 className="animate-spin w-4 h-4" />}
-				{pending ? "Logging out..." : "Log out of all sessions"}
+				{pending ? t("loggingOut") : t("logoutButton")}
 			</Button>
 		</div>
 	);
 };
 
 export const SettingsPageContent = () => {
+	const t = useTranslations("Admin.settings");
 	const [_, formAction] = useActionState(logoutOfAllSessions, null);
 
 	return (
@@ -32,11 +35,10 @@ export const SettingsPageContent = () => {
 			<div className="grid max-w-7xl grid-cols-1 gap-x-8 md:grid-cols-3">
 				<div>
 					<h2 className="text-base font-semibold leading-7 text-muted">
-						Log out of all sessions
+						{t("logoutTitle")}
 					</h2>
 					<p className="mt-1 text-sm leading-6 text-muted/75">
-						This will log out out of all of your sessions across all of your
-						devices of which you are currently logged into.
+						{t("logoutDesc")}
 					</p>
 				</div>
 				<form action={formAction} className="md:col-span-2">

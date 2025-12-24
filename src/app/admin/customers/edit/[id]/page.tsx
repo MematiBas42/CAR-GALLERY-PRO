@@ -29,7 +29,7 @@ const EditCustomerPage = async (props: PageProps) => {
       id: z.number(),
     })
     .safeParse({
-      id: Number(params?.id),
+      id: Number((params as any)?.id),
     });
   if (!success || !data.id) {
     redirect(routes.admin.customers);
@@ -70,7 +70,7 @@ const EditCustomerPage = async (props: PageProps) => {
               <DialogTitle>Edit Customer Details</DialogTitle>
             </DialogHeader>
             <div className="py-4 overflow-y-auto">
-              <EditCustomerForm customer={customer} />
+              <EditCustomerForm customer={customer as any} />
             </div>
           </DialogContent>
         </Dialog>

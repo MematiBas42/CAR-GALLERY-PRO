@@ -5,8 +5,10 @@ import { getSourceId } from '@/lib/source-id'
 import { ClassifiedStatus } from '@prisma/client'
 import React from 'react'
 import { LatestArrivalsCarousel } from './LatestArrivalCarousel'
+import { getTranslations } from "next-intl/server";
 
 const LastestArrival = async () => {
+    const t = await getTranslations("Homepage.LatestArrivals");
     const cars = await prisma.classified.findMany({
         where: {
             status: ClassifiedStatus.LIVE
@@ -21,8 +23,8 @@ const LastestArrival = async () => {
   return (
     <section className="py-16 sm:py-24 bg-secondary">
 			<div className="container mx-auto max-w-[80vw]">
-				<h2 className="mt-2 uppercase text-2xl font-bold tracking-tight text-foreground sm:text-4xl">
-					Latest Arrivals
+				<h2 className="mt-2 uppercase text-2xl font-bold tracking-tight text-foreground sm:text-4xl text-center">
+					{t("title")}
 				</h2>
 				<LatestArrivalsCarousel
                 

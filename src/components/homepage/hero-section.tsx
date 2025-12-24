@@ -10,8 +10,10 @@ import { prisma } from "@/lib/prisma";
 import { SearchButton } from "@/components/homepage/search-button";
 import { buildClassifiedFilterQuery } from "@/lib/utils";
 import { routes } from "@/config/routes";
+import { getTranslations } from "next-intl/server";
 
 const HeroSection = async (props: AwaitedPageProps) => {
+  const t = await getTranslations("Homepage.Hero");
   const { searchParams } = props;
   const totalFiltersApplied = Object.keys(searchParams || {}).length;
   const isFilterApplied = totalFiltersApplied > 0;
@@ -34,7 +36,7 @@ const HeroSection = async (props: AwaitedPageProps) => {
   });
   return (
     <section
-      className="relative flex items-center justify-center h-[calc(100vh-4rem)] bg-cover bg-center"
+      className="relative flex items-start lg:items-center justify-center min-h-[calc(100dvh-4rem)] pt-20 pb-12 lg:py-0 bg-cover bg-center"
       style={{
         backgroundImage: `url('/assets/hero-bg.jpg')`,
       }}
@@ -46,10 +48,10 @@ const HeroSection = async (props: AwaitedPageProps) => {
             className="text-2xl text-center lg:text-left md:text-4xl lg:text-8xl uppercase
              font-bold text-white"
           >
-            Your Next Chapter, Curated.
+            {t("title")}
           </h1>
           <h2 className="mt-4 uppercase text-center lg:text-left text-base md:text-3xl lg:text-4xl text-white">
-            At RIM GLOBAL, we've reimagined the pre-owned car experience for Federal Way. Explore our meticulously curated collection of quality-inspected vehicles and discover the confidence of a transparent, hassle-free journey.
+            {t("subtitle")}
           </h2>
         </div>
         <div
@@ -63,7 +65,7 @@ const HeroSection = async (props: AwaitedPageProps) => {
                 minMaxValue={minMaxResult}
               />
             </div>
-            <SearchButton count={carsCount} label="Discover The Collection" />
+            <SearchButton count={carsCount} label={t("discover")} />
             {isFilterApplied && (
 							<Button
 								asChild
@@ -71,7 +73,7 @@ const HeroSection = async (props: AwaitedPageProps) => {
 								className="w-full hover:bg-accent"
 							>
 								<Link href={routes.home}>
-									Clear Filters ({totalFiltersApplied})
+									{t("clearFilters")} ({totalFiltersApplied})
 								</Link>
 							</Button>
 						)}

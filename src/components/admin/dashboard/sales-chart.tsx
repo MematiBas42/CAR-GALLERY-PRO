@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { formatPrice } from "@/lib/utils";
 import React, { use } from "react";
+import { useTranslations } from "next-intl";
 import {
   Bar,
   BarChart,
@@ -23,23 +24,33 @@ interface SalesChartsProps {
   data: ChartDataType;
 }
 const SalesCharts = (props: SalesChartsProps) => {
+  const t = useTranslations("Admin.dashboard.salesChart");
+  const tMonths = useTranslations("Months");
   const { data } = props;
   const chartData = use(data);
+
+  const translatedData = chartData.map((item) => ({
+    ...item,
+    month: tMonths(item.month),
+  }));
+
   return (
     <div>
       <Card className="mbb-6 bg-gray-800 border-gray-700">
         <CardHeader>
           <CardTitle className="text-gray-100">
-            Monthly sales {new Date().getFullYear() - 1} /{" "}
-            {new Date().getFullYear()}
+            {t("title", {
+              yearStart: new Date().getFullYear() - 1,
+              yearEnd: new Date().getFullYear(),
+            })}
           </CardTitle>
           <CardDescription className="text-gray-400">
-            Number of cars sold per month
+            {t("description")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={500}>
-            <BarChart data={chartData}>
+            <BarChart data={translatedData}>
               <XAxis
               dataKey="month"
               stroke="#60a5fa"

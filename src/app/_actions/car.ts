@@ -12,9 +12,11 @@ import { forbidden, redirect } from "next/navigation";
 import slugify from "slugify";
 import { createPngDataUri } from "unlazy/thumbhash";
 import { CreateCarType, UpdateCarType } from "../schemas/car.schema";
+import { getTranslations } from "next-intl/server";
 
 
 export const createCarAction = async (data: CreateCarType) => {
+  const t = await getTranslations("Admin.cars.messages");
   const session = await auth();
   if (!session) {
     forbidden();
@@ -93,21 +95,21 @@ export const createCarAction = async (data: CreateCarType) => {
     if (createdCar) success = true;
 
   } catch (err) {
-    console.log({ err });
     if (err instanceof Error) {
       return { success: false, message: err.message };
     }
-    return { success: false, message: "Something went wrong" };
+    return { success: false, message: t("genericError") };
   }
   if (success) {
     revalidatePath(routes.admin.cars);
     redirect(routes.admin.cars);
   } else {
-    return { success: false, message: "Failed to create classified" };
+    return { success: false, message: t("createError") };
   }
 };
 
 export const updateCarAction = async (data: UpdateCarType) => {
+  const t = await getTranslations("Admin.cars.messages");
   const session = await auth();
   if (!session) {
     forbidden();
@@ -203,22 +205,22 @@ export const updateCarAction = async (data: UpdateCarType) => {
     );
     if (updatedCar && images) success = true;
   } catch (err) {
-    console.log({ err });
     if (err instanceof Error) {
       return { success: false, message: err.message };
     }
-    return { success: false, message: "Something went wrong" };
+    return { success: false, message: t("genericError") };
   }
   if (success) {
     revalidatePath(routes.admin.cars);
     redirect(routes.admin.cars);
   } else {
-    return { success: false, message: "Failed to update classified" };
+    return { success: false, message: t("updateError") };
   }
 };
 
 
 export const deleteCarAction = async (id: number) => {
+  const t = await getTranslations("Admin.cars.messages");
   const session = await auth();
   if (!session) {
     forbidden();
@@ -231,12 +233,12 @@ export const deleteCarAction = async (id: number) => {
 
     if (deletedCar) {
       revalidatePath(routes.admin.cars);
-      return { success: true, message: "Car deleted successfully" };
+      return { success: true, message: t("deleteSuccess") };
     } else {
-      return { success: false, message: "Failed to delete car" };
+      return { success: false, message: t("deleteError") };
     }
   } catch (error) {
     console.error("Error deleting car:", error);
-    return { success: false, message: "Failed to delete car" };
+    return { success: false, message: t("deleteError") };
   }
 }

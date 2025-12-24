@@ -16,17 +16,21 @@ import { Select } from "../ui/select";
 import { Skeleton } from "../ui/skeleton";
 import InputSelect from "../ui/input-select";
 import { NumberInput } from "../ui/number-input";
+import { useTranslations } from "next-intl";
 
 const RichTextEditor = dynamic(
   () => import("./rich-text-editor").then((mod) => mod.RichTextEditor),
   {
     ssr: false,
-    loading: () => (
-      <div className="space-y-2 flex flex-col">
-        <Skeleton className="w-24 h-4" />
-        <Skeleton className="h-[200px] w-full" />
-      </div>
-    ),
+    loading: () => {
+      const t = useTranslations("Admin.cars.form");
+      return (
+        <div className="space-y-2 flex flex-col">
+          <Skeleton className="w-24 h-4" />
+          <Skeleton className="h-[200px] w-full" />
+        </div>
+      );
+    },
   }
 );
 
@@ -40,6 +44,7 @@ interface CarFormFieldProps {
 }
 
 const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldProps) => {
+  const t = useTranslations("Admin.cars.form");
   const form = useFormContext();
 
   const handleChange = (
@@ -65,7 +70,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
         name="year"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="year">Year</FormLabel>
+            <FormLabel htmlFor="year">{t("year")}</FormLabel>
             <FormControl>
               <Select
                 {...field}
@@ -82,7 +87,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
         name="make"
         render={({ field: { onChange, ...rest } }) => (
           <FormItem>
-            <FormLabel htmlFor="make">Make</FormLabel>
+            <FormLabel htmlFor="make">{t("make")}</FormLabel>
             <FormControl>
               {isLoading ? <Skeleton className="h-10" /> : <Select
                 {...rest}
@@ -99,7 +104,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
         name="model"
         render={({ field: { onChange, ...rest } }) => (
           <FormItem>
-            <FormLabel htmlFor="model">Model</FormLabel>
+            <FormLabel htmlFor="model">{t("model")}</FormLabel>
             <FormControl>
               {isLoading ? <Skeleton className="h-10" /> : <Select
                 {...rest}
@@ -116,7 +121,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
         name="modelVariant"
         render={({ field: { onChange, ...rest } }) => (
           <FormItem>
-            <FormLabel htmlFor="modelVariant">Model Variant</FormLabel>
+            <FormLabel htmlFor="modelVariant">{t("variant")}</FormLabel>
             <FormControl>
               {isLoading ? <Skeleton className="h-10" /> : <Select
                 {...rest}
@@ -131,7 +136,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
 
       <InputSelect
         options={Object.values(CurrencyCode).map((currency) => ({ label: currency, value: currency }))}
-        label="Price"
+        label={t("price")}
         inputName="price"
         selectName="currency"
         inputMode="numeric"
@@ -139,7 +144,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
       />
       <InputSelect
         options={Object.values(OdoUnit).map((value) => ({ label: value, value }))}
-        label="Odometer Reading"
+        label={t("odoReading")}
         inputName="odoReading"
         selectName="odoUnit"
         inputMode="numeric"
@@ -150,7 +155,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
         name="transmission"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="transmission">Transmission</FormLabel>
+            <FormLabel htmlFor="transmission">{t("transmission")}</FormLabel>
             <FormControl>
               <Select
                 {...field}
@@ -166,7 +171,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
         name="fuelType"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="fuelType">Fuel Type</FormLabel>
+            <FormLabel htmlFor="fuelType">{t("fuelType")}</FormLabel>
             <FormControl>
               <Select
                 {...field}
@@ -182,7 +187,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
         name="bodyType"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="bodyType">Body Type</FormLabel>
+            <FormLabel htmlFor="bodyType">{t("bodyType")}</FormLabel>
             <FormControl>
               <Select
                 {...field}
@@ -198,7 +203,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
         name="colour"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="colour">Colour</FormLabel>
+            <FormLabel htmlFor="colour">{t("colour")}</FormLabel>
             <FormControl>
               <Select
                 {...field}
@@ -214,7 +219,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
         name="ulezCompliance"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="ulezCompliance">ULEZ Compliance</FormLabel>
+            <FormLabel htmlFor="ulezCompliance">{t("ulez")}</FormLabel>
             <FormControl>
               <Select
                 {...field}
@@ -230,7 +235,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
         name="vrm"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="vrm">Vehicle Registration Mark</FormLabel>
+            <FormLabel htmlFor="vrm">{t("vrm")}</FormLabel>
             <FormControl>
               <Input placeholder="LA16 PYW" className="uppercase text-white" {...field} />
             </FormControl>
@@ -243,7 +248,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
         name="doors"
         render={({ field: { onChange, ...rest } }) => (
           <FormItem>
-            <FormLabel htmlFor="doors">Doors</FormLabel>
+            <FormLabel htmlFor="doors">{t("doors")}</FormLabel>
             <FormControl>
               <NumberInput
                 {...rest}
@@ -263,7 +268,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
         name="seats"
         render={({ field: { onChange, ...rest } }) => (
           <FormItem>
-            <FormLabel htmlFor="seats">Seats</FormLabel>
+            <FormLabel htmlFor="seats">{t("seats")}</FormLabel>
             <FormControl>
               <NumberInput
                 {...rest}
@@ -284,7 +289,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>{t("description")}</FormLabel>
               <FormControl>
                 <RichTextEditor name={field.name} />
               </FormControl>

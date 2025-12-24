@@ -32,9 +32,10 @@ const DragAndDropContext = dynamic(
 
 export type CarImages = UpdateCarType["images"];
 interface MultiImageUploaderProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> {
   className?: string;
   value?: CarImages;
+  onChange?: (value: CarImages) => void;
 }
 
 type ImageProgess = {

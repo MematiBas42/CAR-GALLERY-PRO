@@ -10,20 +10,22 @@ import { routes } from "@/config/routes";
 import { Button } from "@/components/ui/button";
 import { deleteCustomerAction } from '@/app/_actions/customer';
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export const CustomerActionButtons = ({
 	customer,
 }: { customer: CustomerWithCar }) => {
+	const t = useTranslations("Common.actions");
 	const [isPending, startTransition] = useTransition();
 	const deleteCustomer = (id: number) => {
 		startTransition(async () => {
 			const result = await deleteCustomerAction(id);
 			if (result.success) {
-				toast.success("Customer deleted successfully", {
+				toast.success(t("deleteCustomerSuccess"), {
                     description: result.message,
                 })
 			} else {
-				toast.error("Failed to delete customer", {
+				toast.error(t("deleteCustomerError"), {
                     description: result.message,
                 })
 			}
@@ -36,7 +38,7 @@ export const CustomerActionButtons = ({
 				variant="destructive"
 				className="p-2 h-fit"
 				data-tooltip-id="trash-tooltip"
-				data-tooltip-content="Delete"
+				data-tooltip-content={t("delete")}
 				onClick={() => deleteCustomer(customer.id)}
 			>
 				<Tooltip id="trash-tooltip" />
@@ -48,7 +50,7 @@ export const CustomerActionButtons = ({
 			</Button>
 			<Button
 				data-tooltip-id="edit-tooltip"
-				data-tooltip-content="Edit"
+				data-tooltip-content={t("edit")}
 				className="p-2 h-fit"
 				asChild
 			>

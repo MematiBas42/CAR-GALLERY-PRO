@@ -4,13 +4,15 @@ A modern, full-stack car dealership management system built with Next.js 15, fea
 
 ## ✨ Features
 
-### 🎯 Core Functionality
-- **Modern Car Inventory**: Browse and search vehicles with advanced filtering.
-- **Streamlined Reservations**: A single-page form for a smooth booking experience.
-- **Admin Dashboard**: Complete dealership management interface.
-- **Customer Management**: Track leads, interactions, and manually add new customers.
-- **Image Management**: AWS S3 integration with drag-and-drop uploads.
-- **Real-time Search**: Advanced filtering by make, model, price, and specifications.
+### ✨ Key Features
+
+- **Multilingual Support**: Fully localized in English, Turkish, and Arabic with cookie-based language switching.
+- **Modern Inventory**: Beautifully curated car collection with advanced filtering (Make, Model, Price, Year, etc.).
+- **Advanced Reservation Flow**: Two-step secure booking process with confetti celebration.
+- **Admin Dashboard**: Comprehensive KPI tracking, sales charts, and management tools.
+- **AI Integration**: AI-assisted features for car descriptions and details.
+- **Responsive Design**: Mobile-first approach using Tailwind CSS.
+- **Fast Performance**: Next.js 15 with Turbopack support.
 
 ### 🔐 Authentication & Security
 - **NextAuth v5**: Secure authentication with sessions.

@@ -11,31 +11,8 @@ import parse from "html-react-parser";
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import FavButton from "./fav-button";
-
-const getKeyCarInfo = (car: CarWithImages) => {
-  return [
-    {
-      id: "odoReading",
-      icon: <GaugeCircle className="w-4 h-4" />,
-      value: `${formatNumber(car.odoReading)} ${formatOdometerUnit(car.odoUnit)}`,
-    },
-    {
-      id: "transmission",
-      icon: <Cog className="w-4 h-4" />,
-      value: car?.transmission ? formatTransmission(car?.transmission) : null,
-    },
-    {
-      id: "fuelType",
-      icon: <Fuel className="w-4 h-4" />,
-      value: car?.fuelType ? formatFuelType(car.fuelType) : null,
-    },
-    {
-      id: "colour",
-      icon: <Paintbrush2 className="w-4 h-4" />,
-      value: car?.colour ? formatColour(car.colour) : null,
-    },
-  ];
-};
+import { useTranslations } from "next-intl";
+import ImgixImage from "../ui/imgix-image";
 
 interface CarCardProps {
   car: CarWithImages;
@@ -43,9 +20,34 @@ interface CarCardProps {
 }
 
 const CarCard = ({ car, favourites }: CarCardProps) => {
+  const t = useTranslations("Car");
+  const tEnums = useTranslations("Enums");
   const [isFav, setIsFav] = useState(favourites.includes(car.id));
   const [isVisible, setIsVisible] = useState(true);
   const pathname = usePathname();
+
+  const keyCarInfo = [
+    {
+      id: "odoReading",
+      icon: <GaugeCircle className="w-4 h-4" />,
+      value: `${formatNumber(car.odoReading)} ${tEnums(`OdoUnit.${car.odoUnit}`)}`,
+    },
+    {
+      id: "transmission",
+      icon: <Cog className="w-4 h-4" />,
+      value: car?.transmission ? tEnums(`Transmission.${car?.transmission}`) : null,
+    },
+    {
+      id: "fuelType",
+      icon: <Fuel className="w-4 h-4" />,
+      value: car?.fuelType ? tEnums(`FuelType.${car.fuelType}`) : null,
+    },
+    {
+      id: "colour",
+      icon: <Paintbrush2 className="w-4 h-4" />,
+      value: car?.colour ? tEnums(`Colour.${car.colour}`) : null,
+    },
+  ];
 
   useEffect(() => {
     if (!isFav && pathname === routes.favourites) {
@@ -63,7 +65,7 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
         >
           <div className="aspect-3/2 relative">
             <Link href={routes.singleClassified(car.slug || "slug")}>
-              <Image
+              <ImgixImage
                 placeholder="blur"
                 blurDataURL={car.images[0]?.blurhash || ""}
                 src={car.images[0]?.src || "/placeholder.png"}
@@ -100,9 +102,9 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
             {/* Bottom Section - Pushed to the bottom */}
             <div className="mt-auto pt-3">
               <ul className="text-xs md:text-sm text-muted-foreground xl:flex grid grid-cols-1 grid-rows-4 md:grid-cols-2 md:grid-rows-4 items-center justify-between w-full">
-                {getKeyCarInfo(car).map((info) => (
+                {keyCarInfo.map((info) => (
                   <li key={info.id} className="font-semibold flex xl:flex-col items-center gap-x-1.5">
-                    {info.icon} {info.value ? info.value : "N/A"}
+                    {info.icon} {info.value ? info.value : t("notAvailable")}
                   </li>
                 ))}
               </ul>
@@ -113,11 +115,11 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
                   variant={"outline"}
                 >
                   <Link href={routes.reserve(car.slug || "slug", MultiStepFormEnum.WELCOME)}>
-                    Reserve
+                    {t("reserve")}
                   </Link>
                 </Button>
                 <Button className="flex-1 py-2 lg:py-2.5 h-full text-xs md:text-sm xl:text-base" asChild size={"sm"}>
-                  <Link href={routes.singleClassified(car.slug)}>View details</Link>
+                  <Link href={routes.singleClassified(car.slug)}>{t("viewDetails")}</Link>
                 </Button>
               </div>
             </div>

@@ -12,29 +12,32 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useCallback, useState } from "react";
 import ActiveLink from "../ui/active-link";
-const navigation = [
-  {
-    name: "Dashboard",
-    href: routes.admin.dashboard,
-    icon: LayoutDashboardIcon,
-  },
-  {
-    name: "Cars",
-    href: routes.admin.cars,
-    icon: CarFrontIcon,
-  },
-  {
-    name: "Customers",
-    href: routes.admin.customers,
-    icon: UsersIcon,
-  },
-  {
-    name: "Settings",
-    href: routes.admin.settings,
-    icon: SettingsIcon,
-  },
-];
+import { useTranslations } from "next-intl";
+
 const AdminSidebar = () => {
+  const t = useTranslations("Admin.sidebar");
+  const navigation = [
+    {
+      name: t("dashboard"),
+      href: routes.admin.dashboard,
+      icon: LayoutDashboardIcon,
+    },
+    {
+      name: t("cars"),
+      href: routes.admin.cars,
+      icon: CarFrontIcon,
+    },
+    {
+      name: t("customers"),
+      href: routes.admin.customers,
+      icon: UsersIcon,
+    },
+    {
+      name: t("settings"),
+      href: routes.admin.settings,
+      icon: SettingsIcon,
+    },
+  ];
   const [isSidebarexpanded, setIsSidebarexpanded] = useState(false);
   const handleSidebarHover = useCallback((expanded: boolean) => {
     setIsSidebarexpanded(expanded);

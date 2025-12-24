@@ -4,13 +4,15 @@ import { prisma } from "@/lib/prisma";
 import { CircleCheck, Calendar as CalendarIcon, Car, User } from "lucide-react";
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
-const ReserveSuccessPage = async ({ params }: PageProps) => {
-
+const ReserveSuccessPage = async (props: PageProps) => {
+  const params = await props.params;
+  const t = await getTranslations("Reserve.successPage");
   const customer = await prisma.customer.findFirst({
     where: {
       classified: {
-        slug: params?.slug as string,
+        slug: (params as any)?.slug as string,
       },
     },
     orderBy: {
@@ -21,7 +23,7 @@ const ReserveSuccessPage = async ({ params }: PageProps) => {
     },
   });
 
-  if (!customer) {
+  if (!customer || !customer.classified) {
     // While this should ideally not happen in a real flow,
     // it prevents the page from crashing if no customer is found.
     return notFound();
@@ -33,12 +35,12 @@ const ReserveSuccessPage = async ({ params }: PageProps) => {
         
         <div className="p-8 bg-gray-900/70 border border-gray-700 rounded-xl shadow-lg">
             <CircleCheck className="mx-auto w-16 h-16 text-green-500" />
-            <h1 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">Booking Confirmed!</h1>
-            <p className="mt-4 text-gray-400">Thank you for your reservation. We will see you soon.</p>
+            <h1 className="mt-4 text-3xl font-bold tracking-tight text-white sm:text-4xl">{t("title")}</h1>
+            <p className="mt-4 text-gray-400">{t("description")}</p>
             
             {/* Reservation Details */}
             <div className="mt-8 text-left bg-gray-800/50 p-6 rounded-lg border border-gray-600 space-y-4">
-                <h2 className="text-xl font-semibold text-white border-b border-gray-600 pb-2">Reservation Summary</h2>
+                <h2 className="text-xl font-semibold text-white border-b border-gray-600 pb-2">{t("summary")}</h2>
                 <div className="flex items-center gap-4">
                     <User className="w-5 h-5 text-gray-400" />
                     <span className="text-gray-300">{customer.firstName} {customer.lastName}</span>
@@ -49,7 +51,12 @@ const ReserveSuccessPage = async ({ params }: PageProps) => {
                 </div>
                 <div className="flex items-center gap-4">
                     <CalendarIcon className="w-5 h-5 text-gray-400" />
-                    <span className="text-gray-300">{format(new Date(customer.bookingDate), "EEEE, MMMM do, yyyy 'at' h:mm a")}</span>
+                    <span className="text-gray-300">
+                        {customer.bookingDate 
+                            ? format(new Date(customer.bookingDate), "EEEE, MMMM do, yyyy 'at' h:mm a")
+                            : "N/A"
+                        }
+                    </span>
                 </div>
             </div>
         </div>

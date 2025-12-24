@@ -9,7 +9,10 @@ import { redis } from "@/lib/redis-store";
 import { getSourceId } from "@/lib/source-id";
 import React from "react";
 import { z } from "zod";
+import { getTranslations } from "next-intl/server";
+
 const FavsPage = async (props: PageProps) => {
+  const t = await getTranslations("Favourites");
   const searchParams = await props.searchParams;
   const validPage = pageSchema.parse(searchParams?.page);
 
@@ -37,7 +40,7 @@ const FavsPage = async (props: PageProps) => {
 
   return (
     <div className="container mx-auto px-4 py-8 min-h-[80dvh]">
-			<h1 className="text-3xl font-bold mb-6">Your Favourite Cars</h1>
+			<h1 className="text-3xl font-bold mb-6">{t("title")}</h1>
 			<div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
 				{classifieds.map((classified) => {
 					return (

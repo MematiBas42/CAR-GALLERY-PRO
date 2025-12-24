@@ -33,13 +33,13 @@ export default auth((req) => {
         return NextResponse.next();
       }
 
-      const challengeurl = new URL(routes.challenge, req.url);
+      const challengeurl = new URL(routes.challenge, req.nextUrl.origin);
       return NextResponse.redirect(challengeurl);
     }
     if (nextUrl.pathname === routes.challenge ||
       nextUrl.pathname === routes.signIn
     ) {
-      const adminUrl = new URL(routes.admin.dashboard, req.url);
+      const adminUrl = new URL(routes.admin.dashboard, req.nextUrl.origin);
       return NextResponse.redirect(adminUrl);
     }
   } else {
@@ -47,7 +47,7 @@ export default auth((req) => {
       nextUrl.pathname.startsWith("/admin") ||
       nextUrl.pathname === routes.challenge
     ) {
-      const signInurl = new URL(routes.signIn, req.url);
+      const signInurl = new URL(routes.signIn, req.nextUrl.origin);
       return NextResponse.redirect(signInurl);
     }
   }

@@ -9,28 +9,18 @@ import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { Settings2 } from "lucide-react";
 import { Select } from "../ui/select";
-import {
-  BodyType,
-  Colour,
-  CurrencyCode,
-  FuelType,
-  OdoUnit,
-  Prisma,
-  Transmission,
-  ULEZCompliance,
-} from "@prisma/client";
 import { RangeFilter } from "./RangeFilters";
 import TaxonomyFilters from "./TaxonomyFilters";
 import SearchInput from "../shared/search-input";
 import {
   cn,
-  formatBodyType,
-  formatColour,
-  formatFuelType,
-  formatOdometerUnit,
-  formatTransmission,
 } from "@/lib/utils";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { useTranslations } from "next-intl";
+import { FilterOptions } from "@/config/types";
+import { api } from "@/lib/api-client";
+import { endpoints } from "@/config/endpoints";
+
 interface DialogFiltersProps extends SidebarProps {
   count: number;
 }
@@ -40,6 +30,10 @@ const DialogFilters = ({
   searchParams,
   count,
 }: DialogFiltersProps) => {
+  const t = useTranslations("Inventory");
+  const tLabels = useTranslations("Inventory.labels");
+  const tEnums = useTranslations("Enums");
+  const tFilters = useTranslations("Filters");
   const [open, setOpen] = useState(false);
   const [filtersCount, setFiltersCount] = useState(0);
   const { _min, _max } = minMaxValue;
@@ -70,12 +64,99 @@ const DialogFilters = ({
     }
   );
 
+  // States for dynamic options
+  const [makes, setMakes] = useState<FilterOptions<string, string>>([]);
+  const [models, setModels] = useState<FilterOptions<string, string>>([]);
+  const [modelVariants, setModelVariants] = useState<FilterOptions<string, string>>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [fuelTypeOptions, setFuelTypeOptions] = useState<FilterOptions<string, string>>([]);
+  const [transmissionOptions, setTransmissionOptions] = useState<FilterOptions<string, string>>([]);
+  const [bodyTypeOptions, setBodyTypeOptions] = useState<FilterOptions<string, string>>([]);
+  const [colourOptions, setColourOptions] = useState<FilterOptions<string, string>>([]);
+  const [ulezOptions, setUlezOptions] = useState<FilterOptions<string, string>>([]);
+  const [odoUnitOptions, setOdoUnitOptions] = useState<FilterOptions<string, string>>([]);
+  const [currencyOptions, setCurrencyOptions] = useState<FilterOptions<string, string>>([]);
+  const [doorOptions, setDoorOptions] = useState<FilterOptions<string, string>>([]);
+  const [seatOptions, setSeatOptions] = useState<FilterOptions<string, string>>([]);
+
+  // State for adaptive ranges
+  const [adaptiveRanges, setAdaptiveRanges] = useState<{
+    year: { min: number | null, max: number | null },
+    price: { min: number | null, max: number | null },
+    odoReading: { min: number | null, max: number | null }
+  }>({
+    year: { min: _min.year, max: _max.year },
+    price: { min: _min.price, max: _max.price },
+    odoReading: { min: _min.odoReading, max: _max.odoReading }
+  });
+
   useEffect(() => {
     const filtersCount = Object.entries(
       searchParams as Record<string, string>
     ).filter(([key, value]) => key !== "page" && value).length;
     setFiltersCount(filtersCount);
-  }, [searchParams]);
+
+    // Fetch dynamic options and ranges
+    const fetchOptions = async () => {
+        setIsLoading(true);
+        const params = new URLSearchParams();
+        for (const [k, v] of Object.entries(searchParams as Record<string, string>)) {
+            if (v) params.set(k, v as string);
+        }
+        const url = new URL(endpoints.taxonomy, window.location.href);
+        url.search = params.toString();
+
+        try {
+            const data = await api.get<{
+                makes: FilterOptions<string, string>;
+                models: FilterOptions<string, string>;
+                modelVariants: FilterOptions<string, string>;
+                ranges: {
+                    year: { min: number, max: number },
+                    price: { min: number, max: number },
+                    odoReading: { min: number, max: number }
+                },
+                attributes: {
+                    fuelType: string[];
+                    transmission: string[];
+                    bodyType: string[];
+                    colour: string[];
+                    ulezCompliance: string[];
+                    odoUnit: string[];
+                    currency: string[];
+                    doors: number[];
+                    seats: number[];
+                }
+            }>(url.toString());
+
+            setMakes(data.makes);
+            setModels(data.models);
+            setModelVariants(data.modelVariants);
+            setAdaptiveRanges(data.ranges);
+
+            setFuelTypeOptions(data.attributes.fuelType.map(val => ({ label: tEnums(`FuelType.${val}`), value: val })));
+            setTransmissionOptions(data.attributes.transmission.map(val => ({ label: tEnums(`Transmission.${val}`), value: val })));
+            setBodyTypeOptions(data.attributes.bodyType.map(val => ({ label: tEnums(`BodyType.${val}`), value: val })));
+            setColourOptions(data.attributes.colour.map(val => ({ label: tEnums(`Colour.${val}`), value: val })));
+            setUlezOptions(data.attributes.ulezCompliance.map(val => ({ label: tEnums(`ULEZ.${val}`) || val, value: val }))); 
+            setOdoUnitOptions(data.attributes.odoUnit.map(val => ({ label: tEnums(`OdoUnit.${val}`), value: val })));
+            setCurrencyOptions(data.attributes.currency.map(val => ({ label: val, value: val })));
+            setDoorOptions(data.attributes.doors.map(val => ({ label: val.toString(), value: val.toString() })));
+            setSeatOptions(data.attributes.seats.map(val => ({ label: val.toString(), value: val.toString() })));
+
+        } catch (error) {
+            console.error("Failed to fetch taxonomy attributes", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    if (open) {
+        fetchOptions();
+    }
+
+  }, [searchParams, tEnums, open]); 
 
   const clearAllFilter = () => {
     const url = new URL(routes.inventory, process.env.NEXT_PUBLIC_APP_URL);
@@ -118,14 +199,14 @@ const DialogFilters = ({
         <div className="space-y-6">
             <div>
           <div className="text-lg font-semibold flex justify-between px-4">
-            <DialogTitle>Filters</DialogTitle>
+            <DialogTitle>{t("sidebar.title")}</DialogTitle>
             
           </div>
           <div className="mt-2" />
         </div>
         <div className="p-4">
           <SearchInput
-            placeholder="Search for car..."
+            placeholder={t("sidebar.searchPlaceholder")}
             className="w-full px-3 py-2 border rounded-md
                 focus:outline-hidden focus:ring-2 focus:ring-sky-500"
           />
@@ -134,137 +215,135 @@ const DialogFilters = ({
           <TaxonomyFilters
             searchParams={searchParams}
             handleChange={handleChange}
+            makes={makes}
+            models={models}
+            modelVariants={modelVariants}
+            isLoading={isLoading}
           />
           <RangeFilter
-            label="Year"
+            label={tFilters("year")}
             minName="minYear"
             maxName="maxYear"
-            defaultMin={_min.year || 1925}
-            defaultMax={_max.year || new Date().getFullYear()}
+            defaultMin={adaptiveRanges.year.min || _min.year || 1925}
+            defaultMax={adaptiveRanges.year.max || _max.year || new Date().getFullYear()}
             handleChange={handleChange}
             searchParams={searchParams}
+            placeholder={!adaptiveRanges.year.min ? "-" : undefined}
           />
           <RangeFilter
-            label="Price"
+            label={tFilters("price")}
             minName="minPrice"
             maxName="maxPrice"
-            defaultMin={_min.price || 0}
-            defaultMax={_max.price || Number.MAX_SAFE_INTEGER}
+            defaultMin={adaptiveRanges.price.min || _min.price || 0}
+            defaultMax={adaptiveRanges.price.max || _max.price || Number.MAX_SAFE_INTEGER}
             handleChange={handleChange}
             increment={1000000}
             thousandSeparator={true}
             currency={{ currencyCode: "EUR" }}
             searchParams={searchParams}
+            placeholder={!adaptiveRanges.price.min ? "-" : undefined}
           />
           <RangeFilter
-            label="Odometer Reading"
+            label={tLabels("odometerReading")}
             minName="minReading"
             increment={5000}
             thousandSeparator={true}
             maxName="maxReading"
-            defaultMin={_min.odoReading || 0}
-            defaultMax={_max.odoReading || Number.MAX_SAFE_INTEGER}
+            defaultMin={adaptiveRanges.odoReading.min || _min.odoReading || 0}
+            defaultMax={adaptiveRanges.odoReading.max || _max.odoReading || Number.MAX_SAFE_INTEGER}
             handleChange={handleChange}
             searchParams={searchParams}
+            placeholder={!adaptiveRanges.odoReading.min ? "-" : undefined}
           />
 
           <Select
-            label="Currency"
+            label={tLabels("currency")}
             name="currency"
             value={queryStates.currency || ""}
             onChange={handleChange}
-            options={Object.values(CurrencyCode).map((value) => ({
-              label: value,
-              value,
-            }))}
+            options={currencyOptions}
+            disabled={!currencyOptions.length}
+            placeholder={!currencyOptions.length ? "-" : undefined}
           />
           <Select
-            label="Odometer Unit"
+            label={tLabels("odometerUnit")}
             name="odoUnit"
             value={queryStates.odoUnit || ""}
             onChange={handleChange}
-            options={Object.values(OdoUnit).map((value) => ({
-              label: formatOdometerUnit(value),
-              value,
-            }))}
+            options={odoUnitOptions}
+            disabled={!odoUnitOptions.length}
+            placeholder={!odoUnitOptions.length ? "-" : undefined}
           />
           <Select
-            label="Transmission"
+            label={tLabels("transmission")}
             name="transmission"
             value={queryStates.transmission || ""}
             onChange={handleChange}
-            options={Object.values(Transmission).map((value) => ({
-              label: formatTransmission(value),
-              value,
-            }))}
+            options={transmissionOptions}
+            disabled={!transmissionOptions.length}
+            placeholder={!transmissionOptions.length ? "-" : undefined}
           />
           <Select
-            label="Fuel Type"
+            label={tLabels("fuelType")}
             name="fuelType"
             value={queryStates.fuelType || ""}
             onChange={handleChange}
-            options={Object.values(FuelType).map((value) => ({
-              label: formatFuelType(value),
-              value,
-            }))}
+            options={fuelTypeOptions}
+            disabled={!fuelTypeOptions.length}
+            placeholder={!fuelTypeOptions.length ? "-" : undefined}
           />
           <Select
-            label="Body Type"
+            label={tLabels("bodyType")}
             name="bodyType"
             value={queryStates.bodyType || ""}
             onChange={handleChange}
-            options={Object.values(BodyType).map((value) => ({
-              label: formatBodyType(value),
-              value,
-            }))}
+            options={bodyTypeOptions}
+            disabled={!bodyTypeOptions.length}
+            placeholder={!bodyTypeOptions.length ? "-" : undefined}
           />
           <Select
-            label="Colour"
+            label={tLabels("colour")}
             name="colour"
             value={queryStates.colour || ""}
             onChange={handleChange}
-            options={Object.values(Colour).map((value) => ({
-              label: formatColour(value),
-              value,
-            }))}
+            options={colourOptions}
+            disabled={!colourOptions.length}
+            placeholder={!colourOptions.length ? "-" : undefined}
           />
           <Select
-            label="ULEZ Compliance"
+            label={tLabels("ulezCompliance")}
             name="ulezCompliance"
             value={queryStates.ulezCompliance || ""}
             onChange={handleChange}
-            options={Object.values(ULEZCompliance).map((value) => ({
-              label: value,
-              value,
-            }))}
+            options={ulezOptions}
+            disabled={!ulezOptions.length}
+            placeholder={!ulezOptions.length ? "-" : undefined}
           />
 
           <Select
-            label="Doors"
+            label={tLabels("doors")}
             name="doors"
             value={queryStates.doors || ""}
             onChange={handleChange}
-            options={Array.from({ length: 6 }).map((_, i) => ({
-              label: Number(i + 1).toString(),
-              value: Number(i + 1).toString(),
-            }))}
+            options={doorOptions}
+            disabled={!doorOptions.length}
+            placeholder={!doorOptions.length ? "-" : undefined}
           />
           <Select
-            label="Seats"
+            label={tLabels("seats")}
             name="seats"
             value={queryStates.seats || ""}
             onChange={handleChange}
-            options={Array.from({ length: 8 }).map((_, i) => ({
-              label: Number(i + 1).toString(),
-              value: Number(i + 1).toString(),
-            }))}
+            options={seatOptions}
+            disabled={!seatOptions.length}
+            placeholder={!seatOptions.length ? "-" : undefined}
           />
         </div>
         <div className="flex flex-col space-y-2">
             <Button type="button"
              onClick={() => setOpen(false)}
             >
-                Search {count > 0 ? `(${count})` : ""}
+                {tFilters("search")} {count > 0 ? `(${count})` : ""}
             </Button>
             {filtersCount > 0 && (
                 <Button type="button"
@@ -277,7 +356,7 @@ const DialogFilters = ({
                         : "hover:underline cursor-pointer"
                 )}
                 >
-                    Clear all {filtersCount > 0 ? `(${filtersCount})` : ""}
+                    {t("sidebar.clearAll")} {filtersCount > 0 ? `(${filtersCount})` : ""}
                 </Button>
              )}
         </div>

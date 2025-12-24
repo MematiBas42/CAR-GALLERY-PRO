@@ -6,7 +6,7 @@ import Link from "next/link";
 import { parseAsString, useQueryStates } from "nuqs";
 import { Button } from "../ui/button";
 
-export const SearchButton = ({ count }: { count: number }) => {
+export const SearchButton = ({ count, label = "Search" }: { count: number, label?: string }) => {
 	const [{ make, model, modelVariant, minYear, maxYear, minPrice, maxPrice }] =
 		useQueryStates(
 			{
@@ -35,7 +35,7 @@ export const SearchButton = ({ count }: { count: number }) => {
 	return (
 		<Button className="w-full" asChild>
 			<Link href={relativeUrl}>
-				Search {count > 0 ? ` (${count})` : null}
+				{label} {count > 0 ? ` (${count})` : null}
 			</Link>
 		</Button>
 	);

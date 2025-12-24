@@ -6,12 +6,14 @@ import React from "react";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface RadioFilterProps extends AwaitedPageProps {
   items: string[];
 }
 
 const RadioFilter = (props: RadioFilterProps) => {
+  const t = useTranslations("Enums");
   const { searchParams, items } = props;
   const router = useRouter();
   const status = (searchParams?.status as string) || "all";
@@ -22,6 +24,19 @@ const RadioFilter = (props: RadioFilterProps) => {
     const url = new URL(window.location.href);
     url.search = currentUrlParams.toString();
     router.push(url.toString());
+  };
+
+  const getTranslatedLabel = (item: string) => {
+    // Try to translate from ClassifiedStatus or CustomerStatus
+    try {
+        return t(`ClassifiedStatus.${item}`);
+    } catch {
+        try {
+            return t(`CustomerStatus.${item}`);
+        } catch {
+            return item;
+        }
+    }
   };
 
   return (
@@ -47,7 +62,7 @@ const RadioFilter = (props: RadioFilterProps) => {
             checked={status?.toLowerCase() === item.toLowerCase()}
             className="peer sr-only"
           />
-          {item}
+          {getTranslatedLabel(item)}
         </Label>
       ))}
     </RadioGroup>

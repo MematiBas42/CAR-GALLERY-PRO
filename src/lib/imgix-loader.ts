@@ -5,6 +5,9 @@ interface LoaderProps extends ImageLoaderProps {
 }
 
 export const imgixLoader = ({ src, width, height, quality }: LoaderProps) => {
+	if (src.startsWith("/") || src.startsWith("./") || src.startsWith("../")) {
+		return src;
+	}
 	const url = new URL(src);
 
 	url.searchParams.set("w", width.toString());
@@ -16,5 +19,6 @@ export const imgixLoader = ({ src, width, height, quality }: LoaderProps) => {
 	const path = url.pathname;
 	const params = url.searchParams.toString();
 
-	return `${process.env.NEXT_PUBLIC_IMGIX_URL}${path}?${params}`;
+	const baseUrl = process.env.NEXT_PUBLIC_IMGIX_URL || "";
+	return `${baseUrl}${path}?${params}`;
 };

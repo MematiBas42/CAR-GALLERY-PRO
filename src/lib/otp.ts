@@ -3,6 +3,7 @@ import { bcryptPasswordCompare, bcryptPasswordHash } from "./brypt";
 import { redis } from "./redis-store";
 import { resend } from "./resend";
 import { prisma } from "./prisma";
+import { getTranslations } from "next-intl/server";
 
 const REDIS_PREFIX = "otp";
 const SENDER_EMAIL = "onboarding@resend.dev";
@@ -15,6 +16,7 @@ interface Challenge {
   email: string;
 }
 export async function issueChallenge(userId: string, email: string) {
+  const t = await getTranslations("Emails.otp");
   const array = new Uint32Array(1);
   const code = (crypto.getRandomValues(array)[0] % 900000) + 100000; // Generate a 6-digit code
   const hash = await bcryptPasswordHash(code.toString());
@@ -27,10 +29,15 @@ export async function issueChallenge(userId: string, email: string) {
   const { error } = await resend.emails.send({
     from: `RIM GLOBAL <${SENDER_EMAIL}>`,
     to: email,
-    subject: "Your OTP Code",
+    subject: t("subject"),
     html: `<p>${code}</p>`,
     react: ChallengeEmail({
-      data: { code },
+      data: { 
+        code,
+        title: t("title"),
+        description: t("description"),
+        ignore: t("ignore")
+      },
     }),
   });
 

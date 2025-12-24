@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useTranslations } from "next-intl";
 
 // Make the customer prop optional
 type EditCustomerFormProps = {
@@ -30,6 +31,8 @@ type EditCustomerFormProps = {
 }
 
 const EditCustomerForm = ({ customer }: EditCustomerFormProps) => {
+  const t = useTranslations("Admin.customers.form");
+  const tEnums = useTranslations("Enums");
   const [isPending, startTransition] = useTransition();
   const isEditMode = !!customer;
 
@@ -40,7 +43,7 @@ const EditCustomerForm = ({ customer }: EditCustomerFormProps) => {
       lastName: customer?.lastName || "",
       email: customer?.email || "",
       mobile: customer?.mobile || "",
-      status: customer?.status || CustomerStatus.LEAD,
+      status: customer?.status || CustomerStatus.INTERESTED,
       carTitle: customer?.carTitle || customer?.classified?.title || "",
       notes: customer?.notes || "",
       bookingDate: customer?.bookingDate || undefined,
@@ -68,14 +71,14 @@ const EditCustomerForm = ({ customer }: EditCustomerFormProps) => {
         if (isEditMode) {
             const response = await updateCustomerAction({ id: customer.id, ...data });
             if (response.success) {
-                toast.success("Customer updated successfully");
+                toast.success(t("successUpdated"));
             } else {
-                toast.error("Error updating customer", { description: response.message });
+                toast.error(t("errorUpdating"), { description: response.message });
             }
         } else {
             const response = await createManualCustomerAction(data);
             if (response && !response.success) {
-                 toast.error("Error creating customer", { description: response.message });
+                 toast.error(t("errorCreating"), { description: response.message });
             }
             // On success, the action redirects, so no toast is needed here.
         }
@@ -93,7 +96,7 @@ const EditCustomerForm = ({ customer }: EditCustomerFormProps) => {
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>First Name</FormLabel>
+                  <FormLabel>{t("firstName")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -106,7 +109,7 @@ const EditCustomerForm = ({ customer }: EditCustomerFormProps) => {
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Last Name</FormLabel>
+                  <FormLabel>{t("lastName")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -119,7 +122,7 @@ const EditCustomerForm = ({ customer }: EditCustomerFormProps) => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t("email")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -132,7 +135,7 @@ const EditCustomerForm = ({ customer }: EditCustomerFormProps) => {
               name="mobile"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Mobile</FormLabel>
+                  <FormLabel>{t("mobile")}</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -149,9 +152,9 @@ const EditCustomerForm = ({ customer }: EditCustomerFormProps) => {
               name="carTitle"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Car Title</FormLabel>
+                  <FormLabel>{t("carTitle")}</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="e.g., 2023 Toyota Camry" />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -162,7 +165,7 @@ const EditCustomerForm = ({ customer }: EditCustomerFormProps) => {
               name="bookingDate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Booking Date (YYYY-MM-DD)</FormLabel>
+                  <FormLabel>{t("bookingDate")}</FormLabel>
                   <FormControl>
                     <Input type="date" {...field} value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''} />
                   </FormControl>
@@ -175,9 +178,9 @@ const EditCustomerForm = ({ customer }: EditCustomerFormProps) => {
               name="notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Notes</FormLabel>
+                  <FormLabel>{t("notes")}</FormLabel>
                   <FormControl>
-                    <Textarea {...field} placeholder="Customer notes..." className="bg-transparent text-white" rows={5} />
+                    <Textarea {...field} placeholder={t("notesPlaceholder")} className="bg-transparent text-white" rows={5} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -188,12 +191,12 @@ const EditCustomerForm = ({ customer }: EditCustomerFormProps) => {
               name="status"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Customer Status</FormLabel>
+                  <FormLabel>{t("status")}</FormLabel>
                   <FormControl>
                     <Select
                       {...field}
                       options={Object.values(CustomerStatus).map((value) => ({
-                        label: formatCustomerStatus(value),
+                        label: tEnums(`CustomerStatus.${value}`),
                         value,
                       }))}
                       noDefault={false}
@@ -209,7 +212,7 @@ const EditCustomerForm = ({ customer }: EditCustomerFormProps) => {
             {isPending ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
-              isEditMode ? "Update Customer" : "Create Customer"
+              isEditMode ? t("updateButton") : t("createButton")
             )}
           </Button>
       </form>

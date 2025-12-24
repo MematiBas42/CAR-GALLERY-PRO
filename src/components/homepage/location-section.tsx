@@ -1,11 +1,13 @@
+import { getTranslations } from "next-intl/server";
 
-const LocationSection = () => {
+const LocationSection = async () => {
+  const t = await getTranslations("Contact");
   return (
     <section className="py-12 bg-secondary">
       <div className="container mx-auto px-4 text-center">
-        <h2 className="text-3xl font-bold text-foreground">Visit Our Federal Way Showroom</h2>
+        <h2 className="text-3xl font-bold text-foreground">{t("title")}</h2>
         <p className="mt-2 text-lg text-muted-foreground">
-          Experience the RIM GLOBAL difference in person. Our showroom is designed to provide a comfortable and premium viewing experience. The map below shows our general location in Federal Way.
+          {t("description")}
         </p>
         <div className="mt-8 border rounded-lg overflow-hidden">
           <iframe

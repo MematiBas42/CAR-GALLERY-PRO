@@ -7,3 +7,5 @@ export const SubscribeSchema = z.object({
     lastName: z.string().min(1, "Last name is required"),
 
 })
+
+export type SubscribeSchemaType = z.infer<typeof SubscribeSchema>;

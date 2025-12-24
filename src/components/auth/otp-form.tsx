@@ -11,11 +11,13 @@ import { Button } from "../ui/button";
 import { Loader2, RotateCw } from "lucide-react";
 import { completeChallengeAction, resendChallengeAction } from "@/app/_actions/challenge";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 const OtpForm = () => {
+  const t = useTranslations("Auth.otp");
   const [isCodePending, startCodeTransition] = useTransition();
   const [isSubmitPending, startSubmitTransition] = useTransition();
-    const [sendButtontext, setSendButtontext] = useState("Send Code");
+    const [sendButtontext, setSendButtontext] = useState(t("sendCode"));
 
   
   const router = useRouter();
@@ -26,14 +28,11 @@ const OtpForm = () => {
     startSubmitTransition(async () => {
       // complete OTP action
       const result =  await completeChallengeAction(data.code);
-      console.log("OTP result", result);
       if (!result?.success) {
-        toast.error("Error completing OTP", {
+        toast.error(t("error"), {
           description: result.message,
         });
         return;
-      } else {
-        console.log("OTP completed successfully");
       }
     })
   };
@@ -45,23 +44,23 @@ const OtpForm = () => {
         success, message
       } = await resendChallengeAction ();
       // Here you would typically call an API to send the OTP code
-      setSendButtontext("Resend code");
+      setSendButtontext(t("resendCode"));
       if (!success) {
-        toast.error("Eror sending code",{
+        toast.error(t("errorSend"),{
           description: message,
         });
       }
-      toast.success("Code sent successfully", {
-        description: "Please check your email for the code.",
+      toast.success(t("success"), {
+        description: t("successDesc"),
       })
     });
   }
 
   useEffect(() => {
     if (isCodePending) {
-      setSendButtontext("Sending...");
+      setSendButtontext(t("sending"));
     }
-  },[])
+  },[isCodePending, t])
   return (
     <div
       className="min-h-[calc(100vh-4rem)] flex w-full flex-1 justify-center
@@ -69,10 +68,10 @@ const OtpForm = () => {
     >
       <div className="flex w-full max-w-lg flex-col">
         <h3 className="mb-4 text-4xl md:text-5xl text-center">
-          One time password
+          {t("title")}
         </h3>
         <p className="mb-12 text-center text-slate-500 ">
-          Enter 6 digits code send to your email.{" "}
+          {t("description")}
         </p>
         <Form {...form}>
           <form action="" onSubmit={form.handleSubmit(onSubmit)}>
@@ -115,7 +114,7 @@ const OtpForm = () => {
 								disabled={isSubmitPending}
 							>
 								<span className="text-sm uppercase tracking-wider text-inherit">
-									{isSubmitPending ? "Verifying..." : "Verify"}
+									{isSubmitPending ? t("verifying") : t("verify")}
 								</span>
 								{isSubmitPending ? (
 									<Loader2 className="w-4 h-4 shrink-0 animate-spin" />

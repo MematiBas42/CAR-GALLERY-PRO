@@ -8,18 +8,21 @@ import { EyeIcon, Loader2, PencilIcon, Trash } from "lucide-react";
 import Link from "next/link";
 import { routes } from "@/config/routes";
 import { Tooltip } from "react-tooltip";
+import { useTranslations } from "next-intl";
+
 const ActionButtons = ({ car }: { car: CarWithImages }) => {
+  const t = useTranslations("Common.actions");
   const [isPending, startTransition] = useTransition();
   const deleteCar = (id: number) => {
     startTransition(async () => {
       // delete car logic here
       const result = await deleteCarAction(id);
       if (result.success) {
-        toast.success("Car deleted successfully", {
+        toast.success(t("deleteSuccess"), {
           description: result.message,
         });
       } else {
-        toast.error("Failed to delete car", {
+        toast.error(t("deleteError"), {
           description: result.message,
         });
       }
@@ -32,7 +35,7 @@ const ActionButtons = ({ car }: { car: CarWithImages }) => {
         className="p-2 h-fit"
         onClick={() => deleteCar(car.id)}
         data-tooltip-id="trash-tooltip"
-        data-tooltip-content="Delete Car"
+        data-tooltip-content={t("deleteCar")}
       >
         <Tooltip id="trash-tooltip" />
         {isPending ? (
@@ -45,7 +48,7 @@ const ActionButtons = ({ car }: { car: CarWithImages }) => {
         className="p-2 h-fit bg-white hover:bg-gray-200 text-gray-800"
         asChild
         data-tooltip-id="view-tooltip"
-        data-tooltip-content="View Car"
+        data-tooltip-content={t("viewCar")}
       >
         <Link href={routes.singleClassified(car.slug)}>
           <Tooltip id="view-tooltip" />
@@ -54,7 +57,7 @@ const ActionButtons = ({ car }: { car: CarWithImages }) => {
       </Button>
       <Button className="p-2 h-fit bg-blue-600 hover:bg-blue-700 text-white" asChild
         data-tooltip-id="edit-tooltip"
-        data-tooltip-content="Edit Car"
+        data-tooltip-content={t("editCar")}
       >
         <Link href={routes.admin.editCar(car.id)}>
             <Tooltip id="edit-tooltip" />

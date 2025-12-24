@@ -8,7 +8,10 @@ import { Badge } from "../ui/badge";
 import { CarBadgeMap } from "@/config/constants";
 import { format } from "date-fns";
 import ActionButtons from "./ActionButtons";
+import { useTranslations } from "next-intl";
+
 const CarsTableRow = ({ car }: { car: CarWithImages }) => {
+  const t = useTranslations("Enums");
   return (
     <TableRow className="text-gray-500 border-white/45">
       <TableCell className="font-medium">{car.id}</TableCell>
@@ -30,11 +33,11 @@ const CarsTableRow = ({ car }: { car: CarWithImages }) => {
       </TableCell>
       <TableCell className="hidden md:table-cell">{car.vrm}</TableCell>
       <TableCell className="hidden md:table-cell">
-        {formatColour(car.colour)}
+        {t(`Colour.${car.colour}`)}
       </TableCell>
       <TableCell className="hidden md:table-cell">
         <Badge variant={CarBadgeMap[car.status]}>
-          {formatCarStatus(car.status)}
+          {t(`ClassifiedStatus.${car.status}`)}
         </Badge>
       </TableCell>
         <TableCell className="hidden md:table-cell">

@@ -25,9 +25,12 @@ import { formatDate } from "@/lib/utils";
 import { createCustomerAction } from "@/app/_actions/customer";
 import { toast } from "sonner";
 import { routes } from "@/config/routes";
+import { useTranslations } from "next-intl";
 type SubmitdetaiSchemaType = z.infer<typeof SubmitDetailsSchema>;
 
 const SubmitDetails = (props: MultiStepsFormComponentProps) => {
+  const t = useTranslations("Reserve.submitDetails");
+  const tCommon = useTranslations("Newsletter"); // For Error title
   const { searchParams, params } = props;
   const router = useRouter();
   const form = useForm<SubmitdetaiSchemaType>({
@@ -68,7 +71,6 @@ const SubmitDetails = (props: MultiStepsFormComponentProps) => {
       const handoverTime = decodeURIComponent(
         searchParams?.handoverTime as string
       );
-      console.log({  handoverDate, handoverTime });
       const date = formatDate(handoverDate, handoverTime);
       
       const {success, message} = await createCustomerAction({
@@ -78,14 +80,14 @@ const SubmitDetails = (props: MultiStepsFormComponentProps) => {
       })
 
       if (!success) {
-        toast.error("Error", {
+        toast.error(tCommon("error"), {
           description: message,
           duration: 1000,
         })
         return;
       }
-      toast.success("Success", {
-        description: "Customer has completed the booking",
+      toast.success(t("success"), {
+        description: t("successDesc"),
         duration: 1000,
       });
 
@@ -107,9 +109,9 @@ const SubmitDetails = (props: MultiStepsFormComponentProps) => {
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="firstName">Enter First Name</FormLabel>
+                  <FormLabel htmlFor="firstName">{t("firstNameLabel")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your first name" {...field} />
+                    <Input placeholder={t("firstNamePlaceholder")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -120,9 +122,9 @@ const SubmitDetails = (props: MultiStepsFormComponentProps) => {
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="lastName">Enter Last Name</FormLabel>
+                  <FormLabel htmlFor="lastName">{t("lastNameLabel")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your last name" {...field} />
+                    <Input placeholder={t("lastNamePlaceholder")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -133,9 +135,9 @@ const SubmitDetails = (props: MultiStepsFormComponentProps) => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="email">Enter Email Address</FormLabel>
+                  <FormLabel htmlFor="email">{t("emailLabel")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your email address" {...field} />
+                    <Input placeholder={t("emailPlaceholder")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -146,9 +148,9 @@ const SubmitDetails = (props: MultiStepsFormComponentProps) => {
               name="mobile"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="mobile">Enter Mobile</FormLabel>
+                  <FormLabel htmlFor="mobile">{t("mobileLabel")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your mobile number" {...field} />
+                    <Input placeholder={t("mobilePlaceholder")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -172,7 +174,7 @@ const SubmitDetails = (props: MultiStepsFormComponentProps) => {
                     htmlFor="terms"
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    I agree to the terms and conditions
+                    {t("terms")}
                   </FormLabel>
                   <FormMessage />
                 </FormItem>
@@ -190,7 +192,7 @@ const SubmitDetails = (props: MultiStepsFormComponentProps) => {
             {isPrevPending ? (
               <Loader2 className="w-4 h-4 shrink-0 animate-spin" />
             ) : null}{" "}
-            Previous Step
+            {t("back")}
           </Button>
           <Button
             type="submit"
@@ -200,7 +202,7 @@ const SubmitDetails = (props: MultiStepsFormComponentProps) => {
             {isPending ? (
               <Loader2 className="w-4 h-4 shrink-0 animate-spin" />
             ) : null}{" "}
-            Submit Details
+            {t("submit")}
           </Button>
         </div>
       </form>

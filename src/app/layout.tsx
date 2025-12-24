@@ -6,6 +6,8 @@ import NextTopLoader from "nextjs-toploader";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { cn } from "@/lib/utils";
 import { Suspense } from "react";
+import {NextIntlClientProvider} from 'next-intl';
+import { cookies } from 'next/headers';
 
 const mulish = Mulish({
 	weight: "variable",
@@ -24,13 +26,23 @@ export const metadata: Metadata = {
   title: "RIM GLOBAL",
   description: "Federal Way's Curated Automotive Collection",};
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const locale = cookieStore.get('NEXT_LOCALE')?.value || 'en';
+
+  let messages;
+  try {
+    messages = (await import(`../../messages/${locale}.json`)).default;
+  } catch (error) {
+    messages = (await import(`../../messages/en.json`)).default;
+  }
+
   return (
-		<html lang="en" suppressHydrationWarning>
+		<html lang={locale} suppressHydrationWarning>
       <body
 				className={cn(
 					"antialiased bg-background font-heading",
@@ -38,13 +50,15 @@ export default function RootLayout({
 					mulish.variable,
 				)}
 			>
-        <NextTopLoader showSpinner={true} />
-        <NuqsAdapter>
-            <Suspense>
-                {children}
-            </Suspense>
-        </NuqsAdapter>
-        <Toaster />
+        <NextIntlClientProvider locale={locale} messages={messages}>
+            <NextTopLoader showSpinner={true} />
+            <NuqsAdapter>
+                <Suspense>
+                    {children}
+                </Suspense>
+            </NuqsAdapter>
+            <Toaster />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

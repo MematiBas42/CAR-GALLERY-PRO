@@ -23,6 +23,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 // 1. Combine Schemas
 const reservationSchema = z.object({
@@ -41,6 +42,8 @@ type ReserveViewProps = {
 };
 
 const ReserveView = ({ car }: ReserveViewProps) => {
+  const t = useTranslations("Reserve.view");
+  const tReserve = useTranslations("Reserve.submitDetails");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -67,12 +70,12 @@ const ReserveView = ({ car }: ReserveViewProps) => {
       });
 
       if (!result.success) {
-        toast.error("Error", { description: result.message, duration: 3000 });
+        toast.error(t("error"), { description: result.message, duration: 3000 });
         return;
       }
 
-      toast.success("Success!", { 
-        description: "Your reservation has been confirmed.",
+      toast.success(t("success"), { 
+        description: t("successDesc"),
         duration: 2000,
       });
 
@@ -92,14 +95,14 @@ const ReserveView = ({ car }: ReserveViewProps) => {
             
             {/* Date and Time Selection */}
             <div className="space-y-4">
-                <h2 className="text-2xl font-bold text-white text-center">1. Select Handover Date & Time</h2>
+                <h2 className="text-2xl font-bold text-white text-center">{t("step1Title")}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
                         control={form.control}
                         name="handoverDate"
                         render={({ field }) => (
                             <FormItem className="flex flex-col">
-                                <FormLabel>Handover Date</FormLabel>
+                                <FormLabel>{t("dateLabel")}</FormLabel>
                                 <Popover>
                                     <PopoverTrigger asChild>
                                         <FormControl>
@@ -113,7 +116,7 @@ const ReserveView = ({ car }: ReserveViewProps) => {
                                                 {field.value ? (
                                                     format(field.value, "PPP")
                                                 ) : (
-                                                    <span>Pick a date</span>
+                                                    <span>{t("pickDate")}</span>
                                                 )}
                                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                             </Button>
@@ -138,7 +141,7 @@ const ReserveView = ({ car }: ReserveViewProps) => {
                         name="handoverTime"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Handover Time</FormLabel>
+                                <FormLabel>{t("timeLabel")}</FormLabel>
                                 <FormControl>
                                     <Select options={generataTimeOptions()} {...field} />
                                 </FormControl>
@@ -154,33 +157,33 @@ const ReserveView = ({ car }: ReserveViewProps) => {
 
             {/* User Details */}
             <div className="space-y-4">
-                <h2 className="text-2xl font-bold text-white text-center">2. Enter Your Details</h2>
+                <h2 className="text-2xl font-bold text-white text-center">{t("step2Title")}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField control={form.control} name="firstName" render={({ field }) => (
                         <FormItem>
-                            <FormLabel>First Name</FormLabel>
-                            <FormControl><Input placeholder="Enter your first name" {...field} /></FormControl>
+                            <FormLabel>{tReserve("firstNameLabel")}</FormLabel>
+                            <FormControl><Input placeholder={tReserve("firstNamePlaceholder")} {...field} /></FormControl>
                             <FormMessage />
                         </FormItem>
                     )} />
                     <FormField control={form.control} name="lastName" render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Last Name</FormLabel>
-                            <FormControl><Input placeholder="Enter your last name" {...field} /></FormControl>
+                            <FormLabel>{tReserve("lastNameLabel")}</FormLabel>
+                            <FormControl><Input placeholder={tReserve("lastNamePlaceholder")} {...field} /></FormControl>
                             <FormMessage />
                         </FormItem>
                     )} />
                     <FormField control={form.control} name="email" render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Email Address</FormLabel>
-                            <FormControl><Input type="email" placeholder="Enter your email address" {...field} /></FormControl>
+                            <FormLabel>{tReserve("emailLabel")}</FormLabel>
+                            <FormControl><Input type="email" placeholder={tReserve("emailPlaceholder")} {...field} /></FormControl>
                             <FormMessage />
                         </FormItem>
                     )} />
                     <FormField control={form.control} name="mobile" render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Mobile Number</FormLabel>
-                            <FormControl><Input placeholder="Enter your mobile number" {...field} /></FormControl>
+                            <FormLabel>{tReserve("mobileLabel")}</FormLabel>
+                            <FormControl><Input placeholder={tReserve("mobilePlaceholder")} {...field} /></FormControl>
                             <FormMessage />
                         </FormItem>
                     )} />
@@ -200,7 +203,7 @@ const ReserveView = ({ car }: ReserveViewProps) => {
                     />
                   </FormControl>
                   <div className="space-y-1 leading-none">
-                    <FormLabel>I agree to the terms and conditions</FormLabel>
+                    <FormLabel>{tReserve("terms")}</FormLabel>
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -209,7 +212,7 @@ const ReserveView = ({ car }: ReserveViewProps) => {
 
             {/* Submit Button */}
             <Button type="submit" disabled={isPending} className="w-full font-bold text-lg py-6 bg-green-600 hover:bg-green-700">
-              {isPending ? <Loader2 className="w-6 h-6 animate-spin" /> : "Complete Reservation"}
+              {isPending ? <Loader2 className="w-6 h-6 animate-spin" /> : t("submit")}
             </Button>
           </form>
         </Form>

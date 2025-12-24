@@ -36,6 +36,10 @@ export interface Favourites {
 
 export interface TaxonomyFiltersProps extends AwaitedPageProps {
   handleChange: (e: ChangeEvent<HTMLSelectElement>) => void;
+  makes?: FilterOptions<string, string>;
+  models?: FilterOptions<string, string>;
+  modelVariants?: FilterOptions<string, string>;
+  isLoading?: boolean;
 }
 
 export type FilterOptions<Ltype, VType> = Array<{ label: Ltype; value: VType }>;

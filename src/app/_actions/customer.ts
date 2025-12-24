@@ -6,8 +6,10 @@ import { forbidden, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { routes } from "@/config/routes";
 import { CreateCustomerType, EditCustomerType } from "@/app/schemas/customer.schema";
+import { getTranslations } from "next-intl/server";
 
 export const createCustomerAction = async (data: CreateCustomerType) => {
+  const t = await getTranslations("Admin.customers.messages");
   try {
     const newCustomer = await prisma.customer.create({
       data: {
@@ -25,12 +27,12 @@ export const createCustomerAction = async (data: CreateCustomerType) => {
     });
     return {
       success: true,
-      message: `Thank you for your interest, ${newCustomer.firstName}. We will be in touch shortly.`,
+      message: t("publicSuccess", { name: newCustomer.firstName }),
     };
   } catch (error) {
     return {
       success: false,
-      message: "Failed to submit details",
+      message: t("publicError"),
     };
   }
 };
@@ -38,6 +40,7 @@ export const createCustomerAction = async (data: CreateCustomerType) => {
 export const updateCustomerAction = async (data: {
   id: number;
 } & EditCustomerType) => {
+  const t = await getTranslations("Admin.customers.messages");
   const session = await auth();
   if (!session?.user?.id) {
     return forbidden();
@@ -51,7 +54,7 @@ export const updateCustomerAction = async (data: {
     });
 
     if (!customer) {
-      return { success: false, message: "Customer not found" };
+      return { success: false, message: t("notFound") };
     }
 
     const changes: { field: string; oldValue: any; newValue: any }[] = [];
@@ -128,18 +131,19 @@ export const updateCustomerAction = async (data: {
 
     return {
       success: true,
-      message: `Customer updated successfully`,
+      message: t("updateSuccess"),
     };
   } catch (error) {
     console.error("Update Customer Error:", error);
     return {
       success: false,
-      message: "Failed to update customer",
+      message: t("updateError"),
     };
   }
 };
 
 export const createManualCustomerAction = async (data: EditCustomerType) => {
+  const t = await getTranslations("Admin.customers.messages");
   const session = await auth();
   if (!session?.user?.id) {
     return forbidden();
@@ -162,7 +166,7 @@ export const createManualCustomerAction = async (data: EditCustomerType) => {
     console.error("Create Customer Error:", error);
     return {
       success: false,
-      message: "Failed to create customer",
+      message: t("createError"),
     };
   }
 
@@ -171,6 +175,7 @@ export const createManualCustomerAction = async (data: EditCustomerType) => {
 };
 
 export const deleteCustomerAction = async (id: number) => {
+  const t = await getTranslations("Admin.customers.messages");
   const session = await auth();
   if (!session) {
     return forbidden();
@@ -181,12 +186,12 @@ export const deleteCustomerAction = async (id: number) => {
     revalidatePath(routes.admin.customers);
     return {
       success: true,
-      message: "Customer deleted",
+      message: t("deleteSuccess"),
     };
   } catch (error) {
     return {
       success: false,
-      message: "Failed to delete customer",
+      message: t("deleteError"),
     };
   }
 };

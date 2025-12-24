@@ -9,11 +9,12 @@ import parse from "html-react-parser";
 import { Button } from "@/components/ui/button";
 import Confetti from "confetti-js";
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 type FormHeaderProps = Prisma.ClassifiedGetPayload<{ include: { make: true } }>;
 
 const FormHeader = (props: FormHeaderProps) => {
-
+  const t = useTranslations("Reserve.welcome");
   useEffect(() => {
     const confettiElement = document.getElementById('confetti-canvas');
     if (!confettiElement) {
@@ -59,8 +60,8 @@ const FormHeader = (props: FormHeaderProps) => {
       <div className="mx-auto bg-gray-900/70 rounded-lg shadow-lg text-gray-300 border border-gray-700">
         {/* Top Welcome Section */}
         <div className="bg-gray-800/50 p-4 rounded-t-lg text-center">
-          <h1 className="text-2xl font-bold text-white">You are one step closer to owning this vehicle.</h1>
-          <p className="text-gray-400">Follow the steps below to complete your reservation.</p>
+          <h1 className="text-2xl font-bold text-white">{t("title")}</h1>
+          <p className="text-gray-400">{t("subtitle")}</p>
         </div>
 
         {/* Main Content */}
@@ -70,11 +71,11 @@ const FormHeader = (props: FormHeaderProps) => {
             <div className="flex-1 space-y-3">
               <div className="flex items-start">
                 <CircleCheck className="text-green-500 w-5 h-5 mr-3 flex-shrink-0 mt-1" />
-                <p className="text-gray-400">A simple, secure two-step reservation process.</p>
+                <p className="text-gray-400">{t("step1")}</p>
               </div>
               <div className="flex items-start">
                 <CircleCheck className="text-green-500 w-5 h-5 mr-3 flex-shrink-0 mt-1" />
-                <p className="text-gray-400">Select your preferred handover date and provide your contact details.</p>
+                <p className="text-gray-400">{t("step2")}</p>
               </div>
             </div>
 
@@ -102,13 +103,13 @@ const FormHeader = (props: FormHeaderProps) => {
           {/* Steps Visualizer */}
           <div className="flex justify-around items-center bg-gray-800/50 p-4 rounded-lg mb-6">
             <div className="text-center">
-              <p className="font-semibold text-white">1. Select Date</p>
-              <p className="text-gray-400 text-sm">Choose a handover time</p>
+              <p className="font-semibold text-white">{t("visualizer1")}</p>
+              <p className="text-gray-400 text-sm">{t("visualizer1Desc")}</p>
             </div>
             <ArrowRight className="w-6 h-6 text-gray-500" />
             <div className="text-center">
-              <p className="font-semibold text-white">2. Your Details</p>
-              <p className="text-gray-400 text-sm">Finalize your reservation</p>
+              <p className="font-semibold text-white">{t("visualizer2")}</p>
+              <p className="text-gray-400 text-sm">{t("visualizer2Desc")}</p>
             </div>
           </div>
 
@@ -116,15 +117,15 @@ const FormHeader = (props: FormHeaderProps) => {
           <div className="flex justify-around items-center text-center text-gray-400">
             <div className="flex items-center flex-col justify-center space-y-2">
               <Lock className="w-6 h-6" />
-              <p className="text-sm">Secure Process</p>
+              <p className="text-sm">{t("feature1")}</p>
             </div>
             <div className="flex items-center flex-col justify-center space-y-2">
               <Star className="w-6 h-6" />
-              <p className="text-sm">5-Star Service</p>
+              <p className="text-sm">{t("feature2")}</p>
             </div>
             <div className="flex items-center flex-col justify-center space-y-2">
               <CreditCard className="w-6 h-6" />
-              <p className="text-sm">Flexible Options</p>
+              <p className="text-sm">{t("feature3")}</p>
             </div>
           </div>
         </div>
@@ -132,7 +133,7 @@ const FormHeader = (props: FormHeaderProps) => {
         {/* Action Button */}
         <div className="p-6 border-t border-gray-800">
           <Button onClick={handleConfettiAndScroll} className="font-bold flex gap-x-3 w-full bg-blue-600 hover:bg-blue-700 text-white" size="lg">
-            Proceed to Reservation <ArrowRight className="w-5 h-5" />
+            {t("button")} <ArrowRight className="w-5 h-5" />
           </Button>
         </div>
       </div>

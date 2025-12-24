@@ -1,5 +1,4 @@
 import { routes } from "@/config/routes";
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import NewsLetterForm from "./NewsLetterForm";
@@ -7,19 +6,25 @@ import { auth } from "@/auth";
 import { Button } from "../ui/button";
 import { LayoutDashboard } from "lucide-react";
 
-const navLinks = [
-  { id: 1, href: routes.inventory, label: "The Collection" },
-  { id: 2, href: routes.financing, label: "Financing" },
-  { id: 3, href: routes.ourPhilosophy, label: "Our Philosophy" },
-  { id: 4, href: routes.contact, label: "Contact" },
-];
+import { getTranslations } from "next-intl/server";
+import Image from "next/image";
 
 const PublicFooter = async () => {
+  const tNav = await getTranslations("Navigation");
+  const tFooter = await getTranslations("Footer");
   const session = await auth();
+
+  const navLinks = [
+    { id: 1, href: routes.inventory, label: tNav("collection") },
+    { id: 2, href: routes.financing, label: tNav("financing") },
+    { id: 3, href: routes.ourPhilosophy, label: tNav("philosophy") },
+    { id: 4, href: routes.contact, label: tNav("contact") },
+  ];
+
   return (
     <footer className="bg-secondary px-8 lg:px-0 py-12">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left mb-12 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left mb-12 items-start">
           {/* Column 1: Branding */}
           <div className="flex flex-col items-center md:items-start gap-y-2">
             <Link href={routes.home} className="flex flex-col sm:flex-row items-center gap-4">
@@ -28,6 +33,7 @@ const PublicFooter = async () => {
                 alt="RIM GLOBAL Logo"
                 width={280}
                 height={280}
+                unoptimized
               />
               <div>
                 <span className="text-2xl font-bold text-primary">RIM GLOBAL</span>
@@ -37,7 +43,7 @@ const PublicFooter = async () => {
           </div>
 
           {/* Column 2: Navigation */}
-          <ul className="space-y-2">
+          <ul className="space-y-2 flex flex-col items-center md:items-start">
             {navLinks.map((link) => (
               <li key={link.id}>
                 <Link
@@ -51,9 +57,9 @@ const PublicFooter = async () => {
           </ul>
 
           {/* Column 3: Contact Info & Admin Link */}
-          <div className="flex flex-col justify-between h-full items-start md:items-end">
-            <div className="space-y-2 text-left md:text-right">
-                <h3 className="text-xl font-bold text-primary">Contact Us</h3>
+          <div className="flex flex-col justify-between h-full items-center md:items-end">
+            <div className="space-y-2 text-center md:text-right">
+                <h3 className="text-xl font-bold text-primary">{tFooter("contactUs")}</h3>
                 <address className="not-italic text-muted-foreground">
                 1505 S 356th Street, STE 114-4<br />Federal Way, WA 98003
                 </address>

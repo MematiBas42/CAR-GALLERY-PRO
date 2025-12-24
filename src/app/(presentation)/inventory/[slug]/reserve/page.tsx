@@ -3,8 +3,9 @@ import { notFound } from "next/navigation";
 import { PageProps } from "@/config/types";
 import ReserveView from "./ReserveView";
 
-const ReservePage = async ({ params, searchParams }: PageProps) => {
-  const { slug } = params;
+const ReservePage = async (props: PageProps) => {
+  const params = await props.params;
+  const { slug } = (params as any);
 
   const car = await prisma.classified.findUnique({
     where: { slug },
@@ -15,7 +16,7 @@ const ReservePage = async ({ params, searchParams }: PageProps) => {
     return notFound();
   }
 
-  return <ReserveView car={car} searchParams={searchParams} />;
+  return <ReserveView car={car} />;
 };
 
 export default ReservePage;

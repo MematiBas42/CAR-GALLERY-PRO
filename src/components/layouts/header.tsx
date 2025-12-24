@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
-import { HeartIcon, HomeIcon, LayoutDashboard, MenuIcon, SearchIcon } from "lucide-react";
+import { HeartIcon, HomeIcon, LayoutDashboard, MenuIcon } from "lucide-react";
 import { Favourites } from "@/config/types";
 import SignoutForm from "../auth/SignoutForm";
 import { ThemeToggle } from "../ui/theme-toggle";
@@ -13,21 +13,24 @@ import { auth } from "@/auth";
 import { getSourceId } from "@/lib/source-id";
 import { redis } from "@/lib/redis-store";
 
-const navLinks = [
-  { id: 1, href: routes.inventory, label: "The Collection" },
-  { id: 2, href: routes.financing, label: "Financing" },
-  { id: 3, href: routes.ourPhilosophy, label: "Our Philosophy" },
-  { id: 4, href: routes.contact, label: "Contact" },
-];
+import { getTranslations } from "next-intl/server";
 
 const Header = async () => {
+  const t = await getTranslations("Navigation");
   const session = await auth();
   const sourceId = await getSourceId();
   const favs = await redis.get<Favourites>(sourceId ?? "");
 
+  const navLinks = [
+    { id: 1, href: routes.inventory, label: t("collection") },
+    { id: 2, href: routes.financing, label: t("financing") },
+    { id: 3, href: routes.ourPhilosophy, label: t("philosophy") },
+    { id: 4, href: routes.contact, label: t("contact") },
+  ];
+
   return (
     <header className="flex items-center justify-between h-16 px-4 bg-transparent gap-x-6">
-      <div className="flex items-center flex-1 gap-x-4">
+      <div className="flex items-center justify-center md:justify-start flex-1 gap-x-4">
         <Link href={routes.home} className="flex items-center gap-2">
           <Image
             src="/assets/logo.png"
@@ -35,10 +38,11 @@ const Header = async () => {
             width={60}
             height={60}
             className="relative"
+            unoptimized
           />
-          <div>
+          <div className="text-left md:text-left">
             <span className="text-xl font-bold text-primary">RIM GLOBAL</span>
-            <p className="text-sm text-muted-foreground text-right -mt-1">auto sales</p>
+            <p className="text-sm text-muted-foreground text-right md:text-right -mt-1">auto sales</p>
           </div>
         </Link>
         <LanguageSwitcher />
@@ -48,9 +52,6 @@ const Header = async () => {
           <Link href={routes.home}>
             <HomeIcon className="w-6 h-6" />
           </Link>
-        </Button>
-        <Button variant="outline" size="icon">
-          <SearchIcon className="w-6 h-6" />
         </Button>
         {navLinks.map((link) => (
           <Link

@@ -6,6 +6,7 @@ import { parseAsStringLiteral, useQueryState } from "nuqs";
 import React from "react";
 import { TableHead, TableHeader, TableRow } from "../ui/table";
 import { SortIcon } from "../shared/sort-icon";
+import { useTranslations } from "next-intl";
 const carKeys = [
   "status",
   "title",
@@ -28,6 +29,7 @@ interface CarTableProps extends PageProps {
 type CarTableHeaderProps = Pick<CarTableProps, "sort" | "order">;
 
 const CarTableHeader = (props: CarTableHeaderProps) => {
+  const t = useTranslations("Admin.cars.table");
   const { sort: initialSort, order: initialOrder } = props;
   const [sort, setSort] = useQueryState(
     "sort",
@@ -58,7 +60,7 @@ const CarTableHeader = (props: CarTableHeaderProps) => {
             className="flex items-center gap-2 cursor-pointer"
             onClick={() => handleSort("id")}
           >
-            ID
+            {t("id")}
             <SortIcon<CarKeys>
               sort="id"
               currentSort={sort}
@@ -66,15 +68,15 @@ const CarTableHeader = (props: CarTableHeaderProps) => {
             />
           </div>
         </TableHead>
-        <TableHead className="text-muted w-[80px]">Image</TableHead>
-        <TableHead className="text-muted w-[150px]">Title</TableHead>
+        <TableHead className="text-muted w-[80px]">{t("image")}</TableHead>
+        <TableHead className="text-muted w-[150px]">{t("title")}</TableHead>
         <TableHead className="text-muted w-[150px]">
 					<div
 						className="flex items-center gap-2 cursor-pointer"
 						onClick={() => handleSort("price")}
 						onKeyDown={() => handleSort("price")}
 					>
-						Price
+						{t("price")}
 						<SortIcon<CarKeys>
 							currentSort={sort}
 							currentOrder={order as "asc" | "desc" | null}
@@ -88,7 +90,7 @@ const CarTableHeader = (props: CarTableHeaderProps) => {
 						onClick={() => handleSort("vrm")}
 						onKeyDown={() => handleSort("vrm")}
 					>
-						VRM
+						{t("vrm")}
 						<SortIcon<CarKeys>
 							currentSort={sort}
 							currentOrder={order as "asc" | "desc" | null}
@@ -102,7 +104,7 @@ const CarTableHeader = (props: CarTableHeaderProps) => {
 						onClick={() => handleSort("colour")}
 						onKeyDown={() => handleSort("colour")}
 					>
-						Colour
+						{t("colour")}
 						<SortIcon<CarKeys>
 							currentSort={sort}
 							currentOrder={order as "asc" | "desc" | null}
@@ -116,7 +118,7 @@ const CarTableHeader = (props: CarTableHeaderProps) => {
 						onClick={() => handleSort("status")}
 						onKeyDown={() => handleSort("status")}
 					>
-						Status
+						{t("status")}
 						<SortIcon<CarKeys>
 							currentSort={sort}
 							currentOrder={order as "asc" | "desc" | null}
@@ -126,11 +128,11 @@ const CarTableHeader = (props: CarTableHeaderProps) => {
 				</TableHead>
 				<TableHead className="text-muted hidden md:table-cell">
 					<div
-						className="flex items-center gap-2 cursor-pointer"
+						className="flex items-center gap-2 Dashbaord-pointer"
 						onClick={() => handleSort("createdAt")}
 						onKeyDown={() => handleSort("createdAt")}
 					>
-						Date Created
+						{t("dateCreated")}
 						<SortIcon<CarKeys>
 							currentSort={sort}
 							currentOrder={order as "asc" | "desc" | null}
@@ -144,7 +146,7 @@ const CarTableHeader = (props: CarTableHeaderProps) => {
 						onClick={() => handleSort("views")}
 						onKeyDown={() => handleSort("views")}
 					>
-						Views
+						{t("views")}
 						<SortIcon<CarKeys>
 							currentSort={sort}
 							currentOrder={order as "asc" | "desc" | null}
@@ -152,7 +154,7 @@ const CarTableHeader = (props: CarTableHeaderProps) => {
 						/>
 					</div>
 				</TableHead>
-				<TableHead className="text-muted w-[100px]">Actions</TableHead>
+				<TableHead className="text-muted w-[100px]">{t("actions")}</TableHead>
       </TableRow>
     </TableHeader>
   );

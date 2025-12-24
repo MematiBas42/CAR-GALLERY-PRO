@@ -2,8 +2,10 @@ import { routes } from "@/config/routes";
 import { CarIcon, HomeIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { useTranslations } from "next-intl";
 
 export const EndButtons = () => {
+	const t = useTranslations("Reserve.successPage");
 	return (
 		<div className="mt-6 flex items-center justify-center gap-4">
 			<Button
@@ -12,12 +14,12 @@ export const EndButtons = () => {
 				asChild
 			>
 				<Link href={routes.home}>
-					<HomeIcon className="mr-2 h-5 w-5" /> Go to Homepage
+					<HomeIcon className="mr-2 h-5 w-5" /> {t("goHome")}
 				</Link>
 			</Button>
 			<Button asChild>
 				<Link href={routes.inventory}>
-					<CarIcon className="mr-2 h-5 w-5" /> View other whips
+					<CarIcon className="mr-2 h-5 w-5" /> {t("viewOther")}
 				</Link>
 			</Button>
 		</div>

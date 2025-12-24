@@ -8,8 +8,10 @@ import { Button } from "../ui/button";
 import { useFormStatus } from "react-dom";
 import { CircleCheckIcon, Loader2 } from "lucide-react";
 import { SignInAction } from "@/app/_actions/sign-in";
+import { useTranslations } from "next-intl";
 
 const SignInButton = () => {
+	const t = useTranslations("Auth.signIn");
 	const { pending } = useFormStatus();
 
 	return (
@@ -18,12 +20,13 @@ const SignInButton = () => {
 			type="submit"
 			className="w-full uppercase font-bold"
 		>
-			{pending && <Loader2 className="h-4 w-4 shrink-0 animate-spin" aria-hidden="true" />} Sign In
+			{pending && <Loader2 className="h-4 w-4 shrink-0 animate-spin" aria-hidden="true" />} {t("button")}
 		</Button>
 	);
 };
 
 const SignInform = () => {
+  const t = useTranslations("Auth.signIn");
   const [state, formActions] = useActionState(SignInAction, { success: false, message: "" });
   const router = useRouter();
 
@@ -41,35 +44,35 @@ const SignInform = () => {
         className="border-muted border shadow-lg p-10 rounded-md bg-card"
       >
         <div className="flex items-center mb-6 justify-center">
-          <h2 className="uppercase text-2xl font-bold">Admin Sign In</h2>
+          <h2 className="uppercase text-2xl font-bold">{t("title")}</h2>
         </div>
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{t("email")}</Label>
             <Input
               id="email"
               type="email"
               name="email"
               autoComplete="email"
-              placeholder="Enter your email"
+              placeholder={t("emailPlaceholder")}
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">{t("password")}</Label>
             <Input
               id="password"
               type="password"
               name="password"
-              placeholder="Enter your password"
+              placeholder={t("passwordPlaceholder")}
               autoComplete="current-password"
               required
             />
           </div>
           <div className="my-6 ">
             <p className="text-sm text-muted-foreground mb-2 text-center">
-              <b>This is for admin only</b>
+              <b>{t("adminOnly")}</b>
             </p>
           </div>
           <div className="space-y-4">

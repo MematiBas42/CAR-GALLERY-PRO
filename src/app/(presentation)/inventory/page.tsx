@@ -14,8 +14,7 @@ import { buildClassifiedFilterQuery } from "@/lib/utils";
 import { ClassifiedStatus, Prisma } from "@prisma/client";
 import React, { Suspense } from "react";
 import { z } from "zod";
-
-
+import { getTranslations } from "next-intl/server";
 
 const getInventory = async (searchParams: AwaitedPageProps["searchParams"]) => {
   const validPage = z
@@ -85,6 +84,7 @@ const getInventory = async (searchParams: AwaitedPageProps["searchParams"]) => {
 // };
 
 const InventoryPage = async (props: PageProps) => {
+  const t = await getTranslations("Inventory");
   const searchParams = await props.searchParams;
   const cars = await getInventory(searchParams);
  
@@ -120,7 +120,7 @@ const InventoryPage = async (props: PageProps) => {
         <div className="flex space-y-2 flex-col items-center justify-center pb-4 -mt-1">
           <div className="flex justify-between items-center w-full">
             <h2 className="text-sm md:text-base lg:text-xl font-semibold min-w-fit">
-              {count} Cars Available
+              {t("carsAvailable", { count })}
             </h2>
             {/* <DialogFilters/> */}
             <DialogFilters 

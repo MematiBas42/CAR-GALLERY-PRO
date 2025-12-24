@@ -1,0 +1,453 @@
+{
+  "Navigation": {
+    "collection": "Koleksiyon",
+    "financing": "Finansman",
+    "philosophy": "Felsefemiz",
+    "contact": "İletişim",
+    "home": "Anasayfa",
+    "search": "Ara",
+    "favorites": "Favoriler"
+  },
+  "Auth": {
+    "signIn": {
+      "title": "Yönetici Girişi",
+      "email": "E-posta",
+      "emailPlaceholder": "E-postanızı girin",
+      "password": "Şifre",
+      "passwordPlaceholder": "Şifrenizi girin",
+      "adminOnly": "Bu alan sadece yöneticiler içindir",
+      "button": "Giriş Yap"
+    },
+    "otp": {
+      "title": "Tek kullanımlık şifre",
+      "description": "E-postanıza gönderilen 6 haneli kodu girin.",
+      "sendCode": "Kod Gönder",
+      "resendCode": "Kodu tekrar gönder",
+      "sending": "Gönderiliyor...",
+      "verify": "Doğrula",
+      "verifying": "Doğrulanıyor...",
+      "success": "Kod başarıyla gönderildi",
+      "successDesc": "Lütfen e-postanızı kontrol edin.",
+      "error": "OTP tamamlanırken hata oluştu",
+      "errorSend": "Kod gönderilirken hata oluştu"
+    },
+    "signOut": "Çıkış Yap",
+    "dashboard": "Panel"
+  },
+  "Common": {
+    "pagination": {
+      "previous": "Önceki",
+      "next": "Sonraki",
+      "morePages": "Daha fazla sayfa"
+    },
+    "actions": {
+      "edit": "Düzenle",
+      "delete": "Sil",
+      "save": "Kaydet",
+      "cancel": "İptal",
+      "add": "Ekle",
+      "search": "Ara",
+      "clear": "Temizle",
+      "show": "{value} göster",
+      "view": "Görüntüle",
+      "deleteCar": "Aracı Sil",
+      "viewCar": "Aracı Görüntüle",
+      "editCar": "Aracı Düzenle",
+      "deleteCustomer": "Müşteriyi Sil",
+      "deleteSuccess": "Araç başarıyla silindi",
+      "deleteError": "Araç silinemedi",
+      "deleteCustomerSuccess": "Müşteri başarıyla silindi",
+      "deleteCustomerError": "Müşteri silinemedi"
+    }
+  },
+  "Footer": {
+    "contactUs": "Bize Ulaşın"
+  },
+  "Newsletter": {
+    "placeholder": "E-posta adresinizi girin",
+    "subscribe": "Abone Ol",
+    "subscribing": "Abone olunuyor...",
+    "success": "Abone olundu!",
+    "error": "Hata"
+  },
+  "Homepage": {
+    "Hero": {
+      "title": "Sıradaki Bölümünüz, Özenle Seçildi.",
+      "subtitle": "RIM GLOBAL'de Federal Way için ikinci el araç deneyimini yeniden tasarladık. Kalite kontrolünden geçmiş özenle seçilmiş koleksiyonumuzu keşfedin ve şeffaf, sorunsuz bir yolculuğun güvenini yaşayın.",
+      "discover": "Koleksiyonu Keşfet",
+      "clearFilters": "Filtreleri Temizle"
+    },
+    "Features": {
+      "trust": "Güven Temeli",
+      "financing": "Hayatınıza Uygun Finansman",
+      "description": "Esnek finansman çözümleri sunmak için güvenilir yerel ve ulusal kredi kuruluşlarıyla işbirliği yapıyoruz. Ekibimiz, bütçenize uygun bir plana sizi yönlendirmek ve baştan sona net ve şeffaf bir süreç sağlamak için burada."
+    },
+    "LatestArrivals": {
+      "title": "Son Gelenler"
+    },
+    "Brands": {
+      "title": "Önde Gelen Markaların Özenle Seçilmiş Koleksiyonu",
+      "description": "Portföyümüz, dünyanın en saygın otomotiv isimlerinden özenle seçilmiş araçları içermektedir. Koleksiyonumuzdaki {count} araçla, bir sonraki bölümünüz sizi bekliyor."
+    },
+    "Testimonials": {
+      "title": "Müşterilerimiz Ne Diyor?",
+      "items": {
+        "0": {
+          "quote": "Şimdiye kadar yaşadığım en sorunsuz araba satın alma deneyimiydi. Ekip profesyonel, şeffaf ve inanılmaz yardımcıydı. Uygun fiyata harika bir araba aldım.",
+          "name": "Alex R.",
+          "location": "Federal Way, WA"
+        },
+        "1": {
+          "quote": "İkinci el araba alma sürecinden korkuyordum ama işimi çok kolaylaştırdılar. Baskı yok, sadece samimi tavsiyeler var. Kesinlikle tavsiye ederim!",
+          "name": "Samantha B.",
+          "location": "Tacoma, WA"
+        },
+        "2": {
+          "quote": "Aradığım modelin tam aynısını tertemiz durumda buldum. Koleksiyonlarının kalitesi birinci sınıf. Bir sonraki arabam için kesinlikle geri döneceğim.",
+          "name": "Michael T.",
+          "location": "Seattle, WA"
+        }
+      }
+    }
+  },
+  "Filters": {
+    "year": "Yıl",
+    "price": "Fiyat",
+    "make": "Marka",
+    "model": "Model",
+    "modelVariant": "Versiyon",
+    "min": "Min",
+    "max": "Maks",
+    "search": "Ara",
+    "select": "Seçiniz"
+  },
+  "Inventory": {
+    "carsAvailable": "{count} Araç Mevcut",
+    "sidebar": {
+      "title": "Filtreler",
+      "clearAll": "Tüm filtreleri temizle",
+      "searchPlaceholder": "Araç ara..."
+    },
+    "labels": {
+      "odometerReading": "Kilometre / Mil",
+      "currency": "Para Birimi",
+      "odometerUnit": "Mesafe Birimi",
+      "transmission": "Şanzıman",
+      "fuelType": "Yakıt Tipi",
+      "bodyType": "Kasa Tipi",
+      "colour": "Renk",
+      "ulezCompliance": "ULEZ Uyumluluğu",
+      "doors": "Kapı Sayısı",
+      "seats": "Koltuk Sayısı"
+    }
+  },
+  "Enums": {
+    "BodyType": {
+      "SEDAN": "Sedan",
+      "HATCHBACK": "Hatchback",
+      "SUV": "SUV",
+      "COUPE": "Coupe",
+      "CONVERTIBLE": "Üstü Açık",
+      "WAGON": "Wagon"
+    },
+    "FuelType": {
+      "PETROL": "Benzin",
+      "DIESEL": "Dizel",
+      "ELECTRIC": "Elektrikli",
+      "HYBRID": "Hibrit"
+    },
+    "Transmission": {
+      "MANUAL": "Manuel",
+      "AUTOMATIC": "Otomatik"
+    },
+    "Colour": {
+      "BLACK": "Siyah",
+      "BLUE": "Mavi",
+      "BROWN": "Kahverengi",
+      "GOLD": "Altın",
+      "GREEN": "Yeşil",
+      "GREY": "Gri",
+      "ORANGE": "Turuncu",
+      "PINK": "Pembe",
+      "PURPLE": "Mor",
+      "RED": "Kırmızı",
+      "SILVER": "Gümüş",
+      "WHITE": "Beyaz",
+      "YELLOW": "Sarı"
+    },
+    "OdoUnit": {
+      "MILES": "mil",
+      "KILOMETERS": "km"
+    },
+    "CustomerStatus": {
+      "ALL": "Hepsi",
+      "COLD": "Soğuk",
+      "CONTACTED": "İletişime Geçildi",
+      "INTERESTED": "İlgileniyor",
+      "PURCHASED": "Satın Aldı",
+      "SUBSCRIBER": "Abone",
+      "LEAD": "Potansiyel"
+    },
+    "ClassifiedStatus": {
+      "ALL": "Hepsi",
+      "LIVE": "Yayında",
+      "SOLD": "Satıldı",
+      "DRAFT": "Taslak"
+    }
+  },
+  "Car": {
+    "reserve": "Rezerve Et",
+    "reserveNow": "Şimdi Rezerve Et",
+    "viewDetails": "Detayları Gör",
+    "ourPrice": "Fiyatımız:",
+    "notAvailable": "N/A"
+  },
+  "ULEZ": {
+    "EXEMPT": "Muaf",
+    "NON_EXEMPT": "Muaf Değil"
+  },
+  "Financing": {
+    "title": "Hayatınıza Uygun Finansman",
+    "description": "RIM GLOBAL'de aracınızı finanse etmenin, onu satın almak kadar şeffaf ve basit olması gerektiğine inanıyoruz. Benzersiz durumunuza özel esnek çözümler sunmak için güvenilir yerel ve ulusal kredi kuruluşlarıyla işbirliği yapıyoruz. Ekibimiz her adımda size rehberlik etmek, sizi güvenle sürücü koltuğuna oturtan net ve sorunsuz bir süreç sağlamak için burada."
+  },
+  "Philosophy": {
+    "title": "Felsefemiz",
+    "curation": {
+      "title": "Adet Değil, Kalite:",
+      "description": "En çok araca sahip olmayı değil, en iyisine sahip olmayı hedefliyoruz. Koleksiyonumuzdaki her araç, yüksek kalite, güvenilirlik ve değer standartlarımızı karşılamak üzere özenle seçilmiş ve titizlikle incelenmiştir. Karakteri ve hikayesi olan araçlar arıyoruz, böylece sadece bir araba değil, otomotiv tarihinden bir parça satın aldığınızdan emin oluyoruz."
+    },
+    "transparency": {
+      "title": "Özümüzde Şeffaflık:",
+      "description": "Geleneksel araba satın alma deneyimi genellikle belirsizliklerle doludur. Bunu değiştiriyoruz. Net ve peşin fiyatlandırmadan kapsamlı araç geçmişi raporlarına kadar, güvenli ve bilinçli bir karar vermeniz için ihtiyacınız olan tüm bilgileri sağlıyoruz. Gizli ücretler yok, son dakika sürprizleri yok."
+    },
+    "partnership": {
+      "title": "Ortaklık Yaklaşımı:",
+      "description": "Kendimizi sadece satış elemanı değil, kişisel otomotiv küratörleriniz olarak görüyoruz. Hedefimiz güven ve karşılıklı saygıya dayalı uzun vadeli bir ilişki kurmaktır. Yaşam tarzınıza ve bütçenize uygun mükemmel aracı bulmanıza yardımcı olmak için uzman tavsiyesi ve baskısız bir ortam sunmak üzere buradayız."
+    }
+  },
+  "Favourites": {
+    "title": "Favori Araçlarınız"
+  },
+  "Contact": {
+    "title": "Federal Way Showroomumuzu Ziyaret Edin",
+    "description": "RIM GLOBAL farkını bizzat yaşayın. Showroomumuz konforlu ve premium bir izleme deneyimi sunmak üzere tasarlanmıştır. Aşağıdaki harita Federal Way'deki genel konumumuzu göstermektedir."
+  },
+  "Reserve": {
+    "welcome": {
+      "title": "Bu araca sahip olmaya bir adım daha yaklaştınız.",
+      "subtitle": "Rezervasyonunuzu tamamlamak için aşağıdaki adımları izleyin.",
+      "step1": "Basit ve güvenli iki adımlı rezervasyon süreci.",
+      "step2": "Tercih ettiğiniz teslim tarihini seçin ve iletişim bilgilerinizi girin.",
+      "visualizer1": "1. Tarih Seçimi",
+      "visualizer1Desc": "Teslimat zamanını seçin",
+      "visualizer2": "2. Bilgileriniz",
+      "visualizer2Desc": "Rezervasyonunuzu tamamlayın",
+      "feature1": "Güvenli Süreç",
+      "feature2": "5 Yıldızlı Hizmet",
+      "feature3": "Esnek Seçenekler",
+      "button": "Rezervasyona Devam Et"
+    },
+    "selectDate": {
+      "dateLabel": "Teslim Tarihini Seçin",
+      "timeLabel": "Teslim Saatini Seçin",
+      "back": "GERİ",
+      "continue": "Devam Et"
+    },
+    "submitDetails": {
+      "firstNameLabel": "Adınız",
+      "firstNamePlaceholder": "Adınızı girin",
+      "lastNameLabel": "Soyadınız",
+      "lastNamePlaceholder": "Soyadınızı girin",
+      "emailLabel": "E-posta Adresiniz",
+      "emailPlaceholder": "E-posta adresinizi girin",
+      "mobileLabel": "Telefon Numaranız",
+      "mobilePlaceholder": "Telefon numaranızı girin",
+      "terms": "Şartları ve koşulları kabul ediyorum",
+      "back": "Önceki Adım",
+      "submit": "Bilgileri Gönder",
+      "success": "Başarılı",
+      "successDesc": "Rezervasyon işlemi başarıyla tamamlandı",
+      "view": {
+        "step1Title": "1. Teslim Tarihi ve Saatini Seçin",
+        "step2Title": "2. Bilgilerinizi Girin",
+        "dateLabel": "Teslim Tarihi",
+        "timeLabel": "Teslim Saati",
+        "pickDate": "Tarih seçin",
+        "submit": "Rezervasyonu Tamamla",
+        "success": "Başarılı!",
+        "successDesc": "Rezervasyonunuz onaylandı.",
+        "error": "Hata"
+      },
+      "successPage": {
+        "title": "Rezervasyon Onaylandı!",
+        "description": "Rezervasyonunuz için teşekkür ederiz. Yakında görüşmek üzere.",
+        "summary": "Rezervasyon Özeti",
+        "goHome": "Anasayfaya Git",
+        "viewOther": "Diğer araçlara göz at"
+      }
+    }
+  },
+  "Admin": {
+    "sidebar": {
+      "dashboard": "Panel",
+      "cars": "Araçlar",
+      "customers": "Müşteriler",
+      "settings": "Ayarlar"
+    },
+    "settings": {
+      "logoutTitle": "Tüm oturumlardan çıkış yap",
+      "logoutDesc": "Bu işlem, şu anda giriş yaptığınız tüm cihazlardaki tüm oturumlarınızı sonlandıracaktır.",
+      "logoutButton": "Tüm oturumlardan çıkış yap",
+      "loggingOut": "Çıkış yapılıyor..."
+    },
+    "dashboard": {
+      "totalSales": "Toplam Satış",
+      "totalSalesDesc": "Son 30 gündeki toplam satış geliri",
+      "carsSold": "Satılan Araçlar",
+      "carsSoldDesc": "Son 30 günde satılan toplam araç sayısı",
+      "newCustomers": "Yeni Müşteriler",
+      "newCustomersDesc": "Son 30 gündeki toplam yeni müşteri sayısı",
+      "conversionRate": "Dönüşüm Oranı",
+      "conversionRateDesc": "Son 30 gündeki satış yüzdesi",
+      "salesChart": {
+        "title": "Aylık satışlar {yearStart} / {yearEnd}",
+        "description": "Aylık satılan araç sayısı"
+      }
+    },
+    "cars": {
+      "title": "Tüm araçlar",
+      "addNew": "Yeni ekle",
+      "editTitle": "Araç Detaylarını Düzenle",
+      "createTitle": "Yeni Araç Oluştur",
+      "imagesLabel": "Görseller (en fazla 8)",
+      "statusLabel": "Durum",
+      "updateButton": "Aracı Güncelle",
+      "createButton": "Araç Oluştur",
+      "successUpdated": "Araç güncellendi",
+      "successCreated": "Araç oluşturuldu",
+      "table": {
+        "id": "ID",
+        "image": "Görsel",
+        "title": "Başlık",
+        "price": "Fiyat",
+        "vrm": "Plaka",
+        "colour": "Renk",
+        "status": "Durum",
+        "dateCreated": "Oluşturulma Tarihi",
+        "views": "Görüntülenme",
+        "actions": "İşlemler"
+      },
+      "form": {
+        "year": "Yıl",
+        "make": "Marka",
+        "model": "Model",
+        "variant": "Versiyon",
+        "price": "Fiyat",
+        "odoReading": "Kilometre / Mil",
+        "transmission": "Şanzıman",
+        "fuelType": "Yakıt Tipi",
+        "bodyType": "Kasa Tipi",
+        "colour": "Renk",
+        "ulez": "ULEZ Uyumluluğu",
+        "vrm": "Plaka",
+        "doors": "Kapı Sayısı",
+        "seats": "Koltuk Sayısı",
+        "description": "Açıklama"
+      },
+      "messages": {
+        "createSuccess": "Araç başarıyla oluşturuldu",
+        "createError": "Araç oluşturulamadı",
+        "updateSuccess": "Araç başarıyla güncellendi",
+        "updateError": "Araç güncellenemedi",
+        "deleteSuccess": "Araç başarıyla silindi",
+        "deleteError": "Araç silinemedi",
+        "genericError": "Bir şeyler yanlış gitti"
+      }
+    },
+    "customers": {
+      "title": "Tüm Müşteriler",
+      "addCustomer": "Müşteri Ekle",
+      "messages": {
+        "createSuccess": "Müşteri başarıyla oluşturuldu",
+        "createError": "Müşteri oluşturulamadı",
+        "updateSuccess": "Müşteri başarıyla güncellendi",
+        "updateError": "Müşteri güncellenemedi",
+        "deleteSuccess": "Müşteri başarıyla silindi",
+        "deleteError": "Müşteri silinemedi",
+        "publicSuccess": "İlginiz için teşekkürler, {name}. En kısa sürede sizinle iletişime geçeceğiz.",
+        "publicError": "Bilgiler gönderilemedi",
+        "notFound": "Müşteri bulunamadı",
+        "alreadySubscribed": "Zaten abonesiniz",
+        "genericError": "Beklenmedik bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+      },
+      "table": {
+        "id": "ID",
+        "status": "Durum",
+        "name": "Ad",
+        "email": "E-posta",
+        "mobile": "Telefon",
+        "classified": "İlan",
+        "dateCreated": "Oluşturulma Tarihi",
+        "dateUpdated": "Güncellenme Tarihi",
+        "bookingDate": "Rezervasyon Tarihi",
+        "actions": "İşlemler"
+      },
+      "form": {
+        "firstName": "Ad",
+        "lastName": "Soyad",
+        "email": "E-posta",
+        "mobile": "Telefon",
+        "carTitle": "Araç Başlığı",
+        "bookingDate": "Rezervasyon Tarihi (YYYY-AA-GG)",
+        "notes": "Notlar",
+        "notesPlaceholder": "Müşteri notları...",
+        "status": "Müşteri Durumu",
+        "updateButton": "Müşteriyi Güncelle",
+        "createButton": "Müşteri Oluştur",
+        "successUpdated": "Müşteri başarıyla güncellendi",
+        "errorUpdating": "Müşteri güncellenirken hata oluştu",
+        "errorCreating": "Müşteri oluşturulurken hata oluştu"
+      }
+    }
+  },
+  "Emails": {
+    "otp": {
+      "subject": "Doğrulama Kodunuz",
+      "title": "Doğrulama Kodunuz",
+      "description": "Kimlik doğrulama işlemini tamamlamak için lütfen aşağıdaki kodu kullanın:",
+      "ignore": "Eğer bu kodu siz istemediyseniz, lütfen bu e-postayı dikkate almayın."
+    }
+  },
+  "Errors": {
+    "forbidden": {
+      "title": "Erişim Engellendi",
+      "description": "Bu kaynağa erişim yetkiniz bulunmamaktadır.",
+      "returnHome": "Anasayfaya Dön"
+    },
+    "notAvailable": {
+      "title": "Araç Mevcut Değil",
+      "description": "Üzgünüz, bu araç çoktan satıldı! Ama merak etmeyin, sizin için pek çok başka seçeneğimiz var. Koleksiyonumuzun geri kalanına göz atın.",
+      "slangTitle": "Maalesef bu araç çoktan gitti! 🚗💨"
+    }
+  },
+  "Theme": {
+    "toggle": "Tema değiştir",
+    "light": "Açık",
+    "dark": "Koyu",
+    "system": "Sistem"
+  },
+  "Months": {
+    "Jan": "Oca",
+    "Feb": "Şub",
+    "Mar": "Mar",
+    "Apr": "Nis",
+    "May": "May",
+    "Jun": "Haz",
+    "Jul": "Tem",
+    "Aug": "Ağu",
+    "Sep": "Eyl",
+    "Oct": "Eki",
+    "Nov": "Kas",
+    "Dec": "Ara"
+  }
+}

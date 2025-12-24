@@ -1,0 +1,453 @@
+{
+  "Navigation": {
+    "collection": "The Collection",
+    "financing": "Financing",
+    "philosophy": "Our Philosophy",
+    "contact": "Contact",
+    "home": "Home",
+    "search": "Search",
+    "favorites": "Favorites"
+  },
+  "Auth": {
+    "signIn": {
+      "title": "Admin Sign In",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "adminOnly": "This is for admin only",
+      "button": "Sign In"
+    },
+    "otp": {
+      "title": "One time password",
+      "description": "Enter 6 digits code send to your email.",
+      "sendCode": "Send Code",
+      "resendCode": "Resend code",
+      "sending": "Sending...",
+      "verify": "Verify",
+      "verifying": "Verifying...",
+      "success": "Code sent successfully",
+      "successDesc": "Please check your email for the code.",
+      "error": "Error completing OTP",
+      "errorSend": "Error sending code"
+    },
+    "signOut": "Sign Out",
+    "dashboard": "Dashboard"
+  },
+  "Common": {
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "morePages": "More pages"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save",
+      "cancel": "Cancel",
+      "add": "Add",
+      "search": "Search",
+      "clear": "Clear",
+      "show": "Show {value}",
+      "view": "View",
+      "deleteCar": "Delete Car",
+      "viewCar": "View Car",
+      "editCar": "Edit Car",
+      "deleteCustomer": "Delete Customer",
+      "deleteSuccess": "Car deleted successfully",
+      "deleteError": "Failed to delete car",
+      "deleteCustomerSuccess": "Customer deleted successfully",
+      "deleteCustomerError": "Failed to delete customer"
+    }
+  },
+  "Footer": {
+    "contactUs": "Contact Us"
+  },
+  "Newsletter": {
+    "placeholder": "Enter your email",
+    "subscribe": "Subscribe",
+    "subscribing": "Subscribing...",
+    "success": "Subscribed!",
+    "error": "Error"
+  },
+  "Homepage": {
+    "Hero": {
+      "title": "Your Next Chapter, Curated.",
+      "subtitle": "At RIM GLOBAL, we've reimagined the pre-owned car experience for Federal Way. Explore our meticulously curated collection of quality-inspected vehicles and discover the confidence of a transparent, hassle-free journey.",
+      "discover": "Discover The Collection",
+      "clearFilters": "Clear Filters"
+    },
+    "Features": {
+      "trust": "A Foundation of Trust",
+      "financing": "Financing That Fits Your Life",
+      "description": "We partner with trusted local and national lenders to offer flexible financing solutions. Our team is here to guide you to a plan that aligns with your budget, ensuring a clear and transparent process from start to finish."
+    },
+    "LatestArrivals": {
+      "title": "Latest Arrivals"
+    },
+    "Brands": {
+      "title": "A Curated Collection of Premier Brands",
+      "description": "Our portfolio features a meticulously selected range of vehicles from the world's most respected automotive names. With {count} vehicles currently in our collection, your next chapter awaits."
+    },
+    "Testimonials": {
+      "title": "What Our Customers Say",
+      "items": {
+        "0": {
+          "quote": "The most seamless car buying experience I've ever had. The team was professional, transparent, and incredibly helpful. I got a great car at a fair price.",
+          "name": "Alex R.",
+          "location": "Federal Way, WA"
+        },
+        "1": {
+          "quote": "I was dreading the process of buying a used car, but they made it so easy. No pressure, just genuine advice. Highly recommended!",
+          "name": "Samantha B.",
+          "location": "Tacoma, WA"
+        },
+        "2": {
+          "quote": "Found the exact model I was looking for in pristine condition. The quality of their collection is top-notch. I'll definitely be back for my next car.",
+          "name": "Michael T.",
+          "location": "Seattle, WA"
+        }
+      }
+    }
+  },
+  "Filters": {
+    "year": "Year",
+    "price": "Price",
+    "make": "Make",
+    "model": "Model",
+    "modelVariant": "Model Variant",
+    "min": "Min",
+    "max": "Max",
+    "search": "Search",
+    "select": "Select"
+  },
+  "Inventory": {
+    "carsAvailable": "{count} Cars Available",
+    "sidebar": {
+      "title": "Filters",
+      "clearAll": "Clear all filters",
+      "searchPlaceholder": "Search for car..."
+    },
+    "labels": {
+      "odometerReading": "Odometer Reading",
+      "currency": "Currency",
+      "odometerUnit": "Odometer Unit",
+      "transmission": "Transmission",
+      "fuelType": "Fuel Type",
+      "bodyType": "Body Type",
+      "colour": "Colour",
+      "ulezCompliance": "ULEZ Compliance",
+      "doors": "Doors",
+      "seats": "Seats"
+    }
+  },
+  "Enums": {
+    "BodyType": {
+      "SEDAN": "Sedan",
+      "HATCHBACK": "Hatchback",
+      "SUV": "SUV",
+      "COUPE": "Coupe",
+      "CONVERTIBLE": "Convertible",
+      "WAGON": "Wagon"
+    },
+    "FuelType": {
+      "PETROL": "Petrol",
+      "DIESEL": "Diesel",
+      "ELECTRIC": "Electric",
+      "HYBRID": "Hybrid"
+    },
+    "Transmission": {
+      "MANUAL": "Manual",
+      "AUTOMATIC": "Automatic"
+    },
+    "Colour": {
+      "BLACK": "Black",
+      "BLUE": "Blue",
+      "BROWN": "Brown",
+      "GOLD": "Gold",
+      "GREEN": "Green",
+      "GREY": "Grey",
+      "ORANGE": "Orange",
+      "PINK": "Pink",
+      "PURPLE": "Purple",
+      "RED": "Red",
+      "SILVER": "Silver",
+      "WHITE": "White",
+      "YELLOW": "Yellow"
+    },
+    "OdoUnit": {
+      "MILES": "miles",
+      "KILOMETERS": "km"
+    },
+    "CustomerStatus": {
+      "ALL": "All",
+      "COLD": "Cold",
+      "CONTACTED": "Contacted",
+      "INTERESTED": "Interested",
+      "PURCHASED": "Purchased",
+      "SUBSCRIBER": "Subscriber",
+      "LEAD": "Lead"
+    },
+    "ClassifiedStatus": {
+      "ALL": "All",
+      "LIVE": "Live",
+      "SOLD": "Sold",
+      "DRAFT": "Draft"
+    }
+  },
+  "Car": {
+    "reserve": "Reserve",
+    "reserveNow": "Reserve Now",
+    "viewDetails": "View details",
+    "ourPrice": "Our Price:",
+    "notAvailable": "N/A"
+  },
+  "ULEZ": {
+    "EXEMPT": "Exempt",
+    "NON_EXEMPT": "Non-Exempt"
+  },
+  "Financing": {
+    "title": "Financing That Fits Your Life",
+    "description": "At RIM GLOBAL, we believe financing your vehicle should be as transparent and straightforward as buying it. We partner with trusted local and national lenders to offer flexible solutions tailored to your unique situation. Our team is here to guide you through every step, ensuring a clear, hassle-free process that puts you in the driver's seat with confidence."
+  },
+  "Philosophy": {
+    "title": "Our Philosophy",
+    "curation": {
+      "title": "Curation over Volume:",
+      "description": "We don't aim to have the most cars, just the best. Each vehicle in our collection is hand-selected and rigorously inspected to meet our high standards of quality, reliability, and value. We seek out vehicles with character and a story, ensuring you're not just buying a car, but a piece of automotive history."
+    },
+    "transparency": {
+      "title": "Transparency at the Core:",
+      "description": "The traditional car-buying experience is often clouded with uncertainty. We're changing that. From clear, upfront pricing to comprehensive vehicle history reports, we provide all the information you need to make a confident and informed decision. No hidden fees, no last-minute surprises."
+    },
+    "partnership": {
+      "title": "A Partnership Approach:",
+      "description": "We see ourselves as your personal automotive curators, not just salespeople. Our goal is to build a long-term relationship based on trust and mutual respect. We're here to offer expert advice and a no-pressure environment, helping you find the perfect vehicle that fits your lifestyle and budget."
+    }
+  },
+  "Favourites": {
+    "title": "Your Favourite Cars"
+  },
+  "Contact": {
+    "title": "Visit Our Federal Way Showroom",
+    "description": "Experience the RIM GLOBAL difference in person. Our showroom is designed to provide a comfortable and premium viewing experience. The map below shows our general location in Federal Way."
+  },
+  "Reserve": {
+    "welcome": {
+      "title": "You are one step closer to owning this vehicle.",
+      "subtitle": "Follow the steps below to complete your reservation.",
+      "step1": "A simple, secure two-step reservation process.",
+      "step2": "Select your preferred handover date and provide your contact details.",
+      "visualizer1": "1. Select Date",
+      "visualizer1Desc": "Choose a handover time",
+      "visualizer2": "2. Your Details",
+      "visualizer2Desc": "Finalize your reservation",
+      "feature1": "Secure Process",
+      "feature2": "5-Star Service",
+      "feature3": "Flexible Options",
+      "button": "Proceed to Reservation"
+    },
+    "selectDate": {
+      "dateLabel": "Select Handover Date",
+      "timeLabel": "Select Handover Time",
+      "back": "BACK",
+      "continue": "Continue"
+    },
+    "submitDetails": {
+      "firstNameLabel": "Enter First Name",
+      "firstNamePlaceholder": "Enter your first name",
+      "lastNameLabel": "Enter Last Name",
+      "lastNamePlaceholder": "Enter your last name",
+      "emailLabel": "Enter Email Address",
+      "emailPlaceholder": "Enter your email address",
+      "mobileLabel": "Enter Mobile",
+      "mobilePlaceholder": "Enter your mobile number",
+      "terms": "I agree to the terms and conditions",
+      "back": "Previous Step",
+      "submit": "Submit Details",
+      "success": "Success",
+      "successDesc": "Customer has completed the booking",
+      "view": {
+        "step1Title": "1. Select Handover Date & Time",
+        "step2Title": "2. Enter Your Details",
+        "dateLabel": "Handover Date",
+        "timeLabel": "Handover Time",
+        "pickDate": "Pick a date",
+        "submit": "Complete Reservation",
+        "success": "Success!",
+        "successDesc": "Your reservation has been confirmed.",
+        "error": "Error"
+      },
+      "successPage": {
+        "title": "Booking Confirmed!",
+        "description": "Thank you for your reservation. We will see you soon.",
+        "summary": "Reservation Summary",
+        "goHome": "Go to Homepage",
+        "viewOther": "View other vehicles"
+      }
+    }
+  },
+  "Admin": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "cars": "Cars",
+      "customers": "Customers",
+      "settings": "Settings"
+    },
+    "settings": {
+      "logoutTitle": "Log out of all sessions",
+      "logoutDesc": "This will log out out of all of your sessions across all of your devices of which you are currently logged into.",
+      "logoutButton": "Log out of all sessions",
+      "loggingOut": "Logging out..."
+    },
+    "dashboard": {
+      "totalSales": "Total Sales",
+      "totalSalesDesc": "Total sales revenue in the last 30 days",
+      "carsSold": "Cars Sold",
+      "carsSoldDesc": "Total number of cars sold in the last 30 days",
+      "newCustomers": "New Customers",
+      "newCustomersDesc": "Total number of new customers in the last 30 days",
+      "conversionRate": "Conversion Rate",
+      "conversionRateDesc": "% of sales in the last 30 days",
+      "salesChart": {
+        "title": "Monthly sales {yearStart} / {yearEnd}",
+        "description": "Number of cars sold per month"
+      }
+    },
+    "cars": {
+      "title": "All cars/vehicles",
+      "addNew": "Add new",
+      "editTitle": "Edit Vehicle Details",
+      "createTitle": "Create New Vehicle",
+      "imagesLabel": "Images (up to 8)",
+      "statusLabel": "Status",
+      "updateButton": "Update Car",
+      "createButton": "Create Car",
+      "successUpdated": "Car updated",
+      "successCreated": "Car created",
+      "table": {
+        "id": "ID",
+        "image": "Image",
+        "title": "Title",
+        "price": "Price",
+        "vrm": "VRM",
+        "colour": "Colour",
+        "status": "Status",
+        "dateCreated": "Date Created",
+        "views": "Views",
+        "actions": "Actions"
+      },
+      "form": {
+        "year": "Year",
+        "make": "Make",
+        "model": "Model",
+        "variant": "Model Variant",
+        "price": "Price",
+        "odoReading": "Odometer Reading",
+        "transmission": "Transmission",
+        "fuelType": "Fuel Type",
+        "bodyType": "Body Type",
+        "colour": "Colour",
+        "ulez": "ULEZ Compliance",
+        "vrm": "Vehicle Registration Mark",
+        "doors": "Doors",
+        "seats": "Seats",
+        "description": "Description"
+      },
+      "messages": {
+        "createSuccess": "Car created successfully",
+        "createError": "Failed to create car",
+        "updateSuccess": "Car updated successfully",
+        "updateError": "Failed to update car",
+        "deleteSuccess": "Car deleted successfully",
+        "deleteError": "Failed to delete car",
+        "genericError": "Something went wrong"
+      }
+    },
+    "customers": {
+      "title": "All Customers",
+      "addCustomer": "Add Customer",
+      "messages": {
+        "createSuccess": "Customer created successfully",
+        "createError": "Failed to create customer",
+        "updateSuccess": "Customer updated successfully",
+        "updateError": "Failed to update customer",
+        "deleteSuccess": "Customer deleted successfully",
+        "deleteError": "Failed to delete customer",
+        "publicSuccess": "Thank you for your interest, {name}. We will be in touch shortly.",
+        "publicError": "Failed to submit details",
+        "notFound": "Customer not found",
+        "alreadySubscribed": "You are already subscribed",
+        "genericError": "An unexpected error occurred. Please try again later."
+      },
+      "table": {
+        "id": "ID",
+        "status": "Status",
+        "name": "Name",
+        "email": "Email",
+        "mobile": "Mobile",
+        "classified": "Classified",
+        "dateCreated": "Date Created",
+        "dateUpdated": "Date Updated",
+        "bookingDate": "Booking Date",
+        "actions": "Actions"
+      },
+      "form": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "mobile": "Mobile",
+        "carTitle": "Car Title",
+        "bookingDate": "Booking Date (YYYY-MM-DD)",
+        "notes": "Notes",
+        "notesPlaceholder": "Customer notes...",
+        "status": "Customer Status",
+        "updateButton": "Update Customer",
+        "createButton": "Create Customer",
+        "successUpdated": "Customer updated successfully",
+        "errorUpdating": "Error updating customer",
+        "errorCreating": "Error creating customer"
+      }
+    }
+  },
+  "Emails": {
+    "otp": {
+      "subject": "Your OTP Code",
+      "title": "Your OTP Code",
+      "description": "Please use the following code to complete your authentication:",
+      "ignore": "If you did not request this code, please ignore this email."
+    }
+  },
+  "Errors": {
+    "forbidden": {
+      "title": "Forbidden",
+      "description": "You are not authorized to access this resource.",
+      "returnHome": "Return Home"
+    },
+    "notAvailable": {
+      "title": "Vehicle Not Available",
+      "description": "Don't stress though - we got mad other rides that'll have you cruising in style. Peep the rest of our fire collection on the site!",
+      "slangTitle": "Yo, that whip is already gone, fam! 🚗💨"
+    }
+  },
+  "Theme": {
+    "toggle": "Toggle theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "Months": {
+    "Jan": "Jan",
+    "Feb": "Feb",
+    "Mar": "Mar",
+    "Apr": "Apr",
+    "May": "May",
+    "Jun": "Jun",
+    "Jul": "Jul",
+    "Aug": "Aug",
+    "Sep": "Sep",
+    "Oct": "Oct",
+    "Nov": "Nov",
+    "Dec": "Dec"
+  }
+}

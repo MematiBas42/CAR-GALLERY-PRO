@@ -4,18 +4,28 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import { Select } from "../ui/select";
 import { endpoints } from "@/config/endpoints";
 import { api } from "@/lib/api-client";
+import { useTranslations } from "next-intl";
 
 
 const TaxonomyFilters = (props: TaxonomyFiltersProps) => {
-  const { searchParams, handleChange } = props;
+  const t = useTranslations("Filters");
+  const { 
+    searchParams, 
+    handleChange, 
+    makes: propsMakes, 
+    models: propsModels, 
+    modelVariants: propsVariants,
+    isLoading: propsLoading 
+  } = props;
 
-  const [makes, setMakes] = useState<FilterOptions<string, string>>([]);
-  const [model, setmodel] = useState<FilterOptions<string, string>>([]);
-  const [modelVariant, setmodelVariant] = useState<
-    FilterOptions<string, string>
-  >([]);
+  const [internalMakes, setInternalMakes] = useState<FilterOptions<string, string>>([]);
+  const [internalModels, setInternalModels] = useState<FilterOptions<string, string>>([]);
+  const [internalVariants, setInternalVariants] = useState<FilterOptions<string, string>>([]);
 
  useEffect(() => {
+    // Only fetch if data is not provided via props
+    if (propsMakes || propsModels || propsVariants) return;
+
 		(async function fetchMakesOptions() {
 			const params = new URLSearchParams();
 			for (const [k, v] of Object.entries(
@@ -34,39 +44,46 @@ const TaxonomyFilters = (props: TaxonomyFiltersProps) => {
 				modelVariants: FilterOptions<string, string>;
 			}>(url.toString());
 
-			setMakes(data.makes);
-			setmodel(data.models);
-			setmodelVariant(data.modelVariants);
+			setInternalMakes(data.makes);
+			setInternalModels(data.models);
+			setInternalVariants(data.modelVariants);
 		})();
 
     
-	}, [searchParams]);
+	}, [searchParams, propsMakes, propsModels, propsVariants]);
+
+  const makes = propsMakes || internalMakes;
+  const model = propsModels || internalModels;
+  const modelVariant = propsVariants || internalVariants;
 
   
   return (
     <>
       <Select
-        label="Make"
+        label={t("make")}
         name="make"
         value={(searchParams?.make as string) || ""}
         options={makes}
         onChange={handleChange}
+        placeholder={!makes.length ? "-" : undefined}
       />
       <Select
-        label="Model"
+        label={t("model")}
         name="model"
         value={(searchParams?.model as string) || ""}
         options={model}
         onChange={handleChange}
         disabled={!model.length}
+        placeholder={!model.length ? "-" : undefined}
       />
       <Select
-        label="Model Variant"
+        label={t("modelVariant")}
         name="modelVariant"
         value={(searchParams?.modelVariant as string) || ""}
         options={modelVariant}
         onChange={handleChange}
         disabled={!modelVariant.length}
+        placeholder={!modelVariant.length ? "-" : undefined}
       />
     </>
   );

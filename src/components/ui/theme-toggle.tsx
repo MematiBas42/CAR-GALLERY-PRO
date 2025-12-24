@@ -11,8 +11,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useTranslations } from "next-intl"
 
 export function ThemeToggle() {
+  const t = useTranslations("Theme")
   const { setTheme, theme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = React.useState(false)
 
@@ -34,23 +36,23 @@ export function ThemeToggle() {
           ) : (
             <Sun className="h-[1.2rem] w-[1.2rem]" />
           )}
-          <span className="sr-only">Toggle theme</span>
+          <span className="sr-only">{t("toggle")}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme("light")}>
           <Sun className="h-4 w-4 mr-2" />
-          <span>Light</span>
+          <span>{t("light")}</span>
           {theme === "light" && <Check className="ml-auto h-4 w-4" />}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
           <Moon className="h-4 w-4 mr-2" />
-          <span>Dark</span>
+          <span>{t("dark")}</span>
           {theme === "dark" && <Check className="ml-auto h-4 w-4" />}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
           {/* You can add a system icon if you have one */}
-          <span className="ml-6">System</span>
+          <span className="ml-6">{t("system")}</span>
           {theme === "system" && <Check className="ml-auto h-4 w-4" />}
         </DropdownMenuItem>
       </DropdownMenuContent>

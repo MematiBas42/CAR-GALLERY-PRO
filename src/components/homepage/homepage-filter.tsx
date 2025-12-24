@@ -4,12 +4,14 @@ import { SidebarProps } from "../inventory/sidebar";
 import { parseAsString, useQueryStates } from "nuqs";
 import TaxonomyFilters from "../inventory/TaxonomyFilters";
 import { RangeFilter } from "../inventory/RangeFilters";
+import { useTranslations } from "next-intl";
 
 interface HomepageTaxonomyFiltersProps extends SidebarProps {}
 const HomepageTaxonomyFilters = ({
   searchParams,
   minMaxValue,
 }: HomepageTaxonomyFiltersProps) => {
+  const t = useTranslations("Filters");
   const { _min, _max } = minMaxValue;
   const [, setState] = useQueryStates(
     {
@@ -48,7 +50,7 @@ const HomepageTaxonomyFilters = ({
         handleChange={handleChange}
       />
       <RangeFilter
-        label="Year"
+        label={t("year")}
         minName="minYear"
         maxName="maxYear"
         defaultMin={_min.year || 1925}
@@ -57,7 +59,7 @@ const HomepageTaxonomyFilters = ({
         searchParams={searchParams}
       />
       <RangeFilter
-        label="Price"
+        label={t("price")}
         minName="minPrice"
         maxName="maxPrice"
         defaultMin={_min.price || 0}

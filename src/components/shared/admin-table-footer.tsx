@@ -5,6 +5,7 @@ import { type ChangeEvent, useEffect } from "react";
 import { Select } from "../ui/select";
 import { TableCell, TableFooter, TableRow } from "../ui/table";
 import CustomPagination from "./custom-pagination";
+import { useTranslations } from "next-intl";
 const itemsPerPageOptions: FilterOptions<string, string> = [
 	{ label: "10", value: "10" },
 	{ label: "25", value: "25" },
@@ -20,6 +21,7 @@ interface AdminTableFooterProps extends AwaitedPageProps {
 }
 
 export const AdminTableFooter = (props: AdminTableFooterProps) => {
+    const t = useTranslations("Common.actions");
     const { disabled, totalPages, baseURL, cols, searchParams } = props;
 	const itemsPerPage = searchParams?.itemsPerPage || "10";
 	const router = useRouter();
@@ -48,9 +50,9 @@ export const AdminTableFooter = (props: AdminTableFooterProps) => {
                 >
                     <div className="flex items-center">
                                             <Select
-                                              value={searchParams.itemsPerPage || "10"}
+                                              value={(searchParams?.itemsPerPage as any) || "10"}
                                               options={["10", "20", "50"].map((value) => ({
-                                                label: `Show ${value}`,
+                                                label: t("show", { value }),
                                                 value,
                                               }))}                                    onChange={(e) => {
                                       const url = new URL(baseURL, window.location.origin);

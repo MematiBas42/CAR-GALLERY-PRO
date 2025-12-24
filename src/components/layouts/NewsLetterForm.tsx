@@ -8,26 +8,35 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { subscribeAction } from "@/app/_actions/subscribe";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 const NewsLetterForm = () => {
+  const t = useTranslations("Newsletter");
   const [isPending, startTransition] = useTransition();
   const form = useForm<SubscribeSchemaType>({
     resolver: zodResolver(SubscribeSchema),
     defaultValues: {
       email: "",
+      firstName: "Subscriber", // Defaulting as form only has email input in UI
+      lastName: "User",
     },
   });
 
   const onSubmit = (data: SubscribeSchemaType) => {
     startTransition(async () => {
-      const response = await subscribeAction(data);
+      const formData = new FormData();
+      formData.append("email", data.email);
+      formData.append("firstName", data.firstName);
+      formData.append("lastName", data.lastName);
+      
+      const response = await subscribeAction({ success: false, message: "" }, formData);
       if (response.success) {
-        toast.success("Subscribed!", {
+        toast.success(t("success"), {
           description: response.message,
         });
         form.reset();
       } else {
-        toast.error("Error", {
+        toast.error(t("error"), {
           description: response.message,
         });
       }
@@ -47,8 +56,9 @@ const NewsLetterForm = () => {
             <FormItem className="flex-grow">
               <FormControl>
                 <Input
+                  suppressHydrationWarning
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder={t("placeholder")}
                   className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-400"
                   {...field}
                 />
@@ -57,7 +67,7 @@ const NewsLetterForm = () => {
           )}
         />
         <Button type="submit" variant="default" disabled={isPending}>
-          {isPending ? "Subscribing..." : "Subscribe"}
+          {isPending ? t("subscribing") : t("subscribe")}
         </Button>
       </form>
     </Form>

@@ -6,6 +6,7 @@ import type { Customer } from "@prisma/client";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 import { SortIcon } from "@/components/shared/sort-icon";
 import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useTranslations } from "next-intl";
 
 const customerKeys = [
 	"id",
@@ -31,6 +32,7 @@ interface CustomerTableProps extends PageProps {
 type CustomersTableHeaderProps = Pick<CustomerTableProps, "sort" | "order">;
 
 export const CustomersTableHeader = (props: CustomersTableHeaderProps) => {
+	const t = useTranslations("Admin.customers.table");
 	const { sort: initialSort, order: initialOrder } = props;
 	const [sort, setSort] = useQueryState(
 		"sort",
@@ -63,7 +65,7 @@ export const CustomersTableHeader = (props: CustomersTableHeaderProps) => {
 						onClick={() => handleSort("id")}
 						onKeyDown={() => handleSort("id")}
 					>
-						ID
+						{t("id")}
 						<SortIcon<CustomerKeys>
 							currentSort={sort}
 							currentOrder={order as "asc" | "desc" | null}
@@ -77,7 +79,7 @@ export const CustomersTableHeader = (props: CustomersTableHeaderProps) => {
 						onClick={() => handleSort("status")}
 						onKeyDown={() => handleSort("status")}
 					>
-						Status
+						{t("status")}
 						<SortIcon<CustomerKeys>
 							currentSort={sort}
 							currentOrder={order as "asc" | "desc" | null}
@@ -91,7 +93,7 @@ export const CustomersTableHeader = (props: CustomersTableHeaderProps) => {
 						onClick={() => handleSort("firstName")}
 						onKeyDown={() => handleSort("firstName")}
 					>
-						Name
+						{t("name")}
 						<SortIcon<CustomerKeys>
 							currentSort={sort}
 							currentOrder={order as "asc" | "desc" | null}
@@ -105,7 +107,7 @@ export const CustomersTableHeader = (props: CustomersTableHeaderProps) => {
 						onClick={() => handleSort("email")}
 						onKeyDown={() => handleSort("email")}
 					>
-						Email
+						{t("email")}
 						<SortIcon<CustomerKeys>
 							currentSort={sort}
 							currentOrder={order as "asc" | "desc" | null}
@@ -119,7 +121,7 @@ export const CustomersTableHeader = (props: CustomersTableHeaderProps) => {
 						onClick={() => handleSort("mobile")}
 						onKeyDown={() => handleSort("mobile")}
 					>
-						Mobile
+						{t("mobile")}
 						<SortIcon<CustomerKeys>
 							currentSort={sort}
 							currentOrder={order as "asc" | "desc" | null}
@@ -127,14 +129,14 @@ export const CustomersTableHeader = (props: CustomersTableHeaderProps) => {
 						/>
 					</div>
 				</TableHead>
-				<TableHead className="text-muted max-w-[150px]">Classified</TableHead>
+				<TableHead className="text-muted max-w-[150px]">{t("classified")}</TableHead>
 				<TableHead className="text-muted hidden md:table-cell">
 					<div
 						className="flex items-center gap-2 cursor-pointer"
 						onClick={() => handleSort("createdAt")}
 						onKeyDown={() => handleSort("createdAt")}
 					>
-						Date Created
+						{t("dateCreated")}
 						<SortIcon<CustomerKeys>
 							currentSort={sort}
 							currentOrder={order as "asc" | "desc" | null}
@@ -148,7 +150,7 @@ export const CustomersTableHeader = (props: CustomersTableHeaderProps) => {
 						onClick={() => handleSort("updatedAt")}
 						onKeyDown={() => handleSort("updatedAt")}
 					>
-						Date Updated
+						{t("dateUpdated")}
 						<SortIcon<CustomerKeys>
 							currentSort={sort}
 							currentOrder={order as "asc" | "desc" | null}
@@ -162,7 +164,7 @@ export const CustomersTableHeader = (props: CustomersTableHeaderProps) => {
 						onClick={() => handleSort("bookingDate")}
 						onKeyDown={() => handleSort("bookingDate")}
 					>
-						Booking Date
+						{t("bookingDate")}
 						<SortIcon<CustomerKeys>
 							currentSort={sort}
 							currentOrder={order as "asc" | "desc" | null}
@@ -170,7 +172,7 @@ export const CustomersTableHeader = (props: CustomersTableHeaderProps) => {
 						/>
 					</div>
 				</TableHead>
-				<TableHead className="text-muted w-[100px]">Actions</TableHead>
+				<TableHead className="text-muted w-[100px]">{t("actions")}</TableHead>
 			</TableRow>
 		</TableHeader>
 	);

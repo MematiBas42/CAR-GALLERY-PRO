@@ -5,8 +5,10 @@ import { PrismaClientKnownRequestError, PrismaClientValidationError } from '@pri
 import { z } from 'zod';
 import { SubscribeSchema } from '../schemas/sub.schema';
 import { PrevState } from '@/config/types';
+import { getTranslations } from 'next-intl/server';
 
 export const subscribeAction = async(_: PrevState, formData: FormData) => {
+    const t = await getTranslations("Admin.customers.messages");
     try {
         const {data, success, error} = SubscribeSchema.safeParse({
         email: formData.get('email') as string,
@@ -24,7 +26,7 @@ export const subscribeAction = async(_: PrevState, formData: FormData) => {
             }
         })
         if (subscriber) {
-            return { success: false, message: "You are already subscribed" };
+            return { success: false, message: t("alreadySubscribed") };
         }
 
         await prisma.customer.create({
@@ -35,7 +37,7 @@ export const subscribeAction = async(_: PrevState, formData: FormData) => {
 
         return {
             success: true,
-            message: "You have successfully subscribed to our newsletter",
+            message: t("createSuccess"),
         }
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
@@ -52,7 +54,7 @@ export const subscribeAction = async(_: PrevState, formData: FormData) => {
         }
         return {
             success: false,
-            message: "An unexpected error occurred. Please try again later.",
+            message: t("genericError"),
         }
     }
 }

@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import type { ChangeEvent, SelectHTMLAttributes } from "react";
+import { useTranslations } from "next-intl";
 
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 	label?: string;
@@ -9,9 +10,11 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 	className?: string;
 	selectClassName?: string;
 	noDefault?: boolean;
+	placeholder?: string;
 }
 
 export const Select = (props: SelectProps) => {
+	const t = useTranslations("Filters");
 	const {
 		label,
 		value,
@@ -19,6 +22,7 @@ export const Select = (props: SelectProps) => {
 		onChange,
 		className,
 		noDefault = true,
+		placeholder,
 		...rest
 	} = props;
 
@@ -34,7 +38,7 @@ export const Select = (props: SelectProps) => {
   			)}
   			{...rest}
   		>
-  			{noDefault && <option value="">Select</option>}
+  			{noDefault && <option value="">{placeholder || t("select")}</option>}
   			{options.map((option) => (
   				<option key={option.value} value={option.value}>
   					{option.label}
