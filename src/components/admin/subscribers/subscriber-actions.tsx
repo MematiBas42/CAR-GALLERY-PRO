@@ -9,11 +9,11 @@ export const SubscriberActions = ({ id }: { id: number }) => {
   const [isPending, startTransition] = useTransition();
 
   const handleDelete = () => {
-    if (!confirm("Are you sure you want to unsubscribe this user?")) return;
+    if (!confirm("Are you sure you want to remove this subscriber?")) return;
     startTransition(async () => {
       const res = await deleteCustomerAction(id);
-      if (res.success) toast.success("Subscriber removed");
-      else toast.error(res.message);
+      if (res.success) toast.success("Subscriber removed successfully");
+      else toast.error("Failed to remove subscriber");
     });
   };
 
@@ -21,10 +21,10 @@ export const SubscriberActions = ({ id }: { id: number }) => {
     <button 
       onClick={handleDelete}
       disabled={isPending}
-      className="p-2 hover:bg-red-500/20 text-red-500 rounded-full transition-colors"
-      title="Remove subscriber"
+      className="p-2 hover:bg-red-500/20 text-red-500 rounded-full transition-colors group"
+      title="Unsubscribe user"
     >
-      <Trash2 className="w-4 h-4" />
+      <Trash2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
     </button>
   );
 };

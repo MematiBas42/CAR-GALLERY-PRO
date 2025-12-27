@@ -23,7 +23,7 @@ export const POST = auth(async (req) => {
     const {file} = validated.data
     const uuid = uuidv4()
 
-    // 100MB Limit for S3 Single Upload
+    // 100MB Limit
     if (!file || file.size > 100 * 1024 * 1024) {
         return NextResponse.json(
             { message: "File is too large (Max 100MB)" }, 
@@ -34,7 +34,6 @@ export const POST = auth(async (req) => {
     const {default: mimetype} = await import ("mime-types")
 
     const mime = mimetype.lookup(file.name).toString()
-    // Allow images and videos
     if (mime.match(/image\/(jpeg|jpg|png|webp|svg\+xml)/) === null && mime.match(/video\/(mp4|webm|quicktime)/) === null)  {
 		return NextResponse.json(
 			{ message: `File type invalid ${mime}` },
@@ -43,7 +42,6 @@ export const POST = auth(async (req) => {
     } 
 
     const decodedFileName = decodeURIComponent(decodeURIComponent(file.name));
-    // Replace spaces to avoid S3 issues
 	const key = `upload/${uuid}/${decodedFileName.replace(/\s+/g, '-')}`;
 
     try {
@@ -56,8 +54,14 @@ export const POST = auth(async (req) => {
             mimetype: mime,
         })
         
-        // Construct S3 URL
-        const url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+        // FLEXIBLE URL CONSTRUCTION:
+        // Use custom bucket URL if provided (for R2 or custom CDN), otherwise fallback to standard AWS S3 format
+        let url = "";
+        if (process.env.NEXT_PUBLIC_S3_BUCKET_URL) {
+            url = `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}/${key}`;
+        } else {
+            url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+        }
         
         return NextResponse.json({
             message: "File uploaded successfully",
@@ -67,7 +71,7 @@ export const POST = auth(async (req) => {
     } catch (error) {
         console.error("Error uploading file to S3:", error);
         return NextResponse.json(
-            { message: "Failed to upload file to S3" },
+            { message: "Failed to upload file" },
             { status: 500 }
         );
     }

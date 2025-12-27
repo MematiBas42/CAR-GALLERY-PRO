@@ -352,7 +352,13 @@
       "customers": "Customers",
       "messages": "Messages",
       "subscribers": "Subscribers",
+      "latestArrivals": "Latest Arrivals",
       "settings": "Settings"
+    },
+    "latestArrivals": {
+      "successAdded": "Vehicle added to Latest Arrivals",
+      "successRemoved": "Vehicle removed from Latest Arrivals",
+      "error": "Failed to update featured status"
     },
     "settings": {
       "logoutTitle": "Log out of all sessions",

@@ -23,8 +23,20 @@ const roboto = Roboto({
 	display: "swap",
 });
 export const metadata: Metadata = {
-  title: "RIM GLOBAL",
-  description: "Federal Way's Curated Automotive Collection",};
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
+  title: {
+    default: "RIM GLOBAL",
+    template: "%s | RIM GLOBAL",
+  },
+  description: "Federal Way's Curated Automotive Collection",
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  }
+};
 
 export default async function RootLayout({
   children,

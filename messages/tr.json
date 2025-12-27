@@ -352,7 +352,13 @@
       "customers": "Müşteriler",
       "messages": "Mesajlar",
       "subscribers": "Aboneler",
+      "latestArrivals": "Son Gelenler",
       "settings": "Ayarlar"
+    },
+    "latestArrivals": {
+      "successAdded": "Araç Son Gelenler'e eklendi",
+      "successRemoved": "Araç Son Gelenler'den çıkarıldı",
+      "error": "Durum güncellenemedi"
     },
     "settings": {
       "logoutTitle": "Tüm oturumlardan çıkış yap",

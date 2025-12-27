@@ -4,16 +4,13 @@ Bu belge, butik araç galerisi web sitesinin profesyonel standartlara ulaşması
 
 ---
 
-1. İLETİŞİM VE BÜLTEN YÖNETİMİ (ADMIN PANEL)
-   - Prisma Modelleri: 'ContactMessage' ve 'NewsletterSubscriber' tablolarını oluştur.
-   - Veritabanı Kaydı: Mevcut formların sadece mail atmasını değil, bu tablolara kayıt atmasını sağla.
-   - Admin UI: Müşteriler menüsü altına "Gelen Mesajlar" ve "Abone Listesi" sayfaları ekle.
-   - Aksiyonlar: Mesajları "Okundu" olarak işaretleme ve Abone listesini CSV olarak dışa aktarma (Export) özelliği ekle.
+1. İLETİŞİM VE BÜLTEN YÖNETİMİ (ADMIN PANEL) - TAMAMLANDI
+   - Prisma Modelleri: 'ContactMessage' ve 'EmailTemplate' tabloları oluşturuldu.
+   - Admin UI: Gelen Mesajlar, Aboneler ve E-posta Şablonları sayfaları eklendi.
+   - Otomasyon: Yeni araç eklendiğinde ve fiyat düştüğünde otomatik e-posta bildirimleri entegre edildi.
 
-2. GÖRSEL VE DOSYA YÖNETİMİ (S3 TEMİZLİĞİ)
-   - Deletion Sync: 'deleteCarAction' ve 'updateCarAction' fonksiyonlarını güncelle.
-   - S3 Delete: Veritabanından silinen her resmin 'Key' bilgisi üzerinden S3/R2 servisinden fiziksel olarak silinmesini sağlayan yardımcı fonksiyonu (s3.deleteObject) entegre et.
-   - Çöp Dosya Önleme: Resim yükleme başarısız olursa veya araç kaydedilmezse S3'teki dosyayı geri silecek 'cleanup' mantığını kur.
+2. GÖRSEL VE DOSYA YÖNETİMİ (S3 TEMİZLİĞİ) - TAMAMLANDI
+   - Deletion Sync: Araç ve Marka silindiğinde S3 üzerindeki fiziksel dosyaların silinmesi sağlandı.
 
 3. GÜVENLİK: RATE LIMITING (HIZ SINIRI) - TAMAMLANDI
    - Upstash Entegrasyonu: @upstash/ratelimit kütüphanesini kullanarak API rotalarını koru.

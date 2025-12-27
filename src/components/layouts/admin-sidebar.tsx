@@ -8,9 +8,10 @@ import {
   MailIcon,
   SettingsIcon,
   UsersIcon,
-  UserPlusIcon,
-} from "lucide-react";
-import Image from "next/image";
+      UserPlusIcon,
+      StarIcon,
+      FileCodeIcon,
+    } from "lucide-react";import Image from "next/image";
 import Link from "next/link";
 import React, { useCallback, useState } from "react";
 import ActiveLink from "../ui/active-link";
@@ -30,6 +31,11 @@ const AdminSidebar = () => {
       icon: CarFrontIcon,
     },
     {
+      name: t("latestArrivals"),
+      href: routes.admin.latestArrivals,
+      icon: StarIcon,
+    },
+    {
       name: t("customers"),
       href: routes.admin.customers,
       icon: UsersIcon,
@@ -43,6 +49,11 @@ const AdminSidebar = () => {
       name: t("subscribers"),
       href: routes.admin.subscribers,
       icon: UserPlusIcon,
+    },
+    {
+      name: "Email Templates",
+      href: routes.admin.emailTemplates,
+      icon: FileCodeIcon,
     },
     {
       name: t("settings"),

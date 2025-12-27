@@ -25,6 +25,28 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+const getInventory = async (searchParams: AwaitedPageProps["searchParams"]) => {
+  const validPage = z
+    .string()
+    .transform((value) => Math.max(Number(value), 1))
+    .optional()
+    .parse(searchParams?.page);
+
+  const page = validPage ? validPage : 1;
+  const offset = (page - 1) * CARS_PER_PAGE;
+  
+  return prisma.classified.findMany({
+    where: buildClassifiedFilterQuery(searchParams),
+    include: {
+      images: {
+        take: 1,
+      },
+    },
+    skip: offset,
+    take: CARS_PER_PAGE,
+  });
+};
+
 const InventoryPage = async (props: PageProps) => {
   const t = await getTranslations("Inventory");
   const searchParams = await props.searchParams;

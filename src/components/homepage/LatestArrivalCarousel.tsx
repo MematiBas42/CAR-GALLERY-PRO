@@ -40,6 +40,7 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
 				modules={[Navigation]}
 				spaceBetween={30}
 				slidesPerView={1}
+                centerInsufficientSlides={true}
 				breakpoints={{
 					640: {
 						slidesPerView: 2,

@@ -12,14 +12,16 @@ const AdminMessagesPage = async () => {
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-slate-200">Contact Messages</h1>
-        <div className="text-sm text-slate-400">
-            {messages.filter(m => !m.isRead).length} unread messages
+        <div className="text-sm text-slate-400 font-medium bg-gray-800 px-3 py-1 rounded-full border border-gray-700">
+            {messages.filter(m => !m.isRead).length} unread
         </div>
       </div>
 
       <div className="grid gap-4">
         {messages.length === 0 ? (
-          <p className="text-slate-400">No messages found.</p>
+          <div className="p-12 text-center bg-gray-800 rounded-lg border border-gray-700 text-slate-500 italic">
+            No messages found.
+          </div>
         ) : (
           messages.map((msg) => (
             <div 
@@ -32,13 +34,13 @@ const AdminMessagesPage = async () => {
                   <p className="text-sm text-slate-400">{msg.email} • {msg.phone || "No phone"}</p>
                 </div>
                 <div className="flex items-center gap-4 text-right">
-                    <span className="text-xs text-slate-500 block">
+                    <span className="text-xs text-slate-500 block font-mono">
                         {format(new Date(msg.createdAt), "PPP p")}
                     </span>
                     <MessageActions id={msg.id} isRead={msg.isRead} />
                 </div>
               </div>
-              <p className="text-slate-300 whitespace-pre-wrap">{msg.message}</p>
+              <p className="text-slate-300 whitespace-pre-wrap leading-relaxed">{msg.message}</p>
             </div>
           ))
         )}

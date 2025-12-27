@@ -17,7 +17,8 @@ export const markMessageAsReadAction = async (id: number) => {
     revalidatePath("/admin/messages");
     return { success: true };
   } catch (error) {
-    return { success: false, error: "Failed to update message" };
+    console.error("markMessageAsRead error:", error);
+    return { success: false, error: "Database error: Could not update status." };
   }
 };
 
@@ -32,6 +33,7 @@ export const deleteMessageAction = async (id: number) => {
     revalidatePath("/admin/messages");
     return { success: true };
   } catch (error) {
-    return { success: false, error: "Failed to delete message" };
+    console.error("deleteMessage error:", error);
+    return { success: false, error: "Database error: Could not delete message." };
   }
 };

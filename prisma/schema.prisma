@@ -54,6 +54,7 @@ model Classified {
   odoUnit        OdoUnit          @default(MILES)
   currency       CurrencyCode     @default(GBP)
   status         ClassifiedStatus @default(DRAFT)
+  isLatestArrival Boolean          @default(false) @map("is_latest_arrival")
   createdAt      DateTime         @default(now()) @map("created_at")
   updatedAt      DateTime         @updatedAt @map("updated_at")
   make           Make             @relation(fields: [makeId], references: [id])
@@ -178,6 +179,16 @@ model ContactMessage {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("contact_messages")
+}
+
+model EmailTemplate {
+  id        String   @id @default(uuid())
+  name      String
+  subject   String
+  content   String   @db.Text
+  updatedAt DateTime @updatedAt
+
+  @@map("email_templates")
 }
 
 enum ClassifiedStatus {

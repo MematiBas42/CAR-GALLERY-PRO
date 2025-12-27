@@ -76,6 +76,8 @@ const CustomPagination = ({
     setPage(newPage);
   };
 
+  if (totalPages <= 1) return null;
+
   return (
     <Pagination className={paginationRoot}>
       <PaginationContent className="lg:gap-4">
