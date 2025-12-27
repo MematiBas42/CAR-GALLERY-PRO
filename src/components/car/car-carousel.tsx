@@ -120,7 +120,7 @@ const CarCarousel = ({ images }: ClassifiedCarouselProps) => {
               height={100}
               src={image.src}
               alt={image.alt}
-              quality={1}
+              quality={25}
               placeholder="blur"
               blurDataURL={image.blurhash}
             />

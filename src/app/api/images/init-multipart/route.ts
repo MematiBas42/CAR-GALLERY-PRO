@@ -18,8 +18,11 @@ export const POST = auth(async (req) => {
 
     const mime = mimetype.lookup(name);
 
+    // .env dosyasındaki değişken isimlerini kullanıyoruz (AWS_BUCKET_NAME)
+    const bucketName = process.env.AWS_BUCKET_NAME;
+
     const multipartParams: CreateMultipartUploadCommandInput = {
-      Bucket: process.env.NEXT_PUBLIC_S3_BUCKET_NAME,
+      Bucket: bucketName,
       Key: key.replace(/\s+/g, "-"),
       ...(mime && { ContentType: mime }),
     };
@@ -38,7 +41,14 @@ export const POST = auth(async (req) => {
       { status: 200 }
     );
   } catch (error) {
-    console.log(`Error in initialising multipart upload: ${error}`);
+    console.error("----- S3 MULTIPART INIT ERROR -----");
+    console.error("Error Message:", error instanceof Error ? error.message : error);
+    console.log("Bucket Name:", process.env.AWS_BUCKET_NAME);
+    console.log("Region:", process.env.AWS_REGION);
+    // Güvenlik için sadece var olup olmadıklarını kontrol ediyoruz
+    console.log("Access Key Exists:", !!process.env.AWS_ACCESS_KEY_ID);
+    console.log("Secret Key Exists:", !!process.env.AWS_SECRET_ACCESS_KEY);
+    console.error("-----------------------------------");
     return NextResponse.error();
   }
 });

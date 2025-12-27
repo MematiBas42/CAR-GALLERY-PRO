@@ -6,13 +6,12 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { generateThumbHashFromFile } from "@/lib/thumbhash-client";
 import { createPngDataUri } from "unlazy/thumbhash";
-import { ProcessArgs, Uploader } from "@/lib/uploader";
-import { da } from "@faker-js/faker";
 import { cn } from "@/lib/utils";
 import DragAndDrop from "./drag-and-drop";
 import dynamic from "next/dynamic";
 import { SortableItem } from "./SortableItem";
 import { Skeleton } from "../ui/skeleton";
+import { toast } from "sonner";
 
 
 const DragAndDropContext = dynamic(
@@ -36,6 +35,7 @@ interface MultiImageUploaderProps
   className?: string;
   value?: CarImages;
   onChange?: (value: CarImages) => void;
+  maxFiles?: number;
 }
 
 type ImageProgess = {
@@ -44,7 +44,7 @@ type ImageProgess = {
 };
 
 const MultiImageUploader = (props: MultiImageUploaderProps) => {
-  const { className, value, ...rest } = props;
+  const { className, value, maxFiles, ...rest } = props;
   const form = useFormContext<UpdateCarType>();
   const { fields, replace } = useFieldArray({
     control: form.control,
@@ -80,60 +80,84 @@ const MultiImageUploader = (props: MultiImageUploaderProps) => {
     },
     [replace]
   );
+  
   const setFiles = useCallback(
     async (validfiles: File[]) => {
       const files = Object.values(validfiles);
-      setIsUploading(files.length > 0);
-      let id = items.length + 1;
-      const newImagedata: CarImages = [];
+      setIsUploading(true);
+      
+      const currentItems = [...items];
+      const newItems: CarImages = [];
+
+      // Create placeholders first
       for (const file of files) {
         const uuid = uuidv4();
         const hash = await generateThumbHashFromFile(file);
         const base64 = createPngDataUri(hash);
-        const data = {
-          id,
+        
+        const placeholder = {
+          id: currentItems.length + newItems.length + 1, // temporary id
           uuid,
-          percentage: 0,
+          src: base64, // initially show blurhash or blob url
           alt: file.name,
-          key: "",
-          src: "",
           base64,
           done: false,
         };
-        newImagedata.push(data);
-        id++;
-        const options = { file, uuid };
-        const uploader = new Uploader(options);
-        uploader
-          .onProgress((progress: ProcessArgs) => {
-            if (progress.percentage !== data.percentage) {
-              data.src = `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}/${progress.key}`;
-              data.key = progress.key || "";
-              handleItemProgress({
-                uuid,
-                progress: progress.percentage,
+        
+        newItems.push(placeholder);
+        
+        // Initial progress 0
+        handleItemProgress({ uuid, progress: 0 });
+      }
+      
+      // Update UI with placeholders
+      const allItems = [...currentItems, ...newItems];
+      setItems(allItems);
+      
+      // Process uploads sequentially or in parallel
+      for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          const item = newItems[i];
+          
+          try {
+              const formData = new FormData();
+              formData.append("file", file);
+              
+              // Simulating progress since fetch doesn't support it natively easily
+              handleItemProgress({ uuid: item.uuid!, progress: 50 });
+
+              const response = await fetch("/api/images/single-upload", {
+                  method: "POST",
+                  body: formData,
               });
 
-              const clone = items.concat(newImagedata);
-              setItems(clone);
-            }
-          })
-          .onError((error: Error) => {
-            setIsUploading(false);
-            console.error("Upload error:", error);
-          })
-          .onComplete(() => {
-            data.done = true;
-            const clone = items.concat(newImagedata).map((item) => ({
-              ...item,
-              percentage: 100,
-            }));
-            setItems(clone);
-            replace(clone);
-            setIsUploading(false);
-          });
-        uploader.start();
+              if (!response.ok) {
+                  throw new Error("Upload failed");
+              }
+
+              const data = await response.json();
+              
+              if (data.url) {
+                  // Update item with real URL
+                  item.src = data.url;
+                  item.done = true;
+                  handleItemProgress({ uuid: item.uuid!, progress: 100 });
+              } else {
+                  throw new Error("No URL returned");
+              }
+
+          } catch (error) {
+              console.error("Upload error for file:", file.name, error);
+              toast.error(`Failed to upload ${file.name}`);
+              // Remove failed item
+              const index = allItems.findIndex(x => x.uuid === item.uuid);
+              if (index > -1) allItems.splice(index, 1);
+          }
       }
+      
+      setItems([...allItems]);
+      replace(allItems);
+      setIsUploading(false);
     },
     [items, handleItemProgress, replace]
   );

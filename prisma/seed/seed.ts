@@ -4,6 +4,7 @@ import { seedClass } from "./class.seed";
 import { seedImage } from "./imageSeed";
 import { seedAdmin } from "./admin.seed";
 import { seedCustomers } from "./customer.seed";
+import { seedRimGlobalInventory } from "./rim_global.seed";
 
 const prisma = new PrismaClient();
 async function main() {
@@ -11,6 +12,7 @@ async function main() {
     await seedTax(prisma)
 
     await seedClass(prisma);
+    await seedRimGlobalInventory(prisma);
     await seedImage(prisma);
     await seedAdmin(prisma);
     await seedCustomers(prisma);

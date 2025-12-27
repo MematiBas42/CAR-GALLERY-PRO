@@ -1,5 +1,5 @@
 "use client";
-import { useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubscribeSchema, SubscribeSchemaType } from "@/app/schemas/sub.schema";
@@ -13,11 +13,17 @@ import { useTranslations } from "next-intl";
 const NewsLetterForm = () => {
   const t = useTranslations("Newsletter");
   const [isPending, startTransition] = useTransition();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const form = useForm<SubscribeSchemaType>({
     resolver: zodResolver(SubscribeSchema),
     defaultValues: {
       email: "",
-      firstName: "Subscriber", // Defaulting as form only has email input in UI
+      firstName: "Subscriber", 
       lastName: "User",
     },
   });
@@ -43,11 +49,22 @@ const NewsLetterForm = () => {
     });
   };
 
+  // Prevent hydration mismatch by only rendering on client
+  if (!mounted) {
+      return (
+          <div className="flex w-full max-w-md items-center space-x-2 opacity-0">
+              <div className="h-10 w-full bg-gray-800 rounded-md"></div>
+              <div className="h-10 w-24 bg-primary rounded-md"></div>
+          </div>
+      );
+  }
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex w-full max-w-md items-center space-x-2"
+        suppressHydrationWarning={true}
       >
         <FormField
           control={form.control}

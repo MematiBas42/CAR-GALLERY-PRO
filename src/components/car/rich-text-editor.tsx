@@ -21,7 +21,6 @@ export const RichTextEditor = (props: TextEditorProps) => {
 		height: 200,
 		skin: "oxide-dark",
 		content_css: "dark",
-		icons: "small",
 		resize: false,
 		menubar: false,
 		branding: false,

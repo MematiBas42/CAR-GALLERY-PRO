@@ -23,6 +23,7 @@ export const AdminCustomersHeader = ({ searchParams }: AwaitedPageProps) => {
 					<RadioFilter
 						items={["ALL", ...Object.values(CustomerStatus)]}
 						searchParams={searchParams}
+                        enumType="CustomerStatus"
 					/>
 				</div>
 			</div>

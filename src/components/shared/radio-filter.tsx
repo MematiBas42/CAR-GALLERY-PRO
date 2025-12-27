@@ -1,6 +1,5 @@
 "use client";
 import { AwaitedPageProps } from "@/config/types";
-import { ClassifiedStatus } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
@@ -10,33 +9,21 @@ import { useTranslations } from "next-intl";
 
 interface RadioFilterProps extends AwaitedPageProps {
   items: string[];
+  enumType?: "ClassifiedStatus" | "CustomerStatus"; // Add enumType prop
 }
 
 const RadioFilter = (props: RadioFilterProps) => {
   const t = useTranslations("Enums");
-  const { searchParams, items } = props;
+  const { searchParams, items, enumType = "ClassifiedStatus" } = props; // Default to ClassifiedStatus
   const router = useRouter();
   const status = (searchParams?.status as string) || "all";
 
-  const handleStatus = (status: Lowercase<ClassifiedStatus>) => {
+  const handleStatus = (val: string) => {
     const currentUrlParams = new URLSearchParams(window.location.search);
-    currentUrlParams.set("status", status.toUpperCase());
+    currentUrlParams.set("status", val.toUpperCase());
     const url = new URL(window.location.href);
     url.search = currentUrlParams.toString();
     router.push(url.toString());
-  };
-
-  const getTranslatedLabel = (item: string) => {
-    // Try to translate from ClassifiedStatus or CustomerStatus
-    try {
-        return t(`ClassifiedStatus.${item}`);
-    } catch {
-        try {
-            return t(`CustomerStatus.${item}`);
-        } catch {
-            return item;
-        }
-    }
   };
 
   return (
@@ -62,7 +49,7 @@ const RadioFilter = (props: RadioFilterProps) => {
             checked={status?.toLowerCase() === item.toLowerCase()}
             className="peer sr-only"
           />
-          {getTranslatedLabel(item)}
+          {t(`${enumType}.${item}`)}
         </Label>
       ))}
     </RadioGroup>

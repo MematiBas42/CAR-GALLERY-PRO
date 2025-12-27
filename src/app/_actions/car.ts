@@ -151,8 +151,16 @@ export const updateCarAction = async (data: UpdateCarType) => {
         // update the classified
         const imagesData = await Promise.all(
           data.images.map(async ({ src }, index) => {
-            const hash = await generateThumbHashFromSrUrl(data.images[0].src);
-            const uri = createPngDataUri(hash);
+            let uri = "";
+            try {
+                // If it's a new upload, generate hash. If existing, we might skip or regenerate.
+                // Assuming we want to generate for all or just handle errors gracefully.
+                const hash = await generateThumbHashFromSrUrl(src);
+                uri = createPngDataUri(hash);
+            } catch (e) {
+                console.error("Failed to generate thumbhash for update image:", src, e);
+                uri = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+            }
             return {
               classifiedId: data.id,
               isMain: !index,

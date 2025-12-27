@@ -193,6 +193,10 @@
       "LIVE": "Live",
       "SOLD": "Sold",
       "DRAFT": "Draft"
+    },
+    "ULEZ": {
+      "EXEMPT": "Exempt",
+      "NON_EXEMPT": "Non-Exempt"
     }
   },
   "Car": {
@@ -202,13 +206,18 @@
     "ourPrice": "Our Price:",
     "notAvailable": "N/A"
   },
-  "ULEZ": {
-    "EXEMPT": "Exempt",
-    "NON_EXEMPT": "Non-Exempt"
-  },
   "Financing": {
     "title": "Financing That Fits Your Life",
-    "description": "At RIM GLOBAL, we believe financing your vehicle should be as transparent and straightforward as buying it. We partner with trusted local and national lenders to offer flexible solutions tailored to your unique situation. Our team is here to guide you through every step, ensuring a clear, hassle-free process that puts you in the driver's seat with confidence."
+    "description": "At RIM GLOBAL, we believe financing your vehicle should be as transparent and straightforward as buying it. We partner with trusted local and national lenders to offer flexible solutions tailored to your unique situation. Our team is here to guide you through every step, ensuring a clear, hassle-free process that puts you in the driver's seat with confidence.",
+    "calculator": {
+      "title": "Payment Calculator",
+      "price": "Vehicle Price",
+      "deposit": "Down Payment / Trade-In",
+      "term": "Term (Months)",
+      "rate": "Interest Rate (%)",
+      "monthly": "Estimated Monthly Payment",
+      "disclaimer": "This calculator is for estimation purposes only. Actual payments may vary based on credit score, lender criteria, and other factors."
+    }
   },
   "Philosophy": {
     "title": "Our Philosophy",
@@ -230,7 +239,18 @@
   },
   "Contact": {
     "title": "Visit Our Federal Way Showroom",
-    "description": "Experience the RIM GLOBAL difference in person. Our showroom is designed to provide a comfortable and premium viewing experience. The map below shows our general location in Federal Way."
+    "description": "Experience the RIM GLOBAL difference in person. Our showroom is designed to provide a comfortable and premium viewing experience. The map below shows our general location in Federal Way.",
+    "form": {
+      "title": "Send us a Message",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "message": "Message",
+      "submit": "Send Message",
+      "sending": "Sending...",
+      "success": "Message sent successfully!",
+      "error": "Failed to send message."
+    }
   },
   "Reserve": {
     "welcome": {
@@ -340,8 +360,11 @@
       "form": {
         "year": "Year",
         "make": "Make",
+        "makePlaceholder": "Select make...",
         "model": "Model",
+        "modelPlaceholder": "Select model...",
         "variant": "Model Variant",
+        "variantPlaceholder": "Select variant...",
         "price": "Price",
         "odoReading": "Odometer Reading",
         "transmission": "Transmission",
@@ -355,6 +378,7 @@
         "description": "Description"
       },
       "messages": {
+        "error": "Error",
         "createSuccess": "Car created successfully",
         "createError": "Failed to create car",
         "updateSuccess": "Car updated successfully",

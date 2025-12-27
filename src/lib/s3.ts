@@ -3,22 +3,22 @@ import {
 	type PutObjectCommandInput,
 	S3Client,
 } from "@aws-sdk/client-s3";
-import { Credentials } from "aws-sdk/lib/core";
-const credentials = new Credentials({
-    accessKeyId: process.env.AWS_S3_BUCKET_ACCESS_KEY!,
-    secretAccessKey: process.env.AWS_S3_BUCKET_SECRET_KEY!
-})
 
 export const s3 = new S3Client({
-	region: process.env.NEXT_PUBLIC_S3_BUCKET_REGION,
-	credentials,
+	region: process.env.AWS_REGION,
+	credentials: {
+		accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
+		secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
+	},
 });
+
 interface UploadToS3Args {
 	bucketName: string;
 	path: string;
 	file: Buffer;
 	mimetype: string;
 }
+
 export async function uploadToS3({
     bucketName,
     path,

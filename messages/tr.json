@@ -193,6 +193,10 @@
       "LIVE": "Yayında",
       "SOLD": "Satıldı",
       "DRAFT": "Taslak"
+    },
+    "ULEZ": {
+      "EXEMPT": "Muaf",
+      "NON_EXEMPT": "Muaf Değil"
     }
   },
   "Car": {
@@ -202,13 +206,18 @@
     "ourPrice": "Fiyatımız:",
     "notAvailable": "N/A"
   },
-  "ULEZ": {
-    "EXEMPT": "Muaf",
-    "NON_EXEMPT": "Muaf Değil"
-  },
   "Financing": {
     "title": "Hayatınıza Uygun Finansman",
-    "description": "RIM GLOBAL'de aracınızı finanse etmenin, onu satın almak kadar şeffaf ve basit olması gerektiğine inanıyoruz. Benzersiz durumunuza özel esnek çözümler sunmak için güvenilir yerel ve ulusal kredi kuruluşlarıyla işbirliği yapıyoruz. Ekibimiz her adımda size rehberlik etmek, sizi güvenle sürücü koltuğuna oturtan net ve sorunsuz bir süreç sağlamak için burada."
+    "description": "RIM GLOBAL'de aracınızı finanse etmenin, onu satın almak kadar şeffaf ve basit olması gerektiğine inanıyoruz. Benzersiz durumunuza özel esnek çözümler sunmak için güvenilir yerel ve ulusal kredi kuruluşlarıyla işbirliği yapıyoruz. Ekibimiz her adımda size rehberlik etmek, sizi güvenle sürücü koltuğuna oturtan net ve sorunsuz bir süreç sağlamak için burada.",
+    "calculator": {
+      "title": "Ödeme Hesaplayıcı",
+      "price": "Araç Fiyatı",
+      "deposit": "Peşinat / Takas",
+      "term": "Vade (Ay)",
+      "rate": "Faiz Oranı (%)",
+      "monthly": "Tahmini Aylık Ödeme",
+      "disclaimer": "Bu hesaplayıcı sadece tahmin amaçlıdır. Gerçek ödemeler kredi notuna, banka kriterlerine ve diğer faktörlere göre değişiklik gösterebilir."
+    }
   },
   "Philosophy": {
     "title": "Felsefemiz",
@@ -230,7 +239,18 @@
   },
   "Contact": {
     "title": "Federal Way Showroomumuzu Ziyaret Edin",
-    "description": "RIM GLOBAL farkını bizzat yaşayın. Showroomumuz konforlu ve premium bir izleme deneyimi sunmak üzere tasarlanmıştır. Aşağıdaki harita Federal Way'deki genel konumumuzu göstermektedir."
+    "description": "RIM GLOBAL farkını bizzat yaşayın. Showroomumuz konforlu ve premium bir izleme deneyimi sunmak üzere tasarlanmıştır. Aşağıdaki harita Federal Way'deki genel konumumuzu göstermektedir.",
+    "form": {
+      "title": "Bize Mesaj Gönderin",
+      "name": "Ad Soyad",
+      "email": "E-posta",
+      "phone": "Telefon",
+      "message": "Mesajınız",
+      "submit": "Mesaj Gönder",
+      "sending": "Gönderiliyor...",
+      "success": "Mesajınız başarıyla gönderildi!",
+      "error": "Mesaj gönderilemedi."
+    }
   },
   "Reserve": {
     "welcome": {
@@ -340,8 +360,11 @@
       "form": {
         "year": "Yıl",
         "make": "Marka",
+        "makePlaceholder": "Marka seçiniz...",
         "model": "Model",
+        "modelPlaceholder": "Model seçiniz...",
         "variant": "Versiyon",
+        "variantPlaceholder": "Versiyon seçiniz...",
         "price": "Fiyat",
         "odoReading": "Kilometre / Mil",
         "transmission": "Şanzıman",
@@ -355,6 +378,7 @@
         "description": "Açıklama"
       },
       "messages": {
+        "error": "Hata",
         "createSuccess": "Araç başarıyla oluşturuldu",
         "createError": "Araç oluşturulamadı",
         "updateSuccess": "Araç başarıyla güncellendi",

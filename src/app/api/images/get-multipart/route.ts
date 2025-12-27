@@ -14,7 +14,7 @@ export const POST = auth(async (req) => {
 		const { fileId, fileKey, parts } = validated.data;
 
 		const multipartParams: Omit<UploadPartCommandInput, "PartNumber"> = {
-			Bucket: process.env.NEXT_PUBLIC_S3_BUCKET_NAME,
+			Bucket: process.env.AWS_BUCKET_NAME,
 			Key: fileKey,
 			UploadId: fileId,
 		};

@@ -14,6 +14,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/
 import { Input } from "../ui/input";
 import { Select } from "../ui/select";
 import { Skeleton } from "../ui/skeleton";
+import { SmartCombobox } from "../ui/smart-combobox";
 import InputSelect from "../ui/input-select";
 import { NumberInput } from "../ui/number-input";
 import { useTranslations } from "next-intl";
@@ -85,14 +86,23 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
       <FormField
         control={form.control}
         name="make"
-        render={({ field: { onChange, ...rest } }) => (
+        render={({ field }) => (
           <FormItem>
             <FormLabel htmlFor="make">{t("make")}</FormLabel>
             <FormControl>
-              {isLoading ? <Skeleton className="h-10" /> : <Select
-                {...rest}
+              {isLoading ? <Skeleton className="h-10" /> : <SmartCombobox
                 options={makes}
-                onChange={(e) => handleChange(e, onChange)}
+                value={field.value ? String(field.value) : ""}
+                onChange={(val) => {
+                  field.onChange(val);
+                  form.setValue("model", "");
+                  form.setValue("modelVariant", "");
+                }}
+                enableCreate={true}
+                enableDelete={true}
+                entityType="make"
+                placeholder={t("makePlaceholder") || "Select make..."}
+                emptyText="No make found."
               />}
             </FormControl>
             <FormMessage />
@@ -102,14 +112,23 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
       <FormField
         control={form.control}
         name="model"
-        render={({ field: { onChange, ...rest } }) => (
+        render={({ field }) => (
           <FormItem>
             <FormLabel htmlFor="model">{t("model")}</FormLabel>
             <FormControl>
-              {isLoading ? <Skeleton className="h-10" /> : <Select
-                {...rest}
+              {isLoading ? <Skeleton className="h-10" /> : <SmartCombobox
                 options={models}
-                onChange={(e) => handleChange(e, onChange)}
+                value={field.value ? String(field.value) : ""}
+                onChange={(val) => {
+                  field.onChange(val);
+                  form.setValue("modelVariant", "");
+                }}
+                enableCreate={!!form.watch("make")} // Only enable create if make is selected
+                enableDelete={true}
+                entityType="model"
+                parentId={form.watch("make")}
+                placeholder={t("modelPlaceholder") || "Select model..."}
+                emptyText="No model found."
               />}
             </FormControl>
             <FormMessage />
@@ -119,14 +138,22 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
       <FormField
         control={form.control}
         name="modelVariant"
-        render={({ field: { onChange, ...rest } }) => (
+        render={({ field }) => (
           <FormItem>
             <FormLabel htmlFor="modelVariant">{t("variant")}</FormLabel>
             <FormControl>
-              {isLoading ? <Skeleton className="h-10" /> : <Select
-                {...rest}
+              {isLoading ? <Skeleton className="h-10" /> : <SmartCombobox
                 options={modelVariants}
-                onChange={(e) => handleChange(e, onChange)}
+                value={field.value ? String(field.value) : ""}
+                onChange={(val) => {
+                  field.onChange(val);
+                }}
+                enableCreate={!!form.watch("model")}
+                enableDelete={true}
+                entityType="variant"
+                parentId={form.watch("model")}
+                placeholder={t("variantPlaceholder") || "Select variant..."}
+                emptyText="No variant found."
               />}
             </FormControl>
             <FormMessage />

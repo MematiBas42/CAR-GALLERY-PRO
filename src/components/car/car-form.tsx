@@ -74,6 +74,7 @@ const CarForm = ({ car }: CarFormProps) => {
     const fetchTaxonomy = async () => {
       setIsLoading(true);
       const url = new URL(endpoints.taxonomy, window.location.origin);
+      url.searchParams.append("all", "true"); // Fetch all taxonomies for admin
       if (make) url.searchParams.append("make", make);
       if (model) url.searchParams.append("model", model);
 
@@ -115,10 +116,10 @@ const CarForm = ({ car }: CarFormProps) => {
         colour: car.colour,
         ulezCompliance: car.ulezCompliance,
         status: car.status,
-        odoReading: car.odoReading ?? undefined,
-        seats: car.seats ?? undefined,
-        doors: car.doors ?? undefined,
-        price: car.price ? (car.price / 100) : undefined,
+        odoReading: car.odoReading ?? 0,
+        seats: car.seats ?? 0,
+        doors: car.doors ?? 0,
+        price: car.price ? (car.price / 100) : 0,
       });
     }
   }, [car, isEditMode, form.reset]);
@@ -175,6 +176,7 @@ const CarForm = ({ car }: CarFormProps) => {
                         value,
                       }))}
                       noDefault={false}
+                      className="text-white"
                       {...rest}
                     />
                   </FormControl>
