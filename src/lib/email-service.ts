@@ -59,3 +59,35 @@ export async function sendTemplatedEmail(
     return null;
   }
 }
+
+/**
+ * Optimized helper for bulk sending where template is fetched once externally
+ */
+export async function sendEmailWithContent(
+  to: string,
+  subject: string,
+  htmlContent: string
+) {
+  try {
+    return await resend.emails.send({
+      from: "RIM GLOBAL <onboarding@resend.dev>",
+      to,
+      subject,
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eee; padding: 20px;">
+          <h2 style="color: #2563eb;">RIM GLOBAL</h2>
+          <div style="line-height: 1.6; color: #333;">
+            ${htmlContent}
+          </div>
+          <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
+          <p style="font-size: 12px; color: #999;">
+            1505 S 356th Street, Federal Way, WA 98003
+          </p>
+        </div>
+      `
+    });
+  } catch (error) {
+    console.error("Raw Email Error:", error);
+    return null;
+  }
+}

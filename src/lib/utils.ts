@@ -15,22 +15,32 @@ import {
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { format, parse } from "date-fns";
+export function getImageUrl(path: string | null | undefined) {
+  if (!path) return "/placeholder.jpg";
+  if (path.startsWith("http")) return path; // Legacy support for full URLs
+  
+  const baseUrl = process.env.NEXT_PUBLIC_S3_BUCKET_URL;
+  if (!baseUrl) return path;
+
+  // Ensure no double slashes
+  return `${baseUrl.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
+}
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 interface FormatPriceArgs {
   price: number | null;
-  currency: CurrencyCode | null;
+  currency?: CurrencyCode | null;
 }
 
-export function formatPrice({ price, currency }: FormatPriceArgs) {
-  if (!price) return "0";
+export function formatPrice({ price }: FormatPriceArgs) {
+  if (!price) return "$0";
 
-  const formatter = new Intl.NumberFormat("en-GB", {
+  const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
-    currencyDisplay: "narrowSymbol",
-    ...(currency && { currency }),
+    currency: "USD",
     maximumFractionDigits: 0,
   });
 

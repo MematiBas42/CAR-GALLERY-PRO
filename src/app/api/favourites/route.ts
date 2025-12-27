@@ -5,8 +5,7 @@ import { redis } from "@/lib/redis-store";
 import { setSourceId } from "@/lib/source-id";
 import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
-import z from "zod";
-
+import { prisma } from "@/lib/prisma";
 
 export const POST = async (request: NextRequest) => {
   const body = await request.json();
@@ -29,15 +28,14 @@ export const POST = async (request: NextRequest) => {
     );
   }
 
-  // get sopurceId from cookies
+  // get sourceId from cookies
   const sourceId = await setSourceId();
 
-  // get the exisitng fave from redis
+  // get the existing fave from redis
   const storefav = await redis.get<Favourites>(sourceId);
   const favs: Favourites = storefav || { ids: [] };
 
   if (favs.ids.includes(data.id)) {
-    // add or remove the id based on its current presence in the favourites
     // remove the id if it exists
     favs.ids = favs.ids.filter((id) => id !== data.id);
   } else {
@@ -45,8 +43,39 @@ export const POST = async (request: NextRequest) => {
     favs.ids.push(data.id);
   }
 
-  // update the rdis store with the updated favourites
-  await redis.set(sourceId, favs);
+  // Parallel Execution: Update Redis AND Sync DB
+  const promises: Promise<any>[] = [redis.set(sourceId, favs)];
+
+  // LIVE SYNC: Update all customers associated with this browser/device
+  const dbSyncPromise = (async () => {
+      try {
+        const customers = await prisma.customer.findMany({
+            where: { sourceId: sourceId }
+        });
+
+        if (customers.length > 0) {
+            await prisma.$transaction(
+                customers.map(customer => 
+                prisma.customer.update({
+                    where: { id: customer.id },
+                    data: {
+                    favorites: {
+                        set: favs.ids.map(id => ({ id }))
+                    }
+                    }
+                })
+                )
+            );
+        }
+      } catch (err) {
+        console.error("Failed to sync favorites with DB:", err);
+      }
+  })();
+
+  promises.push(dbSyncPromise);
+
+  await Promise.all(promises);
+
   revalidatePath(routes.favourites)
   return NextResponse.json({ids: favs.ids}, { status: 200 });
 };

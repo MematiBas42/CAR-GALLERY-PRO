@@ -126,13 +126,13 @@ const CarView = async (props: CarWithImagesAndMake) => {
               {parse(props.description || "")}
             </div>
             )}
+import { PriceDisplay } from "../shared/price-display";
+
+// ... inside CarView ...
             <div className="text-4xl font-bold my-4 w-full border border-slate-200
             flex justify-center items-center rounded-xl py-12">
               {t("ourPrice")} { ' '}
-              {formatPrice({
-                price: props.price,
-                currency: props.currency,
-              })}
+              <PriceDisplay amount={props.price} className="text-4xl" />
             </div>
             <Button 
              className="uppercase font-bold py-3 px-6 rounded

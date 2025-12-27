@@ -1,10 +1,9 @@
 'use client';
 import { routes } from "@/config/routes";
 import { CarWithImages, MultiStepFormEnum } from "@/config/types";
-import { formatColour, formatFuelType, formatNumber, formatOdometerUnit, formatPrice, formatTransmission } from "@/lib/utils";
+import { formatNumber } from "@/lib/utils";
 import { AnimatePresence } from "framer-motion";
 import { Cog, Fuel, GaugeCircle, Paintbrush2 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import parse from "html-react-parser";
@@ -13,6 +12,7 @@ import { Button } from "../ui/button";
 import FavButton from "./fav-button";
 import { useTranslations } from "next-intl";
 import ImgixImage from "../ui/imgix-image";
+import { PriceDisplay } from "../shared/price-display";
 
 interface CarCardProps {
   car: CarWithImages;
@@ -77,9 +77,7 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
             </Link>
             <FavButton setIsFav={setIsFav} isFav={isFav} id={car.id} />
             <div className="absolute top-2.5 right-3.5 bg-primary/90 text-primary-foreground font-bold px-2 py-1 rounded">
-              <div className="text-xs lg:text-base xl:text-lg font-semibold">
-                {formatPrice({ price: car.price, currency: "EUR" })}
-              </div>
+              <PriceDisplay amount={car.price} className="text-xs lg:text-base xl:text-lg" />
             </div>
           </div>
           

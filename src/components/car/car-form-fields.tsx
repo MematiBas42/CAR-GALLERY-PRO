@@ -162,14 +162,26 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
         )}
       />
 
-      <InputSelect
-        options={Object.values(CurrencyCode).map((currency) => ({ label: currency, value: currency }))}
-        label={t("price")}
-        inputName="price"
-        selectName="currency"
-        inputMode="numeric"
-        placeholder="0"
+      <FormField
+        control={form.control}
+        name="price"
+        render={({ field: { onChange, ...rest } }) => (
+          <FormItem>
+            <FormLabel htmlFor="price">{t("price")} (USD)</FormLabel>
+            <FormControl>
+              <NumberInput
+                {...rest}
+                placeholder="0"
+                className="text-white"
+                onValueChange={(values) => { onChange(values.floatValue); }}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
       />
+      <input type="hidden" {...form.register("currency")} value="USD" />
+
       <InputSelect
         options={Object.values(OdoUnit).map((value) => ({ label: value, value }))}
         label={t("odoReading")}

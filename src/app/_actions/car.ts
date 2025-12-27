@@ -11,21 +11,21 @@ import { createPngDataUri } from "unlazy/thumbhash";
 import { CreateCarType, UpdateCarType } from "../schemas/car.schema";
 import { getTranslations } from "next-intl/server";
 import { deleteFromS3 } from "@/lib/s3";
-import { sendTemplatedEmail } from "@/lib/email-service";
+import { sendEmailWithContent } from "@/lib/email-service";
 import { CustomerStatus } from "@prisma/client";
+import { getImageUrl } from "@/lib/utils";
 
-// Helper to extract S3 Key from URL
+// Helper to extract S3 Key from URL or raw path
 const getS3KeyFromUrl = (url: string) => {
+    if (!url) return "";
+    // If it's already just a key (doesn't start with http), return it
+    if (!url.startsWith("http")) return url;
+
     try {
-        if (url.startsWith('http')) {
-            const urlObj = new URL(url);
-            // Removes leading slash: /upload/uuid/file.jpg -> upload/uuid/file.jpg
-            return urlObj.pathname.startsWith('/') ? urlObj.pathname.substring(1) : urlObj.pathname;
-        }
-        // If it's already a relative path
-        return url.startsWith('/') ? url.substring(1) : url;
+        const urlObj = new URL(url);
+        return urlObj.pathname.startsWith('/') ? urlObj.pathname.substring(1) : urlObj.pathname;
     } catch (e) {
-        return "";
+        return url; // Fallback
     }
 }
 
@@ -70,7 +70,9 @@ export const createCarAction = async (data: CreateCarType) => {
             data.images.map(async ({ src }, index) => {
               let uri = "";
               try {
-                const hash = await generateThumbHashFromSrUrl(src);
+                // Ensure thumbhash gets the FULL URL even if we store the KEY
+                const fullImageUrl = getImageUrl(src);
+                const hash = await generateThumbHashFromSrUrl(fullImageUrl);
                 uri = createPngDataUri(hash);
               } catch (e) {
                 uri = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
@@ -81,26 +83,44 @@ export const createCarAction = async (data: CreateCarType) => {
         },
       },
     });
+
     if (createdCar) {
       success = true;
 
       // AUTO-NOTIFICATION: New Inventory Arrival
       if (createdCar.status === "LIVE") {
         try {
-          const subscribers = await prisma.customer.findMany({
-            where: { status: CustomerStatus.SUBSCRIBER },
-            select: { email: true, firstName: true }
+          const template = await prisma.emailTemplate.findFirst({
+            where: { name: "New Inventory Arrival" }
           });
 
-          const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-          
-          for (const sub of subscribers) {
-            await sendTemplatedEmail(sub.email, "New Inventory Arrival", {
-              name: sub.firstName,
-              carTitle: createdCar.title,
-              description: createdCar.description?.substring(0, 150).replace(/<[^>]*>?/gm, '') + "...",
-              link: `${appUrl}/inventory/${createdCar.slug}`
+          if (template) {
+            const subscribers = await prisma.customer.findMany({
+              where: { status: CustomerStatus.SUBSCRIBER },
+              select: { email: true, firstName: true }
             });
+
+            const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+            
+            const emailPromises = subscribers.map(sub => {
+                let { subject, content } = template;
+                const templateData = {
+                    name: sub.firstName,
+                    carTitle: createdCar.title,
+                    description: createdCar.description?.substring(0, 150).replace(/<[^>]*>?/gm, '') + "...",
+                    link: `${appUrl}/inventory/${createdCar.slug}`
+                };
+
+                Object.keys(templateData).forEach(key => {
+                    const placeholder = `{{${key}}}`;
+                    subject = subject.replace(new RegExp(placeholder, 'g'), templateData[key as keyof typeof templateData]);
+                    content = content.replace(new RegExp(placeholder, 'g'), templateData[key as keyof typeof templateData]);
+                });
+
+                return sendEmailWithContent(sub.email, subject, content);
+            });
+
+            await Promise.all(emailPromises);
           }
         } catch (e) {
           console.error("New Arrival Email error:", e);
@@ -149,7 +169,8 @@ export const updateCarAction = async (data: UpdateCarType) => {
         data.images.map(async ({ src }, index) => {
           let uri = "";
           try {
-            const hash = await generateThumbHashFromSrUrl(src);
+            const fullImageUrl = getImageUrl(src);
+            const hash = await generateThumbHashFromSrUrl(fullImageUrl);
             uri = createPngDataUri(hash);
           } catch (e) {
             uri = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
@@ -183,26 +204,43 @@ export const updateCarAction = async (data: UpdateCarType) => {
     // AUTO-NOTIFICATION: Price Drop Alert
     if (newPrice < oldPrice && data.status === "LIVE") {
       try {
-        const interestedCustomers = await prisma.customer.findMany({
-          where: { 
-            OR: [
-              { classifiedId: data.id },
-              { status: CustomerStatus.SUBSCRIBER }
-            ]
-          },
-          select: { email: true, firstName: true }
+        const template = await prisma.emailTemplate.findFirst({
+            where: { name: "Price Drop Alert" }
         });
 
-        const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-        const currencySymbol = data.currency === "USD" ? "$" : data.currency === "GBP" ? "£" : "€";
+        if (template) {
+            const interestedCustomers = await prisma.customer.findMany({
+            where: { 
+                OR: [
+                { classifiedId: data.id },
+                { status: CustomerStatus.SUBSCRIBER }
+                ]
+            },
+            select: { email: true, firstName: true }
+            });
 
-        for (const customer of interestedCustomers) {
-          await sendTemplatedEmail(customer.email, "Price Drop Alert", {
-            name: customer.firstName,
-            carTitle: title,
-            newPrice: `${currencySymbol}${(newPrice / 100).toLocaleString()}`,
-            link: `${appUrl}/inventory/${slugify(`${title} ${data.vrm}`)}`
-          });
+            const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+            const currencySymbol = data.currency === "USD" ? "$" : data.currency === "GBP" ? "£" : "€";
+
+            const emailPromises = interestedCustomers.map(customer => {
+                let { subject, content } = template;
+                const templateData = {
+                    name: customer.firstName,
+                    carTitle: title,
+                    newPrice: `${currencySymbol}${(newPrice / 100).toLocaleString()}`,
+                    link: `${appUrl}/inventory/${slugify(`${title} ${data.vrm}`)}`
+                };
+
+                Object.keys(templateData).forEach(key => {
+                    const placeholder = `{{${key}}}`;
+                    subject = subject.replace(new RegExp(placeholder, 'g'), templateData[key as keyof typeof templateData]);
+                    content = content.replace(new RegExp(placeholder, 'g'), templateData[key as keyof typeof templateData]);
+                });
+
+                return sendEmailWithContent(customer.email, subject, content);
+            });
+
+            await Promise.all(emailPromises);
         }
       } catch (e) {
         console.error("Price Drop Email error:", e);
@@ -210,12 +248,14 @@ export const updateCarAction = async (data: UpdateCarType) => {
     }
 
     if (existingCar) {
-        for (const img of existingCar.images) {
-            if (!data.images.find(newImg => newImg.src === img.src)) {
+        const deletePromises = existingCar.images
+            .filter(img => !data.images.find(newImg => newImg.src === img.src))
+            .map(img => {
                 const key = getS3KeyFromUrl(img.src);
-                if (key) await deleteFromS3(key);
-            }
-        }
+                return key ? deleteFromS3(key) : Promise.resolve();
+            });
+        
+        await Promise.all(deletePromises);
     }
   } catch (err) {
     return { success: false, message: t("genericError") };
@@ -238,10 +278,12 @@ export const deleteCarAction = async (id: number) => {
     const deletedCar = await prisma.classified.delete({ where: { id } });
 
     if (deletedCar && car) {
-      for (const img of car.images) {
+      const deletePromises = car.images.map(img => {
           const key = getS3KeyFromUrl(img.src);
-          if (key) await deleteFromS3(key);
-      }
+          return key ? deleteFromS3(key) : Promise.resolve();
+      });
+      await Promise.all(deletePromises);
+
       revalidatePath(routes.admin.cars);
       return { success: true, message: t("deleteSuccess") };
     }

@@ -12,6 +12,22 @@
     "home": {
       "title": "RIM GLOBAL | Autos Usados Premium en Federal Way",
       "description": "Descubre tu próximo capítulo con RIM GLOBAL. Colección meticulosamente seleccionada de autos usados en Federal Way."
+    },
+    "inventory": {
+      "title": "Colección de Vehículos | Ver Inventario - RIM GLOBAL",
+      "description": "Explora nuestra colección de autos usados premium. Encuentra tu auto perfecto en RIM GLOBAL Federal Way."
+    },
+    "financing": {
+      "title": "Financiamiento de Autos | RIM GLOBAL",
+      "description": "Financiamiento fácil y transparente en Federal Way. Solicite préstamos que se ajusten a su vida."
+    },
+    "philosophy": {
+      "title": "Nuestra Filosofía | La Diferencia RIM GLOBAL",
+      "description": "Conozca por qué la transparencia es el núcleo de todo lo que hacemos en RIM GLOBAL."
+    },
+    "contact": {
+      "title": "Contáctenos | RIM GLOBAL",
+      "description": "Visite nuestro showroom en Federal Way o envíenos un mensaje."
     }
   },
   "CookieConsent": {

@@ -2,21 +2,20 @@
 import Image, { type ImageProps } from 'next/image'
 import { useState } from 'react'
 import React from 'react'
+import { getImageUrl } from '@/lib/utils'
 
 type ImgixImageProps = Omit<ImageProps, 'priority' | 'loading'>
 
 const ImgixImage = (props: ImgixImageProps) => {
     const [error, setError] = useState(false)
+    const finalSrc = getImageUrl(props.src as string)
 
-    // Fallback to unoptimized if error occurs or strictly local assets if needed
-    // But Next.js handles local optimization well.
-    
     if (error) {
-        // Fallback placeholder or just render as unoptimized to try loading original
         return (
             <Image 
                 fetchPriority='high' 
-                {...props} 
+                {...props}
+                src={finalSrc}
                 unoptimized={true}
             />
         )
@@ -25,9 +24,9 @@ const ImgixImage = (props: ImgixImageProps) => {
     return (
 		<Image
 			fetchPriority="high"
-			// No custom loader, use Next.js default optimization
 			onError={() => setError(true)}
 			{...props}
+            src={finalSrc}
 		/>
 	);
 }

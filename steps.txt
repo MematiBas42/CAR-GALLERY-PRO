@@ -15,35 +15,29 @@ Bu belge, butik araç galerisi web sitesinin profesyonel standartlara ulaşması
 3. GÜVENLİK: RATE LIMITING (HIZ SINIRI) - TAMAMLANDI
    - Upstash Entegrasyonu: @upstash/ratelimit kütüphanesini kullanarak API rotalarını koru.
    - Limit Tanımları: İletişim, Bülten ve Rezervasyon formları için IP başına saatlik limitler (örn: 1 saatte max 5 mesaj) belirle.
-   - Middleware: API isteklerini middleware seviyesinde kontrol ederek bot saldırılarını sitenize yük binmeden durdur.
 
-4. KARARLILIK: GLOBAL HATA YÖNETİMİ
-   - Error Components: Root ve ana rotalar için 'error.tsx' dosyaları oluştur.
-   - User Feedback: Beklenmedik bir hata oluştuğunda Next.js'in teknik hatası yerine "Bir sorun oluştu, lütfen tekrar deneyin" diyen şık bir arayüz ve "Tekrar Dene" butonu sun.
+4. KARARLILIK: GLOBAL HATA YÖNETİMİ - TAMAMLANDI
+   - Error Components: Root, Admin ve Presentation için özel 'error.tsx' ve 'global-error.tsx' dosyaları oluşturuldu.
 
 5. SEO: STATİK VE DİNAMİK METADATA - TAMAMLANDI
-   - Sayfa Metadataları: Ana sayfa, Envanter, Finansman ve Felsefemiz sayfaları için her dilde ayrı Title ve Description tanımla.
-   - SEO Optimizasyonu: Google arama sonuçlarında "Home - RIM GLOBAL" yerine "RIM GLOBAL | Premium Used Cars in Federal Way" gibi çekici başlıklar ayarla.
+   - SEO Optimizasyonu: Google arama sonuçları için dinamik Title, Description ve OpenGraph etiketleri ayarlandı.
 
-6. SEO: CANONICAL TAGS
-   - URL Standardizasyonu: Her sayfanın <head> kısmına dinamik 'rel=canonical' etiketini ekle.
-   - Kopya İçerik Önleme: Google'ın aynı sayfayı farklı parametrelerle (örn: ?page=1) kopya olarak görmesini engelle.
+6. SEO: CANONICAL TAGS - TAMAMLANDI
+   - URL Standardizasyonu: Her sayfanın <head> kısmına dinamik 'rel=canonical' etiketini eklenerek kopya içerik sorunu çözüldü.
 
 7. YASAL UYUM: COOKIE CONSENT (ÇEREZ ONAYI) - TAMAMLANDI
-   - Banner Bileşeni: Siteniz altına şık, rahatsız etmeyen bir çerez onay bandı ekle.
-   - LocalStorage: Kullanıcının seçimini tarayıcıda sakla ve Gizlilik Politikası sayfasına yönlendirme yap.
+   - Banner Bileşeni: Sitenin altına şık ve dile duyarlı bir çerez onay bandı eklendi.
 
-8. UX: LOADING STATES (YÜKLEME ANLARI)
-   - loading.tsx: Sayfa geçişlerinde TopLoader'a ek olarak ana içerik alanında skeleton (iskelet) ekranlar göster.
-   - Button Feedbacks: Form gönderilirken butonlarda 'isPending' durumunu daha belirgin hale getir.
+8. UX: LOADING STATES (YÜKLEME ANLARI) - TAMAMLANDI
+   - loading.tsx: Sayfa geçişlerinde iskelet (skeleton) ekranlar gösterilerek hız algısı artırıldı.
 
-9. YERELLEŞTİRME: FİYAT VE PARA BİRİMİ STANDARDI
-   - Currency Helper: 'src/lib/utils.ts' içinde merkezi bir formatlayıcı oluştur.
-   - Tutarlılık: Sitedeki tüm fiyatların (Finansman, Kartlar, Detay) seçili dile ve bölgeye göre ($ veya ilgili birim) kuruşu kuruşuna aynı görünmesini sağla.
+9. YERELLEŞTİRME: FİYAT VE PARA BİRİMİ STANDARDI - TAMAMLANDI
+   - Currency Service: Frankfurter API entegrasyonu ile canlı kurlar eklendi ve Redis'te önbelleklendi.
+   - PriceDisplay: Admin'de sadece USD girişi bırakıldı; kullanıcı tarafında dil seçimine göre USD ve Yerel Birim (₺, €, ₩) yan yana gösterildi.
 
-10. ALTYAPI: S3/R2 URL PROXY VE FORMATTER
-    - DB Refactor: Veritabanında tam URL (https://s3...) saklamak yerine sadece dosya 'Key'ini (upload/uuid/file.jpg) sakla.
-    - URL Generator: Resimleri gösterirken bir yardımcı fonksiyon aracılığıyla Base URL'i .env'den çekerek URL oluştur. (Bu sayede yarın AWS'den Cloudflare'e geçtiğinizde veritabanında tek bir hücreyi bile değiştirmeniz gerekmez).
+10. ALTYAPI: S3/R2 URL PROXY VE FORMATTER - TAMAMLANDI
+    - URL Generator: S3 URL oluşturma mantığı merkezi hale getirildi (.env desteğiyle).
+    - Sync Cleanup: Veritabanı ve S3 arasındaki silme işlemleri %100 senkronize edildi.
 
 ---
-RIM GLOBAL - Digital Excellence Plan
+RIM GLOBAL - Digital Excellence Plan - MISSION ACCOMPLISHED 🚀

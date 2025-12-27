@@ -61,6 +61,7 @@ model Classified {
   model          Model            @relation(fields: [modelId], references: [id])
   modelVariant   ModelVariant?    @relation(fields: [modelVariantId], references: [id])
   customers      Customer[]
+  favoritedBy    Customer[]       @relation("CustomerFavorites")
   images         Image[]
 
   @@index([makeId, modelId], map: "index_make_model")
@@ -133,12 +134,15 @@ model Customer {
   bookingDate   DateTime?           @map("booking_date")
   termsAccepted Boolean             @default(false) @map("terms_accepted")
   status        CustomerStatus      @default(INTERESTED)
+  sourceId      String?             @map("source_id")
   classifiedId  Int?                @map("classified_id")
   createdAt     DateTime            @default(now()) @map("created_at")
   updatedAt     DateTime            @updatedAt @map("updated_at")
   lifecycle     CustomerLifecycle[]
   classified    Classified?         @relation(fields: [classifiedId], references: [id], onDelete: Cascade)
+  favorites     Classified[]        @relation("CustomerFavorites")
 
+  @@index([sourceId], map: "index_customer_source_id")
   @@map("customers")
 }
 
