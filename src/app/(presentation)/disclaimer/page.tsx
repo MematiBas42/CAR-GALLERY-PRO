@@ -1,46 +1,115 @@
 import React from 'react';
+import { getLocale } from "next-intl/server";
 
-const DisclaimerPage = () => {
+const DisclaimerPage = async () => {
+  const locale = await getLocale();
+
+  if (locale === 'tr') {
+    return (
+      <div className="container mx-auto px-4 py-16 max-w-4xl text-left leading-relaxed">
+        <h1 className="text-4xl font-bold mb-8 text-primary">Yasal Uyarı</h1>
+        <div className="space-y-6 text-muted-foreground text-lg">
+          <section>
+            <h2 className="text-2xl font-semibold mb-4 text-foreground">Fiyatlandırma ve Ücretler</h2>
+            <p>Bu web sitesinde gösterilen tüm fiyatlara vergiler, ruhsat ve tescil ücretleri dahil değildir.</p>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
+  if (locale === 'ar') {
+    return (
+      <div className="container mx-auto px-4 py-16 max-w-4xl text-right leading-relaxed" dir="rtl">
+        <h1 className="text-4xl font-bold mb-8 text-primary">إخلاء المسؤولية</h1>
+        <div className="space-y-6 text-muted-foreground text-lg">
+          <section>
+            <h2 className="text-2xl font-semibold mb-4 text-foreground">الأسعار والرسوم</h2>
+            <p>جميع الأسعار المعروضة على هذا الموقع لا تشمل الضرائب والترخيص ورسوم التسجيل.</p>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
+  if (locale === 'ko') {
+    return (
+      <div className="container mx-auto px-4 py-16 max-w-4xl text-left leading-relaxed">
+        <h1 className="text-4xl font-bold mb-8 text-primary">법적 고지</h1>
+        <div className="space-y-6 text-muted-foreground text-lg">
+          <section>
+            <h2 className="text-2xl font-semibold mb-4 text-foreground">가격 및 비용</h2>
+            <p>본 웹사이트에 표시된 모든 가격에는 세금, 등록비 등이 포함되어 있지 않습니다.</p>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
+  if (locale === 'ru') {
+    return (
+      <div className="container mx-auto px-4 py-16 max-w-4xl text-left leading-relaxed">
+        <h1 className="text-4xl font-bold mb-8 text-primary">Отказ от ответственности</h1>
+        <div className="space-y-6 text-muted-foreground text-lg">
+          <section>
+            <h2 className="text-2xl font-semibold mb-4 text-foreground">Цены и сборы</h2>
+            <p>Все цены, указанные на этом сайте, не включают налоги, сборы за оформление документов и регистрацию.</p>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
+  if (locale === 'uk') {
+    return (
+      <div className="container mx-auto px-4 py-16 max-w-4xl text-left leading-relaxed">
+        <h1 className="text-4xl font-bold mb-8 text-primary">Відмова від відповідальності</h1>
+        <div className="space-y-6 text-muted-foreground text-lg">
+          <section>
+            <h2 className="text-2xl font-semibold mb-4 text-foreground">Ціни та збори</h2>
+            <p>Усі ціни, вказані на цьому сайті, не включають податки, збори за оформлення документів та реєстрацію.</p>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
+  if (locale === 'vi') {
+    return (
+      <div className="container mx-auto px-4 py-16 max-w-4xl text-left leading-relaxed">
+        <h1 className="text-4xl font-bold mb-8 text-primary">Tuyên bố miễn trừ trách nhiệm</h1>
+        <div className="space-y-6 text-muted-foreground text-lg">
+          <section>
+            <h2 className="text-2xl font-semibold mb-4 text-foreground">Giá cả và Chi phí</h2>
+            <p>Tất cả giá hiển thị trên trang web này không bao gồm thuế, phí cấp biển số và đăng ký. Có thể áp dụng thêm phí dịch vụ tài liệu của đại lý lên đến $200.</p>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
+  if (locale === 'es') {
+    return (
+      <div className="container mx-auto px-4 py-16 max-w-4xl text-left leading-relaxed">
+        <h1 className="text-4xl font-bold mb-8 text-primary">Aviso Legal</h1>
+        <div className="space-y-6 text-muted-foreground text-lg">
+          <section>
+            <h2 className="text-2xl font-semibold mb-4 text-foreground">Precios y Tarifas</h2>
+            <p>Todos los precios mostrados en este sitio web excluyen impuestos, títulos, licencias y tarifas de registro.</p>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="container mx-auto px-4 py-16 max-w-4xl">
+    <div className="container mx-auto px-4 py-16 max-w-4xl leading-relaxed">
       <h1 className="text-4xl font-bold mb-8 text-primary">Disclaimer</h1>
-      <div className="space-y-6 text-muted-foreground">
-        
+      <div className="space-y-6 text-muted-foreground text-lg">
         <section>
           <h2 className="text-2xl font-semibold mb-4 text-foreground">Pricing and Fees</h2>
-          <p>
-            All prices shown on this website exclude taxes, title, license, and registration fees. A dealer documentary service fee of up to $200 may be added to the sale price or capitalized cost. Prices are subject to change without notice. Please contact us directly for the most accurate and up-to-date pricing information.
-          </p>
+          <p>All prices shown on this website exclude taxes, title, license, and registration fees.</p>
         </section>
-
-        <section>
-          <h2 className="text-2xl font-semibold mb-4 text-foreground">Vehicle Information</h2>
-          <p>
-            While we make every effort to ensure the accuracy of the information on this website, errors may occur. We are not responsible for typographical errors or omissions. Vehicle availability, mileage, equipment, and features are subject to change. Please verify all information with a RIM GLOBAL representative before purchasing.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-semibold mb-4 text-foreground">"As-Is" Sale</h2>
-          <p>
-            Unless otherwise stated in writing, all used vehicles are sold "AS-IS" and without warranty, either express or implied. The purchaser will bear the entire expense of repairing or correcting any defects that may exist at the time of sale or develop thereafter. Some vehicles may still be covered by the remainder of the manufacturer's factory warranty.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-semibold mb-4 text-foreground">Financing Estimations</h2>
-          <p>
-            The payment calculator and financing tools provided on this website are for estimation purposes only. Actual monthly payments, down payments, and interest rates may vary based on your credit history, the specific vehicle, and lender criteria. These estimates do not constitute a financing offer or guarantee of credit approval.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-semibold mb-4 text-foreground">Third-Party Links</h2>
-          <p>
-            This website may contain links to third-party websites. RIM GLOBAL is not responsible for the content, privacy policies, or practices of such websites.
-          </p>
-        </section>
-
       </div>
     </div>
   );

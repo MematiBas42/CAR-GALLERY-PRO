@@ -41,6 +41,21 @@ const FavsPage = async (props: PageProps) => {
   return (
     <div className="container mx-auto px-4 py-8 min-h-[80dvh]">
 			<h1 className="text-3xl font-bold mb-6">{t("title")}</h1>
+      
+      <div className="mb-6 flex justify-end">
+        <CustomPagination
+          baseURL={routes.favourites}
+          totalPages={totalPages}
+          styles={{
+            paginationRoot: "justify-end hidden lg:flex",
+            paginationPrevious: "",
+            paginationNext: "",
+            paginationLink: "border active:border",
+            paginationLinkActive: "bg-primary text-primary-foreground",
+          }}
+        />
+      </div>
+
 			<div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
 				{classifieds.map((classified) => {
 					return (
@@ -52,16 +67,17 @@ const FavsPage = async (props: PageProps) => {
 					);
 				})}
 			</div>
-			<div className="mt-8 flex">
+
+			<div className="mt-8 flex justify-center lg:justify-end pb-8">
 				<CustomPagination
 					baseURL={routes.favourites}
 					totalPages={totalPages}
 					styles={{
-						paginationRoot: "justify-center",
+						paginationRoot: "flex",
 						paginationPrevious: "",
 						paginationNext: "",
-						paginationLinkActive: "",
-						paginationLink: "border-none active:border",
+						paginationLink: "border active:border",
+						paginationLinkActive: "bg-primary text-primary-foreground",
 					}}
 				/>
 			</div>

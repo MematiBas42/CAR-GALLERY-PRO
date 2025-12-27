@@ -8,6 +8,28 @@
     "search": "Search",
     "favorites": "Favorites"
   },
+  "SEO": {
+    "home": {
+      "title": "RIM GLOBAL | Premium Used Cars in Federal Way, WA",
+      "description": "Discover your next chapter with RIM GLOBAL. Meticulously curated collection of quality-inspected used cars in Federal Way. Transparent financing and elite service."
+    },
+    "inventory": {
+      "title": "Vehicle Collection | Browse Our Inventory - RIM GLOBAL",
+      "description": "Peep our fire collection of used cars. From luxury sedans to tough SUVs, find your perfect ride at RIM GLOBAL Federal Way."
+    },
+    "financing": {
+      "title": "Auto Financing & Car Loans | RIM GLOBAL",
+      "description": "Easy and transparent car financing in Federal Way. Get estimated monthly payments and apply for loans that fit your life."
+    },
+    "philosophy": {
+      "title": "Our Philosophy | The RIM GLOBAL Difference",
+      "description": "Learn about our curation process and why transparency is at the core of everything we do at RIM GLOBAL."
+    },
+    "contact": {
+      "title": "Contact Us | Visit Our Showroom - RIM GLOBAL",
+      "description": "Visit our Federal Way showroom or send us a message. We're here to help you find your next vehicle."
+    }
+  },
   "Auth": {
     "signIn": {
       "title": "Admin Sign In",
@@ -268,12 +290,23 @@
       "button": "Proceed to Reservation"
     },
     "selectDate": {
+      "errors": {
+        "dateRequired": "Handover date is required",
+        "timeRequired": "Handover time is required"
+      },
       "dateLabel": "Select Handover Date",
       "timeLabel": "Select Handover Time",
       "back": "BACK",
       "continue": "Continue"
     },
     "submitDetails": {
+      "errors": {
+        "firstNameRequired": "First name is required",
+        "lastNameRequired": "Last name is required",
+        "invalidEmail": "Invalid email address",
+        "mobileRequired": "Mobile number is required",
+        "termsRequired": "You must agree to the terms"
+      },
       "firstNameLabel": "Enter First Name",
       "firstNamePlaceholder": "Enter your first name",
       "lastNameLabel": "Enter Last Name",
@@ -443,6 +476,12 @@
     }
   },
   "Errors": {
+    "notFound": {
+      "title": "Page Not Found",
+      "description": "We couldn't find the page you were looking for. It might have been removed, renamed, or doesn't exist.",
+      "returnHome": "Return Home",
+      "browse": "Browse Inventory"
+    },
     "forbidden": {
       "title": "Forbidden",
       "description": "You are not authorized to access this resource.",

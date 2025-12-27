@@ -9,7 +9,6 @@ import React, { useTransition } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
-import { Input } from "../ui/input";
 import { Select } from "../ui/select";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
@@ -17,31 +16,35 @@ import { routes } from "@/config/routes";
 import { generataTimeOptions, generateDateOptions } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
-const SelectDateSchema = z.object({
+const createSelectDateSchema = (t: any) => z.object({
   handoverDate: z.string({
-    message: "Handover date is required",
+    required_error: t("dateRequired"),
   }),
-  // Add other fields as necessary
   handoverTime: z.string({
-    message: "Handover time is required",
+    required_error: t("timeRequired"),
   }),
 });
-type SelectDateType = z.infer<typeof SelectDateSchema>;
+
+type SelectDateType = z.infer<ReturnType<typeof createSelectDateSchema>>;
+
 const SelectDate = (props: MultiStepsFormComponentProps) => {
   const t = useTranslations("Reserve.selectDate");
+  const tErrors = useTranslations("Reserve.selectDate.errors");
+  
   const { searchParams } = props;
   const handoverDate = (searchParams?.handoverDate as string) || undefined;
   const handoverTime = (searchParams?.handoverTime as string) || undefined;
+  
   const form = useForm<SelectDateType>({
-    resolver: zodResolver(SelectDateSchema),
+    resolver: zodResolver(createSelectDateSchema(tErrors)),
     mode: "onBlur",
     defaultValues: {
       handoverDate: handoverDate
         ? decodeURIComponent(handoverDate)
-        : handoverDate, // Decode the date if it exists
+        : handoverDate, 
       handoverTime: handoverTime
         ? decodeURIComponent(handoverTime)
-        : handoverTime, // Decode the time if it exists
+        : handoverTime, 
     },
   });
 
@@ -50,8 +53,7 @@ const SelectDate = (props: MultiStepsFormComponentProps) => {
   const [isPreviousPending, startPreviousTransition] = useTransition();
 
   const prevStep = () => {
-    startTransition(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+    startPreviousTransition(async () => {
       const url = new URL(window.location.href);
       url.searchParams.set("step", MultiStepFormEnum.WELCOME.toString());
       router.push(url.toString());
@@ -63,11 +65,9 @@ const SelectDate = (props: MultiStepsFormComponentProps) => {
       const valid = await form.trigger();
       if (!valid) return;
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
       const url = new URL(
         routes.reserve(props.car.slug, MultiStepFormEnum.SUBMIT_DETAILS),
-        process.env.NEXT_PUBLIC_APP_URL
+        process.env.NEXT_PUBLIC_APP_URL || window.location.origin
       );
       url.searchParams.set(
         "handoverDate",
@@ -80,24 +80,24 @@ const SelectDate = (props: MultiStepsFormComponentProps) => {
       router.push(url.toString());
     });
   };
+
   return (
     <Form {...form}>
       <form
-        className="mx-auto bg-white  flex flex-col rounded-b-lg shadow-lg p-6 h-96"
-        action=""
+        className="mx-auto bg-white flex flex-col rounded-b-lg shadow-lg p-6 h-96"
         onSubmit={form.handleSubmit(onSelectDate)}
       >
-        <div className="space-y-6 flex-1 ">
+        <div className="space-y-6 flex-1">
           <FormField
             control={form.control}
             name="handoverDate"
             render={({ field: { ref, ...rest } }) => (
               <FormItem>
-                <FormLabel htmlFor="handoverDate">
+                <FormLabel htmlFor="handoverDate" className="text-gray-700">
                   {t("dateLabel")}
                 </FormLabel>
                 <FormControl>
-                  <Select options={generateDateOptions()} {...rest} />
+                  <Select options={generateDateOptions()} {...rest} className="text-gray-900 border-gray-300" />
                 </FormControl>
               </FormItem>
             )}
@@ -107,11 +107,11 @@ const SelectDate = (props: MultiStepsFormComponentProps) => {
             name="handoverTime"
             render={({ field: { ref, ...rest } }) => (
               <FormItem>
-                <FormLabel htmlFor="handoverTime">
+                <FormLabel htmlFor="handoverTime" className="text-gray-700">
                   {t("timeLabel")}
                 </FormLabel>
                 <FormControl>
-                  <Select options={generataTimeOptions()} {...rest} />
+                  <Select options={generataTimeOptions()} {...rest} className="text-gray-900 border-gray-300" />
                 </FormControl>
               </FormItem>
             )}
@@ -120,13 +120,12 @@ const SelectDate = (props: MultiStepsFormComponentProps) => {
         <div className="flex gap-x-4">
           <Button
             type="button"
+            variant="outline"
             onClick={prevStep}
             disabled={isPreviousPending}
-            className="uppercase font-bold flex gap-x-3 w-full flex-1"
+            className="uppercase font-bold flex gap-x-3 w-full flex-1 border-gray-300 text-gray-700"
           >
-            {isPreviousPending ? (
-              <Loader2 className="w-4 h-4 shrink-0 animate-spin" />
-            ) : null}{" "}
+            {isPreviousPending && <Loader2 className="w-4 h-4 shrink-0 animate-spin" />}
             {t("back")}
           </Button>
           <Button
@@ -134,10 +133,8 @@ const SelectDate = (props: MultiStepsFormComponentProps) => {
             disabled={isPending}
             className="uppercase font-bold flex gap-x-3 w-full flex-1"
           >
-            {isPending ? (
-              <Loader2 className="w-4 h-4 shrink-0 animate-spin" />
-            ) : null}{" "}
-            {t("continue")} 🎯
+            {isPending && <Loader2 className="w-4 h-4 shrink-0 animate-spin" />}
+            {t("continue")}
           </Button>
         </div>
       </form>

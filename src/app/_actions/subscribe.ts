@@ -2,13 +2,23 @@
 import { prisma } from '@/lib/prisma';
 import { CustomerStatus } from '@prisma/client';
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from '@prisma/client/runtime/library';
-import { z } from 'zod';
 import { SubscribeSchema } from '../schemas/sub.schema';
 import { PrevState } from '@/config/types';
 import { getTranslations } from 'next-intl/server';
+import { newsletterRateLimit } from "@/lib/rate-limiter";
+import { headers } from "next/headers";
 
 export const subscribeAction = async(_: PrevState, formData: FormData) => {
     const t = await getTranslations("Admin.customers.messages");
+    
+    // Rate limiting
+    const ip = (await headers()).get("x-forwarded-for") ?? "127.0.0.1";
+    const { success: limitSuccess } = await newsletterRateLimit.limit(ip);
+    
+    if (!limitSuccess) {
+      return { success: false, message: "Too many attempts. Please try again tomorrow." };
+    }
+
     try {
         const {data, success, error} = SubscribeSchema.safeParse({
         email: formData.get('email') as string,

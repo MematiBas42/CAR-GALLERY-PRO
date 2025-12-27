@@ -1,0 +1,52 @@
+CAR GALLERY PRO - YAYINA HAZIRLIK VE İYİLEŞTİRME YOL HARİTASI (steps.txt)
+
+Bu belge, butik araç galerisi web sitesinin profesyonel standartlara ulaşması için gereken teknik ve fonksiyonel düzeltme adımlarını içerir.
+
+---
+
+1. İLETİŞİM VE BÜLTEN YÖNETİMİ (ADMIN PANEL)
+   - Prisma Modelleri: 'ContactMessage' ve 'NewsletterSubscriber' tablolarını oluştur.
+   - Veritabanı Kaydı: Mevcut formların sadece mail atmasını değil, bu tablolara kayıt atmasını sağla.
+   - Admin UI: Müşteriler menüsü altına "Gelen Mesajlar" ve "Abone Listesi" sayfaları ekle.
+   - Aksiyonlar: Mesajları "Okundu" olarak işaretleme ve Abone listesini CSV olarak dışa aktarma (Export) özelliği ekle.
+
+2. GÖRSEL VE DOSYA YÖNETİMİ (S3 TEMİZLİĞİ)
+   - Deletion Sync: 'deleteCarAction' ve 'updateCarAction' fonksiyonlarını güncelle.
+   - S3 Delete: Veritabanından silinen her resmin 'Key' bilgisi üzerinden S3/R2 servisinden fiziksel olarak silinmesini sağlayan yardımcı fonksiyonu (s3.deleteObject) entegre et.
+   - Çöp Dosya Önleme: Resim yükleme başarısız olursa veya araç kaydedilmezse S3'teki dosyayı geri silecek 'cleanup' mantığını kur.
+
+3. GÜVENLİK: RATE LIMITING (HIZ SINIRI) - TAMAMLANDI
+   - Upstash Entegrasyonu: @upstash/ratelimit kütüphanesini kullanarak API rotalarını koru.
+   - Limit Tanımları: İletişim, Bülten ve Rezervasyon formları için IP başına saatlik limitler (örn: 1 saatte max 5 mesaj) belirle.
+   - Middleware: API isteklerini middleware seviyesinde kontrol ederek bot saldırılarını sitenize yük binmeden durdur.
+
+4. KARARLILIK: GLOBAL HATA YÖNETİMİ
+   - Error Components: Root ve ana rotalar için 'error.tsx' dosyaları oluştur.
+   - User Feedback: Beklenmedik bir hata oluştuğunda Next.js'in teknik hatası yerine "Bir sorun oluştu, lütfen tekrar deneyin" diyen şık bir arayüz ve "Tekrar Dene" butonu sun.
+
+5. SEO: STATİK VE DİNAMİK METADATA - TAMAMLANDI
+   - Sayfa Metadataları: Ana sayfa, Envanter, Finansman ve Felsefemiz sayfaları için her dilde ayrı Title ve Description tanımla.
+   - SEO Optimizasyonu: Google arama sonuçlarında "Home - RIM GLOBAL" yerine "RIM GLOBAL | Premium Used Cars in Federal Way" gibi çekici başlıklar ayarla.
+
+6. SEO: CANONICAL TAGS
+   - URL Standardizasyonu: Her sayfanın <head> kısmına dinamik 'rel=canonical' etiketini ekle.
+   - Kopya İçerik Önleme: Google'ın aynı sayfayı farklı parametrelerle (örn: ?page=1) kopya olarak görmesini engelle.
+
+7. YASAL UYUM: COOKIE CONSENT (ÇEREZ ONAYI) - TAMAMLANDI
+   - Banner Bileşeni: Siteniz altına şık, rahatsız etmeyen bir çerez onay bandı ekle.
+   - LocalStorage: Kullanıcının seçimini tarayıcıda sakla ve Gizlilik Politikası sayfasına yönlendirme yap.
+
+8. UX: LOADING STATES (YÜKLEME ANLARI)
+   - loading.tsx: Sayfa geçişlerinde TopLoader'a ek olarak ana içerik alanında skeleton (iskelet) ekranlar göster.
+   - Button Feedbacks: Form gönderilirken butonlarda 'isPending' durumunu daha belirgin hale getir.
+
+9. YERELLEŞTİRME: FİYAT VE PARA BİRİMİ STANDARDI
+   - Currency Helper: 'src/lib/utils.ts' içinde merkezi bir formatlayıcı oluştur.
+   - Tutarlılık: Sitedeki tüm fiyatların (Finansman, Kartlar, Detay) seçili dile ve bölgeye göre ($ veya ilgili birim) kuruşu kuruşuna aynı görünmesini sağla.
+
+10. ALTYAPI: S3/R2 URL PROXY VE FORMATTER
+    - DB Refactor: Veritabanında tam URL (https://s3...) saklamak yerine sadece dosya 'Key'ini (upload/uuid/file.jpg) sakla.
+    - URL Generator: Resimleri gösterirken bir yardımcı fonksiyon aracılığıyla Base URL'i .env'den çekerek URL oluştur. (Bu sayede yarın AWS'den Cloudflare'e geçtiğinizde veritabanında tek bir hücreyi bile değiştirmeniz gerekmez).
+
+---
+RIM GLOBAL - Digital Excellence Plan

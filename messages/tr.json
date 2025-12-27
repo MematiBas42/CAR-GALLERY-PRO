@@ -8,6 +8,28 @@
     "search": "Ara",
     "favorites": "Favoriler"
   },
+  "SEO": {
+    "home": {
+      "title": "RIM GLOBAL | Federal Way'de Premium İkinci El Araçlar",
+      "description": "Sıradaki bölümünüzü RIM GLOBAL ile keşfedin. Federal Way'de özenle seçilmiş, kalite kontrolünden geçmiş ikinci el araç koleksiyonu. Şeffaf finansman ve üst düzey hizmet."
+    },
+    "inventory": {
+      "title": "Araç Koleksiyonu | Envanterimize Göz Atın - RIM GLOBAL",
+      "description": "Geniş ikinci el araç koleksiyonumuzu inceleyin. Lüks sedanlardan güçlü SUV'lara kadar mükemmel aracınızı RIM GLOBAL Federal Way'de bulun."
+    },
+    "financing": {
+      "title": "Araç Finansmanı ve Krediler | RIM GLOBAL",
+      "description": "Federal Way'de kolay ve şeffaf araç finansmanı. Aylık ödemelerinizi hesaplayın ve hayatınıza uygun kredi seçeneklerine başvurun."
+    },
+    "philosophy": {
+      "title": "Felsefemiz | RIM GLOBAL Farkı",
+      "description": "Araç seçim sürecimiz ve şeffaflığın neden RIM GLOBAL'de yaptığımız her şeyin merkezinde olduğu hakkında bilgi edinin."
+    },
+    "contact": {
+      "title": "İletişim | Showroomumuzu Ziyaret Edin - RIM GLOBAL",
+      "description": "Federal Way showroomumuzu ziyaret edin veya bize mesaj gönderin. Bir sonraki aracınızı bulmanıza yardımcı olmak için buradayız."
+    }
+  },
   "Auth": {
     "signIn": {
       "title": "Yönetici Girişi",
@@ -268,12 +290,23 @@
       "button": "Rezervasyona Devam Et"
     },
     "selectDate": {
+      "errors": {
+        "dateRequired": "Teslimat tarihi zorunludur",
+        "timeRequired": "Teslimat saati zorunludur"
+      },
       "dateLabel": "Teslim Tarihini Seçin",
       "timeLabel": "Teslim Saatini Seçin",
       "back": "GERİ",
       "continue": "Devam Et"
     },
     "submitDetails": {
+      "errors": {
+        "firstNameRequired": "Ad zorunludur",
+        "lastNameRequired": "Soyad zorunludur",
+        "invalidEmail": "Geçersiz e-posta adresi",
+        "mobileRequired": "Telefon numarası zorunludur",
+        "termsRequired": "Şartları kabul etmelisiniz"
+      },
       "firstNameLabel": "Adınız",
       "firstNamePlaceholder": "Adınızı girin",
       "lastNameLabel": "Soyadınız",
@@ -443,6 +476,12 @@
     }
   },
   "Errors": {
+    "notFound": {
+      "title": "Sayfa Bulunamadı",
+      "description": "Aradığınız sayfayı bulamadık. Kaldırılmış, adı değiştirilmiş veya hiç var olmamış olabilir.",
+      "returnHome": "Anasayfaya Dön",
+      "browse": "Araçlara Göz At"
+    },
     "forbidden": {
       "title": "Erişim Engellendi",
       "description": "Bu kaynağa erişim yetkiniz bulunmamaktadır.",

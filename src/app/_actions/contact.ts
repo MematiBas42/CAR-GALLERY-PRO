@@ -2,10 +2,20 @@
 
 import { contactFormSchema, ContactFormType } from "@/app/schemas/contact.schema";
 import { Resend } from "resend";
+import { contactRateLimit } from "@/lib/rate-limiter";
+import { headers } from "next/headers";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendContactEmail = async (data: ContactFormType) => {
+  // Rate limiting
+  const ip = (await headers()).get("x-forwarded-for") ?? "127.0.0.1";
+  const { success: limitSuccess } = await contactRateLimit.limit(ip);
+  
+  if (!limitSuccess) {
+    return { success: false, error: "Too many requests. Please try again later." };
+  }
+
   const result = contactFormSchema.safeParse(data);
 
   if (!result.success) {

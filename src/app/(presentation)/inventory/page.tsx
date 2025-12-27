@@ -150,17 +150,19 @@ const InventoryPage = async (props: PageProps) => {
           </Suspense>
         </div>
 
-        <CustomPagination 
-          baseURL={routes.inventory}
-          totalPages={totalPages}
-          styles={{
-            paginationRoot: "justify-center lg:hidden pt-12",
-            paginationPrevious: "",
-            paginationNext: "",
-            paginationLink: "border active:border",
-            paginationLinkActive: "bg-primary text-primary-foreground",
-          }}
-        />
+        <div className="mt-8 flex justify-center lg:justify-end pb-8">
+          <CustomPagination 
+            baseURL={routes.inventory}
+            totalPages={totalPages}
+            styles={{
+              paginationRoot: "flex",
+              paginationPrevious: "",
+              paginationNext: "",
+              paginationLink: "border active:border",
+              paginationLinkActive: "bg-primary text-primary-foreground",
+            }}
+          />
+        </div>
       </div>
     </div>
   );

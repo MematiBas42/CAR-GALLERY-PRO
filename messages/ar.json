@@ -268,12 +268,23 @@
       "button": "المتابعة للحجز"
     },
     "selectDate": {
+      "errors": {
+        "dateRequired": "تاريخ التسليم مطلوب",
+        "timeRequired": "وقت التسليم مطلوب"
+      },
       "dateLabel": "اختر تاريخ التسليم",
       "timeLabel": "اختر وقت التسليم",
       "back": "رجوع",
       "continue": "استمرار"
     },
     "submitDetails": {
+      "errors": {
+        "firstNameRequired": "الاسم الأول مطلوب",
+        "lastNameRequired": "الاسم الأخير مطلوب",
+        "invalidEmail": "البريد الإلكتروني غير صالح",
+        "mobileRequired": "رقم الجوال مطلوب",
+        "termsRequired": "يجب الموافقة على الشروط"
+      },
       "firstNameLabel": "الاسم الأول",
       "firstNamePlaceholder": "أدخل اسمك الأول",
       "lastNameLabel": "الاسم الأخير",
@@ -443,6 +454,12 @@
     }
   },
   "Errors": {
+    "notFound": {
+      "title": "الصفحة غير موجودة",
+      "description": "لم نتمكن من العثور على الصفحة التي تبحث عنها. ربما تمت إزالتها أو تغيير اسمها أو أنها غير موجودة.",
+      "returnHome": "العودة للصفحة الرئيسية",
+      "browse": "تصفح السيارات"
+    },
     "forbidden": {
       "title": "غير مسموح",
       "description": "غير مصرح لك بالوصول إلى هذا المورد.",

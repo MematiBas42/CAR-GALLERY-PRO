@@ -1,59 +1,122 @@
 import React from 'react';
+import { getLocale } from "next-intl/server";
 
-const TermsPage = () => {
+const TermsPage = async () => {
+  const locale = await getLocale();
+
+  if (locale === 'tr') {
+    return (
+      <div className="container mx-auto px-4 py-16 max-w-4xl text-left leading-relaxed">
+        <h1 className="text-4xl font-bold mb-8 text-primary">Hizmet Şartları</h1>
+        <div className="space-y-6 text-muted-foreground text-lg">
+          <p>Son Güncelleme: {new Date().toLocaleDateString('tr-TR')}</p>
+          <section>
+            <h2 className="text-2xl font-semibold mb-4 text-foreground">1. Şartların Kabulü</h2>
+            <p>RIM GLOBAL web sitesine erişerek veya siteyi kullanarak, bu Hizmet Şartlarına ve geçerli tüm yasalara bağlı kalmayı kabul etmiş olursunuz.</p>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
+  if (locale === 'ar') {
+    return (
+      <div className="container mx-auto px-4 py-16 max-w-4xl text-right leading-relaxed" dir="rtl">
+        <h1 className="text-4xl font-bold mb-8 text-primary">شروط الخدمة</h1>
+        <div className="space-y-6 text-muted-foreground text-lg">
+          <p>آخر تحديث: {new Date().toLocaleDateString('ar-SA')}</p>
+          <section>
+            <h2 className="text-2xl font-semibold mb-4 text-foreground">1. الموافقة على الشروط</h2>
+            <p>من خلال الدخول إلى موقع RIM GLOBAL أو استخدامه، فإنك توافق على الالتزام بشروط الخدمة هذه وجميع القوانين واللوائح المعمول بها.</p>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
+  if (locale === 'ko') {
+    return (
+      <div className="container mx-auto px-4 py-16 max-w-4xl text-left leading-relaxed">
+        <h1 className="text-4xl font-bold mb-8 text-primary">이용 약관</h1>
+        <div className="space-y-6 text-muted-foreground text-lg">
+          <p>최종 수정일: {new Date().toLocaleDateString('ko-KR')}</p>
+          <section>
+            <h2 className="text-2xl font-semibold mb-4 text-foreground">1. 약관 동의</h2>
+            <p>RIM GLOBAL 웹사이트를 방문하거나 이용함으로써 귀하는 본 이용 약관 및 모든 관련 법규를 준수할 것에 동의하게 됩니다.</p>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
+  if (locale === 'ru') {
+    return (
+      <div className="container mx-auto px-4 py-16 max-w-4xl text-left leading-relaxed">
+        <h1 className="text-4xl font-bold mb-8 text-primary">Условия использования</h1>
+        <div className="space-y-6 text-muted-foreground text-lg">
+          <p>Последнее обновление: {new Date().toLocaleDateString('ru-RU')}</p>
+          <section>
+            <h2 className="text-2xl font-semibold mb-4 text-foreground">1. Согласие с условиями</h2>
+            <p>Заходя на сайт RIM GLOBAL или используя его, вы соглашаетесь соблюдать настоящие Условия использования и все применимые законы.</p>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
+  if (locale === 'uk') {
+    return (
+      <div className="container mx-auto px-4 py-16 max-w-4xl text-left leading-relaxed">
+        <h1 className="text-4xl font-bold mb-8 text-primary">Умови використання</h1>
+        <div className="space-y-6 text-muted-foreground text-lg">
+          <p>Останнє оновлення: {new Date().toLocaleDateString('uk-UA')}</p>
+          <section>
+            <h2 className="text-2xl font-semibold mb-4 text-foreground">1. Згода з умовами</h2>
+            <p>Заходячи на сайт RIM GLOBAL або використовуючи його, ви погоджуєтеся дотримуватися цих Умов використання та всіх відповідних законів.</p>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
+  if (locale === 'vi') {
+    return (
+      <div className="container mx-auto px-4 py-16 max-w-4xl text-left leading-relaxed">
+        <h1 className="text-4xl font-bold mb-8 text-primary">Điều khoản Dịch vụ</h1>
+        <div className="space-y-6 text-muted-foreground text-lg">
+          <p>Cập nhật lần cuối: {new Date().toLocaleDateString('vi-VN')}</p>
+          <section>
+            <h2 className="text-2xl font-semibold mb-4 text-foreground">1. Đồng ý với các Điều khoản</h2>
+            <p>Bằng cách truy cập hoặc sử dụng trang web RIM GLOBAL, bạn đồng ý tuân thủ các Điều khoản Dịch vụ này và tất cả các luật và quy định hiện hành.</p>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
+  if (locale === 'es') {
+    return (
+      <div className="container mx-auto px-4 py-16 max-w-4xl text-left leading-relaxed">
+        <h1 className="text-4xl font-bold mb-8 text-primary">Términos de Servicio</h1>
+        <div className="space-y-6 text-muted-foreground text-lg">
+          <p>Última actualización: {new Date().toLocaleDateString('es-ES')}</p>
+          <section>
+            <h2 className="text-2xl font-semibold mb-4 text-foreground">1. Acuerdo de Términos</h2>
+            <p>Al acceder o utilizar el sitio web de RIM GLOBAL, usted acepta estar sujeto a estos Términos de Servicio y a todas las leyes y regulaciones aplicables.</p>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="container mx-auto px-4 py-16 max-w-4xl">
+    <div className="container mx-auto px-4 py-16 max-w-4xl leading-relaxed">
       <h1 className="text-4xl font-bold mb-8 text-primary">Terms of Service</h1>
-      <div className="space-y-6 text-muted-foreground">
+      <div className="space-y-6 text-muted-foreground text-lg">
         <p>Last Updated: {new Date().toLocaleDateString('en-US')}</p>
-
         <section>
           <h2 className="text-2xl font-semibold mb-4 text-foreground">1. Agreement to Terms</h2>
-          <p>
-            By accessing or using the RIM GLOBAL website, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing this site.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-semibold mb-4 text-foreground">2. Use License</h2>
-          <p>
-            Permission is granted to temporarily download one copy of the materials (information or software) on RIM GLOBAL's website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license, you may not:
-          </p>
-          <ul className="list-disc pl-6 mt-2 space-y-2">
-            <li>Modify or copy the materials;</li>
-            <li>Use the materials for any commercial purpose, or for any public display (commercial or non-commercial);</li>
-            <li>Attempt to decompile or reverse engineer any software contained on RIM GLOBAL's website;</li>
-            <li>Remove any copyright or other proprietary notations from the materials; or</li>
-            <li>Transfer the materials to another person or "mirror" the materials on any other server.</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-semibold mb-4 text-foreground">3. Disclaimer</h2>
-          <p>
-            The materials on RIM GLOBAL's website are provided on an 'as is' basis. RIM GLOBAL makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-semibold mb-4 text-foreground">4. Limitations</h2>
-          <p>
-            In no event shall RIM GLOBAL or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on RIM GLOBAL's website.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-semibold mb-4 text-foreground">5. Accuracy of Materials</h2>
-          <p>
-            The materials appearing on RIM GLOBAL's website could include technical, typographical, or photographic errors. RIM GLOBAL does not warrant that any of the materials on its website are accurate, complete, or current. RIM GLOBAL may make changes to the materials contained on its website at any time without notice. However, RIM GLOBAL does not make any commitment to update the materials.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-2xl font-semibold mb-4 text-foreground">6. Governing Law</h2>
-          <p>
-            These terms and conditions are governed by and construed in accordance with the laws of the State of Washington, USA, and you irrevocably submit to the exclusive jurisdiction of the courts in that State or location.
-          </p>
+          <p>By accessing or using the RIM GLOBAL website, you agree to be bound by these Terms of Service and all applicable laws and regulations.</p>
         </section>
       </div>
     </div>

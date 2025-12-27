@@ -2,13 +2,14 @@ import { EndButtons } from "@/components/shared/end-buttons";
 import { PageProps } from "@/config/types";
 import { prisma } from "@/lib/prisma";
 import { CircleCheck, Calendar as CalendarIcon, Car, User } from "lucide-react";
-import { format } from "date-fns";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getFormatter } from "next-intl/server";
 
 const ReserveSuccessPage = async (props: PageProps) => {
   const params = await props.params;
   const t = await getTranslations("Reserve.successPage");
+  const format = await getFormatter();
+  
   const customer = await prisma.customer.findFirst({
     where: {
       classified: {
@@ -53,7 +54,10 @@ const ReserveSuccessPage = async (props: PageProps) => {
                     <CalendarIcon className="w-5 h-5 text-gray-400" />
                     <span className="text-gray-300">
                         {customer.bookingDate 
-                            ? format(new Date(customer.bookingDate), "EEEE, MMMM do, yyyy 'at' h:mm a")
+                            ? format.dateTime(new Date(customer.bookingDate), {
+                                dateStyle: 'full',
+                                timeStyle: 'short'
+                              })
                             : "N/A"
                         }
                     </span>

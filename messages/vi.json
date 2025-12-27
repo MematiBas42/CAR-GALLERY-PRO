@@ -1,0 +1,369 @@
+{
+  "Navigation": {
+    "collection": "Bộ sưu tập",
+    "financing": "Tài chính",
+    "philosophy": "Triết lý của chúng tôi",
+    "contact": "Liên hệ",
+    "home": "Trang chủ",
+    "search": "Tìm kiếm",
+    "favorites": "Yêu thích"
+  },
+  "Auth": {
+    "signIn": {
+      "title": "Đăng nhập Admin",
+      "email": "Email",
+      "emailPlaceholder": "Nhập email của bạn",
+      "password": "Mật khẩu",
+      "passwordPlaceholder": "Nhập mật khẩu của bạn",
+      "adminOnly": "Chỉ dành cho quản trị viên",
+      "button": "Đăng nhập"
+    },
+    "otp": {
+      "title": "Mật khẩu một lần",
+      "description": "Nhập mã 6 chữ số đã gửi đến email của bạn.",
+      "sendCode": "Gửi mã",
+      "resendCode": "Gửi lại mã",
+      "sending": "Đang gửi...",
+      "verify": "Xác minh",
+      "verifying": "Đang xác minh...",
+      "success": "Mã đã được gửi thành công",
+      "successDesc": "Vui lòng kiểm tra email của bạn.",
+      "error": "Lỗi hoàn tất OTP",
+      "errorSend": "Lỗi gửi mã"
+    },
+    "signOut": "Đăng xuất",
+    "dashboard": "Bảng điều khiển"
+  },
+  "Common": {
+    "pagination": {
+      "previous": "Trước",
+      "next": "Tiếp theo",
+      "morePages": "Thêm trang"
+    },
+    "actions": {
+      "edit": "Chỉnh sửa",
+      "delete": "Xóa",
+      "save": "Lưu",
+      "cancel": "Hủy",
+      "add": "Thêm",
+      "search": "Tìm kiếm",
+      "clear": "Xóa sạch",
+      "show": "Hiển thị {value}",
+      "view": "Xem",
+      "deleteCar": "Xóa xe",
+      "viewCar": "Xem xe",
+      "editCar": "Sửa xe",
+      "deleteCustomer": "Xóa khách hàng",
+      "deleteSuccess": "Xóa xe thành công",
+      "deleteError": "Lỗi khi xóa xe",
+      "deleteCustomerSuccess": "Xóa khách hàng thành công",
+      "deleteCustomerError": "Lỗi khi xóa khách hàng"
+    }
+  },
+  "Footer": {
+    "contactUs": "Liên hệ với chúng tôi"
+  },
+  "Newsletter": {
+    "placeholder": "Nhập email của bạn",
+    "subscribe": "Đăng ký",
+    "subscribing": "Đang đăng ký...",
+    "success": "Đã đăng ký!",
+    "error": "Lỗi"
+  },
+  "Homepage": {
+    "Hero": {
+      "title": "Chương tiếp theo của bạn, được chọn lọc.",
+      "subtitle": "Tại RIM GLOBAL, chúng tôi đã tái định nghĩa trải nghiệm mua xe cũ tại Federal Way. Khám phá bộ sưu tập xe đã được kiểm định chất lượng và tận hưởng hành trình minh bạch, không rắc rối.",
+      "discover": "Khám phá bộ sưu tập",
+      "clearFilters": "Xóa bộ lọc"
+    },
+    "Features": {
+      "trust": "Nền tảng của sự tin cậy",
+      "financing": "Tài chính phù hợp với cuộc sống",
+      "description": "Chúng tôi hợp tác với các tổ chức cho vay uy tín để cung cấp giải pháp tài chính linh hoạt. Đội ngũ của chúng tôi sẽ hướng dẫn bạn chọn kế hoạch phù hợp với ngân sách."
+    },
+    "LatestArrivals": {
+      "title": "Xe mới về"
+    },
+    "Brands": {
+      "title": "Bộ sưu tập các thương hiệu hàng đầu",
+      "description": "Danh mục của chúng tôi bao gồm các loại xe được tuyển chọn kỹ lưỡng từ những tên tuổi uy tín nhất thế giới. Hiện có {count} xe trong bộ sưu tập."
+    },
+    "Testimonials": {
+      "title": "Khách hàng nói gì về chúng tôi",
+      "items": {
+        "0": {
+          "quote": "Trải nghiệm mua xe mượt mà nhất tôi từng có. Đội ngũ chuyên nghiệp, minh bạch và cực kỳ hữu ích. Tôi đã mua được xe tốt với giá hời.",
+          "name": "Alex R.",
+          "location": "Federal Way, WA"
+        },
+        "1": {
+          "quote": "Tôi từng lo lắng về việc mua xe cũ, nhưng họ đã giúp mọi thứ trở nên thật dễ dàng. Không áp lực, chỉ có những lời khuyên chân thành. Rất khuyến khích!",
+          "name": "Samantha B.",
+          "location": "Tacoma, WA"
+        },
+        "2": {
+          "quote": "Tìm thấy đúng mẫu xe tôi mong muốn trong tình trạng hoàn hảo. Chất lượng bộ sưu tập của họ là hàng đầu. Chắc chắn sẽ quay lại.",
+          "name": "Michael T.",
+          "location": "Seattle, WA"
+        }
+      }
+    }
+  },
+  "Filters": {
+    "year": "Năm",
+    "price": "Giá",
+    "make": "Hãng xe",
+    "model": "Dòng xe",
+    "modelVariant": "Phiên bản",
+    "min": "Tối thiểu",
+    "max": "Tối đa",
+    "search": "Tìm kiếm",
+    "select": "Chọn"
+  },
+  "Inventory": {
+    "carsAvailable": "Có {count} xe",
+    "sidebar": {
+      "title": "Bộ lọc",
+      "clearAll": "Xóa tất cả bộ lọc",
+      "searchPlaceholder": "Tìm xe..."
+    },
+    "labels": {
+      "odometerReading": "Số km đã đi",
+      "currency": "Tiền tệ",
+      "odometerUnit": "Đơn vị đo",
+      "transmission": "Hộp số",
+      "fuelType": "Loại nhiên liệu",
+      "bodyType": "Kiểu dáng",
+      "colour": "Màu sắc",
+      "ulezCompliance": "Tiêu chuẩn khí thải",
+      "doors": "Số cửa",
+      "seats": "Số ghế"
+    }
+  },
+  "Enums": {
+    "BodyType": {
+      "SEDAN": "Sedan",
+      "HATCHBACK": "Hatchback",
+      "SUV": "SUV",
+      "COUPE": "Coupe",
+      "CONVERTIBLE": "Mui trần",
+      "WAGON": "Wagon"
+    },
+    "FuelType": {
+      "PETROL": "Xăng",
+      "DIESEL": "Dầu Diesel",
+      "ELECTRIC": "Điện",
+      "HYBRID": "Hybrid"
+    },
+    "Transmission": {
+      "MANUAL": "Số sàn",
+      "AUTOMATIC": "Số tự động"
+    },
+    "Colour": {
+      "BLACK": "Đen",
+      "BLUE": "Xanh dương",
+      "BROWN": "Nâu",
+      "GOLD": "Vàng kim",
+      "GREEN": "Xanh lá",
+      "GREY": "Xám",
+      "ORANGE": "Cam",
+      "PINK": "Hồng",
+      "PURPLE": "Tím",
+      "RED": "Đỏ",
+      "SILVER": "Bạc",
+      "WHITE": "Trắng",
+      "YELLOW": "Vàng"
+    },
+    "OdoUnit": {
+      "MILES": "dặm",
+      "KILOMETERS": "km"
+    },
+    "CustomerStatus": {
+      "ALL": "Tất cả",
+      "COLD": "Ít tiềm năng",
+      "CONTACTED": "Đã liên hệ",
+      "INTERESTED": "Quan tâm",
+      "PURCHASED": "Đã mua",
+      "SUBSCRIBER": "Người đăng ký",
+      "LEAD": "Tiềm năng"
+    },
+    "ClassifiedStatus": {
+      "ALL": "Tất cả",
+      "LIVE": "Đang bán",
+      "SOLD": "Đã bán",
+      "DRAFT": "Bản nháp"
+    },
+    "ULEZ": {
+      "EXEMPT": "Miễn trừ",
+      "NON_EXEMPT": "Không miễn trừ"
+    }
+  },
+  "Car": {
+    "reserve": "Đặt chỗ",
+    "reserveNow": "Đặt ngay",
+    "viewDetails": "Xem chi tiết",
+    "ourPrice": "Giá của chúng tôi:",
+    "notAvailable": "Không có sẵn"
+  },
+  "Financing": {
+    "title": "Tài chính phù hợp với bạn",
+    "description": "Tại RIM GLOBAL, chúng tôi tin rằng việc hỗ trợ tài chính cho xe của bạn nên minh bạch và đơn giản như việc mua nó.",
+    "calculator": {
+      "title": "Công cụ tính toán",
+      "price": "Giá xe",
+      "deposit": "Trả trước",
+      "term": "Thời hạn (Tháng)",
+      "rate": "Lãi suất (%)",
+      "monthly": "Trả góp hàng tháng dự kiến",
+      "disclaimer": "Công cụ này chỉ mang tính chất tham khảo."
+    }
+  },
+  "Philosophy": {
+    "title": "Triết lý của chúng tôi",
+    "curation": {
+      "title": "Chất lượng hơn số lượng:",
+      "description": "Chúng tôi không đặt mục tiêu có nhiều xe nhất, mà là những chiếc xe tốt nhất."
+    },
+    "transparency": {
+      "title": "Minh bạch là cốt lõi:",
+      "description": "Chúng tôi cung cấp mọi thông tin bạn cần để đưa ra quyết định tự tin."
+    }
+  },
+  "Favourites": {
+    "title": "Xe yêu thích của bạn"
+  },
+  "Contact": {
+    "title": "Ghé thăm Showroom của chúng tôi",
+    "description": "Trải nghiệm sự khác biệt của RIM GLOBAL tại Federal Way.",
+    "form": {
+      "title": "Gửi tin nhắn",
+      "name": "Họ tên",
+      "email": "Email",
+      "phone": "Điện thoại",
+      "message": "Lời nhắn",
+      "submit": "Gửi tin nhắn",
+      "sending": "Đang gửi...",
+      "success": "Gửi tin nhắn thành công!",
+      "error": "Lỗi gửi tin nhắn."
+    }
+  },
+  "Reserve": {
+    "welcome": {
+      "title": "Bạn đã ở rất gần chiếc xe này.",
+      "subtitle": "Làm theo các bước dưới đây để hoàn tất đặt chỗ.",
+      "step1": "Quy trình đặt chỗ 2 bước đơn giản, an toàn.",
+      "step2": "Chọn ngày nhận xe và cung cấp thông tin liên hệ.",
+      "visualizer1": "1. Chọn ngày",
+      "visualizer1Desc": "Chọn thời gian nhận xe",
+      "visualizer2": "2. Thông tin của bạn",
+      "visualizer2Desc": "Hoàn tất đặt chỗ",
+      "feature1": "Quy trình an toàn",
+      "feature2": "Dịch vụ 5 sao",
+      "feature3": "Tùy chọn linh hoạt",
+      "button": "Tiếp tục đặt chỗ"
+    },
+    "selectDate": {
+      "errors": {
+        "dateRequired": "Vui lòng chọn ngày nhận xe",
+        "timeRequired": "Vui lòng chọn giờ nhận xe"
+      },
+      "dateLabel": "Chọn ngày nhận xe",
+      "timeLabel": "Chọn giờ nhận xe",
+      "back": "QUAY LẠI",
+      "continue": "Tiếp tục"
+    },
+    "submitDetails": {
+      "errors": {
+        "firstNameRequired": "Vui lòng nhập tên",
+        "lastNameRequired": "Vui lòng nhập họ",
+        "invalidEmail": "Email không hợp lệ",
+        "mobileRequired": "Vui lòng nhập số điện thoại",
+        "termsRequired": "Bạn phải đồng ý với các điều khoản"
+      },
+      "firstNameLabel": "Tên",
+      "firstNamePlaceholder": "Nhập tên của bạn",
+      "lastNameLabel": "Họ",
+      "lastNamePlaceholder": "Nhập họ của bạn",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Nhập email của bạn",
+      "mobileLabel": "Điện thoại",
+      "mobilePlaceholder": "Nhập số điện thoại",
+      "terms": "Tôi đồng ý với các điều khoản và điều kiện",
+      "back": "Bước trước",
+      "submit": "Gửi thông tin",
+      "success": "Thành công",
+      "successDesc": "Đặt chỗ đã được hoàn tất",
+      "view": {
+        "step1Title": "1. Chọn ngày & giờ nhận xe",
+        "step2Title": "2. Nhập thông tin của bạn",
+        "dateLabel": "Ngày nhận xe",
+        "timeLabel": "Giờ nhận xe",
+        "pickDate": "Chọn ngày",
+        "submit": "Hoàn tất đặt chỗ",
+        "success": "Thành công!",
+        "successDesc": "Đặt chỗ của bạn đã được xác nhận.",
+        "error": "Lỗi"
+      },
+      "successPage": {
+        "title": "Đã xác nhận đặt chỗ!",
+        "description": "Cảm ơn bạn đã đặt chỗ. Hẹn gặp lại bạn sớm.",
+        "summary": "Tóm tắt đặt chỗ",
+        "goHome": "Về trang chủ",
+        "viewOther": "Xem xe khác"
+      }
+    }
+  },
+  "Admin": {
+    "cars": {
+      "form": {
+        "year": "Năm",
+        "make": "Hãng",
+        "makePlaceholder": "Chọn hãng...",
+        "model": "Dòng xe",
+        "modelPlaceholder": "Chọn dòng xe...",
+        "variant": "Phiên bản",
+        "variantPlaceholder": "Chọn phiên bản...",
+        "price": "Giá"
+      }
+    }
+  },
+  "Errors": {
+    "notFound": {
+      "title": "Không tìm thấy trang",
+      "description": "Chúng tôi không thể tìm thấy trang bạn yêu cầu. Nó có thể đã bị xóa hoặc đổi tên.",
+      "returnHome": "Về trang chủ",
+      "browse": "Xem bộ sưu tập"
+    },
+    "forbidden": {
+      "title": "Bị từ chối",
+      "description": "Bạn không có quyền truy cập vào tài nguyên này.",
+      "returnHome": "Về trang chủ"
+    },
+    "notAvailable": {
+      "title": "Xe không còn sẵn",
+      "description": "Xin lỗi, chiếc xe này đã được bán! Nhưng đừng lo, chúng tôi còn nhiều lựa chọn khác.",
+      "slangTitle": "Ồ, chiếc xe này đã có chủ rồi! 🚗💨"
+    }
+  },
+  "Theme": {
+    "toggle": "Đổi giao diện",
+    "light": "Sáng",
+    "dark": "Tối",
+    "system": "Hệ thống"
+  },
+  "Months": {
+    "Jan": "Th1",
+    "Feb": "Th2",
+    "Mar": "Th3",
+    "Apr": "Th4",
+    "May": "Th5",
+    "Jun": "Th6",
+    "Jul": "Th7",
+    "Aug": "Th8",
+    "Sep": "Th9",
+    "Oct": "Th10",
+    "Nov": "Th11",
+    "Dec": "Th12"
+  }
+}
