@@ -92,6 +92,11 @@
     "success": "Abone olundu!",
     "error": "Hata"
   },
+  "CookieConsent": {
+    "message": "Deneyiminizi iyileştirmek ve tercihlerinizi hatırlamak için çerezleri kullanıyoruz. Sitemizi kullanmaya devam ederek çerez kullanımını kabul etmiş olursunuz.",
+    "accept": "Kabul Et",
+    "policy": "Gizlilik Politikası"
+  },
   "Homepage": {
     "Hero": {
       "title": "Sıradaki Bölümünüz, Özenle Seçildi.",
@@ -345,6 +350,8 @@
       "dashboard": "Panel",
       "cars": "Araçlar",
       "customers": "Müşteriler",
+      "messages": "Mesajlar",
+      "subscribers": "Aboneler",
       "settings": "Ayarlar"
     },
     "settings": {

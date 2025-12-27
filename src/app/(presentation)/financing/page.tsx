@@ -1,6 +1,15 @@
 import React from 'react';
 import { getTranslations } from "next-intl/server";
 import { FinancingCalculator } from '@/components/financing/calculator';
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("SEO.financing");
+  return {
+    title: t("title"),
+    description: t("description"),
+  };
+}
 
 const FinancingPage = async () => {
   const t = await getTranslations("Financing");

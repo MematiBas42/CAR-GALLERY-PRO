@@ -5,8 +5,10 @@ import { Variants } from "framer-motion";
 import {
   CarFrontIcon,
   LayoutDashboardIcon,
+  MailIcon,
   SettingsIcon,
   UsersIcon,
+  UserPlusIcon,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -31,6 +33,16 @@ const AdminSidebar = () => {
       name: t("customers"),
       href: routes.admin.customers,
       icon: UsersIcon,
+    },
+    {
+      name: t("messages"),
+      href: routes.admin.messages,
+      icon: MailIcon,
+    },
+    {
+      name: t("subscribers"),
+      href: routes.admin.subscribers,
+      icon: UserPlusIcon,
     },
     {
       name: t("settings"),

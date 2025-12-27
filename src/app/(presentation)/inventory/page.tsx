@@ -15,73 +15,15 @@ import { ClassifiedStatus, Prisma } from "@prisma/client";
 import React, { Suspense } from "react";
 import { z } from "zod";
 import { getTranslations } from "next-intl/server";
+import { Metadata } from "next";
 
-const getInventory = async (searchParams: AwaitedPageProps["searchParams"]) => {
-  const validPage = z
-    .string()
-    .transform((value) => Math.max(Number(value), 1))
-    .optional()
-    .parse(searchParams?.page);
-
-  // getthe current page from search params, default to 1
-  const page = validPage ? validPage : 1;
-
-  // cal the offset for pagination
-  const offset = (page - 1) * CARS_PER_PAGE;
-  
-  return prisma.classified.findMany({
-    where: buildClassifiedFilterQuery(searchParams),
-    include: {
-      images: {
-        take: 1, // only take the first image
-      },
-    },
-    skip: offset,
-    take: CARS_PER_PAGE,
-  });
-};
-
-//   searchParams: AwaitedPageProps["searchParams"] | undefined
-// ): Prisma.ClassifiedWhereInput => {
-//   const data = CarFilterSchema.safeParse(searchParams);
-//   if (!data) {
-//     return {
-//       status: ClassifiedStatus.LIVE,
-//     };
-//   }
-
-//   const keys = Object.keys(data);
-//   const taxonomyFilters = ["make", "model", "modelVariant"];
-//   const mapParamsToFields = keys.reduce(
-//     (acc, key) => {
-//       const value = searchParams?.[key] as string | undefined;
-//       if (!value) return acc;
-
-//       if (taxonomyFilters.includes(key)) {
-//         acc[key] = { id: Number(value) };
-//       }
-
-//       return acc;
-//     },
-//     {} as { [key: string]: any }
-//   );
-
-//   return {
-//     status: ClassifiedStatus.LIVE,
-//     ...(searchParams?.q && {
-//       OR: [
-//         { title: { contains: searchParams.q, mode: "insensitive" as const } },
-//         {
-//           description: {
-//             contains: searchParams.q,
-//             mode: "insensitive" as const,
-//           },
-//         },
-//       ],
-//     }),
-//     ...mapParamsToFields,
-//   };
-// };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("SEO.inventory");
+  return {
+    title: t("title"),
+    description: t("description"),
+  };
+}
 
 const InventoryPage = async (props: PageProps) => {
   const t = await getTranslations("Inventory");

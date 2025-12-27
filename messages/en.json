@@ -92,6 +92,11 @@
     "success": "Subscribed!",
     "error": "Error"
   },
+  "CookieConsent": {
+    "message": "We use cookies to enhance your browsing experience and remember your preferences. By continuing to use our site, you agree to this use of cookies.",
+    "accept": "Accept",
+    "policy": "Privacy Policy"
+  },
   "Homepage": {
     "Hero": {
       "title": "Your Next Chapter, Curated.",
@@ -345,6 +350,8 @@
       "dashboard": "Dashboard",
       "cars": "Cars",
       "customers": "Customers",
+      "messages": "Messages",
+      "subscribers": "Subscribers",
       "settings": "Settings"
     },
     "settings": {

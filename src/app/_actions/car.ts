@@ -1,19 +1,29 @@
 "use server";
 import { auth } from "@/auth";
 import sanitizeHtml from 'sanitize-html';
-import { StreamableSkeletonProps } from "@/components/admin/cars/StreamableSkeletion";
 import { routes } from "@/config/routes";
 import { prisma } from "@/lib/prisma";
 import { generateThumbHashFromSrUrl } from "@/lib/thumbhash-server";
-import { CurrencyCode } from "@prisma/client";
-import { randomInt } from "crypto";
 import { revalidatePath } from "next/cache";
 import { forbidden, redirect } from "next/navigation";
 import slugify from "slugify";
 import { createPngDataUri } from "unlazy/thumbhash";
 import { CreateCarType, UpdateCarType } from "../schemas/car.schema";
 import { getTranslations } from "next-intl/server";
+import { deleteFromS3 } from "@/lib/s3";
 
+// Helper to extract S3 Key from URL
+const getS3KeyFromUrl = (url: string) => {
+    // Expected format: https://bucket.s3.region.amazonaws.com/upload/uuid/name.jpg
+    // We need: upload/uuid/name.jpg
+    try {
+        const urlObj = new URL(url);
+        // Pathname usually starts with / so we remove it
+        return urlObj.pathname.startsWith('/') ? urlObj.pathname.substring(1) : urlObj.pathname;
+    } catch (e) {
+        return "";
+    }
+}
 
 export const createCarAction = async (data: CreateCarType) => {
   const t = await getTranslations("Admin.cars.messages");
@@ -78,8 +88,14 @@ export const createCarAction = async (data: CreateCarType) => {
         images: {
           create: await Promise.all(
             data.images.map(async ({ src }, index) => {
-              const hash = await generateThumbHashFromSrUrl(src);
-              const uri = createPngDataUri(hash);
+              let uri = "";
+              try {
+                const hash = await generateThumbHashFromSrUrl(src);
+                uri = createPngDataUri(hash);
+              } catch (e) {
+                console.error("Failed to generate thumbhash for image:", src, e);
+                uri = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+              }
               return {
                 isMain: !index,
                 blurhash: uri,
@@ -140,9 +156,16 @@ export const updateCarAction = async (data: UpdateCarType) => {
     }
 
     const slug = slugify(`${title} ${data.vrm}`);
+    
+    // Get existing images to delete them from S3 later
+    const existingCar = await prisma.classified.findUnique({
+        where: { id: data.id },
+        include: { images: true }
+    });
+
     const [updatedCar, images] = await prisma.$transaction(
       async (prisma) => {
-        // delete existing images if any
+        // delete existing images from DB
         await prisma.image.deleteMany({
           where: {
             classifiedId: data.id,
@@ -153,12 +176,9 @@ export const updateCarAction = async (data: UpdateCarType) => {
           data.images.map(async ({ src }, index) => {
             let uri = "";
             try {
-                // If it's a new upload, generate hash. If existing, we might skip or regenerate.
-                // Assuming we want to generate for all or just handle errors gracefully.
                 const hash = await generateThumbHashFromSrUrl(src);
                 uri = createPngDataUri(hash);
             } catch (e) {
-                console.error("Failed to generate thumbhash for update image:", src, e);
                 uri = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
             }
             return {
@@ -209,9 +229,22 @@ export const updateCarAction = async (data: UpdateCarType) => {
 
         return [updatedCar, images];
       },
-      { timeout: 10000 } // Set a timeout for the transaction
+      { timeout: 10000 }
     );
-    if (updatedCar && images) success = true;
+
+    if (updatedCar && images) {
+        success = true;
+        // Clean up OLD images from S3 after successful DB update
+        if (existingCar) {
+            for (const img of existingCar.images) {
+                // If the image is not in the new list, delete it from S3
+                if (!data.images.find(newImg => newImg.src === img.src)) {
+                    const key = getS3KeyFromUrl(img.src);
+                    if (key) await deleteFromS3(key);
+                }
+            }
+        }
+    }
   } catch (err) {
     if (err instanceof Error) {
       return { success: false, message: err.message };
@@ -235,11 +268,24 @@ export const deleteCarAction = async (id: number) => {
   }
 
   try {
+    // Get images first before deleting the car record
+    const car = await prisma.classified.findUnique({
+        where: { id },
+        include: { images: true }
+    });
+
     const deletedCar = await prisma.classified.delete({
       where: { id },
     });
 
     if (deletedCar) {
+      // Clean up S3 images
+      if (car) {
+          for (const img of car.images) {
+              const key = getS3KeyFromUrl(img.src);
+              if (key) await deleteFromS3(key);
+          }
+      }
       revalidatePath(routes.admin.cars);
       return { success: true, message: t("deleteSuccess") };
     } else {

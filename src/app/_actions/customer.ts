@@ -7,9 +7,23 @@ import { prisma } from "@/lib/prisma";
 import { routes } from "@/config/routes";
 import { CreateCustomerType, EditCustomerType } from "@/app/schemas/customer.schema";
 import { getTranslations } from "next-intl/server";
+import { generalFormRateLimit } from "@/lib/rate-limiter";
+import { headers } from "next/headers";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const createCustomerAction = async (data: CreateCustomerType) => {
   const t = await getTranslations("Admin.customers.messages");
+  
+  // Rate limiting
+  const ip = (await headers()).get("x-forwarded-for") ?? "127.0.0.1";
+  const { success: limitSuccess } = await generalFormRateLimit.limit(ip);
+  
+  if (!limitSuccess) {
+    return { success: false, message: "Too many requests. Please try again in an hour." };
+  }
+
   try {
     const newCustomer = await prisma.customer.create({
       data: {
@@ -24,12 +38,39 @@ export const createCustomerAction = async (data: CreateCustomerType) => {
           },
         },
       },
+      include: {
+        classified: true,
+      }
     });
+
+    // AUTO-RESPONDER: Send confirmation email to customer
+    if (newCustomer.email) {
+        try {
+            await resend.emails.send({
+                from: "RIM GLOBAL <onboarding@resend.dev>", // Update this with your verified domain
+                to: newCustomer.email,
+                subject: `Booking Confirmed: ${newCustomer.classified?.title}`,
+                html: `
+                    <h1>Hello ${newCustomer.firstName},</h1>
+                    <p>Thank you for your interest in the <strong>${newCustomer.classified?.title}</strong>.</p>
+                    <p>We have received your reservation request for <strong>${newCustomer.bookingDate?.toLocaleString()}</strong>.</p>
+                    <p>Our team will contact you shortly at ${newCustomer.mobile} to confirm the details.</p>
+                    <br/>
+                    <p>Best regards,<br/>The RIM GLOBAL Team</p>
+                `,
+            });
+        } catch (mailError) {
+            console.error("Failed to send customer confirmation email:", mailError);
+            // Don't fail the whole action if only the confirmation email fails
+        }
+    }
+
     return {
       success: true,
       message: t("publicSuccess", { name: newCustomer.firstName }),
     };
   } catch (error) {
+    console.error("Create Customer Error:", error);
     return {
       success: false,
       message: t("publicError"),
@@ -184,6 +225,7 @@ export const deleteCustomerAction = async (id: number) => {
   try {
     await prisma.customer.delete({ where: { id } });
     revalidatePath(routes.admin.customers);
+    revalidatePath(routes.admin.subscribers); // Ensure subscribers page is also refreshed
     return {
       success: true,
       message: t("deleteSuccess"),

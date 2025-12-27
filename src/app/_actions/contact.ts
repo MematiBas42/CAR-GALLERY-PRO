@@ -4,6 +4,7 @@ import { contactFormSchema, ContactFormType } from "@/app/schemas/contact.schema
 import { Resend } from "resend";
 import { contactRateLimit } from "@/lib/rate-limiter";
 import { headers } from "next/headers";
+import { prisma } from "@/lib/prisma";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -25,7 +26,17 @@ export const sendContactEmail = async (data: ContactFormType) => {
   const { name, email, phone, message } = result.data;
 
   try {
-    // Send email to admin
+    // 1. Save to Database
+    await prisma.contactMessage.create({
+      data: {
+        name,
+        email,
+        phone,
+        message,
+      }
+    });
+
+    // 2. Send email to admin
     await resend.emails.send({
       from: "Car Dealer <onboarding@resend.dev>", // Update this with your verified domain
       to: "delivered@resend.dev", // Update this with the admin email
@@ -42,7 +53,7 @@ export const sendContactEmail = async (data: ContactFormType) => {
 
     return { success: true };
   } catch (error) {
-    console.error("Email sending failed:", error);
-    return { success: false, error: "Failed to send email" };
+    console.error("Contact Form error:", error);
+    return { success: false, error: "Something went wrong. Please try again." };
   }
 };
