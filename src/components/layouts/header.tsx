@@ -94,8 +94,41 @@ const Header = async () => {
             <SheetTitle className="sr-only">Navigate RIM GLOBAL</SheetTitle>
           </Button>
         </SheetTrigger>
-        <SheetContent side="right" className="w-full max-w-xs p-4">
-          {/* Mobile menu content needs to be restored/updated as well */}
+        <SheetContent side="right" className="w-full max-w-xs p-6 bg-background">
+          <div className="flex flex-col gap-8 mt-8">
+            <div className="flex items-center justify-between">
+                <span className="font-bold text-xl">Menu</span>
+                <ThemeToggle />
+            </div>
+            <nav className="flex flex-col gap-4">
+                {navLinks.map((link) => (
+                <Link
+                    key={link.id}
+                    href={link.href}
+                    className="text-lg font-medium text-foreground hover:text-primary border-b border-muted pb-2"
+                >
+                    {link.label}
+                </Link>
+                ))}
+                <Link
+                    href={routes.favourites}
+                    className="text-lg font-medium text-foreground hover:text-primary border-b border-muted pb-2 flex justify-between"
+                >
+                    {t("favorites")}
+                    <span className="bg-primary text-primary-foreground px-2 rounded-full text-sm">
+                        {favs ? favs.ids.length : 0}
+                    </span>
+                </Link>
+            </nav>
+            {session && (
+                <div className="pt-4 border-t border-muted">
+                    <Link href={routes.admin.dashboard} className="flex items-center gap-2 text-primary font-bold mb-4">
+                        <LayoutDashboard className="w-5 h-5" /> Admin Panel
+                    </Link>
+                    <SignoutForm />
+                </div>
+            )}
+          </div>
         </SheetContent>
       </Sheet>
     </header>

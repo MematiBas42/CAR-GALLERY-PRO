@@ -83,12 +83,35 @@ export const createVariantAction = async (data: z.infer<typeof createVariantSche
 
 // --- DELETE ACTIONS ---
 
+import { deleteFromS3 } from "@/lib/s3";
+
+// Helper to extract S3 Key from URL
+const getS3KeyFromUrl = (url: string) => {
+    try {
+        const urlObj = new URL(url);
+        return urlObj.pathname.startsWith('/') ? urlObj.pathname.substring(1) : urlObj.pathname;
+    } catch (e) {
+        return "";
+    }
+}
+
+// ... inside the file, update deleteMakeAction:
+
 export const deleteMakeAction = async (id: number) => {
   const session = await auth();
   if (!session) forbidden();
 
   try {
+    const make = await prisma.make.findUnique({ where: { id } });
+    
     await prisma.make.delete({ where: { id } });
+
+    // Clean up logo from S3 if it exists and is an S3 URL
+    if (make?.image && make.image.includes('amazonaws.com')) {
+        const key = getS3KeyFromUrl(make.image);
+        if (key) await deleteFromS3(key);
+    }
+
     revalidatePath("/admin/cars");
     return { success: true, message: "Make deleted successfully" };
   } catch (error) {

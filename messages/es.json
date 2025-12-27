@@ -8,6 +8,17 @@
     "search": "Buscar",
     "favorites": "Favoritos"
   },
+  "SEO": {
+    "home": {
+      "title": "RIM GLOBAL | Autos Usados Premium en Federal Way",
+      "description": "Descubre tu próximo capítulo con RIM GLOBAL. Colección meticulosamente seleccionada de autos usados en Federal Way."
+    }
+  },
+  "CookieConsent": {
+    "message": "Utilizamos cookies para mejorar su experiencia y recordar sus preferencias. Al continuar navegando, acepta el uso de cookies.",
+    "accept": "Aceptar",
+    "policy": "Política de Privacidad"
+  },
   "Auth": {
     "signIn": {
       "title": "Inicio de Sesión Admin",
