@@ -33,6 +33,7 @@ const PublicFooter = async () => {
                 alt="RIM GLOBAL Logo"
                 width={280}
                 height={280}
+                className="dark:invert"
                 unoptimized
               />
               <div>
@@ -80,8 +81,18 @@ const PublicFooter = async () => {
         </div>
 
         {/* Newsletter Section - Centered */}
-        <div className="flex flex-col items-center text-center">
+        <div className="flex flex-col items-center text-center mt-12">
           <NewsLetterForm />
+        </div>
+
+        {/* Legal Links - Bottom */}
+        <div className="border-t border-gray-800 mt-12 pt-8 text-center text-sm text-muted-foreground">
+          <p>&copy; {new Date().getFullYear()} RIM GLOBAL. All rights reserved.</p>
+          <div className="flex justify-center gap-6 mt-4">
+            <Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link>
+            <Link href="/terms-of-service" className="hover:text-primary transition-colors">Terms of Service</Link>
+            <Link href="/disclaimer" className="hover:text-primary transition-colors">Disclaimer</Link>
+          </div>
         </div>
       </div>
     </footer>

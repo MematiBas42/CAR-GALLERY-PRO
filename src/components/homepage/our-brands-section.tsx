@@ -11,26 +11,14 @@ const OurBrandSection = async() => {
     const t = await getTranslations("Homepage.Brands");
     const brands = await prisma.make.findMany({
         where: {
-            name: {
-                in: [
-                    "Rolls-Royce",
-					"Aston Martin",
-					"Porsche",
-					"Lamborghini",
-					"Audi",
-					"Jaguar",
-					"Land Rover",
-					"Mercedes-Benz",
-					"Ferrari",
-					"Bentley",
-					"McLaren",
-					"Ford",
-					"Volkswagen",
-					"Maserati",
-					"Lexus",
-                ],
-                mode: 'insensitive',
+            classifieds: {
+                some: {
+                    status: ClassifiedStatus.LIVE
+                }
             }
+        },
+        orderBy: {
+            name: 'asc'
         }
     })
 

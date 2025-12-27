@@ -37,7 +37,7 @@ const Header = async () => {
             alt="RIM GLOBAL Logo"
             width={60}
             height={60}
-            className="relative"
+            className="relative dark:invert"
             unoptimized
           />
           <div className="text-left md:text-left">
