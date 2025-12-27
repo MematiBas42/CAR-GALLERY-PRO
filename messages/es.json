@@ -320,25 +320,25 @@
       "back": "Paso Anterior",
       "submit": "Enviar Detalles",
       "success": "Éxito",
-      "successDesc": "La reserva ha sido completada",
-      "view": {
-        "step1Title": "1. Seleccionar Fecha y Hora de Entrega",
-        "step2Title": "2. Ingrese sus Datos",
-        "dateLabel": "Fecha de Entrega",
-        "timeLabel": "Hora de Entrega",
-        "pickDate": "Elegir fecha",
-        "submit": "Completar Reserva",
-        "success": "¡Éxito!",
-        "successDesc": "Su reserva ha sido confirmada.",
-        "error": "Error"
-      },
-      "successPage": {
-        "title": "¡Reserva Confirmada!",
-        "description": "Gracias por su reserva. Nos vemos pronto.",
-        "summary": "Resumen de la Reserva",
-        "goHome": "Ir al Inicio",
-        "viewOther": "Ver otros vehículos"
-      }
+      "successDesc": "La reserva ha sido completada"
+    },
+    "view": {
+      "step1Title": "1. Seleccionar Fecha y Hora de Entrega",
+      "step2Title": "2. Ingrese sus Datos",
+      "dateLabel": "Fecha de Entrega",
+      "timeLabel": "Hora de Entrega",
+      "pickDate": "Elegir fecha",
+      "submit": "Completar Reserva",
+      "success": "¡Éxito!",
+      "successDesc": "Su reserva ha sido confirmada.",
+      "error": "Error"
+    },
+    "successPage": {
+      "title": "¡Reserva Confirmada!",
+      "description": "Gracias por su reserva. Nos vemos pronto.",
+      "summary": "Resumen de la Reserva",
+      "goHome": "Ir al Inicio",
+      "viewOther": "Ver otros vehículos"
     }
   },
   "Admin": {

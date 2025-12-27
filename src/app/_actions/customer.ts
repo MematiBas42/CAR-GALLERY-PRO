@@ -12,6 +12,7 @@ import { headers, cookies } from "next/headers";
 import { Resend } from "resend";
 import { redis } from "@/lib/redis-store";
 import { Favourites } from "@/config/types";
+import { sendTemplatedEmail } from "@/lib/email-service";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -81,7 +82,7 @@ export const createCustomerAction = async (data: CreateCustomerType) => {
         
         await sendTemplatedEmail(newCustomer.email, templateName, {
             name: newCustomer.firstName,
-            carTitle: newCustomer.classified?.title || customer.carTitle || "Vehicle",
+            carTitle: newCustomer.classified?.title || "Vehicle",
             date: localizedDate,
             link: `${appUrl}/inventory/${newCustomer.classified?.slug}`
         });

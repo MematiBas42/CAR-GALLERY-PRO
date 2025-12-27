@@ -324,25 +324,25 @@
       "back": "Önceki Adım",
       "submit": "Bilgileri Gönder",
       "success": "Başarılı",
-      "successDesc": "Rezervasyon işlemi başarıyla tamamlandı",
-      "view": {
-        "step1Title": "1. Teslim Tarihi ve Saatini Seçin",
-        "step2Title": "2. Bilgilerinizi Girin",
-        "dateLabel": "Teslim Tarihi",
-        "timeLabel": "Teslim Saati",
-        "pickDate": "Tarih seçin",
-        "submit": "Rezervasyonu Tamamla",
-        "success": "Başarılı!",
-        "successDesc": "Rezervasyonunuz onaylandı.",
-        "error": "Hata"
-      },
-      "successPage": {
-        "title": "Rezervasyon Onaylandı!",
-        "description": "Rezervasyonunuz için teşekkür ederiz. Yakında görüşmek üzere.",
-        "summary": "Rezervasyon Özeti",
-        "goHome": "Anasayfaya Git",
-        "viewOther": "Diğer araçlara göz at"
-      }
+      "successDesc": "Rezervasyon işlemi başarıyla tamamlandı"
+    },
+    "view": {
+      "step1Title": "1. Teslim Tarihi ve Saatini Seçin",
+      "step2Title": "2. Bilgilerinizi Girin",
+      "dateLabel": "Teslim Tarihi",
+      "timeLabel": "Teslim Saati",
+      "pickDate": "Tarih seçin",
+      "submit": "Rezervasyonu Tamamla",
+      "success": "Başarılı!",
+      "successDesc": "Rezervasyonunuz onaylandı.",
+      "error": "Hata"
+    },
+    "successPage": {
+      "title": "Rezervasyon Onaylandı!",
+      "description": "Rezervasyonunuz için teşekkür ederiz. Yakında görüşmek üzere.",
+      "summary": "Rezervasyon Özeti",
+      "goHome": "Anasayfaya Git",
+      "viewOther": "Diğer araçlara göz at"
     }
   },
   "Admin": {

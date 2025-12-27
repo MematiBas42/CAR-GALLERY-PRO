@@ -32,7 +32,7 @@ const createSubmitDetailsSchema = (t: any) => z.object({
   email: z.string().email({ message: t("invalidEmail") }),
   mobile: z.string().min(1, { message: t("mobileRequired") }),
   terms: z.enum(["true"], {
-    error_map: () => ({ message: t("termsRequired") }),
+    errorMap: () => ({ message: t("termsRequired") }),
   }),
 });
 

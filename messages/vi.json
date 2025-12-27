@@ -315,25 +315,25 @@
       "back": "Bước trước",
       "submit": "Gửi thông tin",
       "success": "Thành công",
-      "successDesc": "Đặt chỗ đã được hoàn tất",
-      "view": {
-        "step1Title": "1. Chọn ngày & giờ nhận xe",
-        "step2Title": "2. Nhập thông tin của bạn",
-        "dateLabel": "Ngày nhận xe",
-        "timeLabel": "Giờ nhận xe",
-        "pickDate": "Chọn ngày",
-        "submit": "Hoàn tất đặt chỗ",
-        "success": "Thành công!",
-        "successDesc": "Đặt chỗ của bạn đã được xác nhận.",
-        "error": "Lỗi"
-      },
-      "successPage": {
-        "title": "Đã xác nhận đặt chỗ!",
-        "description": "Cảm ơn bạn đã đặt chỗ. Hẹn gặp lại bạn sớm.",
-        "summary": "Tóm tắt đặt chỗ",
-        "goHome": "Về trang chủ",
-        "viewOther": "Xem xe khác"
-      }
+      "successDesc": "Đặt chỗ đã được hoàn tất"
+    },
+    "view": {
+      "step1Title": "1. Chọn ngày & giờ nhận xe",
+      "step2Title": "2. Nhập thông tin của bạn",
+      "dateLabel": "Ngày nhận xe",
+      "timeLabel": "Giờ nhận xe",
+      "pickDate": "Chọn ngày",
+      "submit": "Hoàn tất đặt chỗ",
+      "success": "Thành công!",
+      "successDesc": "Đặt chỗ của bạn đã được xác nhận.",
+      "error": "Lỗi"
+    },
+    "successPage": {
+      "title": "Đã xác nhận đặt chỗ!",
+      "description": "Cảm ơn bạn đã đặt chỗ. Hẹn gặp lại bạn sớm.",
+      "summary": "Tóm tắt đặt chỗ",
+      "goHome": "Về trang chủ",
+      "viewOther": "Xem xe khác"
     }
   },
   "Admin": {

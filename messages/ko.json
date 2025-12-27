@@ -315,25 +315,25 @@
       "back": "이전 단계",
       "submit": "정보 제출",
       "success": "성공",
-      "successDesc": "예약이 성공적으로 완료되었습니다",
-      "view": {
-        "step1Title": "1. 인수 날짜 및 시간 선택",
-        "step2Title": "2. 상세 정보 입력",
-        "dateLabel": "인수 날짜",
-        "timeLabel": "인수 시간",
-        "pickDate": "날짜 선택",
-        "submit": "예약 완료",
-        "success": "성공!",
-        "successDesc": "예약이 확정되었습니다.",
-        "error": "오류"
-      },
-      "successPage": {
-        "title": "예약 확정!",
-        "description": "예약해 주셔서 감사합니다. 곧 뵙겠습니다.",
-        "summary": "예약 요약",
-        "goHome": "홈으로 이동",
-        "viewOther": "다른 차량 보기"
-      }
+      "successDesc": "예약이 성공적으로 완료되었습니다"
+    },
+    "view": {
+      "step1Title": "1. 인수 날짜 및 시간 선택",
+      "step2Title": "2. 상세 정보 입력",
+      "dateLabel": "인수 날짜",
+      "timeLabel": "인수 시간",
+      "pickDate": "날짜 선택",
+      "submit": "예약 완료",
+      "success": "성공!",
+      "successDesc": "예약이 확정되었습니다.",
+      "error": "오류"
+    },
+    "successPage": {
+      "title": "예약 확정!",
+      "description": "예약해 주셔서 감사합니다. 곧 뵙겠습니다.",
+      "summary": "예약 요약",
+      "goHome": "홈으로 이동",
+      "viewOther": "다른 차량 보기"
     }
   },
   "Admin": {

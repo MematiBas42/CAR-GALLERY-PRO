@@ -99,8 +99,9 @@ export const createCarAction = async (data: CreateCarType) => {
 
                 Object.keys(templateData).forEach(key => {
                     const placeholder = `{{${key}}}`;
-                    subject = subject.replace(new RegExp(placeholder, 'g'), templateData[key as keyof typeof templateData]);
-                    content = content.replace(new RegExp(placeholder, 'g'), templateData[key as keyof typeof templateData]);
+                    const value = templateData[key as keyof typeof templateData] || '';
+                    subject = subject.replace(new RegExp(placeholder, 'g'), value);
+                    content = content.replace(new RegExp(placeholder, 'g'), value);
                 });
 
                 return sendEmailWithContent(sub.email, subject, content);
@@ -219,8 +220,9 @@ export const updateCarAction = async (data: UpdateCarType) => {
 
                 Object.keys(templateData).forEach(key => {
                     const placeholder = `{{${key}}}`;
-                    subject = subject.replace(new RegExp(placeholder, 'g'), templateData[key as keyof typeof templateData]);
-                    content = content.replace(new RegExp(placeholder, 'g'), templateData[key as keyof typeof templateData]);
+                    const value = templateData[key as keyof typeof templateData] || '';
+                    subject = subject.replace(new RegExp(placeholder, 'g'), value);
+                    content = content.replace(new RegExp(placeholder, 'g'), value);
                 });
 
                 return sendEmailWithContent(customer.email, subject, content);

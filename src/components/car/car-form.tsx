@@ -54,17 +54,38 @@ const CarForm = ({ car }: CarFormProps) => {
   const [modelVariants, setModelVariants] = useState<FilterOptions<string, string>>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const form = useForm<CreateCarType | UpdateCarType>({
-    resolver: zodResolver(isEditMode ? updateCarSchema : createCarSchema),
-    defaultValues: isEditMode
-      ? { id: car.id }
-      : {
+  const defaultValues = isEditMode && car ? {
+        id: car.id,
+        odoUnit: car.odoUnit,
+        currency: car.currency,
+        images: car.images?.map(img => ({ ...img, uuid: uuidv4(), done: true, percentage: 100 })) || [],
+        make: car.makeId.toString(),
+        model: car.modelId.toString(),
+        modelVariant: car.modelVariantId?.toString() || "",
+        year: car.year.toString(),
+        vrm: car.vrm ?? "",
+        description: car.description ?? "",
+        fuelType: car.fuelType,
+        bodyType: car.bodyType,
+        transmission: car.transmission,
+        colour: car.colour,
+        ulezCompliance: car.ulezCompliance,
+        status: car.status,
+        odoReading: car.odoReading ?? 0,
+        seats: car.seats ?? 0,
+        doors: car.doors ?? 0,
+        price: car.price ? (car.price / 100) : 0,
+  } : {
           images: [], year: "", make: "", model: "", modelVariant: "",
           description: "", vrm: "", odoReading: undefined, price: undefined, doors: undefined, seats: undefined,
           fuelType: FuelType.PETROL, bodyType: BodyType.SEDAN, transmission: Transmission.AUTOMATIC,
           colour: Colour.BLACK, ulezCompliance: ULEZCompliance.EXEMPT, odoUnit: OdoUnit.MILES,
           status: ClassifiedStatus.DRAFT, currency: CurrencyCode.GBP,
-        },
+  };
+
+  const form = useForm<CreateCarType | UpdateCarType>({
+    resolver: zodResolver(isEditMode ? updateCarSchema : createCarSchema),
+    defaultValues,
   });
 
   const make = form.watch("make");
@@ -96,33 +117,6 @@ const CarForm = ({ car }: CarFormProps) => {
 
     fetchTaxonomy();
   }, [make, model]);
-
-  useEffect(() => {
-    if (car && isEditMode) {
-      form.reset({
-        id: car.id,
-        odoUnit: car.odoUnit,
-        currency: car.currency,
-        images: car.images?.map(img => ({ ...img, uuid: uuidv4(), done: true, percentage: 100 })) || [],
-        make: car.makeId.toString(),
-        model: car.modelId.toString(),
-        modelVariant: car.modelVariantId?.toString() || "",
-        year: car.year.toString(),
-        vrm: car.vrm ?? "",
-        description: car.description ?? "",
-        fuelType: car.fuelType,
-        bodyType: car.bodyType,
-        transmission: car.transmission,
-        colour: car.colour,
-        ulezCompliance: car.ulezCompliance,
-        status: car.status,
-        odoReading: car.odoReading ?? 0,
-        seats: car.seats ?? 0,
-        doors: car.doors ?? 0,
-        price: car.price ? (car.price / 100) : 0,
-      });
-    }
-  }, [car, isEditMode, form.reset]);
 
   const carformSubmit: SubmitHandler<CreateCarType | UpdateCarType> = async (data) => {
     startTransition(async () => {

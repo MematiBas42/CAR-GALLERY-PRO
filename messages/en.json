@@ -324,25 +324,25 @@
       "back": "Previous Step",
       "submit": "Submit Details",
       "success": "Success",
-      "successDesc": "Customer has completed the booking",
-      "view": {
-        "step1Title": "1. Select Handover Date & Time",
-        "step2Title": "2. Enter Your Details",
-        "dateLabel": "Handover Date",
-        "timeLabel": "Handover Time",
-        "pickDate": "Pick a date",
-        "submit": "Complete Reservation",
-        "success": "Success!",
-        "successDesc": "Your reservation has been confirmed.",
-        "error": "Error"
-      },
-      "successPage": {
-        "title": "Booking Confirmed!",
-        "description": "Thank you for your reservation. We will see you soon.",
-        "summary": "Reservation Summary",
-        "goHome": "Go to Homepage",
-        "viewOther": "View other vehicles"
-      }
+      "successDesc": "Customer has completed the booking"
+    },
+    "view": {
+      "step1Title": "1. Select Handover Date & Time",
+      "step2Title": "2. Enter Your Details",
+      "dateLabel": "Handover Date",
+      "timeLabel": "Handover Time",
+      "pickDate": "Pick a date",
+      "submit": "Complete Reservation",
+      "success": "Success!",
+      "successDesc": "Your reservation has been confirmed.",
+      "error": "Error"
+    },
+    "successPage": {
+      "title": "Booking Confirmed!",
+      "description": "Thank you for your reservation. We will see you soon.",
+      "summary": "Reservation Summary",
+      "goHome": "Go to Homepage",
+      "viewOther": "View other vehicles"
     }
   },
   "Admin": {
