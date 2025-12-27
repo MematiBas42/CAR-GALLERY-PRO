@@ -33,14 +33,14 @@ export const Select = (props: SelectProps) => {
   			onChange={onChange}
   			value={value ?? ""}
   			className={cn(
-  				className,
   				"bg-transparent disabled:bg-muted/50 w-full px-3 py-2 border-input border rounded-md focus:outline-hidden custom-select appearance-none pr-12 text-foreground",
+                className
   			)}
   			{...rest}
   		>
-  			{noDefault && <option value="">{placeholder || t("select")}</option>}
+  			{noDefault && <option value="" className="bg-[#1e293b] text-white">{placeholder || t("select")}</option>}
   			{options.map((option) => (
-  				<option key={option.value} value={option.value}>
+  				<option key={option.value} value={option.value} className="bg-[#1e293b] text-white">
   					{option.label}
   				</option>
   			))}

@@ -36,7 +36,7 @@ export async function seedRimGlobalInventory(prisma: PrismaClient) {
             update: {},
             create: {
                 name: car.make,
-                image: `https://vl.imgix.net/img/${car.make.replace(/\s+/g, "-").toLowerCase()}-logo.png?auto=format,compress`
+                image: `/assets/brands/${car.make.replace(/\s+/g, "-").toLowerCase()}.svg`
             }
         });
 

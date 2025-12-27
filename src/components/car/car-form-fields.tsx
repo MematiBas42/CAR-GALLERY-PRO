@@ -75,6 +75,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
             <FormControl>
               <Select
                 {...field}
+                className="text-white bg-transparent border-input"
                 options={years.map((year) => ({ label: year, value: year }))}
               />
             </FormControl>
@@ -186,6 +187,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
             <FormControl>
               <Select
                 {...field}
+                className="text-white"
                 options={Object.values(Transmission).map((value) => ({ label: formatTransmission(value), value }))}
               />
             </FormControl>
@@ -202,6 +204,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
             <FormControl>
               <Select
                 {...field}
+                className="text-white"
                 options={Object.values(FuelType).map((value) => ({ label: formatFuelType(value), value }))}
               />
             </FormControl>
@@ -218,6 +221,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
             <FormControl>
               <Select
                 {...field}
+                className="text-white"
                 options={Object.values(BodyType).map((value) => ({ label: formatBodyType(value), value }))}
               />
             </FormControl>
@@ -234,6 +238,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
             <FormControl>
               <Select
                 {...field}
+                className="text-white"
                 options={Object.values(Colour).map((value) => ({ label: formatColour(value), value }))}
               />
             </FormControl>
@@ -250,6 +255,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
             <FormControl>
               <Select
                 {...field}
+                className="text-white"
                 options={Object.values(ULEZCompliance).map((value) => ({ label: value, value }))}
               />
             </FormControl>
@@ -264,7 +270,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
           <FormItem>
             <FormLabel htmlFor="vrm">{t("vrm")}</FormLabel>
             <FormControl>
-              <Input placeholder="LA16 PYW" className="uppercase text-white" {...field} />
+              <Input placeholder="LA16 PYW" className="uppercase text-white bg-transparent border-input" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>

@@ -185,7 +185,7 @@ export function SmartCombobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between bg-transparent text-white border-input hover:bg-accent hover:text-accent-foreground"
+          className="w-full justify-between bg-transparent text-white border-input hover:bg-transparent hover:!text-white"
         >
           {value
             ? selectedLabel
@@ -193,21 +193,22 @@ export function SmartCombobox({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
-        <Command shouldFilter={false}> 
+      <PopoverContent className="w-[--radix-popover-trigger-width] p-0 border-input bg-[#1e293b]">
+        <Command shouldFilter={false} className="bg-[#1e293b]"> 
           <CommandInput 
             placeholder={`Search...`} 
             value={searchValue}
             onValueChange={setSearchValue}
+            className="text-white border-none focus:ring-0"
           />
-          <CommandList>
+          <CommandList className="bg-[#1e293b]">
             {filteredOptions.length === 0 && (
-                <CommandEmpty className="py-2 px-2 text-sm">
+                <CommandEmpty className="py-2 px-2 text-sm text-gray-400">
                     {emptyText}
                     {enableCreate && searchValue && (
                          <Button 
                          variant="ghost" 
-                         className="mt-2 w-full justify-start font-normal text-muted-foreground hover:text-foreground"
+                         className="mt-2 w-full justify-start font-normal text-gray-400 hover:text-white hover:bg-slate-800"
                          onClick={openCreateDialog}
                          >
                              <Plus className="mr-2 h-4 w-4" />
@@ -216,19 +217,18 @@ export function SmartCombobox({
                     )}
                 </CommandEmpty>
             )}
-            <CommandGroup>
+            <CommandGroup className="bg-[#1e293b]">
               {filteredOptions.map((option) => (
                 <CommandItem
                   key={String(option.value)}
                   value={option.label}
-                  className="cursor-pointer pointer-events-auto flex justify-between items-center group"
+                  className="cursor-pointer pointer-events-auto flex justify-between items-center group !text-white hover:!text-white data-[selected=true]:!text-white hover:bg-slate-800 aria-selected:bg-slate-800 aria-selected:!text-white"
                   onSelect={() => {
                     onChange(String(option.value))
                     setSearchValue("") 
                     setOpen(false)
                   }}
                   onMouseDown={(e) => {
-                    // Prevent deleting when clicking item text, only main click selects
                     if ((e.target as HTMLElement).closest('.delete-btn')) return;
                     
                     e.preventDefault();
@@ -245,7 +245,7 @@ export function SmartCombobox({
                         String(value) === String(option.value) ? "opacity-100" : "opacity-0"
                         )}
                     />
-                    {option.label}
+                    <span className="text-white">{option.label}</span>
                   </div>
                   
                   {enableDelete && (

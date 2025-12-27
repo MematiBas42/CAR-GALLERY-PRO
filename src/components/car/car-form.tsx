@@ -176,7 +176,7 @@ const CarForm = ({ car }: CarFormProps) => {
                         value,
                       }))}
                       noDefault={false}
-                      className="text-white"
+                      className="text-white bg-transparent border-input"
                       {...rest}
                     />
                   </FormControl>

@@ -5,11 +5,14 @@ import {
 } from "@aws-sdk/client-s3";
 
 export const s3 = new S3Client({
-	region: process.env.AWS_REGION,
+	region: process.env.AWS_REGION || "auto",
 	credentials: {
 		accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
 		secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
 	},
+    // Add endpoint support for Cloudflare R2, MinIO, etc.
+    // If AWS_ENDPOINT is defined in .env, use it. Otherwise default to AWS standard.
+    ...(process.env.AWS_ENDPOINT ? { endpoint: process.env.AWS_ENDPOINT } : {}),
 });
 
 interface UploadToS3Args {

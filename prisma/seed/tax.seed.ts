@@ -74,11 +74,11 @@ export async function seedTax(prisma: PrismaClient) {
 			},
 			update: {
 				name,
-				image: `https://vl.imgix.net/img/${name.replace(/\s+/g, "-").toLowerCase()}-logo.png?auto=format,compress`,
+				image: `/assets/brands/${name.replace(/\s+/g, "-").toLowerCase()}.svg`,
 			},
 			create: {
 				name,
-				image: `https://vl.imgix.net/img/${name.replace(/\s+/g, "-").toLowerCase()}-logo.png?auto=format,compress`,
+				image: `/assets/brands/${name.replace(/\s+/g, "-").toLowerCase()}.svg`,
 			},
 		});
 	});

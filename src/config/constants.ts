@@ -2,10 +2,10 @@ import { BadgeProps } from "@/components/ui/badge";
 import { ClassifiedStatus, CustomerStatus } from "@prisma/client";
 
 export const imageSources = {
-    classifiedPlaceholder: `https://meat-motors.imgix.net/placeholder.jpg`,
+    classifiedPlaceholder: `/placeholder.jpg`,
     carPlaceholer: `/placeholder.jpg`,
-    features: `https://meat-motors.imgix.net/features.jpg`,
-    carLineup: `https://meat-motors.imgix.net/car-lineup.jpg`
+    features: `/assets/hero-bg.jpg`, // Assuming this exists or use placeholder
+    carLineup: `/assets/hero-bg.jpg`
 }
 
 export const CARS_PER_PAGE = 6

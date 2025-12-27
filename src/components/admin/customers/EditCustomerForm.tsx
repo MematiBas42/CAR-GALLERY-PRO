@@ -195,6 +195,7 @@ const EditCustomerForm = ({ customer }: EditCustomerFormProps) => {
                   <FormControl>
                     <Select
                       {...field}
+                      className="text-white"
                       options={Object.values(CustomerStatus).map((value) => ({
                         label: tEnums(`CustomerStatus.${value}`),
                         value,

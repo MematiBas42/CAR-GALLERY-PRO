@@ -14,11 +14,10 @@ export const signOutAction = async () => {
 }
 
 export const logoutOfAllSessions = async () => {
-	const session = await auth();
-	if (!session?.user?.id) return null;
-	await prisma.session.deleteMany({
-		where: { userId: session.user.id },
-	});
-
-	redirect(routes.signIn);
+    // In JWT strategy, we cannot easily invalidate other sessions without token rotation logic.
+    // For now, we will sign out the current session.
+	await signOut({
+        redirect: true,
+        redirectTo: routes.signIn,
+    });
 };
