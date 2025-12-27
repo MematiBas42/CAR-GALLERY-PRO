@@ -4,10 +4,10 @@ import { FinancingCalculator } from '@/components/financing/calculator';
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("SEO.financing");
+  const t = await getTranslations("SEO");
   return {
-    title: t("title"),
-    description: t("description"),
+    title: t("financing.title"),
+    description: t("financing.description"),
   };
 }
 

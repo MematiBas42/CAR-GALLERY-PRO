@@ -3,7 +3,7 @@ import React from "react";
 import { CarWithImages } from "@/config/types";
 import { TableCell, TableRow } from "../ui/table";
 import Image from "next/image";
-import { formatCarStatus, formatColour, formatPrice } from "@/lib/utils";
+import { formatCarStatus, formatColour, formatPrice, getImageUrl } from "@/lib/utils";
 import { Badge } from "../ui/badge";
 import { CarBadgeMap } from "@/config/constants";
 import { format } from "date-fns";
@@ -17,7 +17,7 @@ const CarsTableRow = ({ car }: { car: CarWithImages }) => {
       <TableCell className="font-medium">{car.id}</TableCell>
       <TableCell className="p-0">
 		<Image
-		  src={car.images?.[0]?.src || "/placeholder.png"}
+		  src={getImageUrl(car.images?.[0]?.src)}
 		  alt={car.images?.[0]?.alt || "Car Image"}
 		  width={120}
 		  height={100}

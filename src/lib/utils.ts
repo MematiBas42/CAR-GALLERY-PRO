@@ -26,6 +26,19 @@ export function getImageUrl(path: string | null | undefined) {
   return `${baseUrl.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;
 }
 
+// Helper to extract S3 Key from URL or raw path
+export const getS3KeyFromUrl = (url: string) => {
+    if (!url) return "";
+    if (!url.startsWith("http")) return url;
+
+    try {
+        const urlObj = new URL(url);
+        return urlObj.pathname.startsWith('/') ? urlObj.pathname.substring(1) : urlObj.pathname;
+    } catch (e) {
+        return url;
+    }
+}
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }

@@ -1,6 +1,16 @@
 import LocationSection from '@/components/homepage/location-section';
 import { ContactForm } from '@/components/contact/contact-form';
 import React from 'react';
+import { getTranslations } from "next-intl/server";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("SEO");
+  return {
+    title: t("contact.title"),
+    description: t("contact.description"),
+  };
+}
 
 const ContactPage = () => {
   return (

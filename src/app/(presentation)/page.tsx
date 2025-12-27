@@ -10,10 +10,10 @@ import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("SEO.home");
+  const t = await getTranslations("SEO");
   return {
-    title: t("title"),
-    description: t("description"),
+    title: t("home.title"),
+    description: t("home.description"),
   };
 }
 

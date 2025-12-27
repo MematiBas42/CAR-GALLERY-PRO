@@ -8,6 +8,28 @@
     "search": "Tìm kiếm",
     "favorites": "Yêu thích"
   },
+  "SEO": {
+    "home": {
+      "title": "RIM GLOBAL | Xe đã qua sử dụng cao cấp tại Federal Way, WA",
+      "description": "Khám phá chương tiếp theo của bạn với RIM GLOBAL. Bộ sưu tập xe đã qua sử dụng được kiểm định chất lượng tỉ mỉ tại Federal Way. Tài chính minh bạch và dịch vụ đẳng cấp."
+    },
+    "inventory": {
+      "title": "Bộ sưu tập xe | Xem kho xe của chúng tôi - RIM GLOBAL",
+      "description": "Xem bộ sưu tập xe đã qua sử dụng tuyệt vời của chúng tôi. Từ sedan hạng sang đến SUV mạnh mẽ, hãy tìm chiếc xe hoàn hảo của bạn tại RIM GLOBAL Federal Way."
+    },
+    "financing": {
+      "title": "Tài chính & Vay mua xe | RIM GLOBAL",
+      "description": "Hỗ trợ tài chính mua xe dễ dàng và minh bạch tại Federal Way. Nhận ước tính khoản thanh toán hàng tháng và đăng ký khoản vay phù hợp với cuộc sống của bạn."
+    },
+    "philosophy": {
+      "title": "Triết lý của chúng tôi | Sự khác biệt của RIM GLOBAL",
+      "description": "Tìm hiểu về quy trình tuyển chọn xe của chúng tôi và lý do tại sao sự minh bạch là cốt lõi trong mọi việc chúng tôi làm tại RIM GLOBAL."
+    },
+    "contact": {
+      "title": "Liên hệ | Ghé thăm Showroom của chúng tôi - RIM GLOBAL",
+      "description": "Ghé thăm showroom Federal Way của chúng tôi hoặc gửi tin nhắn cho chúng tôi. Chúng tôi ở đây để giúp bạn tìm chiếc xe tiếp theo."
+    }
+  },
   "Auth": {
     "signIn": {
       "title": "Đăng nhập Admin",

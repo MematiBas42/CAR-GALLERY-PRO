@@ -10,6 +10,7 @@ import { routes } from "@/config/routes";
 import { MultiStepFormEnum } from "@/config/types";
 import { CheckIcon, XIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { PriceDisplay } from "../shared/price-display";
 import {
 	CarFrontIcon,
 	CarIcon,
@@ -29,7 +30,6 @@ type CarWithImagesAndMake = Prisma.ClassifiedGetPayload<{
 const CarView = async (props: CarWithImagesAndMake) => {
   const t = await getTranslations("Car");
   const tEnums = await getTranslations("Enums");
-  const tULEZ = await getTranslations("ULEZ");
 
   const carFeatures = [
     {
@@ -40,7 +40,7 @@ const CarView = async (props: CarWithImagesAndMake) => {
             ) : (
                 <XIcon className="w-6 h-6 mx-auto text-red-500" />
             ),
-        label: tULEZ(props.ulezCompliance),
+        label: tEnums(`ULEZ.${props.ulezCompliance}`),
     },
     {
         id: 2,
@@ -126,9 +126,6 @@ const CarView = async (props: CarWithImagesAndMake) => {
               {parse(props.description || "")}
             </div>
             )}
-import { PriceDisplay } from "../shared/price-display";
-
-// ... inside CarView ...
             <div className="text-4xl font-bold my-4 w-full border border-slate-200
             flex justify-center items-center rounded-xl py-12">
               {t("ourPrice")} { ' '}

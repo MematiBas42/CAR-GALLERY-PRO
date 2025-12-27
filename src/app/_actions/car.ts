@@ -13,21 +13,7 @@ import { getTranslations } from "next-intl/server";
 import { deleteFromS3 } from "@/lib/s3";
 import { sendEmailWithContent } from "@/lib/email-service";
 import { CustomerStatus } from "@prisma/client";
-import { getImageUrl } from "@/lib/utils";
-
-// Helper to extract S3 Key from URL or raw path
-const getS3KeyFromUrl = (url: string) => {
-    if (!url) return "";
-    // If it's already just a key (doesn't start with http), return it
-    if (!url.startsWith("http")) return url;
-
-    try {
-        const urlObj = new URL(url);
-        return urlObj.pathname.startsWith('/') ? urlObj.pathname.substring(1) : urlObj.pathname;
-    } catch (e) {
-        return url; // Fallback
-    }
-}
+import { getImageUrl, getS3KeyFromUrl } from "@/lib/utils";
 
 export const createCarAction = async (data: CreateCarType) => {
   const t = await getTranslations("Admin.cars.messages");

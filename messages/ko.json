@@ -8,6 +8,28 @@
     "search": "검색",
     "favorites": "관심 차량"
   },
+  "SEO": {
+    "home": {
+      "title": "RIM GLOBAL | 워싱턴주 페더럴웨이 프리미엄 중고차",
+      "description": "RIM GLOBAL과 함께 당신의 다음 장을 시작하세요. 페더럴웨이에서 엄격하게 검수된 고품질 중고차 컬렉션. 투명한 금융 서비스와 엘리트 서비스를 제공합니다."
+    },
+    "inventory": {
+      "title": "차량 컬렉션 | 인벤토리 살펴보기 - RIM GLOBAL",
+      "description": "우리의 프리미엄 중고차 컬렉션을 확인하세요. 럭셔리 세단부터 강력한 SUV까지, RIM GLOBAL 페더럴웨이에서 완벽한 차량을 찾으세요."
+    },
+    "financing": {
+      "title": "자동차 할부 및 대출 | RIM GLOBAL",
+      "description": "페더럴웨이에서 쉽고 투명한 자동차 할부. 예상 월 납입금을 확인하고 당신의 삶에 맞는 대출을 신청하세요."
+    },
+    "philosophy": {
+      "title": "경영 철학 | RIM GLOBAL의 차별점",
+      "description": "우리의 엄선 과정과 왜 투명성이 RIM GLOBAL이 하는 모든 일의 핵심인지 알아보세요."
+    },
+    "contact": {
+      "title": "문의하기 | 전시장 방문 - RIM GLOBAL",
+      "description": "페더럴웨이 전시장을 방문하거나 메시지를 보내주세요. 당신의 다음 차량을 찾는 데 도움을 드리겠습니다."
+    }
+  },
   "Auth": {
     "signIn": {
       "title": "관리자 로그인",

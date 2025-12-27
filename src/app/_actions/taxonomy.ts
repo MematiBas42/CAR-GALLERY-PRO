@@ -84,18 +84,7 @@ export const createVariantAction = async (data: z.infer<typeof createVariantSche
 // --- DELETE ACTIONS ---
 
 import { deleteFromS3 } from "@/lib/s3";
-
-// Helper to extract S3 Key from URL
-const getS3KeyFromUrl = (url: string) => {
-    try {
-        const urlObj = new URL(url);
-        return urlObj.pathname.startsWith('/') ? urlObj.pathname.substring(1) : urlObj.pathname;
-    } catch (e) {
-        return "";
-    }
-}
-
-// ... inside the file, update deleteMakeAction:
+import { getS3KeyFromUrl } from "@/lib/utils";
 
 export const deleteMakeAction = async (id: number) => {
   const session = await auth();

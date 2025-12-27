@@ -14,7 +14,7 @@ import type { Swiper as SwiperType } from "swiper/types";
 import SwiperButton from "../shared/swiper-button";
 import { CarouselSkeleton } from "./carousel-skeleton";
 import ImgixImage from "../ui/imgix-image";
-import { imgixLoader } from "@/lib/imgix-loader";
+import { getImageUrl } from "@/lib/utils";
 
 const Swiper = dynamic(() => import("swiper/react").then((mod) => mod.Swiper), {
   ssr: false,
@@ -51,7 +51,7 @@ const CarCarousel = ({ images }: ClassifiedCarouselProps) => {
       sourceIndex: activeIndex,
     });
   }, [lightBoxController.toggler, activeIndex]);
-  const sources = images.map((image) => image.src);
+  const sources = images.map((image) => getImageUrl(image.src));
   return (
     <>
     <FsLightbox
