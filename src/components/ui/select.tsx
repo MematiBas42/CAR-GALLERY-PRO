@@ -118,13 +118,13 @@ const SelectItem = React.forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none transition-all duration-200",
-      // Visual Mouse Hover - Pure CSS
-      "hover:!bg-gray-200/50 hover:!text-accent-foreground",
-      // Completely disable automatic focus highlight
-      "focus:!bg-transparent focus:!text-inherit focus:!ring-0 focus:!outline-none",
-      "data-[highlighted]:!bg-transparent data-[highlighted]:!text-inherit",
-      // Selected State - Permanent Professional Glow
+      "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-2 pr-8 text-sm transition-all duration-200",
+      // Force kill all auto-states
+      "outline-none focus:!outline-none focus:!ring-0",
+      "hover:!bg-transparent hover:!text-inherit",
+      "focus:!bg-transparent focus:!text-inherit",
+      "data-[highlighted]:!bg-transparent data-[highlighted]:!text-inherit data-[highlighted]:!shadow-none",
+      // Selected State - Professional Glow
       "data-[state=checked]:!bg-gray-100 data-[state=checked]:!text-black data-[state=checked]:font-bold data-[state=checked]:shadow-[0_0_15px_rgba(0,0,0,0.05)]", 
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
       className

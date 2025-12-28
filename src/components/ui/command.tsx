@@ -118,10 +118,11 @@ const CommandItem = React.forwardRef<
   <CommandPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-all duration-200",
-      // Visual Mouse Hover - Pure CSS (Instantly clears when mouse leaves)
-      "hover:!bg-gray-200/50 hover:!text-accent-foreground", 
-      // Force disable any automatic background/glow from the library
+      "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm transition-all duration-200",
+      // Kill ALL visual states from the library/browser
+      "outline-none focus:!outline-none focus:!ring-0",
+      "hover:!bg-transparent hover:!text-inherit",
+      "focus:!bg-transparent focus:!text-inherit",
       "aria-selected:!bg-transparent aria-selected:!text-inherit aria-selected:!shadow-none",
       className
     )}

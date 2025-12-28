@@ -1,6 +1,6 @@
 import { routes } from "@/config/routes";
 import Link from "next/link";
-import React from "react";
+import React, { Suspense, cache } from "react";
 import Image from "next/image";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger, SheetClose } from "../ui/sheet";
 import { Button } from "../ui/button";
@@ -13,31 +13,30 @@ import { auth } from "@/auth";
 import { getSourceId } from "@/lib/source-id";
 import { redis } from "@/lib/redis-store";
 import { prisma } from "@/lib/prisma";
-
 import { getTranslations } from "next-intl/server";
+
+const getLiveFavCount = cache(async (sourceId: string | undefined) => {
+  if (!sourceId) return 0;
+  try {
+    const favs = await redis.get<Favourites>(sourceId);
+    if (favs && Array.isArray(favs.ids) && favs.ids.length > 0) {
+      return await prisma.classified.count({
+        where: { id: { in: favs.ids }, status: "LIVE" }
+      });
+    }
+  } catch (e) {}
+  return 0;
+});
+
+const FavoriteCount = async ({ sourceId }: { sourceId: string | undefined }) => {
+  const liveFavCount = await getLiveFavCount(sourceId);
+  return <span className="text-xs">{liveFavCount}</span>;
+};
 
 const Header = async () => {
   const t = await getTranslations("Navigation");
   const session = await auth();
   const sourceId = await getSourceId();
-  
-  let liveFavCount = 0;
-  try {
-    if (sourceId) {
-        const favs = await redis.get<Favourites>(sourceId);
-        if (favs && Array.isArray(favs.ids) && favs.ids.length > 0) {
-            // Highly optimized count: only runs if IDs exist
-            liveFavCount = await prisma.classified.count({
-                where: {
-                    id: { in: favs.ids },
-                    status: "LIVE"
-                }
-            });
-        }
-    }
-  } catch (error) {
-    // Silent fail for production stability
-  }
 
   const navLinks = [
     { id: 1, href: routes.inventory, label: t("collection") },
@@ -88,9 +87,9 @@ const Header = async () => {
             <Link href={routes.favourites}>
                 <HeartIcon className="w-6 h-6" />
                 <div className="absolute -top-1.5 -right-1.5 flex items-center justify-center w-5 h-5 text-primary-foreground bg-primary rounded-full">
-                    <span className="text-xs">
-                        {liveFavCount}
-                    </span>
+                    <Suspense fallback={<span className="text-[10px]">...</span>}>
+                        <FavoriteCount sourceId={sourceId} />
+                    </Suspense>
                 </div>
             </Link>
         </Button>
@@ -140,7 +139,9 @@ const Header = async () => {
                   >
                       {t("favorites")}
                       <span className="bg-primary text-primary-foreground px-2 rounded-full text-sm">
-                          {liveFavCount}
+                        <Suspense fallback="...">
+                            <FavoriteCount sourceId={sourceId} />
+                        </Suspense>
                       </span>
                   </Link>
                 </SheetClose>

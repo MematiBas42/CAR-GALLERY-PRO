@@ -224,10 +224,8 @@ export function SmartCombobox({
                   value={option.label}
                   className={cn(
                       "cursor-pointer pointer-events-auto flex justify-between items-center group transition-all duration-200",
-                      // Mouse Hover - Pure CSS
-                      "hover:!bg-gray-200/20 hover:!text-white",
-                      // Disable automatic focus highlight
-                      "aria-selected:!bg-transparent aria-selected:!text-white",
+                      // Completely remove hover/focus background changes
+                      "hover:!bg-transparent aria-selected:!bg-transparent",
                       // Selected State - Professional Glow
                       String(value) === String(option.value) && "bg-gray-100/10 text-white font-bold shadow-[0_0_15px_rgba(255,255,255,0.1)]"
                   )}

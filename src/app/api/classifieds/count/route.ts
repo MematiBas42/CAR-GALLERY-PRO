@@ -7,15 +7,22 @@ export const GET = async (request: NextRequest) => {
   
   try {
     const where = buildClassifiedFilterQuery(Object.fromEntries(searchParams));
-    const count = await prisma.classified.count({ where });
-
-    let slug = null;
-    if (count === 1) {
-      const car = await prisma.classified.findFirst({
+    
+    // Optimized: Fetch top 2 items to check for "exactly 1" case and get slug in ONE query
+    const sample = await prisma.classified.findMany({
         where,
+        take: 2,
         select: { slug: true }
-      });
-      slug = car?.slug;
+    });
+
+    let count = sample.length;
+    let slug = null;
+
+    if (count === 1) {
+        slug = sample[0].slug;
+    } else if (count === 2) {
+        // If 2 or more, we need the actual count
+        count = await prisma.classified.count({ where });
     }
 
     return NextResponse.json({ count, slug }, {
