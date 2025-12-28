@@ -61,7 +61,7 @@ const DialogFilters = ({
       seats: parseAsString.withDefault(""),
       ulezCompliance: parseAsString.withDefault(""),
     },
-    { shallow: false }
+    { shallow: true }
   );
 
   const adaptiveRanges = taxonomyRanges || {
@@ -101,11 +101,9 @@ const DialogFilters = ({
       setQueryStates({ model: null, modelVariant: null });
     }
 
-    const newSearchParams = new URLSearchParams(searchParams);
-    if (value) newSearchParams.set(name, value);
-    else newSearchParams.delete(name);
-    
-    router.push(`${routes.inventory}?${newSearchParams.toString()}`);
+    React.startTransition(() => {
+        router.refresh();
+    });
   };
 
   return (

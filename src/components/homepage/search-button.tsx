@@ -1,41 +1,47 @@
 "use client";
 
 import { routes } from "@/config/routes";
-
 import Link from "next/link";
 import { parseAsString, useQueryStates } from "nuqs";
 import { Button } from "../ui/button";
+import useSWR from "swr";
+import { Loader2 } from "lucide-react";
 
-export const SearchButton = ({ count, label = "Search" }: { count: number, label?: string }) => {
-	const [{ make, model, modelVariant, minYear, maxYear, minPrice, maxPrice }] =
-		useQueryStates(
-			{
-				make: parseAsString.withDefault(""),
-				model: parseAsString.withDefault(""),
-				modelVariant: parseAsString.withDefault(""),
-				minYear: parseAsString.withDefault(""),
-				maxYear: parseAsString.withDefault(""),
-				minPrice: parseAsString.withDefault(""),
-				maxPrice: parseAsString.withDefault(""),
-			},
-			{ shallow: false },
-		);
+const fetcher = (url: string) => fetch(url).then(res => res.json());
 
-	const queryParams = new URLSearchParams();
-	if (make) queryParams.append("make", make);
-	if (model) queryParams.append("model", model);
-	if (modelVariant) queryParams.append("modelVariant", modelVariant);
-	if (minYear) queryParams.append("minYear", minYear);
-	if (maxYear) queryParams.append("maxYear", maxYear);
-	if (minPrice) queryParams.append("minPrice", minPrice);
-	if (maxPrice) queryParams.append("maxPrice", maxPrice);
+export const SearchButton = ({ initialCount, label = "Search" }: { initialCount: number, label?: string }) => {
+	const [query] = useQueryStates({
+		make: parseAsString.withDefault(""),
+		model: parseAsString.withDefault(""),
+		modelVariant: parseAsString.withDefault(""),
+		minYear: parseAsString.withDefault(""),
+		maxYear: parseAsString.withDefault(""),
+		minPrice: parseAsString.withDefault(""),
+		maxPrice: parseAsString.withDefault(""),
+	});
 
-	const relativeUrl = `${routes.inventory}?${queryParams.toString()}`;
+	// Construct API URL based on current query states
+	const params = new URLSearchParams();
+	Object.entries(query).forEach(([key, value]) => {
+		if (value) params.set(key, value);
+	});
+
+	const { data, isLoading } = useSWR(`/api/classifieds/count?${params.toString()}`, fetcher, {
+		fallbackData: { count: initialCount },
+		revalidateOnFocus: false,
+		dedupingInterval: 2000 // 2 saniye içinde aynı sorguyu yapma
+	});
+
+	const relativeUrl = `${routes.inventory}?${params.toString()}`;
+    const displayCount = data?.count ?? initialCount;
 
 	return (
-		<Button className="w-full" asChild>
+		<Button className="w-full relative overflow-hidden" asChild disabled={isLoading}>
 			<Link href={relativeUrl}>
-				{label} {count > 0 ? ` (${count})` : null}
+				{label} 
+                <span className="ml-2 inline-flex items-center min-w-[1.5rem] justify-center">
+                    {isLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : `(${displayCount})`}
+                </span>
 			</Link>
 		</Button>
 	);

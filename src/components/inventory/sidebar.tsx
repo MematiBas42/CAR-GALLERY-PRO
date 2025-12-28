@@ -52,7 +52,7 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
       seats: parseAsString.withDefault(""),
       ulezCompliance: parseAsString.withDefault(""),
     },
-    { shallow: false }
+    { shallow: true }
   );
 
   const adaptiveRanges = taxonomyRanges || {
@@ -72,7 +72,7 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
   const seatOptions = (attributes?.seats || []).map((val: any) => ({ label: val.toString(), value: val.toString() }));
 
   useEffect(() => {
-    const params = typeof searchParams?.then === 'function' ? {} : searchParams; // Handle potential Promise
+    const params = typeof searchParams?.then === 'function' ? {} : searchParams;
     const count = Object.entries(params as Record<string, string>)
       .filter(([key, value]) => key !== "page" && value).length;
     setFilterCount(count);
@@ -91,11 +91,9 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
       setQueryStates({ model: null, modelVariant: null });
     }
 
-    const newSearchParams = new URLSearchParams(searchParams);
-    if (value) newSearchParams.set(name, value);
-    else newSearchParams.delete(name);
-    
-    router.push(`${routes.inventory}?${newSearchParams.toString()}`);
+    React.startTransition(() => {
+        router.refresh();
+    });
   };
 
   return (

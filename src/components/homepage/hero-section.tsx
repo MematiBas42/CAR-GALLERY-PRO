@@ -1,11 +1,7 @@
 import HomepageTaxonomyFilters from "@/components/homepage/homepage-filter";
 import { Button } from "@/components/ui/button";
-import { imageSources } from "@/config/constants";
-import { AwaitedPageProps, PageProps } from "@/config/types";
-import { imgixLoader } from "@/lib/imgix-loader";
-import Image from "next/image";
+import { AwaitedPageProps } from "@/config/types";
 import Link from "next/link";
-import { ClassifiedStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { SearchButton } from "@/components/homepage/search-button";
 import { buildClassifiedFilterQuery } from "@/lib/utils";
@@ -15,6 +11,7 @@ import { getTranslations } from "next-intl/server";
 const HeroSection = async (props: AwaitedPageProps) => {
   const t = await getTranslations("Homepage.Hero");
   const { searchParams } = props;
+  
   const filterParams = Object.entries(searchParams || {})
     .filter(([key, value]) => key !== "page" && value);
   const totalFiltersApplied = filterParams.length;
@@ -23,19 +20,12 @@ const HeroSection = async (props: AwaitedPageProps) => {
   const carsCount = await prisma.classified.count({
     where: buildClassifiedFilterQuery(searchParams),
   });
-  const minMaxResult = await prisma.classified.aggregate({
-    where: { status: ClassifiedStatus.LIVE },
-    _min: {
-      year: true,
-      price: true,
-      odoReading: true,
-    },
-    _max: {
-      price: true,
-      year: true,
-      odoReading: true,
-    },
-  });
+
+  const emptyMinMax = {
+    _min: { year: 1900, price: 0, odoReading: 0 },
+    _max: { year: new Date().getFullYear(), price: 1000000, odoReading: 1000000 }
+  } as any;
+
   return (
     <section
       className="relative flex items-start lg:items-center justify-center min-h-[calc(100dvh-4rem)] pt-20 pb-12 lg:py-0 bg-cover bg-center"
@@ -64,10 +54,10 @@ const HeroSection = async (props: AwaitedPageProps) => {
             <div className="space-y-2 flex flex-col w-full gap-x-4">
               <HomepageTaxonomyFilters
                 searchParams={searchParams}
-                minMaxValue={minMaxResult}
+                minMaxValue={emptyMinMax}
               />
             </div>
-            <SearchButton count={carsCount} label={t("discover")} />
+            <SearchButton initialCount={carsCount} label={t("discover")} />
             {isFilterApplied && (
 							<Button
 								asChild

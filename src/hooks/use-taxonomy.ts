@@ -31,6 +31,7 @@ export interface TaxonomyData {
     doors: number[];
     seats: number[];
   };
+  totalCount: number;
   updatedAt: string;
 }
 
