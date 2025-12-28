@@ -77,14 +77,14 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
               />
             </Link>
             <FavButton setIsFav={setIsFav} isFav={isFav} id={car.id} />
+            <div className="absolute top-3 right-3 bg-primary/95 text-primary-foreground font-bold px-3 py-1.5 rounded-lg shadow-xl z-20">
+              <PriceDisplay amount={car.price} className="text-sm md:text-base lg:text-lg" />
+            </div>
           </div>
           
           <div className="p-4 flex flex-col flex-grow"> 
             {/* Top Section */}
-            <div className="flex flex-col gap-y-1 mb-2">
-              <div className="text-primary font-bold text-lg md:text-xl">
-                <PriceDisplay amount={car.price} />
-              </div>
+            <div>
               <Link
                 href={routes.singleClassified(car.slug || "slug")}
                 className="text-sm md:text-base lg:text-lg font-semibold line-clamp-1 transition-colors hover:text-primary"
@@ -92,7 +92,7 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
                 {car.title}
               </Link>
               {car.description && (
-                <div className="mt-1 text-xs md:text-sm xl:text-base text-muted-foreground line-clamp-2 prose dark:prose-invert max-w-none">
+                <div className="mt-2 text-xs md:text-sm xl:text-base text-muted-foreground line-clamp-2 prose dark:prose-invert max-w-none">
                   {parse(car.description)}
                 </div>
               )}
