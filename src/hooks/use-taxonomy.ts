@@ -1,4 +1,6 @@
 import useSWR from "swr";
+import { useEffect } from "react";
+import { setIsLoading } from "./use-loading";
 
 export interface TaxonomyOption {
   v: string; // value
@@ -43,6 +45,11 @@ export function useTaxonomy() {
     revalidateIfStale: true,
     dedupingInterval: 60000, 
   });
+
+  useEffect(() => {
+    setIsLoading(isLoading);
+    return () => setIsLoading(false);
+  }, [isLoading]);
 
   const taxonomy = data?.taxonomyTree || [];
 

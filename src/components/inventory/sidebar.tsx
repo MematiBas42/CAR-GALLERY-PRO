@@ -11,6 +11,7 @@ import { Prisma } from "@prisma/client";
 import { Select } from "../ui/select";
 import { useTranslations } from "next-intl";
 import { useTaxonomy } from "@/hooks/use-taxonomy";
+import { setIsLoading } from "@/hooks/use-loading";
 
 export interface SidebarProps {
   minMaxValue: Prisma.GetClassifiedAggregateType<{
@@ -21,6 +22,7 @@ export interface SidebarProps {
 }
 
 const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
+  const [isPending, startTransition] = React.useTransition();
   const t = useTranslations("Inventory");
   const tLabels = useTranslations("Inventory.labels");
   const tEnums = useTranslations("Enums");
@@ -72,6 +74,11 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
   const seatOptions = (attributes?.seats || []).map((val: any) => ({ label: val.toString(), value: val.toString() }));
 
   useEffect(() => {
+    setIsLoading(isPending);
+    return () => setIsLoading(false);
+  }, [isPending]);
+
+  useEffect(() => {
     const params = typeof searchParams?.then === 'function' ? {} : searchParams;
     const count = Object.entries(params as Record<string, string>)
       .filter(([key, value]) => key !== "page" && value).length;
@@ -80,16 +87,21 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
 
   const clearFilters = () => {
     const url = new URL(routes.inventory, process.env.NEXT_PUBLIC_APP_URL);
-    window.location.replace(url.toString());
+    startTransition(() => {
+        window.location.replace(url.toString());
+    });
   };
 
   const handleChange = (e: { target: { name: string; value: string } }) => {
     const { name, value } = e.target;
-    setQueryStates({ [name]: value || null });
+    
+    startTransition(() => {
+        setQueryStates({ [name]: value || null });
 
-    if (name === "make") {
-      setQueryStates({ model: null, modelVariant: null });
-    }
+        if (name === "make") {
+            setQueryStates({ model: null, modelVariant: null });
+        }
+    });
   };
 
   return (

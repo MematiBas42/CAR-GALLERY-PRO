@@ -19,6 +19,7 @@ import TaxonomyFilters from "./TaxonomyFilters";
 import { Select } from "../ui/select";
 import { useTranslations } from "next-intl";
 import { useTaxonomy } from "@/hooks/use-taxonomy";
+import { useLoading, setIsLoading } from "@/hooks/use-loading";
 
 interface DialogFiltersProps extends SidebarProps {
   count: number;
@@ -29,6 +30,8 @@ const DialogFilters = ({
   searchParams,
   count,
 }: DialogFiltersProps) => {
+  const isLoadingGlobal = useLoading();
+  const [isPending, startTransition] = React.useTransition();
   const t = useTranslations("Inventory");
   const tLabels = useTranslations("Inventory.labels");
   const tEnums = useTranslations("Enums");
@@ -81,6 +84,11 @@ const DialogFilters = ({
   const seatOptions = (attributes?.seats || []).map((val: any) => ({ label: val.toString(), value: val.toString() }));
 
   useEffect(() => {
+    setIsLoading(isPending);
+    return () => setIsLoading(false);
+  }, [isPending]);
+
+  useEffect(() => {
     const params = typeof searchParams?.then === 'function' ? {} : searchParams;
     const count = Object.entries(params as Record<string, string>)
       .filter(([key, value]) => key !== "page" && value).length;
@@ -89,17 +97,22 @@ const DialogFilters = ({
 
   const clearAllFilter = () => {
     const url = new URL(routes.inventory, process.env.NEXT_PUBLIC_APP_URL);
-    router.replace(url.toString());
-    setOpen(false);
+    startTransition(() => {
+        router.replace(url.toString());
+        setOpen(false);
+    });
   };
 
   const handleChange = (e: { target: { name: string; value: string } }) => {
     const { name, value } = e.target;
-    setQueryStates({ [name]: value || null });
+    
+    startTransition(() => {
+        setQueryStates({ [name]: value || null });
 
-    if (name === "make") {
-      setQueryStates({ model: null, modelVariant: null });
-    }
+        if (name === "make") {
+            setQueryStates({ model: null, modelVariant: null });
+        }
+    });
   };
 
   return (

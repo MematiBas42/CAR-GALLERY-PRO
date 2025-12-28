@@ -6,26 +6,40 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "../ui/button";
 import useSWR from "swr";
 import { Loader2 } from "lucide-react";
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
+import { setIsLoading } from "@/hooks/use-loading";
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 export const SearchButton = ({ initialCount, label = "Search" }: { initialCount: number, label?: string }) => {
     const searchParams = useSearchParams();
     
-    // Convert searchParams to a stable string key for SWR
     const queryString = useMemo(() => {
         const params = new URLSearchParams(searchParams.toString());
-        // Remove page if exists as it doesn't affect total count
         params.delete("page");
         return params.toString();
     }, [searchParams]);
 
-	const { data, isLoading } = useSWR(`/api/classifieds/count?${queryString}`, fetcher, {
-		fallbackData: queryString ? undefined : { count: initialCount },
-		revalidateOnFocus: false,
-		dedupingInterval: 1000
-	});
+	const { data, isLoading, error } = useSWR(
+        queryString ? `/api/classifieds/count?${queryString}` : `/api/classifieds/count`, 
+        fetcher, 
+        {
+            fallbackData: queryString ? undefined : { count: initialCount },
+            revalidateOnFocus: false,
+            revalidateIfStale: false,
+            dedupingInterval: 5000,
+            shouldRetryOnError: false
+        }
+    );
+
+    useEffect(() => {
+        if (queryString) {
+            setIsLoading(isLoading);
+        }
+        return () => setIsLoading(false);
+    }, [isLoading, queryString]);
+
+    if (error) console.error("SearchButton Count API Error:", error);
 
 	const relativeUrl = `${routes.inventory}?${queryString}`;
     const displayCount = data?.count ?? initialCount;

@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { Suspense } from "react";
 import {NextIntlClientProvider} from 'next-intl';
 import { cookies } from 'next/headers';
+import { GlobalLoader } from "@/components/shared/global-loader";
 
 const mulish = Mulish({
 	weight: "variable",
@@ -63,7 +64,8 @@ export default async function RootLayout({
 				)}
 			>
         <NextIntlClientProvider locale={locale} messages={messages}>
-            <NextTopLoader showSpinner={true} />
+            <NextTopLoader showSpinner={false} color="oklch(0.205 0 0)" />
+            <GlobalLoader />
             <NuqsAdapter>
                 <Suspense>
                     {children}
