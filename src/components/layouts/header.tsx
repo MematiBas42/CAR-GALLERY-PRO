@@ -21,13 +21,22 @@ const Header = async () => {
   const sourceId = await getSourceId();
   
   let favs: Favourites | null = null;
+  let liveFavCount = 0;
   try {
     if (sourceId) {
         favs = await redis.get<Favourites>(sourceId);
+        if (favs && favs.ids.length > 0) {
+            // Count only LIVE classifieds
+            liveFavCount = await prisma.classified.count({
+                where: {
+                    id: { in: favs.ids },
+                    status: "LIVE"
+                }
+            });
+        }
     }
   } catch (error) {
-    console.error("Redis connection failed in Header:", error);
-    // Fail gracefully: Site should work even if Redis is down
+    console.error("Redis or Prisma connection failed in Header:", error);
     favs = { ids: [] }; 
   }
 
@@ -77,7 +86,7 @@ const Header = async () => {
                 <HeartIcon className="w-6 h-6" />
                 <div className="absolute -top-1.5 -right-1.5 flex items-center justify-center w-5 h-5 text-primary-foreground bg-primary rounded-full">
                     <span className="text-xs">
-                        {favs ? favs.ids.length : 0}
+                        {liveFavCount}
                     </span>
                 </div>
             </Link>
@@ -126,7 +135,7 @@ const Header = async () => {
                 >
                     {t("favorites")}
                     <span className="bg-primary text-primary-foreground px-2 rounded-full text-sm">
-                        {favs ? favs.ids.length : 0}
+                        {liveFavCount}
                     </span>
                 </Link>
             </nav>

@@ -24,19 +24,39 @@ const FavsPage = async (props: PageProps) => {
 
   const sourceId = await getSourceId();
   const favourites = await redis.get<Favourites>(sourceId ?? "");
+  const favIds = favourites ? favourites.ids : [];
 
+  // Get only LIVE classifieds from the favorites list
   const classifieds = await prisma.classified.findMany({
-    where: { id: { in: favourites ? favourites.ids : [] } },
+    where: { 
+        id: { in: favIds },
+        status: "LIVE"
+    },
     include: { images: { take: 1 } },
     skip: offset,
     take: CARS_PER_PAGE,
   });
 
-  const count = await prisma.classified.count({
-    where: { id: { in: favourites ? favourites.ids : [] } },
+  // Check if any favorite car is no longer LIVE and cleanup if necessary
+  const liveIds = classifieds.map(c => c.id);
+  const totalLiveCount = await prisma.classified.count({
+      where: { id: { in: favIds }, status: "LIVE" }
   });
 
-  const totalPages = Math.ceil(count / CARS_PER_PAGE);
+  // If there's a mismatch, it means some cars were sold/deleted. Cleanup Redis.
+  if (favIds.length > 0 && liveIds.length < favIds.length) {
+      const actualLiveIds = await prisma.classified.findMany({
+          where: { id: { in: favIds }, status: "LIVE" },
+          select: { id: true }
+      }).then(res => res.map(r => r.id));
+
+      if (sourceId) {
+        await redis.set(sourceId, { ids: actualLiveIds });
+        // Optional: Also sync with DB if needed, but Redis is the primary source for the counter
+      }
+  }
+
+  const totalPages = Math.ceil(totalLiveCount / CARS_PER_PAGE);
 
   return (
     <div className="container mx-auto px-4 py-8 min-h-[80dvh]">
@@ -62,11 +82,12 @@ const FavsPage = async (props: PageProps) => {
 						<CarCard
 							key={classified.id}
 							car={classified}
-							favourites={favourites ? favourites.ids : []}
+							favourites={liveIds}
 						/>
 					);
 				})}
 			</div>
+
 
 			<div className="mt-8 flex justify-center lg:justify-end pb-8">
 				<CustomPagination
