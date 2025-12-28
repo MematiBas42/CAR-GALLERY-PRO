@@ -100,12 +100,16 @@ export function Combobox({
                     key={option.value}
                     value={option.label}
                     onSelect={() => handleSelect(option.value)}
-                    className="rounded-md px-3 py-2 text-sm cursor-pointer transition-all"
+                    className={cn(
+                        "rounded-md px-3 py-2 text-sm cursor-pointer transition-all duration-200",
+                        // Selected State - Permanent Professional Glow
+                        String(value) === String(option.value) && "bg-gray-100 text-black font-bold shadow-[0_0_15px_rgba(0,0,0,0.05)]"
+                    )}
                   >
                     <Check
                       className={cn(
-                        "mr-2 h-4 w-4 text-primary",
-                        value === option.value ? "opacity-100" : "opacity-0"
+                        "mr-2 h-4 w-4 text-black",
+                        String(value) === String(option.value) ? "opacity-100" : "opacity-0"
                       )}
                     />
                     {option.label}
