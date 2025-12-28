@@ -14,12 +14,10 @@ const remotePatterns = [
 ];
 
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ["localhost:3000", "127.0.0.1:3000", "192.168.1.7:3000", "192.168.1.5:3000", "192.168.1.5", "192.168.123.8", "192.168.123.8:3000"],
   /* config options here */
   compress: true,
   images: {
 		remotePatterns: remotePatterns,
-        qualities: [25, 50, 75, 100],
 	},
   experimental: {
     authInterrupts: true,
