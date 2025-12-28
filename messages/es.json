@@ -10,56 +10,51 @@
   },
   "SEO": {
     "home": {
-      "title": "RIM GLOBAL | Autos Usados Premium en Federal Way",
-      "description": "Descubre tu próximo capítulo con RIM GLOBAL. Colección meticulosamente seleccionada de autos usados en Federal Way."
+      "title": "RIM GLOBAL | Coches de Ocasión Premium en Federal Way, WA",
+      "description": "Descubra su próximo capítulo con RIM GLOBAL. Colección meticulosamente seleccionada de coches usados de calidad inspeccionada en Federal Way. Financiación transparente y servicio de élite."
     },
     "inventory": {
-      "title": "Colección de Vehículos | Ver Inventario - RIM GLOBAL",
-      "description": "Explora nuestra colección de autos usados premium. Encuentra tu auto perfecto en RIM GLOBAL Federal Way."
+      "title": "Colección de Vehículos | Explore nuestro Inventario - RIM GLOBAL",
+      "description": "Vea nuestra excelente colección de coches usados. Desde sedanes de lujo hasta robustos SUVs, encuentre su vehículo perfecto en RIM GLOBAL Federal Way."
     },
     "financing": {
-      "title": "Financiamiento de Autos | RIM GLOBAL",
-      "description": "Financiamiento fácil y transparente en Federal Way. Solicite préstamos que se ajusten a su vida."
+      "title": "Financiación de Automóviles y Préstamos para Coches | RIM GLOBAL",
+      "description": "Financiación de coches fácil y transparente en Federal Way. Obtenga pagos mensuales estimados y solicite préstamos que se adapten a su vida."
     },
     "philosophy": {
-      "title": "Nuestra Filosofía | La Diferencia RIM GLOBAL",
-      "description": "Conozca por qué la transparencia es el núcleo de todo lo que hacemos en RIM GLOBAL."
+      "title": "Nuestra Filosofía | La Diferencia de RIM GLOBAL",
+      "description": "Conozca nuestro proceso de selección y por qué la transparencia es el núcleo de todo lo que hacemos en RIM GLOBAL."
     },
     "contact": {
-      "title": "Contáctenos | RIM GLOBAL",
-      "description": "Visite nuestro showroom en Federal Way o envíenos un mensaje."
+      "title": "Contáctenos | Visite nuestra sala de exposición - RIM GLOBAL",
+      "description": "Visite nuestra sala de exposición en Federal Way o envíenos un mensaje. Estamos aquí para ayudarle a encontrar su próximo vehículo."
     }
-  },
-  "CookieConsent": {
-    "message": "Utilizamos cookies para mejorar su experiencia y recordar sus preferencias. Al continuar navegando, acepta el uso de cookies.",
-    "accept": "Aceptar",
-    "policy": "Política de Privacidad"
   },
   "Auth": {
     "signIn": {
-      "title": "Inicio de Sesión Admin",
+      "title": "Inicio de sesión de administrador",
       "email": "Correo electrónico",
-      "emailPlaceholder": "Ingrese su correo",
+      "emailPlaceholder": "Introduzca su correo electrónico",
       "password": "Contraseña",
-      "passwordPlaceholder": "Ingrese su contraseña",
-      "adminOnly": "Solo para administradores",
-      "button": "Entrar"
+      "passwordPlaceholder": "Introduzca su contraseña",
+      "adminOnly": "Esto es solo para administradores",
+      "button": "Iniciar sesión"
     },
     "otp": {
       "title": "Contraseña de un solo uso",
-      "description": "Ingrese el código de 6 dígitos enviado a su correo.",
-      "sendCode": "Enviar Código",
+      "description": "Introduzca el código de 6 dígitos enviado a su correo electrónico.",
+      "sendCode": "Enviar código",
       "resendCode": "Reenviar código",
       "sending": "Enviando...",
       "verify": "Verificar",
       "verifying": "Verificando...",
       "success": "Código enviado con éxito",
-      "successDesc": "Por favor revise su correo electrónico.",
-      "error": "Error al completar OTP",
+      "successDesc": "Por favor, compruebe su correo electrónico para el código.",
+      "error": "Error al completar el OTP",
       "errorSend": "Error al enviar el código"
     },
-    "signOut": "Cerrar Sesión",
-    "dashboard": "Panel"
+    "signOut": "Cerrar sesión",
+    "dashboard": "Tablero"
   },
   "Common": {
     "pagination": {
@@ -77,12 +72,12 @@
       "clear": "Limpiar",
       "show": "Mostrar {value}",
       "view": "Ver",
-      "deleteCar": "Eliminar Auto",
-      "viewCar": "Ver Auto",
-      "editCar": "Editar Auto",
-      "deleteCustomer": "Eliminar Cliente",
-      "deleteSuccess": "Auto eliminado con éxito",
-      "deleteError": "Error al eliminar el auto",
+      "deleteCar": "Eliminar coche",
+      "viewCar": "Ver coche",
+      "editCar": "Editar coche",
+      "deleteCustomer": "Eliminar cliente",
+      "deleteSuccess": "Coche eliminado con éxito",
+      "deleteError": "Error al eliminar el coche",
       "deleteCustomerSuccess": "Cliente eliminado con éxito",
       "deleteCustomerError": "Error al eliminar el cliente"
     }
@@ -91,46 +86,51 @@
     "contactUs": "Contáctenos"
   },
   "Newsletter": {
-    "placeholder": "Ingrese su correo",
+    "placeholder": "Introduzca su correo electrónico",
     "subscribe": "Suscribirse",
-    "subscribing": "Suscribiendo...",
+    "subscribing": "Suscribiéndose...",
     "success": "¡Suscrito!",
     "error": "Error"
   },
+  "CookieConsent": {
+    "message": "Utilizamos cookies para mejorar su experiencia de navegación y recordar sus preferencias. Al continuar utilizando nuestro sitio, usted acepta este uso de cookies.",
+    "accept": "Aceptar",
+    "policy": "Política de Privacidad"
+  },
   "Homepage": {
     "Hero": {
-      "title": "Tu próximo capítulo, curado.",
-      "subtitle": "En RIM GLOBAL, hemos reinventado la experiencia de autos usados para Federal Way. Explore nuestra colección meticulosamente seleccionada y descubra la confianza de un viaje transparente y sin complicaciones.",
-      "discover": "Descubre La Colección",
-      "clearFilters": "Limpiar Filtros"
+      "title": "Su próximo capítulo, curado.",
+      "subtitle": "En RIM GLOBAL, hemos reinventado la experiencia de coches de ocasión para Federal Way. Explore nuestra colección meticulosamente seleccionada de vehículos inspeccionados de calidad y descubra la confianza de un viaje transparente y sin complicaciones.",
+      "discover": "Descubra la Colección",
+      "clearFilters": "Limpiar filtros"
     },
     "Features": {
-      "trust": "Una Base de Confianza",
-      "financing": "Financiación que se adapta a tu vida",
-      "description": "Nos asociamos con prestamistas locales y nacionales de confianza para ofrecer soluciones flexibles. Nuestro equipo te guiará hacia un plan que se ajuste a tu presupuesto."
+      "trust": "Una base de confianza",
+      "financing": "Financiación que se adapta a su vida",
+      "description": "Nos asociamos con prestamistas locales y nacionales de confianza para ofrecer soluciones de financiación flexibles. Nuestro equipo está aquí para guiarle hacia un plan que se alinee con su presupuesto, asegurando un proceso claro y transparente de principio a fin."
     },
     "LatestArrivals": {
-      "title": "Últimas Llegadas"
+      "title": "Últimas llegadas"
     },
     "Brands": {
-      "title": "Una Colección Curada de Marcas Premium",
-      "description": "Nuestra cartera presenta una gama de vehículos meticulosamente seleccionados de los nombres más respetados del mundo. Con {count} vehículos en nuestra colección."
+      "title": "Una colección seleccionada de marcas de prestigio",
+      "description": "Nuestra cartera cuenta con una gama meticulosamente seleccionada de vehículos de los nombres automotrices más respetados del mundo. Con {count} vehículos actualmente en nuestra colección, su próximo capítulo le espera."
     },
     "Testimonials": {
-      "title": "Lo Que Dicen Nuestros Clientes",
+      "title": "Lo que dicen nuestros clientes",
       "items": {
         "0": {
-          "quote": "La experiencia de compra más fluida que he tenido. El equipo fue profesional, transparente e increíblemente servicial. Conseguí un gran auto a un precio justo.",
+          "quote": "La experiencia de compra de un coche más fluida que he tenido nunca. El equipo fue profesional, transparente e increíblemente servicial. Conseguí un gran coche a un precio justo.",
           "name": "Alex R.",
           "location": "Federal Way, WA"
         },
         "1": {
-          "quote": "Temía el proceso de comprar un auto usado, pero lo hicieron muy fácil. Sin presiones, solo consejos genuinos. ¡Altamente recomendado!",
+          "quote": "Temía el proceso de comprar un coche usado, pero lo hicieron muy fácil. Sin presión, solo consejos genuinos. ¡Muy recomendable!",
           "name": "Samantha B.",
           "location": "Tacoma, WA"
         },
         "2": {
-          "quote": "Encontré exactamente el modelo que buscaba en condiciones prístinas. La calidad de su colección es de primera. Definitivamente volveré.",
+          "quote": "Encontré exactamente el modelo que buscaba en condiciones prístinas. La calidad de su colección es de primera. Definitivamente volveré para mi próximo coche.",
           "name": "Michael T.",
           "location": "Seattle, WA"
         }
@@ -142,26 +142,28 @@
     "price": "Precio",
     "make": "Marca",
     "model": "Modelo",
-    "modelVariant": "Variante",
+    "modelVariant": "Variante del modelo",
     "min": "Mín",
     "max": "Máx",
     "search": "Buscar",
-    "select": "Seleccionar"
+    "select": "Seleccionar",
+    "loading": "Cargando..."
   },
   "Inventory": {
-    "carsAvailable": "{count} Autos Disponibles",
+    "carsAvailable": "{count} Coches disponibles",
     "sidebar": {
       "title": "Filtros",
       "clearAll": "Limpiar todos los filtros",
-      "searchPlaceholder": "Buscar auto..."
+      "searchPlaceholder": "Buscar coche...",
+      "showResults": "Mostrar {count} resultados"
     },
     "labels": {
       "odometerReading": "Kilometraje",
       "currency": "Moneda",
-      "odometerUnit": "Unidad de Distancia",
+      "odometerUnit": "Unidad de kilometraje",
       "transmission": "Transmisión",
-      "fuelType": "Tipo de Combustible",
-      "bodyType": "Tipo de Carrocería",
+      "fuelType": "Tipo de combustible",
+      "bodyType": "Tipo de carrocería",
       "colour": "Color",
       "ulezCompliance": "Cumplimiento ULEZ",
       "doors": "Puertas",
@@ -174,8 +176,8 @@
       "HATCHBACK": "Hatchback",
       "SUV": "SUV",
       "COUPE": "Cupé",
-      "CONVERTIBLE": "Convertible",
-      "WAGON": "Rural"
+      "CONVERTIBLE": "Descapotable",
+      "WAGON": "Familiar"
     },
     "FuelType": {
       "PETROL": "Gasolina",
@@ -213,63 +215,68 @@
       "INTERESTED": "Interesado",
       "PURCHASED": "Comprado",
       "SUBSCRIBER": "Suscriptor",
-      "LEAD": "Prospecto"
+      "LEAD": "Cliente potencial"
     },
     "ClassifiedStatus": {
       "ALL": "Todos",
-      "LIVE": "En Vivo",
+      "LIVE": "En vivo",
       "SOLD": "Vendido",
       "DRAFT": "Borrador"
     },
     "ULEZ": {
       "EXEMPT": "Exento",
-      "NON_EXEMPT": "No Exento"
+      "NON_EXEMPT": "No exento"
     }
   },
   "Car": {
     "reserve": "Reservar",
-    "reserveNow": "Reservar Ahora",
+    "reserveNow": "Reservar ahora",
     "viewDetails": "Ver detalles",
-    "ourPrice": "Nuestro Precio:",
+    "ourPrice": "Nuestro precio:",
     "notAvailable": "N/A"
   },
   "Financing": {
-    "title": "Financiación que se adapta a tu vida",
-    "description": "En RIM GLOBAL, creemos que financiar tu vehículo debería ser tan transparente y directo como comprarlo. Nos asociamos con prestamistas de confianza para ofrecer soluciones flexibles.",
+    "title": "Financiación que se adapta a su vida",
+    "description": "En RIM GLOBAL, creemos que financiar su vehículo debe ser tan transparente y sencillo como comprarlo. Nos asociamos con prestamistas locales y nacionales de confianza para ofrecer soluciones flexibles adaptadas a su situación única. Nuestro equipo está aquí para guiarle en cada paso, asegurando un proceso claro y sin complicaciones que le ponga en el asiento del conductor con confianza.",
     "calculator": {
-      "title": "Calculadora de Pagos",
-      "price": "Precio del Vehículo",
-      "deposit": "Pago Inicial / Canje",
-      "term": "Plazo (Meses)",
-      "rate": "Tasa de Interés (%)",
-      "monthly": "Pago Mensual Estimado",
-      "disclaimer": "Esta calculadora es solo para fines de estimación."
+      "title": "Calculadora de pagos",
+      "price": "Precio del vehículo",
+      "deposit": "Pago inicial / Intercambio",
+      "term": "Plazo (meses)",
+      "rate": "Tasa de interés (%)",
+      "monthly": "Pago mensual estimado",
+      "disclaimer": "Esta calculadora es solo para fines de estimación. Los pagos reales pueden variar según la puntuación de crédito, los criterios del prestamista y otros factores."
     }
   },
   "Philosophy": {
     "title": "Nuestra Filosofía",
     "curation": {
       "title": "Curación sobre Volumen:",
-      "description": "No pretendemos tener la mayor cantidad de autos, sino los mejores. Cada vehículo es seleccionado e inspeccionado rigurosamente."
+      "description": "No pretendemos tener la mayor cantidad de coches, sino los mejores. Cada vehículo de nuestra colección es seleccionado a mano y rigurosamente inspeccionado para cumplir con nuestros altos estándares de calidad, fiabilidad y valor. Buscamos vehículos con carácter y una historia, asegurando que no solo está comprando un coche, sino una pieza de historia automotriz."
     },
     "transparency": {
-      "title": "Transparencia en el Núcleo:",
-      "description": "Cambiamos la incertidumbre tradicional de la compra de autos por información clara y honesta."
+      "title": "Transparencia en el núcleo:",
+      "description": "La experiencia tradicional de compra de un coche a menudo está empañada por la incertidumbre. Estamos cambiando eso. Desde precios claros y por adelantado hasta informes completos del historial del vehículo, proporcionamos toda la información que necesita para tomar una decisión segura e informada. Sin tarifas ocultas, sin sorpresas de último minuto."
+    },
+    "partnership": {
+      "title": "Un enfoque de asociación:",
+      "description": "Nos vemos como sus curadores automotrices personales, no solo vendedores. Nuestro objetivo es construir una relación a largo plazo basada en la confianza y el respeto mutuo. Estamos aquí para ofrecer asesoramiento experto y un entorno sin presiones, ayudándole a encontrar el vehículo perfecto que se adapte a su estilo de vida y presupuesto."
     }
   },
   "Favourites": {
-    "title": "Tus Autos Favoritos"
+    "title": "Sus coches favoritos"
   },
   "Contact": {
-    "title": "Visite Nuestro Showroom de Federal Way",
-    "description": "Experimente la diferencia de RIM GLOBAL en persona. Nuestro showroom está diseñado para una experiencia de visualización premium.",
+    "title": "Visite nuestra sala de exposición en Federal Way",
+    "description": "Experimente la diferencia de RIM GLOBAL en persona. Nuestra sala de exposición está diseñada para proporcionar una experiencia de visualización premium y cómoda. El mapa de abajo muestra nuestra ubicación general en Federal Way.",
+    "getDirections": "Obtener direcciones",
     "form": {
-      "title": "Enviarnos un Mensaje",
+      "title": "Envíenos un mensaje",
       "name": "Nombre",
-      "email": "Correo",
+      "email": "Correo electrónico",
       "phone": "Teléfono",
       "message": "Mensaje",
-      "submit": "Enviar Mensaje",
+      "submit": "Enviar mensaje",
       "sending": "Enviando...",
       "success": "¡Mensaje enviado con éxito!",
       "error": "Error al enviar el mensaje."
@@ -277,100 +284,230 @@
   },
   "Reserve": {
     "welcome": {
-      "title": "Estás un paso más cerca de ser dueño de este vehículo.",
+      "title": "Está un paso más cerca de ser el dueño de este vehículo.",
       "subtitle": "Siga los pasos a continuación para completar su reserva.",
-      "step1": "Un proceso de reserva simple y seguro de dos pasos.",
-      "step2": "Seleccione su fecha de entrega y proporcione sus datos de contacto.",
-      "visualizer1": "1. Seleccionar Fecha",
-      "visualizer1Desc": "Elija un horario",
-      "visualizer2": "2. Sus Datos",
+      "step1": "Un proceso de reserva simple y seguro en dos pasos.",
+      "step2": "Seleccione su fecha de entrega preferida y proporcione sus datos de contacto.",
+      "visualizer1": "1. Seleccionar fecha",
+      "visualizer1Desc": "Elija una hora de entrega",
+      "visualizer2": "2. Sus datos",
       "visualizer2Desc": "Finalice su reserva",
-      "feature1": "Proceso Seguro",
-      "feature2": "Servicio 5 Estrellas",
-      "feature3": "Opciones Flexibles",
-      "button": "Proceder a la Reserva"
+      "feature1": "Proceso seguro",
+      "feature2": "Servicio de 5 estrellas",
+      "feature3": "Opciones flexibles",
+      "button": "Proceder a la reserva"
     },
     "selectDate": {
       "errors": {
-        "dateRequired": "La fecha de entrega es requerida",
-        "timeRequired": "La hora de entrega es requerida"
+        "dateRequired": "La fecha de entrega es obligatoria",
+        "timeRequired": "La hora de entrega es obligatoria"
       },
-      "dateLabel": "Seleccionar Fecha de Entrega",
-      "timeLabel": "Seleccionar Hora de Entrega",
+      "dateLabel": "Seleccionar fecha de entrega",
+      "timeLabel": "Seleccionar hora de entrega",
       "back": "ATRÁS",
       "continue": "Continuar"
     },
     "submitDetails": {
       "errors": {
-        "firstNameRequired": "El nombre es requerido",
-        "lastNameRequired": "El apellido es requerido",
-        "invalidEmail": "Correo electrónico inválido",
-        "mobileRequired": "El teléfono es requerido",
+        "firstNameRequired": "El nombre es obligatorio",
+        "lastNameRequired": "El apellido es obligatorio",
+        "invalidEmail": "Dirección de correo electrónico no válida",
+        "mobileRequired": "El número de móvil es obligatorio",
         "termsRequired": "Debe aceptar los términos"
       },
-      "firstNameLabel": "Nombre",
-      "firstNamePlaceholder": "Ingrese su nombre",
-      "lastNameLabel": "Apellido",
-      "lastNamePlaceholder": "Ingrese su apellido",
-      "emailLabel": "Correo",
-      "emailPlaceholder": "Ingrese su correo",
-      "mobileLabel": "Teléfono",
-      "mobilePlaceholder": "Ingrese su número de teléfono",
+      "firstNameLabel": "Introduzca su nombre",
+      "firstNamePlaceholder": "Introduzca su nombre",
+      "lastNameLabel": "Introduzca su apellido",
+      "lastNamePlaceholder": "Introduzca su apellido",
+      "emailLabel": "Introduzca su correo electrónico",
+      "emailPlaceholder": "Introduzca su correo electrónico",
+      "mobileLabel": "Introduzca su móvil",
+      "mobilePlaceholder": "Introduzca su número de móvil",
       "terms": "Acepto los términos y condiciones",
-      "back": "Paso Anterior",
-      "submit": "Enviar Detalles",
+      "back": "Paso anterior",
+      "submit": "Enviar datos",
       "success": "Éxito",
-      "successDesc": "La reserva ha sido completada"
+      "successDesc": "El cliente ha completado la reserva"
     },
     "view": {
-      "step1Title": "1. Seleccionar Fecha y Hora de Entrega",
-      "step2Title": "2. Ingrese sus Datos",
-      "dateLabel": "Fecha de Entrega",
-      "timeLabel": "Hora de Entrega",
-      "pickDate": "Elegir fecha",
-      "submit": "Completar Reserva",
+      "step1Title": "1. Seleccionar fecha y hora de entrega",
+      "step2Title": "2. Introduzca sus datos",
+      "dateLabel": "Fecha de entrega",
+      "timeLabel": "Hora de entrega",
+      "pickDate": "Elija una fecha",
+      "submit": "Completar reserva",
       "success": "¡Éxito!",
       "successDesc": "Su reserva ha sido confirmada.",
       "error": "Error"
     },
     "successPage": {
-      "title": "¡Reserva Confirmada!",
+      "title": "¡Reserva confirmada!",
       "description": "Gracias por su reserva. Nos vemos pronto.",
-      "summary": "Resumen de la Reserva",
-      "goHome": "Ir al Inicio",
+      "summary": "Resumen de la reserva",
+      "goHome": "Ir a la página de inicio",
       "viewOther": "Ver otros vehículos"
     }
   },
   "Admin": {
+    "sidebar": {
+      "dashboard": "Tablero",
+      "cars": "Coches",
+      "customers": "Clientes",
+      "messages": "Mensajes",
+      "subscribers": "Suscriptores",
+      "latestArrivals": "Últimas llegadas",
+      "settings": "Configuración"
+    },
+    "latestArrivals": {
+      "successAdded": "Vehículo añadido a Últimas llegadas",
+      "successRemoved": "Vehículo eliminado de Últimas llegadas",
+      "error": "Error al actualizar el estado destacado"
+    },
+    "settings": {
+      "logoutTitle": "Cerrar sesión en todas las sesiones",
+      "logoutDesc": "Esto cerrará la sesión en todas sus sesiones en todos sus dispositivos en los que esté conectado actualmente.",
+      "logoutButton": "Cerrar sesión en todas las sesiones",
+      "loggingOut": "Cerrando sesión..."
+    },
+    "dashboard": {
+      "totalSales": "Ventas totales",
+      "totalSalesDesc": "Ingresos por ventas totales en los últimos 30 días",
+      "carsSold": "Coches vendidos",
+      "carsSoldDesc": "Número total de coches vendidos en los últimos 30 días",
+      "newCustomers": "Nuevos clientes",
+      "newCustomersDesc": "Número total de nuevos clientes en los últimos 30 días",
+      "conversionRate": "Tasa de conversión",
+      "conversionRateDesc": "% de ventas en los últimos 30 días",
+      "salesChart": {
+        "title": "Ventas mensuales {yearStart} / {yearEnd}",
+        "description": "Número de coches vendidos por mes"
+      }
+    },
     "cars": {
+      "title": "Todos los coches/vehículos",
+      "addNew": "Añadir nuevo",
+      "editTitle": "Editar detalles del vehículo",
+      "createTitle": "Crear nuevo vehículo",
+      "imagesLabel": "Görseller (en fazla 50)",
+      "statusLabel": "Estado",
+      "updateButton": "Actualizar coche",
+      "createButton": "Crear coche",
+      "successUpdated": "Coche actualizado",
+      "successCreated": "Coche creado",
+      "table": {
+        "id": "ID",
+        "image": "Imagen",
+        "title": "Título",
+        "price": "Precio",
+        "vrm": "VRM",
+        "colour": "Color",
+        "status": "Estado",
+        "dateCreated": "Fecha de creación",
+        "views": "Vistas",
+        "actions": "Acciones"
+      },
       "form": {
         "year": "Año",
         "make": "Marca",
         "makePlaceholder": "Seleccionar marca...",
         "model": "Modelo",
         "modelPlaceholder": "Seleccionar modelo...",
-        "variant": "Variante",
+        "variant": "Variante del modelo",
         "variantPlaceholder": "Seleccionar variante...",
-        "price": "Precio"
+        "price": "Precio",
+        "odoReading": "Kilometraje",
+        "transmission": "Transmisión",
+        "fuelType": "Tipo de combustible",
+        "bodyType": "Tipo de carrocería",
+        "colour": "Color",
+        "ulez": "Cumplimiento ULEZ",
+        "vrm": "Marca de registro del vehículo",
+        "doors": "Puertas",
+        "seats": "Asientos",
+        "description": "Descripción"
+      },
+      "messages": {
+        "error": "Error",
+        "createSuccess": "Coche creado con éxito",
+        "createError": "Error al crear el coche",
+        "updateSuccess": "Coche actualizado con éxito",
+        "updateError": "Error al actualizar el coche",
+        "deleteSuccess": "Coche eliminado con éxito",
+        "deleteError": "Error al eliminar el coche",
+        "notFound": "Coche no encontrado",
+        "genericError": "Algo salió mal"
       }
+    },
+    "customers": {
+      "title": "Todos los clientes",
+      "addCustomer": "Añadir cliente",
+      "messages": {
+        "createSuccess": "Cliente creado con éxito",
+        "createError": "Error al crear el cliente",
+        "updateSuccess": "Cliente actualizado con éxito",
+        "updateError": "Error al actualizar el cliente",
+        "deleteSuccess": "Cliente eliminado con éxito",
+        "deleteError": "Error al eliminar el cliente",
+        "publicSuccess": "Gracias por su interés, {name}. Nos pondremos en contacto en breve.",
+        "publicError": "Error al enviar los datos",
+        "notFound": "Cliente no encontrado",
+        "alreadySubscribed": "Ya estás suscrito",
+        "genericError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo más tarde."
+      },
+      "table": {
+        "id": "ID",
+        "status": "Estado",
+        "name": "Nombre",
+        "email": "Correo electrónico",
+        "mobile": "Móvil",
+        "classified": "Clasificado",
+        "dateCreated": "Fecha de creación",
+        "dateUpdated": "Fecha de actualización",
+        "bookingDate": "Fecha de reserva",
+        "actions": "Acciones"
+      },
+      "form": {
+        "firstName": "Nombre",
+        "lastName": "Apellido",
+        "email": "Correo electrónico",
+        "mobile": "Móvil",
+        "carTitle": "Título del coche",
+        "bookingDate": "Fecha de reserva (AAAA-MM-DD)",
+        "notes": "Notas",
+        "notesPlaceholder": "Notas del cliente...",
+        "status": "Estado del cliente",
+        "updateButton": "Actualizar cliente",
+        "createButton": "Crear cliente",
+        "successUpdated": "Cliente actualizado con éxito",
+        "errorUpdating": "Error al actualizar el cliente",
+        "errorCreating": "Error al crear el cliente"
+      }
+    }
+  },
+  "Emails": {
+    "otp": {
+      "subject": "Su código OTP",
+      "title": "Su código OTP",
+      "description": "Por favor, use el siguiente código para completar su autenticación:",
+      "ignore": "Si no solicitó este código, ignore este correo electrónico."
     }
   },
   "Errors": {
     "notFound": {
-      "title": "Página No Encontrada",
-      "description": "No pudimos encontrar la página que buscaba. Puede haber sido eliminada o renombrada.",
-      "returnHome": "Volver al Inicio",
-      "browse": "Ver Inventario"
+      "title": "Página no encontrada",
+      "description": "No pudimos encontrar la página que buscaba. Podría haber sido eliminada, renombrada o no existe.",
+      "returnHome": "Volver al inicio",
+      "browse": "Explorar inventario"
     },
     "forbidden": {
       "title": "Prohibido",
-      "description": "No tiene autorización para acceder a este recurso.",
-      "returnHome": "Volver al Inicio"
+      "description": "No está autorizado para acceder a este recurso.",
+      "returnHome": "Volver al inicio"
     },
     "notAvailable": {
-      "title": "Vehículo No Disponible",
-      "description": "¡Lo sentimos, este auto ya se vendió! Pero no se preocupe, tenemos muchos otros.",
-      "slangTitle": "¡Vaya, ese auto ya se fue, amigo! 🚗💨"
+      "title": "Vehículo no disponible",
+      "description": "No se preocupe, tenemos muchos otros vehículos que le encantarán. ¡Vea el resto de nuestra excelente colección en el sitio!",
+      "slangTitle": "¡Vaya, ese vehículo ya no está disponible! 🚗💨"
     }
   },
   "Theme": {

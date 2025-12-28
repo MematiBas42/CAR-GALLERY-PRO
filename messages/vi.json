@@ -92,6 +92,11 @@
     "success": "Đã đăng ký!",
     "error": "Lỗi"
   },
+  "CookieConsent": {
+    "message": "We use cookies to enhance your browsing experience and remember your preferences. By continuing to use our site, you agree to this use of cookies.",
+    "accept": "Accept",
+    "policy": "Privacy Policy"
+  },
   "Homepage": {
     "Hero": {
       "title": "Chương tiếp theo của bạn, được chọn lọc.",
@@ -141,14 +146,16 @@
     "min": "Tối thiểu",
     "max": "Tối đa",
     "search": "Tìm kiếm",
-    "select": "Chọn"
+    "select": "Chọn",
+    "loading": "Loading..."
   },
   "Inventory": {
     "carsAvailable": "Có {count} xe",
     "sidebar": {
       "title": "Bộ lọc",
       "clearAll": "Xóa tất cả bộ lọc",
-      "searchPlaceholder": "Tìm xe..."
+      "searchPlaceholder": "Tìm xe...",
+      "showResults": "Show {count} results"
     },
     "labels": {
       "odometerReading": "Số km đã đi",
@@ -250,6 +257,10 @@
     "transparency": {
       "title": "Minh bạch là cốt lõi:",
       "description": "Chúng tôi cung cấp mọi thông tin bạn cần để đưa ra quyết định tự tin."
+    },
+    "partnership": {
+      "title": "A Partnership Approach:",
+      "description": "We see ourselves as your personal automotive curators, not just salespeople. Our goal is to build a long-term relationship based on trust and mutual respect. We're here to offer expert advice and a no-pressure environment, helping you find the perfect vehicle that fits your lifestyle and budget."
     }
   },
   "Favourites": {
@@ -258,6 +269,7 @@
   "Contact": {
     "title": "Ghé thăm Showroom của chúng tôi",
     "description": "Trải nghiệm sự khác biệt của RIM GLOBAL tại Federal Way.",
+    "getDirections": "Get Directions",
     "form": {
       "title": "Gửi tin nhắn",
       "name": "Họ tên",
@@ -337,7 +349,63 @@
     }
   },
   "Admin": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "cars": "Cars",
+      "customers": "Customers",
+      "messages": "Messages",
+      "subscribers": "Subscribers",
+      "latestArrivals": "Latest Arrivals",
+      "settings": "Settings"
+    },
+    "latestArrivals": {
+      "successAdded": "Vehicle added to Latest Arrivals",
+      "successRemoved": "Vehicle removed from Latest Arrivals",
+      "error": "Failed to update featured status"
+    },
+    "settings": {
+      "logoutTitle": "Log out of all sessions",
+      "logoutDesc": "This will log out out of all of your sessions across all of your devices of which you are currently logged into.",
+      "logoutButton": "Log out of all sessions",
+      "loggingOut": "Logging out..."
+    },
+    "dashboard": {
+      "totalSales": "Total Sales",
+      "totalSalesDesc": "Total sales revenue in the last 30 days",
+      "carsSold": "Cars Sold",
+      "carsSoldDesc": "Total number of cars sold in the last 30 days",
+      "newCustomers": "New Customers",
+      "newCustomersDesc": "Total number of new customers in the last 30 days",
+      "conversionRate": "Conversion Rate",
+      "conversionRateDesc": "% of sales in the last 30 days",
+      "salesChart": {
+        "title": "Monthly sales {yearStart} / {yearEnd}",
+        "description": "Number of cars sold per month"
+      }
+    },
     "cars": {
+      "title": "All cars/vehicles",
+      "addNew": "Add new",
+      "editTitle": "Edit Vehicle Details",
+      "createTitle": "Create New Vehicle",
+      "imagesLabel": "Images (up to 50)",
+      "statusLabel": "Status",
+      "updateButton": "Update Car",
+      "createButton": "Create Car",
+      "successUpdated": "Car updated",
+      "successCreated": "Car created",
+      "table": {
+        "id": "ID",
+        "image": "Image",
+        "title": "Title",
+        "price": "Price",
+        "vrm": "VRM",
+        "colour": "Colour",
+        "status": "Status",
+        "dateCreated": "Date Created",
+        "views": "Views",
+        "actions": "Actions"
+      },
       "form": {
         "year": "Năm",
         "make": "Hãng",
@@ -346,8 +414,82 @@
         "modelPlaceholder": "Chọn dòng xe...",
         "variant": "Phiên bản",
         "variantPlaceholder": "Chọn phiên bản...",
-        "price": "Giá"
+        "price": "Giá",
+        "odoReading": "Odometer Reading",
+        "transmission": "Transmission",
+        "fuelType": "Fuel Type",
+        "bodyType": "Body Type",
+        "colour": "Colour",
+        "ulez": "ULEZ Compliance",
+        "vrm": "Vehicle Registration Mark",
+        "doors": "Doors",
+        "seats": "Seats",
+        "description": "Description"
+      },
+      "messages": {
+        "error": "Error",
+        "createSuccess": "Car created successfully",
+        "createError": "Failed to create car",
+        "updateSuccess": "Car updated successfully",
+        "updateError": "Failed to update car",
+        "deleteSuccess": "Car deleted successfully",
+        "deleteError": "Failed to delete car",
+        "notFound": "Car not found",
+        "genericError": "Something went wrong"
       }
+    },
+    "customers": {
+      "title": "All Customers",
+      "addCustomer": "Add Customer",
+      "messages": {
+        "createSuccess": "Customer created successfully",
+        "createError": "Failed to create customer",
+        "updateSuccess": "Customer updated successfully",
+        "updateError": "Failed to update customer",
+        "deleteSuccess": "Customer deleted successfully",
+        "deleteError": "Failed to delete customer",
+        "publicSuccess": "Thank you for your interest, {name}. We will be in touch shortly.",
+        "publicError": "Failed to submit details",
+        "notFound": "Customer not found",
+        "alreadySubscribed": "You are already subscribed",
+        "genericError": "An unexpected error occurred. Please try again later."
+      },
+      "table": {
+        "id": "ID",
+        "status": "Status",
+        "name": "Name",
+        "email": "Email",
+        "mobile": "Mobile",
+        "classified": "Classified",
+        "dateCreated": "Date Created",
+        "dateUpdated": "Date Updated",
+        "bookingDate": "Booking Date",
+        "actions": "Actions"
+      },
+      "form": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "mobile": "Mobile",
+        "carTitle": "Car Title",
+        "bookingDate": "Booking Date (YYYY-MM-DD)",
+        "notes": "Notes",
+        "notesPlaceholder": "Customer notes...",
+        "status": "Customer Status",
+        "updateButton": "Update Customer",
+        "createButton": "Create Customer",
+        "successUpdated": "Customer updated successfully",
+        "errorUpdating": "Error updating customer",
+        "errorCreating": "Error creating customer"
+      }
+    }
+  },
+  "Emails": {
+    "otp": {
+      "subject": "Your OTP Code",
+      "title": "Your OTP Code",
+      "description": "Please use the following code to complete your authentication:",
+      "ignore": "If you did not request this code, please ignore this email."
     }
   },
   "Errors": {

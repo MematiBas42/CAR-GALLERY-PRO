@@ -30,11 +30,6 @@
       "description": "قم بزيارة معرضنا في Federal Way أو أرسل لنا رسالة. نحن هنا لمساعدتك في العثور على سيارتك التالية."
     }
   },
-  "CookieConsent": {
-    "message": "نحن نستخدم ملفات تعريف الارتباط لتحسين تجربتك وتذكر تفضيلاتك. من خلال الاستمرار في استخدام موقعنا، فإنك توافق على هذا الاستخدام.",
-    "accept": "قبول",
-    "policy": "سياسة الخصوصية"
-  },
   "Auth": {
     "signIn": {
       "title": "تسجيل دخول المسؤول",
@@ -97,6 +92,11 @@
     "success": "تم الاشتراك!",
     "error": "خطأ"
   },
+  "CookieConsent": {
+    "message": "نحن نستخدم ملفات تعريف الارتباط لتحسين تجربتك وتذكر تفضيلاتك. من خلال الاستمرار في استخدام موقعنا، فإنك توافق على هذا الاستخدام.",
+    "accept": "قبول",
+    "policy": "سياسة الخصوصية"
+  },
   "Homepage": {
     "Hero": {
       "title": "فصلك التالي، منسق بعناية.",
@@ -146,14 +146,16 @@
     "min": "أدنى",
     "max": "أقصى",
     "search": "بحث",
-    "select": "اختر"
+    "select": "اختر",
+    "loading": "Loading..."
   },
   "Inventory": {
     "carsAvailable": "{count} سيارة متاحة",
     "sidebar": {
       "title": "المرشحات",
       "clearAll": "مسح جميع المرشحات",
-      "searchPlaceholder": "البحث عن سيارة..."
+      "searchPlaceholder": "البحث عن سيارة...",
+      "showResults": "Show {count} results"
     },
     "labels": {
       "odometerReading": "قراءة العداد",
@@ -267,6 +269,7 @@
   "Contact": {
     "title": "قم بزيارة صالة عرض Federal Way الخاصة بنا",
     "description": "اختبر فرق RIM GLOBAL شخصيًا. تم تصميم صالة العرض الخاصة بنا لتوفير تجربة مشاهدة مريحة وفاخرة. توضح الخريطة أدناه موقعنا العام في Federal Way.",
+    "getDirections": "Get Directions",
     "form": {
       "title": "أرسل لنا رسالة",
       "name": "الاسم",
@@ -350,7 +353,15 @@
       "dashboard": "لوحة التحكم",
       "cars": "السيارات",
       "customers": "العملاء",
+      "messages": "Messages",
+      "subscribers": "Subscribers",
+      "latestArrivals": "Latest Arrivals",
       "settings": "الإعدادات"
+    },
+    "latestArrivals": {
+      "successAdded": "Vehicle added to Latest Arrivals",
+      "successRemoved": "Vehicle removed from Latest Arrivals",
+      "error": "Failed to update featured status"
     },
     "settings": {
       "logoutTitle": "تسجيل الخروج من جميع الجلسات",
@@ -423,6 +434,7 @@
         "updateError": "فشل في تحديث السيارة",
         "deleteSuccess": "تم حذف السيارة بنجاح",
         "deleteError": "فشل في حذف السيارة",
+        "notFound": "Car not found",
         "genericError": "حدث خطأ ما"
       }
     },

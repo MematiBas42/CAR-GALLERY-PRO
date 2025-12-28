@@ -434,6 +434,7 @@
         "updateError": "Araç güncellenemedi",
         "deleteSuccess": "Araç başarıyla silindi",
         "deleteError": "Araç silinemedi",
+        "notFound": "Araç bulunamadı",
         "genericError": "Bir şeyler yanlış gitti"
       }
     },
