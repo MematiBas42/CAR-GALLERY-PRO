@@ -38,8 +38,22 @@ export const RangeFilter = (props: RangeFilterProps) => {
 	}, [searchParams?.[minName], searchParams?.[maxName], minName, maxName]);
 
 	const handleApply = () => {
-		handleChange({ target: { name: minName, value: minVal } } as any);
-		handleChange({ target: { name: maxName, value: maxVal } } as any);
+		let finalMin = minVal;
+		let finalMax = maxVal;
+
+		// Auto-swap if Min > Max for logical consistency
+		if (minVal && maxVal && Number(minVal) > Number(maxVal)) {
+			finalMin = maxVal;
+			finalMax = minVal;
+			setMinVal(finalMin);
+			setMaxVal(finalMax);
+		}
+
+		// Perform batch update to trigger only ONE server-side count/refresh
+		handleChange({
+			[minName]: finalMin || null,
+			[maxName]: finalMax || null,
+		} as any);
 	};
 
 	return (

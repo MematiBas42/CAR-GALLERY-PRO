@@ -32,12 +32,16 @@ const HomepageTaxonomyFilters = ({
   }, [isPending]);
 
   const handleChange = async (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: any
   ) => {
-    const { name, value } = e.target;
-    setState({ [name]: value || null });
-    if (name === "make") {
-        setState({ model: null, modelVariant: null });
+    if (e.target && typeof e.target === 'object' && 'name' in e.target) {
+        const { name, value } = e.target;
+        setState({ [name]: value || null });
+        if (name === "make") {
+            setState({ model: null, modelVariant: null });
+        }
+    } else {
+        setState(e);
     }
   };
 

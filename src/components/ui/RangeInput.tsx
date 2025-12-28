@@ -20,6 +20,12 @@ export const RangeInput = (props: RangeInputProps) => {
 	const t = useTranslations("Filters");
 	const { label, minInput, maxInput, onApply } = props;
 
+	const handleKeyDown = (e: React.KeyboardEvent) => {
+		if (e.key === "Enter") {
+			onApply();
+		}
+	};
+
 	return (
 		<div className="grid gap-2">
 			{label && <h4 className="text-sm font-medium">{label}</h4>}
@@ -28,6 +34,7 @@ export const RangeInput = (props: RangeInputProps) => {
 					<Input
 						{...minInput}
 						type="number"
+						onKeyDown={handleKeyDown}
 						className="h-10 bg-background/50 border-muted-foreground/20 focus-visible:ring-1"
 					/>
 				</div>
@@ -35,6 +42,7 @@ export const RangeInput = (props: RangeInputProps) => {
 					<Input
 						{...maxInput}
 						type="number"
+						onKeyDown={handleKeyDown}
 						className="h-10 bg-background/50 border-muted-foreground/20 focus-visible:ring-1"
 					/>
 				</div>

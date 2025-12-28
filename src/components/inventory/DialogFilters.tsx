@@ -98,11 +98,16 @@ const DialogFilters = ({
     });
   };
 
-  const handleChange = (e: { target: { name: string; value: string } }) => {
-    const { name, value } = e.target;
-    setQueryStates({ [name]: value || null });
-    if (name === "make") {
-        setQueryStates({ model: null, modelVariant: null });
+  const handleChange = (e: any) => {
+    if (e.target && typeof e.target === 'object' && 'name' in e.target) {
+        const { name, value } = e.target;
+        setQueryStates({ [name]: value || null });
+        if (name === "make") {
+            setQueryStates({ model: null, modelVariant: null });
+        }
+    } else {
+        // Batch update support
+        setQueryStates(e);
     }
     startTransition(() => {
         router.refresh();
