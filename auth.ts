@@ -65,7 +65,6 @@ export const {
         session.user.role = token.role;
       }
       // Pass the 2FA status to the session so middleware can read it
-      // @ts-expect-error - requires2FA is likely not defined in the default types yet
       session.requires2FA = token.requires2FA;
       return session;
     },

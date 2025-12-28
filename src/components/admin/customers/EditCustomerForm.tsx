@@ -16,7 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Select } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { formatCustomerStatus } from "@/lib/utils";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -192,17 +192,20 @@ const EditCustomerForm = ({ customer }: EditCustomerFormProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("status")}</FormLabel>
-                  <FormControl>
-                    <Select
-                      {...field}
-                      className="text-white"
-                      options={Object.values(CustomerStatus).map((value) => ({
-                        label: tEnums(`CustomerStatus.${value}`),
-                        value,
-                      }))}
-                      noDefault={false}
-                    />
-                  </FormControl>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="text-white">
+                        <SelectValue placeholder={t("status")} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {Object.values(CustomerStatus).map((value) => (
+                        <SelectItem key={value} value={value}>
+                          {tEnums(`CustomerStatus.${value}`)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
