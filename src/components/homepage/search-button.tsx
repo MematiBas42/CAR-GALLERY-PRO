@@ -2,53 +2,40 @@
 
 import { routes } from "@/config/routes";
 import Link from "next/link";
-import { parseAsString, useQueryStates } from "nuqs";
+import { useSearchParams } from "next/navigation";
 import { Button } from "../ui/button";
 import useSWR from "swr";
 import { Loader2 } from "lucide-react";
+import React, { useMemo } from "react";
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 export const SearchButton = ({ initialCount, label = "Search" }: { initialCount: number, label?: string }) => {
-	const [query] = useQueryStates({
-		make: parseAsString.withDefault(""),
-		model: parseAsString.withDefault(""),
-		modelVariant: parseAsString.withDefault(""),
-		minYear: parseAsString.withDefault(""),
-		maxYear: parseAsString.withDefault(""),
-		minPrice: parseAsString.withDefault(""),
-		maxPrice: parseAsString.withDefault(""),
+    const searchParams = useSearchParams();
+    
+    // Convert searchParams to a stable string key for SWR
+    const queryString = useMemo(() => {
+        const params = new URLSearchParams(searchParams.toString());
+        // Remove page if exists as it doesn't affect total count
+        params.delete("page");
+        return params.toString();
+    }, [searchParams]);
+
+	const { data, isLoading } = useSWR(`/api/classifieds/count?${queryString}`, fetcher, {
+		fallbackData: queryString ? undefined : { count: initialCount },
+		revalidateOnFocus: false,
+		dedupingInterval: 1000
 	});
 
-	// Construct API URL based on current query states
-	const params = new URLSearchParams();
-	Object.entries(query).forEach(([key, value]) => {
-		if (value) params.set(key, value);
-	});
-
-	const { data, isLoading, error } = useSWR(
-        params.toString() ? `/api/classifieds/count?${params.toString()}` : `/api/classifieds/count`, 
-        fetcher, 
-        {
-            fallbackData: { count: initialCount },
-            revalidateOnFocus: false,
-            revalidateIfStale: false,
-            dedupingInterval: 5000, // Increase to 5 seconds
-            shouldRetryOnError: false
-        }
-    );
-
-    if (error) console.error("SearchButton Count API Error:", error);
-
-	const relativeUrl = `${routes.inventory}?${params.toString()}`;
+	const relativeUrl = `${routes.inventory}?${queryString}`;
     const displayCount = data?.count ?? initialCount;
 
 	return (
-		<Button className="w-full relative overflow-hidden" asChild disabled={isLoading}>
-			<Link href={relativeUrl}>
+		<Button className="w-full relative overflow-hidden h-12 text-base font-semibold" asChild>
+			<Link href={queryString ? relativeUrl : routes.inventory}>
 				{label} 
-                <span className="ml-2 inline-flex items-center min-w-[1.5rem] justify-center">
-                    {isLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : `(${displayCount})`}
+                <span className="ml-2 inline-flex items-center min-w-[1.5rem] justify-center bg-white/20 px-2 py-0.5 rounded-full text-sm">
+                    {isLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : displayCount}
                 </span>
 			</Link>
 		</Button>

@@ -115,7 +115,10 @@ const DialogFilters = ({
           )}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] h-[100dvh] sm:h-[90vh] overflow-hidden flex flex-col p-0 gap-0 border-none sm:border-solid rounded-none sm:rounded-xl">
+      <DialogContent 
+        className="sm:max-w-[425px] h-[100dvh] sm:h-[90vh] overflow-hidden flex flex-col p-0 gap-0 border-none sm:border-solid rounded-none sm:rounded-xl"
+        onOpenAutoFocus={(e) => e.preventDefault()} // Prevent focus fight with nested selects
+      >
         <DialogHeader className="p-6 border-b">
           <div className="flex items-center justify-between pr-6">
             <DialogTitle className="text-xl font-bold">{t("sidebar.title")}</DialogTitle>
