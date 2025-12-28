@@ -1,6 +1,6 @@
 generator client {
   provider       = "prisma-client-js"
-  reviewFeatures = ["prismaSchemaFolder", "strictUndefinedChecks", "driverAdapters"]
+  reviewFeatures = ["prismaSchemaFolder", "strictUndefinedChecks"]
 }
 
 datasource db {
@@ -67,6 +67,8 @@ model Classified {
   @@index([makeId, modelId], map: "index_make_model")
   @@index([status], map: "index_status")
   @@index([price], map: "index_price")
+  @@index([status, createdAt], map: "index_status_created_at")
+  @@index([status, isLatestArrival], map: "index_status_latest_arrival")
   @@map("classifieds")
 }
 
@@ -143,6 +145,8 @@ model Customer {
   favorites     Classified[]        @relation("CustomerFavorites")
 
   @@index([sourceId], map: "index_customer_source_id")
+  @@index([email], map: "index_customer_email")
+  @@index([status], map: "index_customer_status")
   @@map("customers")
 }
 

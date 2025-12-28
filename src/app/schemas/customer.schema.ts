@@ -1,6 +1,5 @@
 
 import { CustomerStatus } from "@prisma/client";
-import slug from "slug";
 import { z } from "zod";
 export const SubmitDetailsSchema = z.object({
 	firstName: z.string({ message: "firstName is required" }),

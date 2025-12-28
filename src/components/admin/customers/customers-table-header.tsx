@@ -115,7 +115,7 @@ export const CustomersTableHeader = (props: CustomersTableHeaderProps) => {
 						/>
 					</div>
 				</TableHead>
-				<TableHead className="text-muted w-[150px]">
+				<TableHead className="text-muted w-[150px] hidden md:table-cell">
 					<div
 						className="flex items-center gap-2 cursor-pointer"
 						onClick={() => handleSort("mobile")}

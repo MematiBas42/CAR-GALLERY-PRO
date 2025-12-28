@@ -34,26 +34,51 @@ export async function POST(req: Request) {
         );
     }
 
-    const { default: mimetype } = await import("mime-types");
-    const mime = mimetype.lookup(fileData.name).toString();
+    // Magic Bytes Validation
+    const buffer = await fileData.arrayBuffer();
+    const bytes = new Uint8Array(buffer.slice(0, 4));
+    let header = "";
+    for (let i = 0; i < bytes.length; i++) {
+        header += bytes[i].toString(16).toUpperCase();
+    }
 
-    if (mime.match(/image\/(jpeg|jpg|png|webp|svg\+xml)/) === null && mime.match(/video\/(mp4|webm|quicktime)/) === null) {
+    let detectedMime: string | null = null;
+
+    // Check for common image signatures
+    if (header.startsWith("FFD8FF")) {
+        detectedMime = "image/jpeg";
+    } else if (header === "89504E47") {
+        detectedMime = "image/png";
+    } else if (header.startsWith("47494638")) {
+        detectedMime = "image/gif";
+    } else if (header.startsWith("52494646") && new TextDecoder().decode(buffer.slice(8, 12)) === "WEBP") {
+        // WEBP is RIFF....WEBP. We checked RIFF (52494646), now check WEBP.
+        detectedMime = "image/webp";
+    }
+
+    if (!detectedMime) {
         return NextResponse.json(
-            { message: `File type invalid ${mime}` },
+            { message: "Invalid file content. Only JPEG, PNG, GIF, and WEBP are allowed." },
             { status: 400 }
         );
     }
 
+    const { default: mimetype } = await import("mime-types");
+    const mime = mimetype.lookup(fileData.name).toString();
+
+    // Double check if extension matches content (optional but good practice)
+    // or just use the detectedMime for the S3 Upload content-type
+    
     const decodedFileName = decodeURIComponent(decodeURIComponent(fileData.name));
     const key = `upload/${uuid}/${decodedFileName.replace(/\s+/g, '-')}`;
 
     try {
-        const buffer = Buffer.from(await fileData.arrayBuffer());
+        const nodeBuffer = Buffer.from(buffer);
         const command = new PutObjectCommand({
             Bucket: process.env.AWS_BUCKET_NAME!,
             Key: key,
-            Body: buffer,
-            ContentType: mime,
+            Body: nodeBuffer,
+            ContentType: detectedMime, // Use the verified mime type
         });
 
         await s3.send(command);

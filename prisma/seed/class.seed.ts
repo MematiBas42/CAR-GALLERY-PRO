@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { BodyType, ClassifiedStatus, Colour, CurrencyCode, FuelType, OdoUnit, PrismaClient, Transmission, ULEZCompliance } from "@prisma/client";
 import { Prisma } from "@prisma/client";
-import slugify from "slug";
+import slugify from "slugify";
 export async function seedClass(prisma: PrismaClient) {
   const makes = await prisma.make.findMany({
     include: {
@@ -30,7 +30,7 @@ export async function seedClass(prisma: PrismaClient) {
 
     const title = [year, make.name, model.name, variant?.name].filter(Boolean).join(" ");
     const vrm = faker.vehicle.vrm();
-    const baseSlug = slugify(`${title}-${vrm}`);
+    const baseSlug = slugify(`${title}-${vrm}`, { lower: true });
 
     classifiedsData.push({
         year,

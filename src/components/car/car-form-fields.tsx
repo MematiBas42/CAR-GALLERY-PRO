@@ -328,7 +328,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
           </FormItem>
         )}
       />
-      <div className="col-span-2">
+      <div className="col-span-1 md:col-span-2">
         <FormField
           control={form.control}
           name="description"

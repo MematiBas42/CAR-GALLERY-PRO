@@ -56,7 +56,7 @@ export const updateCarSchema = z.object({
 	images: z.array(
 		z.object({
 			id: z.number().optional(),
-			src: z.string().url(),
+			src: z.string(),
 			alt: z.string(),
 			uuid: z.string().uuid().optional(),
 			base64: z.string().optional(),

@@ -9,7 +9,7 @@ import {
     CurrencyCode, 
     ULEZCompliance 
 } from "@prisma/client";
-import slugify from "slug";
+import slugify from "slugify";
 
 export async function seedRimGlobalInventory(prisma: PrismaClient) {
     const inventory = [
@@ -51,7 +51,7 @@ export async function seedRimGlobalInventory(prisma: PrismaClient) {
         });
         
         const title = `${car.year} ${car.make} ${car.model}`;
-        const slug = slugify(`${title}-${car.vrm}`);
+        const slug = slugify(`${title}-${car.vrm}`, { lower: true });
 
         await prisma.classified.upsert({
             where: { slug },

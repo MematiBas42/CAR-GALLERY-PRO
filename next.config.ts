@@ -1,14 +1,24 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from 'next-intl/plugin';
+import "./src/env";
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
+// Parse environment variable for allowed image domains (comma separated)
+// Example: IMAGE_HOST_DOMAINS="**.r2.dev, cdn.example.com"
+const imageDomains = process.env.IMAGE_HOST_DOMAINS?.split(",").map(d => d.trim()) || ["**.amazonaws.com"];
+
+const remotePatterns = [
+  ...imageDomains.map(hostname => ({ hostname })),
+  { hostname: "**.openstreetmap.org" } // Always allow map tiles
+];
+
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ["localhost:3000", "192.168.1.7:3000", "192.168.1.5:3000", "192.168.1.5"],
+  allowedDevOrigins: ["localhost:3000", "127.0.0.1:3000", "192.168.1.7:3000", "192.168.1.5:3000", "192.168.1.5", "192.168.123.8", "192.168.123.8:3000"],
   /* config options here */
   compress: true,
   images: {
-		remotePatterns: [{ hostname: "*" }],
+		remotePatterns: remotePatterns,
         qualities: [25, 50, 75, 100],
 	},
   experimental: {

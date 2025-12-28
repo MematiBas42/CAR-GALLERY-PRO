@@ -17,10 +17,14 @@ import { twMerge } from "tailwind-merge";
 import { format, parse } from "date-fns";
 export function getImageUrl(path: string | null | undefined) {
   if (!path) return "/placeholder.jpg";
-  if (path.startsWith("http")) return path; // Legacy support for full URLs
+  if (path.startsWith("http") || path.startsWith("/")) return path; // Legacy support for full URLs or absolute paths
   
   const baseUrl = process.env.NEXT_PUBLIC_S3_BUCKET_URL;
-  if (!baseUrl) return path;
+  
+  // If S3 is not configured, assume local uploads
+  if (!baseUrl) {
+      return `/uploads/${path}`;
+  }
 
   // Ensure no double slashes
   return `${baseUrl.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;

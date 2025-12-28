@@ -5,6 +5,7 @@ import CredentialsProvider from "@auth/core/providers/credentials";
 import { bcryptPasswordCompare } from "@/lib/brypt";
 import { routes } from "@/config/routes";
 import { SignInSchema } from "@/app/schemas/auth.schema";
+import { redis } from "@/lib/redis-store";
 
 export const {
   handlers: { GET, POST },
@@ -47,12 +48,23 @@ export const {
       if (user) {
         token.id = user.id;
       }
+      
+      // Check 2FA status from Redis
+      if (token.id) {
+        const isVerified = await redis.get(`session_verified:uid-${token.id}`);
+        // If verified in Redis, requireF2A is false. Otherwise true.
+        token.requires2FA = !isVerified;
+      }
+
       return token;
     },
     session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
       }
+      // Pass the 2FA status to the session so middleware can read it
+      // @ts-expect-error - requires2FA is likely not defined in the default types yet
+      session.requires2FA = token.requires2FA;
       return session;
     },
   },

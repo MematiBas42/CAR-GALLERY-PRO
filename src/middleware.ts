@@ -17,7 +17,6 @@ function setRequestHeaders(requestHeaders: Headers) {
       frame-ancestors 'none';
       upgrade-insecure-requests;
   `;
-  requestHeaders.set("x-auth-token", `Bearer ${process.env.X_AUTH_TOKEN}`);
 
 	const contentSecurityPolicy = cspHeader.replace(/\s{2,}/g, " ").trim();
 	requestHeaders.set("x-nonce", nonce);

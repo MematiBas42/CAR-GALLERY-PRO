@@ -22,7 +22,7 @@ const CreateCarDialog = () => {
           Add new
         </Button>
       </DialogTrigger>
-      <DialogContent className={cn(`bg-card max-w-6xl`)}>
+      <DialogContent className={cn(`bg-card w-[95vw] max-w-6xl p-4 md:p-6`)}>
         <DialogHeader>
           <DialogTitle>Create new car</DialogTitle>
         </DialogHeader>

@@ -55,7 +55,7 @@ const CarTableHeader = (props: CarTableHeaderProps) => {
   return (
     <TableHeader>
       <TableRow className="hover:bg-transparent border-gray-800">
-        <TableHead className="text-muted w-[80px]">
+        <TableHead className="text-muted w-[80px] hidden md:table-cell">
           <div
             className="flex items-center gap-2 cursor-pointer"
             onClick={() => handleSort("id")}
@@ -140,10 +140,9 @@ const CarTableHeader = (props: CarTableHeaderProps) => {
 						/>
 					</div>
 				</TableHead>
-				<TableHead className="text-muted">
+				<TableHead className="text-muted hidden md:table-cell">
 					<div
 						className="flex items-center gap-2 cursor-pointer"
-						onClick={() => handleSort("views")}
 						onKeyDown={() => handleSort("views")}
 					>
 						{t("views")}

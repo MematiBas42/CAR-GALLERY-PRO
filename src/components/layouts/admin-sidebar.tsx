@@ -86,7 +86,7 @@ const AdminSidebar = () => {
   };
   return (
     <motion.div
-      className="bg-black/20 h-screen overflow-hidden flex flex-col"
+      className="bg-black/20 h-screen overflow-hidden hidden md:flex flex-col border-r border-white/5"
       animate={isSidebarexpanded ? "expanded" : "collapsed"}
       variants={sidebarVariants}
       initial="collapsed"
@@ -112,7 +112,7 @@ const AdminSidebar = () => {
                     alt="RIM GLOBAL logo"
                     src={"/logo.svg"}
                     fill={true}
-                    className="object-contain object-left"
+                    className="object-contain object-left invert"
                   />
                 </motion.div>
               ) : (

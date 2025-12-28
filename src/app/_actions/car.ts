@@ -35,7 +35,7 @@ export const createCarAction = async (data: CreateCarType) => {
       if (modelVariant) title = `${title} ${modelVariant.name}`;
     }
 
-    const slug = slugify(`${title} ${data.vrm}`);
+    const slug = slugify(`${title} ${data.vrm}`, { lower: true });
     const cleanDescription = sanitizeHtml(data.description, {
       allowedTags: [ 'p', 'a', 'strong', 'b', 'em', 'i', 'u', 'strike', 'br', 'ul', 'ol', 'li' ],
       allowedAttributes: { 'a': [ 'href', 'rel', 'target' ] }
@@ -173,7 +173,7 @@ export const updateCarAction = async (data: UpdateCarType) => {
       await prisma.classified.update({
         where: { id: data.id },
         data: {
-          slug: slugify(`${title} ${data.vrm}`), title, year: Number(data.year),
+          slug: slugify(`${title} ${data.vrm}`, { lower: true }), title, year: Number(data.year),
           makeId, modelId, ...(modelVariantId && { modelVariantId }),
           vrm: data.vrm, price: newPrice, currency: data.currency,
           odoReading: data.odoReading, odoUnit: data.odoUnit,
@@ -215,7 +215,7 @@ export const updateCarAction = async (data: UpdateCarType) => {
                     name: customer.firstName,
                     carTitle: title,
                     newPrice: `${currencySymbol}${(newPrice / 100).toLocaleString()}`,
-                    link: `${appUrl}/inventory/${slugify(`${title} ${data.vrm}`)}`
+                    link: `${appUrl}/inventory/${slugify(`${title} ${data.vrm}`, { lower: true })}`
                 };
 
                 Object.keys(templateData).forEach(key => {

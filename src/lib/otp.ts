@@ -52,33 +52,15 @@ export async function completeChallenge(userId: string, code: string) {
   if (challenge) {
     const isCorrect = await bcryptPasswordCompare(code, challenge.codeHash);
     if (isCorrect) {
-        const session = await prisma.session.findFirst({
-            where: {
-                userId,
-                requireF2A: true, 
-            }
-        })
-        if (session) {
-            await prisma.session.updateMany({
-                where: {
-                    sessionToken: session.sessionToken,
-                    userId,
-                },
-                data: {
-                    requireF2A: false,
-                }
-            });
-            await redis.del(`${REDIS_PREFIX}:uid-${userId}`);
-
-            return {
-                success: true,
-                message: "2FA challenge completed successfully",
-            }
-        }
+        // Since we are using JWT strategy, we can't update a database session.
+        // Instead, we mark the user as verified in Redis.
+        // The auth.ts jwt callback will check this key.
+        await redis.setex(`session_verified:uid-${userId}`, 24 * 60 * 60, "true");
+        await redis.del(`${REDIS_PREFIX}:uid-${userId}`);
 
         return {
-            success: false,
-            message: "2FA challenge not found",
+            success: true,
+            message: "2FA challenge completed successfully",
         }
     }
     return {
