@@ -147,7 +147,8 @@
     "max": "Макс.",
     "search": "Поиск",
     "select": "Выбрать",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "apply": "Apply"
   },
   "Inventory": {
     "carsAvailable": "Доступно автомобилей: {count}",

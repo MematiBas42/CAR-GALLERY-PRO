@@ -147,7 +147,8 @@
     "max": "Max",
     "search": "Search",
     "select": "Select",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "apply": "Apply"
   },
   "Inventory": {
     "carsAvailable": "{count} Cars Available",

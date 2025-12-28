@@ -147,7 +147,8 @@
     "max": "Máx",
     "search": "Buscar",
     "select": "Seleccionar",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "apply": "Apply"
   },
   "Inventory": {
     "carsAvailable": "{count} Coches disponibles",

@@ -147,7 +147,8 @@
     "max": "최대",
     "search": "검색",
     "select": "선택",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "apply": "Apply"
   },
   "Inventory": {
     "carsAvailable": "{count}대의 차량 이용 가능",

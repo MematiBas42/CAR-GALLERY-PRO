@@ -147,7 +147,8 @@
     "max": "Maks",
     "search": "Ara",
     "select": "Seçiniz",
-    "loading": "Yükleniyor..."
+    "loading": "Yükleniyor...",
+    "apply": "Uygula"
   },
   "Inventory": {
     "carsAvailable": "{count} Araç Mevcut",
