@@ -11,7 +11,8 @@ export const ClassifiedCardSkeleton = () => {
 			<CardContent className="p-4 h-fit">
 				<div className="space-y-4 h-[180px]">
 					<div className="space-y-2">
-						<Skeleton className="w-3/4 h-6" />
+						<Skeleton className="w-1/3 h-6" /> {/* Price Skeleton */}
+						<Skeleton className="w-3/4 h-6" /> {/* Title Skeleton */}
 						<Skeleton className="w-full h-4" />
 						<Skeleton className="w-3/4 h-4 mr-8" />
 					</div>
