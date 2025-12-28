@@ -58,6 +58,7 @@ export function useClassifiedCount(queryString: string, initialCount: number) {
 
     return {
         count: data?.count ?? initialCount,
+        slug: data?.slug ?? null,
         isLoading
     };
 }

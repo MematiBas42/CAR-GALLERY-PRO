@@ -9,7 +9,16 @@ export const GET = async (request: NextRequest) => {
     const where = buildClassifiedFilterQuery(Object.fromEntries(searchParams));
     const count = await prisma.classified.count({ where });
 
-    return NextResponse.json({ count }, {
+    let slug = null;
+    if (count === 1) {
+      const car = await prisma.classified.findFirst({
+        where,
+        select: { slug: true }
+      });
+      slug = car?.slug;
+    }
+
+    return NextResponse.json({ count, slug }, {
       status: 200,
       headers: { "Cache-Control": "private, no-cache" }
     });
