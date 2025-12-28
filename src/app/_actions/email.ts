@@ -26,7 +26,7 @@ export const sendBulkEmailAction = async (formData: { subject: string; content: 
     // For larger lists, we would iterate or use a loop.
     const emailPromises = subscribers.map(sub => 
       resend.emails.send({
-        from: "RIM GLOBAL <onboarding@resend.dev>",
+        from: "RIM GLOBAL <info@rimglobalauto.com>",
         to: sub.email,
         subject: formData.subject,
         html: `

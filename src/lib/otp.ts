@@ -6,7 +6,7 @@ import { prisma } from "./prisma";
 import { getTranslations } from "next-intl/server";
 
 const REDIS_PREFIX = "otp";
-const SENDER_EMAIL = "onboarding@resend.dev";
+const SENDER_EMAIL = "info@rimglobalauto.com";
 
 // issue new 2fa for user and sends them the code
 // if there is an outstanding 2fa challenge for the user, it just resend the code

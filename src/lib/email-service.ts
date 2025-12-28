@@ -38,7 +38,7 @@ export async function sendTemplatedEmail(
     });
 
     return await resend.emails.send({
-      from: "RIM GLOBAL <onboarding@resend.dev>", // Replace with verified domain in prod
+      from: "RIM GLOBAL <info@rimglobalauto.com>", // Replace with verified domain in prod // Replace with verified domain in prod
       to,
       subject,
       html: `
@@ -70,7 +70,7 @@ export async function sendEmailWithContent(
 ) {
   try {
     return await resend.emails.send({
-      from: "RIM GLOBAL <onboarding@resend.dev>",
+      from: "RIM GLOBAL <info@rimglobalauto.com>", // Replace with verified domain in prod
       to,
       subject,
       html: `

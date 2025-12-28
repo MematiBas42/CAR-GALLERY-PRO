@@ -37,10 +37,10 @@ export const sendContactEmail = async (data: ContactFormType) => {
     });
 
     // 2. Send email to admin
-    await resend.emails.send({
-      from: "RIM GLOBAL <onboarding@resend.dev>", // Update this with your verified domain
-      to: "delivered@resend.dev", // Update this with the admin email
-      subject: `New Message from ${name}`,
+    const { data, error } = await resend.emails.send({
+      from: "RIM GLOBAL <info@rimglobalauto.com>", // Update this with your verified domain
+      to: "info@rimglobalauto.com", // Update this with the admin email
+      subject: `New Contact Form Submission from ${name}`,
       html: `
         <h2>New Message Received</h2>
         <p><strong>Name:</strong> ${name}</p>
