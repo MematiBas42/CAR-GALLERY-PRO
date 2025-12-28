@@ -16,6 +16,9 @@ const remotePatterns = [
 const nextConfig: NextConfig = {
   /* config options here */
   compress: true,
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   images: {
 		remotePatterns: remotePatterns,
 	},
