@@ -116,7 +116,7 @@ const DialogFilters = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen} modal={false}>
       <DialogTrigger asChild>
         <Button variant="outline" className="lg:hidden flex gap-2">
           <Filter className="w-4 h-4" />
@@ -130,9 +130,8 @@ const DialogFilters = ({
       </DialogTrigger>
       <DialogContent 
         className="sm:max-w-[425px] h-[100dvh] sm:h-[90vh] overflow-hidden flex flex-col p-0 gap-0 border-none sm:border-solid rounded-none sm:rounded-xl z-[9999]"
-        onOpenAutoFocus={(e) => e.preventDefault()}
         onPointerDownOutside={(e) => {
-            // Prevent Dialog from closing when clicking on an external Popover/Portal
+            // Only prevent closing if clicking inside a radix portal (like our Combobox)
             if (e.target instanceof Element && e.target.closest('[data-radix-popper-content-wrapper]')) {
                 e.preventDefault();
             }

@@ -59,7 +59,7 @@ export function Combobox({
   return (
     <div className={cn("grid gap-2", className)}>
       {label && <label className="text-sm font-medium">{label}</label>}
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover open={open} onOpenChange={setOpen} modal={true}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
