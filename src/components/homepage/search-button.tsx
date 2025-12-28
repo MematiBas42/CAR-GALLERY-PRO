@@ -26,11 +26,19 @@ export const SearchButton = ({ initialCount, label = "Search" }: { initialCount:
 		if (value) params.set(key, value);
 	});
 
-	const { data, isLoading } = useSWR(`/api/classifieds/count?${params.toString()}`, fetcher, {
-		fallbackData: { count: initialCount },
-		revalidateOnFocus: false,
-		dedupingInterval: 2000 // 2 saniye içinde aynı sorguyu yapma
-	});
+	const { data, isLoading, error } = useSWR(
+        params.toString() ? `/api/classifieds/count?${params.toString()}` : `/api/classifieds/count`, 
+        fetcher, 
+        {
+            fallbackData: { count: initialCount },
+            revalidateOnFocus: false,
+            revalidateIfStale: false,
+            dedupingInterval: 5000, // Increase to 5 seconds
+            shouldRetryOnError: false
+        }
+    );
+
+    if (error) console.error("SearchButton Count API Error:", error);
 
 	const relativeUrl = `${routes.inventory}?${params.toString()}`;
     const displayCount = data?.count ?? initialCount;

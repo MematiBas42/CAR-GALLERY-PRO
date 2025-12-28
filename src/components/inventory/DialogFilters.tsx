@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { SidebarProps } from "./sidebar";
 import { useRouter } from "next/navigation";
 import { parseAsString, useQueryStates } from "nuqs";
@@ -81,10 +81,10 @@ const DialogFilters = ({
   const seatOptions = (attributes?.seats || []).map((val: any) => ({ label: val.toString(), value: val.toString() }));
 
   useEffect(() => {
-    const filtersCount = Object.entries(
-      searchParams as Record<string, string>
-    ).filter(([key, value]) => key !== "page" && value).length;
-    setFiltersCount(filtersCount);
+    const params = typeof searchParams?.then === 'function' ? {} : searchParams;
+    const count = Object.entries(params as Record<string, string>)
+      .filter(([key, value]) => key !== "page" && value).length;
+    setFiltersCount(count);
   }, [searchParams]); 
 
   const clearAllFilter = () => {
@@ -119,16 +119,16 @@ const DialogFilters = ({
           )}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-[425px] h-[100dvh] sm:h-[90vh] overflow-hidden flex flex-col p-0 gap-0 border-none sm:border-solid rounded-none sm:rounded-xl">
+        <DialogHeader className="p-6 border-b">
           <div className="flex items-center justify-between pr-6">
-            <DialogTitle>{t("sidebar.title")}</DialogTitle>
+            <DialogTitle className="text-xl font-bold">{t("sidebar.title")}</DialogTitle>
             {filtersCount > 0 && (
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={clearAllFilter}
-                className="text-destructive text-xs h-auto p-0 hover:bg-transparent"
+                className="text-destructive text-xs h-auto p-0 hover:bg-transparent font-medium"
               >
                 <X className="w-3 h-3 mr-1" />
                 {t("sidebar.clearAll")}
@@ -137,7 +137,7 @@ const DialogFilters = ({
           </div>
         </DialogHeader>
 
-        <div className="grid gap-4 py-4">
+        <div className="flex-1 overflow-y-auto p-6 space-y-6">
           <TaxonomyFilters handleChange={handleChange as any} />
 
           <RangeFilter
@@ -181,8 +181,8 @@ const DialogFilters = ({
           <Select label={tLabels("doors")} name="doors" value={queryStates.doors} onChange={handleChange as any} options={doorOptions} disabled={isLoading} placeholder={tFilters("select")} />
           <Select label={tLabels("seats")} name="seats" value={queryStates.seats} onChange={handleChange as any} options={seatOptions} disabled={isLoading} placeholder={tFilters("select")} />
         </div>
-        <DialogFooter className="sticky bottom-0 bg-background pt-2 border-t">
-          <Button onClick={() => setOpen(false)} className="w-full">
+        <DialogFooter className="p-6 bg-background border-t mt-auto">
+          <Button onClick={() => setOpen(false)} className="w-full h-12 text-base font-semibold uppercase tracking-wide">
             {t("sidebar.showResults", { count })}
           </Button>
         </DialogFooter>
