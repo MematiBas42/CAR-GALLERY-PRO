@@ -24,8 +24,8 @@ export default async function Home(props: PageProps) {
   return (
     <>
       <HeroSection searchParams={searchParams} />
-      <FeaturesSection />
       <LastestArrival />
+      <FeaturesSection />
       <TestimonialsSection />
       <OurBrandSection  />
       <LocationSection />
