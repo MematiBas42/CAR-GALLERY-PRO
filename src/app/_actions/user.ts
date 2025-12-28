@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 import { CreateUserSchema } from "@/app/schemas/auth.schema";
 import { PrevState } from "@/config/types";
 
-export const createUserAction = async (prevState: PrevState, formData: FormData) => {
+export const createUserAction = async (prevState: PrevState | null, formData: FormData) => {
   await requireSuperAdmin();
 
   const data = Object.fromEntries(formData.entries());

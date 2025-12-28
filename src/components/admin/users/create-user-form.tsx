@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { useEffect } from "react";
 
 export default function CreateUserForm() {
-  const [state, formAction, isPending] = useActionState(createUserAction, null);
+  const [state, formAction, isPending] = useActionState(createUserAction, { success: false, message: "" });
 
   useEffect(() => {
     if (state?.success) {
