@@ -77,8 +77,8 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
               />
             </Link>
             <FavButton setIsFav={setIsFav} isFav={isFav} id={car.id} />
-            <div className="absolute top-3 right-3 bg-primary/95 text-primary-foreground font-bold px-3 py-1.5 rounded-lg shadow-xl z-20">
-              <PriceDisplay amount={car.price} className="text-sm md:text-base lg:text-lg" />
+            <div className="absolute top-3 right-3 bg-primary/95 text-primary-foreground font-bold px-2 py-1 md:px-3 md:py-1.5 rounded-lg shadow-xl z-20">
+              <PriceDisplay amount={car.price} showLocal={false} className="text-xs md:text-sm lg:text-base" />
             </div>
           </div>
           
