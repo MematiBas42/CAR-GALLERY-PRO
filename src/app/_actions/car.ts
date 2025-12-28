@@ -15,6 +15,10 @@ import { deleteFromS3 } from "@/lib/s3";
 import { sendEmailWithContent } from "@/lib/email-service";
 import { CustomerStatus } from "@prisma/client";
 import { getImageUrl, getS3KeyFromUrl } from "@/lib/utils";
+import { redis } from "@/lib/redis-store";
+import { generateTaxonomyData } from "@/lib/taxonomy-utils";
+
+const TAXONOMY_CACHE_KEY = "global_taxonomy_data";
 
 export const createCarAction = async (data: CreateCarType) => {
   const t = await getTranslations("Admin.cars.messages");
@@ -73,7 +77,10 @@ export const createCarAction = async (data: CreateCarType) => {
 
     if (createdCar) {
       success = true;
-
+      // Invalidate Cache and Update Static JSON
+      await redis.del(TAXONOMY_CACHE_KEY);
+      await generateTaxonomyData();
+      
       // AUTO-NOTIFICATION: New Inventory Arrival
       if (createdCar.status === "LIVE") {
           try {
@@ -126,6 +133,7 @@ export const createCarAction = async (data: CreateCarType) => {
       }
     }
   } catch (err) {
+    console.error("Create Car Action Error:", err);
     return { success: false, message: err instanceof Error ? err.message : t("genericError") };
   }
   if (success) {
@@ -197,6 +205,8 @@ export const updateCarAction = async (data: UpdateCarType) => {
     });
 
     success = true;
+    await redis.del(TAXONOMY_CACHE_KEY);
+    await generateTaxonomyData();
 
     // AUTO-NOTIFICATION: Price Drop Alert
     if (newPrice < oldPrice && data.status === "LIVE") {
@@ -275,6 +285,8 @@ export const deleteCarAction = async (id: number) => {
     const deletedCar = await prisma.classified.delete({ where: { id } });
 
     if (deletedCar && car) {
+      await redis.del(TAXONOMY_CACHE_KEY);
+      await generateTaxonomyData();
       const deletePromises = car.images.map(img => {
           const key = getS3KeyFromUrl(img.src);
           return key ? deleteFromS3(key) : Promise.resolve();

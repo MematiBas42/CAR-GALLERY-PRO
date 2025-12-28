@@ -1,89 +1,65 @@
 "use client";
-import { AwaitedPageProps, FilterOptions, TaxonomyFiltersProps } from "@/config/types";
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { Select } from "../ui/select";
-import { endpoints } from "@/config/endpoints";
-import { api } from "@/lib/api-client";
+import React, { useMemo } from "react";
+import { Combobox } from "../ui/combobox";
 import { useTranslations } from "next-intl";
+import { parseAsString, useQueryStates } from "nuqs";
+import { useTaxonomy, getModelsForMake, getVariantsForModel } from "@/hooks/use-taxonomy";
 
+interface TaxonomyFiltersProps {
+    handleChange: (e: { target: { name: string; value: string } }) => void;
+}
 
-const TaxonomyFilters = (props: TaxonomyFiltersProps) => {
+const TaxonomyFilters = ({ handleChange }: TaxonomyFiltersProps) => {
   const t = useTranslations("Filters");
-  const { 
-    searchParams, 
-    handleChange, 
-    makes: propsMakes, 
-    models: propsModels, 
-    modelVariants: propsVariants,
-    isLoading: propsLoading 
-  } = props;
-
-  const [internalMakes, setInternalMakes] = useState<FilterOptions<string, string>>([]);
-  const [internalModels, setInternalModels] = useState<FilterOptions<string, string>>([]);
-  const [internalVariants, setInternalVariants] = useState<FilterOptions<string, string>>([]);
-
- useEffect(() => {
-    // Only fetch if data is not provided via props
-    if (propsMakes || propsModels || propsVariants) return;
-
-		(async function fetchMakesOptions() {
-			const params = new URLSearchParams();
-			for (const [k, v] of Object.entries(
-				searchParams as Record<string, string>,
-			)) {
-				if (v) params.set(k, v as string);
-			}
-
-			const url = new URL(endpoints.taxonomy, window.location.href);
-
-			url.search = params.toString();
-
-			const data = await api.get<{
-				makes: FilterOptions<string, string>;
-				models: FilterOptions<string, string>;
-				modelVariants: FilterOptions<string, string>;
-			}>(url.toString());
-
-			setInternalMakes(data.makes);
-			setInternalModels(data.models);
-			setInternalVariants(data.modelVariants);
-		})();
-
-    
-	}, [searchParams, propsMakes, propsModels, propsVariants]);
-
-  const makes = propsMakes || internalMakes;
-  const model = propsModels || internalModels;
-  const modelVariant = propsVariants || internalVariants;
-
+  const { taxonomy, isLoading } = useTaxonomy();
   
+  const [queryStates] = useQueryStates({
+    make: parseAsString.withDefault(""),
+    model: parseAsString.withDefault(""),
+    modelVariant: parseAsString.withDefault(""),
+  });
+
+  const makes = taxonomy.map(m => ({ label: m.l, value: m.v }));
+  
+  const models = useMemo(() => {
+      return getModelsForMake(taxonomy, queryStates.make).map(m => ({ label: m.l, value: m.v }));
+  }, [taxonomy, queryStates.make]);
+
+  const modelVariants = useMemo(() => {
+      return getVariantsForModel(taxonomy, queryStates.make, queryStates.model).map(v => ({ label: v.l, value: v.v }));
+  }, [taxonomy, queryStates.make, queryStates.model]);
+
   return (
     <>
-      <Select
+      <Combobox
         label={t("make")}
         name="make"
-        value={(searchParams?.make as string) || ""}
+        value={queryStates.make}
         options={makes}
-        onChange={handleChange}
-        placeholder={!makes.length ? "-" : undefined}
+        onChange={handleChange as any}
+        placeholder={isLoading ? t("loading") : t("select")}
+        searchPlaceholder={t("search")}
+        disabled={isLoading}
       />
-      <Select
+      <Combobox
         label={t("model")}
         name="model"
-        value={(searchParams?.model as string) || ""}
-        options={model}
-        onChange={handleChange}
-        disabled={!model.length}
-        placeholder={!model.length ? "-" : undefined}
+        value={queryStates.model}
+        options={models}
+        onChange={handleChange as any}
+        disabled={!queryStates.make || !models.length}
+        placeholder={!queryStates.make ? t("select") : (isLoading ? t("loading") : t("select"))}
+        searchPlaceholder={t("search")}
       />
-      <Select
+      <Combobox
         label={t("modelVariant")}
         name="modelVariant"
-        value={(searchParams?.modelVariant as string) || ""}
-        options={modelVariant}
-        onChange={handleChange}
-        disabled={!modelVariant.length}
-        placeholder={!modelVariant.length ? "-" : undefined}
+        value={queryStates.modelVariant}
+        options={modelVariants}
+        onChange={handleChange as any}
+        disabled={!queryStates.model || !modelVariants.length}
+        placeholder={!queryStates.model ? t("select") : (isLoading ? t("loading") : t("select"))}
+        searchPlaceholder={t("search")}
       />
     </>
   );

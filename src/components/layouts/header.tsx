@@ -19,7 +19,17 @@ const Header = async () => {
   const t = await getTranslations("Navigation");
   const session = await auth();
   const sourceId = await getSourceId();
-  const favs = await redis.get<Favourites>(sourceId ?? "");
+  
+  let favs: Favourites | null = null;
+  try {
+    if (sourceId) {
+        favs = await redis.get<Favourites>(sourceId);
+    }
+  } catch (error) {
+    console.error("Redis connection failed in Header:", error);
+    // Fail gracefully: Site should work even if Redis is down
+    favs = { ids: [] }; 
+  }
 
   const navLinks = [
     { id: 1, href: routes.inventory, label: t("collection") },
