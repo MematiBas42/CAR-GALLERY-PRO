@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { auth } from "@/auth";
+import { requireAdmin } from "@/lib/auth-guard";
 import { forbidden, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { routes } from "@/config/routes";
@@ -101,9 +102,8 @@ export const createCustomerAction = async (data: CreateCustomerType) => {
 // Updated deleteCustomerAction to refresh subscribers page
 export const updateCustomerAction = async (data: { id: number } & EditCustomerType) => {
   const t = await getTranslations("Admin.customers.messages");
-  const session = await auth();
-  if (!session?.user?.id) return forbidden();
-  const userId = session.user.id;
+  const session = await requireAdmin();
+  const userId = session.user?.id;
 
   try {
     const customer = await prisma.customer.findUnique({ where: { id: data.id } });
@@ -118,8 +118,7 @@ export const updateCustomerAction = async (data: { id: number } & EditCustomerTy
 };
 
 export const createManualCustomerAction = async (data: EditCustomerType) => {
-  const session = await auth();
-  if (!session?.user?.id) return forbidden();
+  const session = await requireAdmin();
   try {
     await prisma.customer.create({ data: { ...data } });
     revalidatePath(routes.admin.customers);
@@ -130,8 +129,7 @@ export const createManualCustomerAction = async (data: EditCustomerType) => {
 };
 
 export const deleteCustomerAction = async (id: number) => {
-  const session = await auth();
-  if (!session) return forbidden();
+  const session = await requireAdmin();
   try {
     await prisma.customer.delete({ where: { id } });
     revalidatePath(routes.admin.customers);

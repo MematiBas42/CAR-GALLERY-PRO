@@ -1,6 +1,7 @@
 "use server";
 import { auth } from "@/auth";
 import sanitizeHtml from 'sanitize-html';
+import { requireAdmin } from "@/lib/auth-guard";
 import { routes } from "@/config/routes";
 import { prisma } from "@/lib/prisma";
 import { generateThumbHashFromSrUrl } from "@/lib/thumbhash-server";
