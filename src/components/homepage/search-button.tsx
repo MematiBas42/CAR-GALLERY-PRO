@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
 import React, { useMemo } from "react";
-import { useTaxonomy } from "@/hooks/use-taxonomy";
+import { useClassifiedCount } from "@/hooks/use-taxonomy";
 
 export const SearchButton = ({ initialCount, label = "Search" }: { initialCount: number, label?: string }) => {
     const searchParams = useSearchParams();
@@ -17,8 +17,7 @@ export const SearchButton = ({ initialCount, label = "Search" }: { initialCount:
         return params.toString();
     }, [searchParams]);
 
-    // Use the Fusion API via useTaxonomy instead of a separate count fetch
-    const { filteredCount, isLoading } = useTaxonomy(queryString);
+    const { count, isLoading } = useClassifiedCount(queryString, initialCount);
 
 	const relativeUrl = `${routes.inventory}?${queryString}`;
 
@@ -27,7 +26,7 @@ export const SearchButton = ({ initialCount, label = "Search" }: { initialCount:
 			<Link href={queryString ? relativeUrl : routes.inventory}>
 				{label} 
                 <span className="ml-2 inline-flex items-center min-w-[1.5rem] justify-center bg-white/20 px-2 py-0.5 rounded-full text-sm">
-                    {isLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : filteredCount}
+                    {isLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : count}
                 </span>
 			</Link>
 		</Button>

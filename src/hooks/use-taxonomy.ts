@@ -1,84 +1,74 @@
 import useSWR from "swr";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { setIsLoading } from "./use-loading";
 
-export interface TaxonomyOption {
-  v: string; // value
-  l: string; // label
-}
-
-export interface ModelNode extends TaxonomyOption {
-  vr: TaxonomyOption[]; // variants
-}
-
-export interface MakeNode extends TaxonomyOption {
-  m: ModelNode[]; // models
-}
+export interface TaxonomyOption { v: string; l: string; }
+export interface ModelNode extends TaxonomyOption { vr: TaxonomyOption[]; }
+export interface MakeNode extends TaxonomyOption { m: ModelNode[]; }
 
 export interface TaxonomyData {
   taxonomyTree: MakeNode[];
-  ranges: {
-    year: { min: number; max: number };
-    price: { min: number; max: number };
-    odoReading: { min: number; max: number };
-  };
-  attributes: {
-    fuelType: string[];
-    transmission: string[];
-    bodyType: string[];
-    colour: string[];
-    ulezCompliance: string[];
-    odoUnit: string[];
-    currency: string[];
-    doors: number[];
-    seats: number[];
-  };
+  ranges: { year: { min: number; max: number }; price: { min: number; max: number }; odoReading: { min: number; max: number }; };
+  attributes: { fuelType: string[]; transmission: string[]; bodyType: string[]; colour: string[]; ulezCompliance: string[]; odoUnit: string[]; currency: string[]; doors: number[]; seats: number[]; };
   totalCount: number;
-  filteredCount?: number; // Added via Fusion API
   updatedAt: string;
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export function useTaxonomy(params?: string) {
-  const apiUrl = params ? `/api/taxonomy?${params}` : "/api/taxonomy";
-  
-  const { data, error, isLoading } = useSWR<TaxonomyData>(apiUrl, fetcher, {
+// World-class Separation: Fetch static tree ONCE
+export function useTaxonomy() {
+  const { data, error, isLoading } = useSWR<TaxonomyData>("/api/taxonomy", fetcher, {
     revalidateOnFocus: false,
-    revalidateIfStale: true,
-    dedupingInterval: 10000, // 10 seconds for params-based queries
+    revalidateIfStale: false,
+    dedupingInterval: 3600000, 
   });
 
   useEffect(() => {
-    setIsLoading(isLoading, "taxonomy-fetch");
-    return () => setIsLoading(false, "taxonomy-fetch");
+    setIsLoading(isLoading, "taxonomy-static-fetch");
+    return () => setIsLoading(false, "taxonomy-static-fetch");
   }, [isLoading]);
-
-  const taxonomy = data?.taxonomyTree || [];
 
   return {
     data,
     isLoading,
     isError: error,
-    taxonomy,
+    taxonomy: data?.taxonomyTree || [],
     ranges: data?.ranges,
     attributes: data?.attributes,
     totalCount: data?.totalCount || 0,
-    filteredCount: data?.filteredCount ?? data?.totalCount ?? 0,
-    getModels: (makeId: string) => getModelsForMake(taxonomy, makeId),
-    getVariants: (makeId: string, modelId: string) => getVariantsForModel(taxonomy, makeId, modelId)
   };
+}
+
+// World-class Reactivity: Fetch dynamic counts separately
+export function useClassifiedCount(queryString: string, initialCount: number) {
+    const { data, isLoading } = useSWR(
+        queryString ? `/api/classifieds/count?${queryString}` : null,
+        fetcher,
+        {
+            revalidateOnFocus: false,
+            dedupingInterval: 2000,
+        }
+    );
+
+    useEffect(() => {
+        setIsLoading(isLoading, "count-fetch");
+        return () => setIsLoading(false, "count-fetch");
+    }, [isLoading]);
+
+    return {
+        count: data?.count ?? initialCount,
+        isLoading
+    };
 }
 
 export function getModelsForMake(taxonomy: MakeNode[], makeId: string): ModelNode[] {
   if (!makeId) return [];
-  const make = taxonomy.find((m) => m.v === makeId);
-  return make ? make.m : [];
+  return taxonomy.find((m) => m.v === makeId)?.m || [];
 }
 
 export function getVariantsForModel(taxonomy: MakeNode[], makeId: string, modelId: string): TaxonomyOption[] {
   if (!makeId || !modelId) return [];
   const make = taxonomy.find((m) => m.v === makeId);
-  const model = make?.m.find((md) => md.v === modelId);
-  return model ? model.vr : [];
+  return make?.m.find((md) => md.v === modelId)?.vr || [];
 }

@@ -31,9 +31,9 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
   const [filterCount, setFilterCount] = useState(0);
   const { _min, _max } = minMaxValue;
   
-  const { ranges: taxonomyRanges, attributes, isLoading } = useTaxonomy();
+  const { ranges: taxonomyRanges, attributes, isLoading: isTaxonomyLoading } = useTaxonomy();
 
-  const [queryStates, setQueryStates] = useQueryStates(
+  const [, setQueryStates] = useQueryStates(
     {
       make: parseAsString.withDefault(""),
       model: parseAsString.withDefault(""),
@@ -54,7 +54,10 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
       seats: parseAsString.withDefault(""),
       ulezCompliance: parseAsString.withDefault(""),
     },
-    { shallow: false }
+    { 
+        shallow: false,
+        startTransition // World-class transition handling by nuqs
+    }
   );
 
   const adaptiveRanges = taxonomyRanges || {
@@ -74,8 +77,8 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
   const seatOptions = (attributes?.seats || []).map((val: any) => ({ label: val.toString(), value: val.toString() }));
 
   useEffect(() => {
-    setIsLoading(isPending, "inventory-update");
-    return () => setIsLoading(false, "inventory-update");
+    setIsLoading(isPending, "inventory-list-update");
+    return () => setIsLoading(false, "inventory-list-update");
   }, [isPending]);
 
   useEffect(() => {
@@ -94,14 +97,10 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
 
   const handleChange = (e: { target: { name: string; value: string } }) => {
     const { name, value } = e.target;
-    
-    startTransition(() => {
-        setQueryStates({ [name]: value || null });
-
-        if (name === "make") {
-            setQueryStates({ model: null, modelVariant: null });
-        }
-    });
+    setQueryStates({ [name]: value || null });
+    if (name === "make") {
+        setQueryStates({ model: null, modelVariant: null });
+    }
   };
 
   return (
@@ -155,15 +154,15 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
           searchParams={searchParams}
         />
 
-        <Select label={tLabels("currency")} name="currency" value={queryStates.currency} onChange={handleChange as any} options={currencyOptions} disabled={isLoading} placeholder={tFilters("select")} />
-        <Select label={tLabels("odometerUnit")} name="odoUnit" value={queryStates.odoUnit} onChange={handleChange as any} options={odoUnitOptions} disabled={isLoading} placeholder={tFilters("select")} />
-        <Select label={tLabels("transmission")} name="transmission" value={queryStates.transmission} onChange={handleChange as any} options={transmissionOptions} disabled={isLoading} placeholder={tFilters("select")} />
-        <Select label={tLabels("fuelType")} name="fuelType" value={queryStates.fuelType} onChange={handleChange as any} options={fuelTypeOptions} disabled={isLoading} placeholder={tFilters("select")} />
-        <Select label={tLabels("bodyType")} name="bodyType" value={queryStates.bodyType} onChange={handleChange as any} options={bodyTypeOptions} disabled={isLoading} placeholder={tFilters("select")} />
-        <Select label={tLabels("colour")} name="colour" value={queryStates.colour} onChange={handleChange as any} options={colourOptions} disabled={isLoading} placeholder={tFilters("select")} />
-        <Select label={tLabels("ulezCompliance")} name="ulezCompliance" value={queryStates.ulezCompliance} onChange={handleChange as any} options={ulezOptions} disabled={isLoading} placeholder={tFilters("select")} />
-        <Select label={tLabels("doors")} name="doors" value={queryStates.doors} onChange={handleChange as any} options={doorOptions} disabled={isLoading} placeholder={tFilters("select")} />
-        <Select label={tLabels("seats")} name="seats" value={queryStates.seats} onChange={handleChange as any} options={seatOptions} disabled={isLoading} placeholder={tFilters("select")} />
+        <Select label={tLabels("currency")} name="currency" value={searchParams.currency} onChange={handleChange as any} options={currencyOptions} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+        <Select label={tLabels("odometerUnit")} name="odoUnit" value={searchParams.odoUnit} onChange={handleChange as any} options={odoUnitOptions} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+        <Select label={tLabels("transmission")} name="transmission" value={searchParams.transmission} onChange={handleChange as any} options={transmissionOptions} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+        <Select label={tLabels("fuelType")} name="fuelType" value={searchParams.fuelType} onChange={handleChange as any} options={fuelTypeOptions} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+        <Select label={tLabels("bodyType")} name="bodyType" value={searchParams.bodyType} onChange={handleChange as any} options={bodyTypeOptions} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+        <Select label={tLabels("colour")} name="colour" value={searchParams.colour} onChange={handleChange as any} options={colourOptions} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+        <Select label={tLabels("ulezCompliance")} name="ulezCompliance" value={searchParams.ulezCompliance} onChange={handleChange as any} options={ulezOptions} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+        <Select label={tLabels("doors")} name="doors" value={searchParams.doors} onChange={handleChange as any} options={doorOptions} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+        <Select label={tLabels("seats")} name="seats" value={searchParams.seats} onChange={handleChange as any} options={seatOptions} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
       </div>
     </div>
   );
