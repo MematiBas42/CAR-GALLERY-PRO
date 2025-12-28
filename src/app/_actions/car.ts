@@ -127,8 +127,7 @@ export const createCarAction = async (data: CreateCarType) => {
 
 export const updateCarAction = async (data: UpdateCarType) => {
   const t = await getTranslations("Admin.cars.messages");
-  const session = await auth();
-  if (!session) forbidden();
+  const session = await requireAdmin();
 
   let success = false;
   try {
@@ -258,8 +257,7 @@ export const updateCarAction = async (data: UpdateCarType) => {
 
 export const deleteCarAction = async (id: number) => {
   const t = await getTranslations("Admin.cars.messages");
-  const session = await auth();
-  if (!session) forbidden();
+  const session = await requireAdmin();
 
   try {
     const car = await prisma.classified.findUnique({ where: { id }, include: { images: true } });
@@ -282,8 +280,7 @@ export const deleteCarAction = async (id: number) => {
 }
 
 export const toggleLatestArrivalAction = async (id: number, isLatest: boolean) => {
-  const session = await auth();
-  if (!session) forbidden();
+  const session = await requireAdmin();
   try {
     await prisma.classified.update({ where: { id }, data: { isLatestArrival: isLatest } });
     revalidatePath("/admin/latest-arrivals");

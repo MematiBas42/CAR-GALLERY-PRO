@@ -27,6 +27,12 @@ export const resendChallengeAction = async () => {
 }
 
 export const completeChallengeAction = async (code: string) => {
+    // RATE LIMIT: Prevent brute-force (e.g. 5 attempts per hour)
+    const limiterError = await genericRateLimit("otp-verify");
+    if (limiterError) {
+        return limiterError;
+    }
+
     const session = await auth();
     if (!session?.user) {
         return {

@@ -6,6 +6,8 @@ import { SignInSchema } from "../schemas/auth.schema";
 import { PrevState } from "@/config/types";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { genericRateLimit } from "@/lib/rate-limiter";
+import { prisma } from "@/lib/prisma";
+import { issueChallenge } from "@/lib/otp";
 
 export const SignInAction = async (_: PrevState, formData: FormData) => {
   try {
@@ -32,6 +34,13 @@ export const SignInAction = async (_: PrevState, formData: FormData) => {
             password: data.password,
             redirect: false,
           });
+
+          // Send 2FA Code
+          const user = await prisma.user.findUnique({ where: { email: data.email } });
+          if (user) {
+            await issueChallenge(user.id, user.email);
+          }
+
     return {
       success: true,
       message: "Sign in successful",
