@@ -146,14 +146,16 @@
     "min": "Min",
     "max": "Maks",
     "search": "Ara",
-    "select": "Seçiniz"
+    "select": "Seçiniz",
+    "loading": "Yükleniyor..."
   },
   "Inventory": {
     "carsAvailable": "{count} Araç Mevcut",
     "sidebar": {
       "title": "Filtreler",
       "clearAll": "Tüm filtreleri temizle",
-      "searchPlaceholder": "Araç ara..."
+      "searchPlaceholder": "Araç ara...",
+      "showResults": "{count} sonucu göster"
     },
     "labels": {
       "odometerReading": "Kilometre / Mil",

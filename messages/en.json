@@ -146,14 +146,16 @@
     "min": "Min",
     "max": "Max",
     "search": "Search",
-    "select": "Select"
+    "select": "Select",
+    "loading": "Loading..."
   },
   "Inventory": {
     "carsAvailable": "{count} Cars Available",
     "sidebar": {
       "title": "Filters",
       "clearAll": "Clear all filters",
-      "searchPlaceholder": "Search for car..."
+      "searchPlaceholder": "Search for car...",
+      "showResults": "Show {count} results"
     },
     "labels": {
       "odometerReading": "Odometer Reading",

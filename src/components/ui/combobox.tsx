@@ -70,7 +70,7 @@ export function Combobox({
           >
             <span className="truncate">
               {value
-                ? options.find((option) => option.value === value)?.label
+                ? options.find((option) => String(option.value) === String(value))?.label || value
                 : placeholder}
             </span>
             <div className="flex items-center gap-1">
