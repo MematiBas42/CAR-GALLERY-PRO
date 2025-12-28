@@ -49,17 +49,19 @@ const Header = async () => {
   return (
     <header className="flex items-center justify-between h-16 px-4 bg-transparent gap-x-2 overflow-hidden">
       <div className="flex items-center justify-start flex-1 gap-x-1 md:gap-x-4 min-w-0">
-        <Link href={routes.home} className="flex items-center gap-1.5 md:gap-2 min-w-0 flex-shrink-0">
-          <Image
-            src="/assets/logo.png"
-            alt="RIM GLOBAL Logo"
-            width={40}
-            height={40}
-            className="relative dark:invert flex-shrink-0 w-7 h-7 md:w-12 md:h-12"
-            unoptimized
-          />
-          <div className="flex flex-col min-w-0 pr-1">
-            <span className="text-sm md:text-xl font-bold text-primary truncate leading-tight">RIM GLOBAL</span>
+        <Link href={routes.home} className="flex items-center gap-2 min-w-0 flex-shrink-0">
+          <div className="relative flex-shrink-0 h-8 w-auto md:h-12">
+            <Image
+              src="/assets/logo.png"
+              alt="RIM GLOBAL Logo"
+              width={120}
+              height={45}
+              className="relative dark:invert h-full w-auto object-contain"
+              unoptimized
+            />
+          </div>
+          <div className="flex flex-col min-w-0">
+            <span className="text-sm md:text-xl font-bold text-primary truncate leading-tight tracking-tight">RIM GLOBAL</span>
             <p className="text-[9px] md:text-sm text-muted-foreground leading-tight truncate">auto sales</p>
           </div>
         </Link>
