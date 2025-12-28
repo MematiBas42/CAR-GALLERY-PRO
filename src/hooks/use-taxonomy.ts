@@ -40,18 +40,22 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 export function useTaxonomy() {
   const { data, error, isLoading } = useSWR<TaxonomyData>("/api/taxonomy", fetcher, {
     revalidateOnFocus: false,
-    revalidateIfStale: true, // Allow stale while revalidating from Redis
-    dedupingInterval: 60000, // 1 minute client-side deduplication
+    revalidateIfStale: true,
+    dedupingInterval: 60000, 
   });
+
+  const taxonomy = data?.taxonomyTree || [];
 
   return {
     data,
     isLoading,
     isError: error,
-    taxonomy: data?.taxonomyTree || [],
+    taxonomy,
     ranges: data?.ranges,
     attributes: data?.attributes,
-    totalCount: data?.totalCount || 0
+    totalCount: data?.totalCount || 0,
+    getModels: (makeId: string) => getModelsForMake(taxonomy, makeId),
+    getVariants: (makeId: string, modelId: string) => getVariantsForModel(taxonomy, makeId, modelId)
   };
 }
 
