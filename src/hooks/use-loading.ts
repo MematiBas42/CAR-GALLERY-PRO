@@ -3,10 +3,14 @@
 import { useState, useEffect } from "react";
 
 const LOADING_EVENT = "global_loading_state_change";
+let pendingRequests = 0;
 
 export function setIsLoading(loading: boolean) {
   if (typeof window !== "undefined") {
-    window.dispatchEvent(new CustomEvent(LOADING_EVENT, { detail: loading }));
+    if (loading) pendingRequests++;
+    else pendingRequests = Math.max(0, pendingRequests - 1);
+    
+    window.dispatchEvent(new CustomEvent(LOADING_EVENT, { detail: pendingRequests > 0 }));
   }
 }
 
