@@ -24,39 +24,39 @@ const FavsPage = async (props: PageProps) => {
 
   const sourceId = await getSourceId();
   const favourites = await redis.get<Favourites>(sourceId ?? "");
-  const favIds = favourites ? favourites.ids : [];
+  const favIds = favourites?.ids || [];
 
   // Get only LIVE classifieds from the favorites list
   const classifieds = await prisma.classified.findMany({
     where: { 
         id: { in: favIds },
-        status: "LIVE"
+        status: ClassifiedStatus.LIVE
     },
     include: { images: { take: 1 } },
     skip: offset,
     take: CARS_PER_PAGE,
   });
 
-  // Check if any favorite car is no longer LIVE and cleanup if necessary
-  const liveIds = classifieds.map(c => c.id);
+  // Atomic sync check
   const totalLiveCount = await prisma.classified.count({
-      where: { id: { in: favIds }, status: "LIVE" }
+      where: { id: { in: favIds }, status: ClassifiedStatus.LIVE }
   });
 
-  // If there's a mismatch, it means some cars were sold/deleted. Cleanup Redis.
-  if (favIds.length > 0 && liveIds.length < favIds.length) {
-      const actualLiveIds = await prisma.classified.findMany({
-          where: { id: { in: favIds }, status: "LIVE" },
+  // Devils Advocate: Cleanup only if absolutely necessary to save Redis writes
+  if (favIds.length > 0 && totalLiveCount < favIds.length) {
+      // Run cleanup as a side effect (non-blocking in many environments, but here we await for data integrity)
+      const liveIdsInDb = await prisma.classified.findMany({
+          where: { id: { in: favIds }, status: ClassifiedStatus.LIVE },
           select: { id: true }
       }).then(res => res.map(r => r.id));
 
       if (sourceId) {
-        await redis.set(sourceId, { ids: actualLiveIds });
-        // Optional: Also sync with DB if needed, but Redis is the primary source for the counter
+        await redis.set(sourceId, { ids: liveIdsInDb });
       }
   }
 
   const totalPages = Math.ceil(totalLiveCount / CARS_PER_PAGE);
+  const liveIds = classifieds.map(c => c.id);
 
   return (
     <div className="container mx-auto px-4 py-8 min-h-[80dvh]">

@@ -20,13 +20,12 @@ const Header = async () => {
   const session = await auth();
   const sourceId = await getSourceId();
   
-  let favs: Favourites | null = null;
   let liveFavCount = 0;
   try {
     if (sourceId) {
-        favs = await redis.get<Favourites>(sourceId);
-        if (favs && favs.ids.length > 0) {
-            // Count only LIVE classifieds
+        const favs = await redis.get<Favourites>(sourceId);
+        if (favs && Array.isArray(favs.ids) && favs.ids.length > 0) {
+            // Highly optimized count: only runs if IDs exist
             liveFavCount = await prisma.classified.count({
                 where: {
                     id: { in: favs.ids },
@@ -36,8 +35,7 @@ const Header = async () => {
         }
     }
   } catch (error) {
-    console.error("Redis or Prisma connection failed in Header:", error);
-    favs = { ids: [] }; 
+    // Silent fail for production stability
   }
 
   const navLinks = [

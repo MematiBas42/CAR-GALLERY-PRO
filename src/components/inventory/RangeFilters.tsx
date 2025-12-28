@@ -35,37 +35,40 @@ export const RangeFilter = (props: RangeFilterProps) => {
 
 	const initialState = useMemo(() => {
 		const state: FilterOptions<string, number> = [];
-		const range = defaultMax - defaultMin;
+        
+        // Ensure values are numbers and handle edge cases
+        const min = Math.max(0, defaultMin);
+        const max = Math.max(min, defaultMax);
+		const range = max - min;
+        
+        if (range === 0 && min > 0) {
+            state.push({ 
+                label: currency ? formatPrice({ price: min, currency: currency.currencyCode }) : (thousandSeparator ? formatNumber(min) : min.toString()), 
+                value: min 
+            });
+            return state;
+        }
 		
-		// Sensible default increment to prevent millions of items
+		// Dynamic increment calculation if not provided
 		let safeIncrement = increment;
-		if (!safeIncrement) {
-			if (range > 100000) safeIncrement = 10000;
+		if (!safeIncrement || safeIncrement <= 0) {
+			if (range > 500000) safeIncrement = 50000;
+			else if (range > 100000) safeIncrement = 10000;
 			else if (range > 10000) safeIncrement = 1000;
 			else if (range > 1000) safeIncrement = 100;
 			else safeIncrement = 1;
 		}
 
-		let iterator = defaultMin;
-		
-		// Safety: max 1000 items
-		const maxItems = 1000;
+		let iterator = min;
+		const maxItems = 500; // Reduced for even better performance
 		let count = 0;
 
-		while (iterator <= defaultMax && count < maxItems) {
-			if (currency) {
-				state.push({
-					label: formatPrice({
-						price: iterator,
-						currency: currency.currencyCode,
-					}),
-					value: iterator,
-				});
-			} else if (thousandSeparator) {
-				state.push({ label: formatNumber(iterator), value: iterator });
-			} else {
-				state.push({ label: iterator.toString(), value: iterator });
-			}
+		while (iterator <= max && count < maxItems) {
+			const label = currency 
+                ? formatPrice({ price: iterator, currency: currency.currencyCode }) 
+                : (thousandSeparator ? formatNumber(iterator) : iterator.toString());
+            
+            state.push({ label, value: iterator });
 			
 			iterator += safeIncrement;
 			count++;
