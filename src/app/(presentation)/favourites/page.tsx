@@ -7,6 +7,7 @@ import { Favourites, PageProps } from "@/config/types";
 import { prisma } from "@/lib/prisma";
 import { redis } from "@/lib/redis-store";
 import { getSourceId } from "@/lib/source-id";
+import { ClassifiedStatus } from "@prisma/client";
 import React from "react";
 import { z } from "zod";
 import { getTranslations } from "next-intl/server";

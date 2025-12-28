@@ -12,6 +12,7 @@ import { LanguageSwitcher } from "./language-switcher";
 import { auth } from "@/auth";
 import { getSourceId } from "@/lib/source-id";
 import { redis } from "@/lib/redis-store";
+import { prisma } from "@/lib/prisma";
 
 import { getTranslations } from "next-intl/server";
 
