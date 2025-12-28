@@ -52,7 +52,7 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
       seats: parseAsString.withDefault(""),
       ulezCompliance: parseAsString.withDefault(""),
     },
-    { shallow: true }
+    { shallow: false }
   );
 
   const adaptiveRanges = taxonomyRanges || {
@@ -72,7 +72,8 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
   const seatOptions = (attributes?.seats || []).map((val: any) => ({ label: val.toString(), value: val.toString() }));
 
   useEffect(() => {
-    const count = Object.entries(searchParams as Record<string, string>)
+    const params = typeof searchParams?.then === 'function' ? {} : searchParams; // Handle potential Promise
+    const count = Object.entries(params as Record<string, string>)
       .filter(([key, value]) => key !== "page" && value).length;
     setFilterCount(count);
   }, [searchParams]); 
@@ -101,13 +102,15 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
     <div className="py-4 w-[21.25rem] bg-card border-r border-muted hidden lg:block">
       <div className="text-lg font-semibold flex justify-between px-4">
         <span>{t("sidebar.title")}</span>
-        <button
-          type="button"
-          onClick={clearFilters}
-          className={cn("text-sm text-muted-foreground", !filterCount ? "opacity-50 pointer-events-none" : "hover:underline")}
-        >
-          {t("sidebar.clearAll")} {filterCount ? `(${filterCount})` : null}
-        </button>
+        {filterCount > 0 && (
+            <button
+            type="button"
+            onClick={clearFilters}
+            className="text-sm text-destructive hover:underline cursor-pointer"
+            >
+            {t("sidebar.clearAll")} ({filterCount})
+            </button>
+        )}
       </div>
       <div className="p-4">
         <SearchInput placeholder={t("sidebar.searchPlaceholder")} className="w-full" />

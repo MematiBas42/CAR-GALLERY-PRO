@@ -61,7 +61,7 @@ const DialogFilters = ({
       seats: parseAsString.withDefault(""),
       ulezCompliance: parseAsString.withDefault(""),
     },
-    { shallow: true }
+    { shallow: false }
   );
 
   const adaptiveRanges = taxonomyRanges || {

@@ -15,7 +15,9 @@ import { getTranslations } from "next-intl/server";
 const HeroSection = async (props: AwaitedPageProps) => {
   const t = await getTranslations("Homepage.Hero");
   const { searchParams } = props;
-  const totalFiltersApplied = Object.keys(searchParams || {}).length;
+  const filterParams = Object.entries(searchParams || {})
+    .filter(([key, value]) => key !== "page" && value);
+  const totalFiltersApplied = filterParams.length;
   const isFilterApplied = totalFiltersApplied > 0;
 
   const carsCount = await prisma.classified.count({

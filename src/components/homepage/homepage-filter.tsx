@@ -26,7 +26,7 @@ const HomepageTaxonomyFilters = ({
       minPrice: parseAsString.withDefault(""),
       maxPrice: parseAsString.withDefault(""),
     },
-    { shallow: true }
+    { shallow: false }
   );
 
   const { ranges } = useTaxonomy();
