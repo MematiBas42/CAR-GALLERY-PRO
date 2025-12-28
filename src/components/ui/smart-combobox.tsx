@@ -72,7 +72,7 @@ export function SmartCombobox({
   const [createdOptions, setCreatedOptions] = useState<{ label: string; value: string }[]>([])
 
   const mergedOptions = useMemo(() => {
-      const normalize = (opts: typeof options) => opts.map(o => ({ ...o, value: String(o.value) }));
+      const normalize = (opts: any[]) => (Array.isArray(opts) ? opts : []).map(o => ({ ...o, value: String(o.value) }));
       const normalizedOptions = normalize(options);
       const normalizedCreated = normalize(createdOptions);
       const allOptions = [...normalizedOptions, ...normalizedCreated];

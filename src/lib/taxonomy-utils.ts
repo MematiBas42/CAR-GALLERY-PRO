@@ -12,22 +12,20 @@ export async function generateTaxonomyData(): Promise<TaxonomyData | null> {
   if (isLocked) return null;
 
   try {
-    await redis.set(TAXONOMY_LOCK_KEY, "true", { ex: 30 });
+    await redis.set(TAXONOMY_LOCK_KEY, "true", { ex: 60 });
 
-    const classifieds = await prisma.classified.findMany({
+    // 1. Get unique combinations of Make/Model/Variant for LIVE classifieds
+    const combinations = await prisma.classified.findMany({
       where: { status: 'LIVE' },
       select: {
         make: { select: { id: true, name: true } },
         model: { select: { id: true, name: true } },
         modelVariant: { select: { id: true, name: true } },
-        year: true, price: true, odoReading: true,
-        fuelType: true, transmission: true, bodyType: true,
-        colour: true, ulezCompliance: true, odoUnit: true,
-        currency: true, doors: true, seats: true
-      }
+      },
+      distinct: ['makeId', 'modelId', 'modelVariantId']
     });
 
-    if (classifieds.length === 0) {
+    if (combinations.length === 0) {
         return {
             taxonomyTree: [],
             ranges: { year: { min: 1900, max: new Date().getFullYear() }, price: { min: 0, max: 0 }, odoReading: { min: 0, max: 0 } },
@@ -36,9 +34,10 @@ export async function generateTaxonomyData(): Promise<TaxonomyData | null> {
         };
     };
 
+    // 2. Build taxonomy tree from unique combinations
     const makeMap = new Map<number, { v: string, l: string, m: Map<number, { v: string, l: string, vr: Map<number, TaxonomyOption> }> }>();
 
-    classifieds.forEach(c => {
+    combinations.forEach(c => {
       if (!c.make) return;
       if (!makeMap.has(c.make.id)) {
         makeMap.set(c.make.id, { v: String(c.make.id), l: c.make.name, m: new Map() });
@@ -65,28 +64,44 @@ export async function generateTaxonomyData(): Promise<TaxonomyData | null> {
       })).sort((a, b) => a.l.localeCompare(b.l))
     })).sort((a, b) => a.l.localeCompare(b.l));
 
-    const safeMin = (arr: number[]) => arr.length ? Math.min(...arr) : 0;
-    const safeMax = (arr: number[]) => arr.length ? Math.max(...arr) : 0;
+    // 3. Get ranges and attributes via optimized queries
+    const [aggregates, counts] = await Promise.all([
+      prisma.classified.aggregate({
+        where: { status: 'LIVE' },
+        _min: { year: true, price: true, odoReading: true },
+        _max: { year: true, price: true, odoReading: true },
+        _count: true
+      }),
+      prisma.classified.findMany({
+          where: { status: 'LIVE' },
+          select: {
+              fuelType: true, transmission: true, bodyType: true,
+              colour: true, ulezCompliance: true, odoUnit: true,
+              currency: true, doors: true, seats: true
+          },
+          distinct: ['fuelType', 'transmission', 'bodyType', 'colour', 'ulezCompliance', 'odoUnit', 'currency', 'doors', 'seats']
+      })
+    ]);
 
     const finalData: TaxonomyData = {
       taxonomyTree,
       ranges: {
-        year: { min: safeMin(classifieds.map(c => c.year)), max: safeMax(classifieds.map(c => c.year)) },
-        price: { min: safeMin(classifieds.map(c => c.price)), max: safeMax(classifieds.map(c => c.price)) },
-        odoReading: { min: safeMin(classifieds.map(c => c.odoReading)), max: safeMax(classifieds.map(c => c.odoReading)) }
+        year: { min: aggregates._min.year ?? 1900, max: aggregates._max.year ?? new Date().getFullYear() },
+        price: { min: aggregates._min.price ?? 0, max: aggregates._max.price ?? 0 },
+        odoReading: { min: aggregates._min.odoReading ?? 0, max: aggregates._max.odoReading ?? 0 }
       },
       attributes: {
-        fuelType: Array.from(new Set(classifieds.map(c => c.fuelType).filter(Boolean))).sort() as string[],
-        transmission: Array.from(new Set(classifieds.map(c => c.transmission).filter(Boolean))).sort() as string[],
-        bodyType: Array.from(new Set(classifieds.map(c => c.bodyType).filter(Boolean))).sort() as string[],
-        colour: Array.from(new Set(classifieds.map(c => c.colour).filter(Boolean))).sort() as string[],
-        ulezCompliance: Array.from(new Set(classifieds.map(c => c.ulezCompliance).filter(Boolean))).sort() as string[],
-        odoUnit: Array.from(new Set(classifieds.map(c => c.odoUnit).filter(Boolean))).sort() as string[],
-        currency: Array.from(new Set(classifieds.map(c => c.currency).filter(Boolean))).sort() as string[],
-        doors: Array.from(new Set(classifieds.map(c => c.doors).filter(Boolean))).sort() as number[],
-        seats: Array.from(new Set(classifieds.map(c => c.seats).filter(Boolean))).sort() as number[]
+        fuelType: Array.from(new Set(counts.map(c => c.fuelType).filter(Boolean))).sort() as string[],
+        transmission: Array.from(new Set(counts.map(c => c.transmission).filter(Boolean))).sort() as string[],
+        bodyType: Array.from(new Set(counts.map(c => c.bodyType).filter(Boolean))).sort() as string[],
+        colour: Array.from(new Set(counts.map(c => c.colour).filter(Boolean))).sort() as string[],
+        ulezCompliance: Array.from(new Set(counts.map(c => c.ulezCompliance).filter(Boolean))).sort() as string[],
+        odoUnit: Array.from(new Set(counts.map(c => c.odoUnit).filter(Boolean))).sort() as string[],
+        currency: Array.from(new Set(counts.map(c => c.currency).filter(Boolean))).sort() as string[],
+        doors: Array.from(new Set(counts.map(c => c.doors).filter(Boolean))).sort() as number[],
+        seats: Array.from(new Set(counts.map(c => c.seats).filter(Boolean))).sort() as number[]
       },
-      totalCount: classifieds.length,
+      totalCount: aggregates._count,
       updatedAt: new Date().toISOString()
     };
 

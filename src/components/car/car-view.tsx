@@ -101,6 +101,22 @@ const CarView = async (props: CarWithImagesAndMake) => {
               </h1>
             </div>
           </div>
+          
+          <div className="text-4xl font-bold my-4 w-full border border-slate-200
+            flex justify-center items-center rounded-xl py-12">
+              {t("ourPrice")} { ' '}
+              <PriceDisplay amount={props.price} className="text-4xl" />
+          </div>
+
+          <Button 
+             className="uppercase font-bold py-3 px-6 rounded
+             w-full mb-6"
+            asChild>
+              <Link href={routes.reserve(props.slug , MultiStepFormEnum.WELCOME)}>
+                {t("reserveNow")}
+              </Link>
+          </Button>
+
           <div className="mt-4 flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
             <span className="bg-gray-200 text-gray-800 
             text-sm font-medium px-2.5 py-2.5 rounded-md">
@@ -126,20 +142,8 @@ const CarView = async (props: CarWithImagesAndMake) => {
               {parse(props.description || "")}
             </div>
             )}
-            <div className="text-4xl font-bold my-4 w-full border border-slate-200
-            flex justify-center items-center rounded-xl py-12">
-              {t("ourPrice")} { ' '}
-              <PriceDisplay amount={props.price} className="text-4xl" />
-            </div>
-            <Button 
-             className="uppercase font-bold py-3 px-6 rounded
-             w-full mb-4"
-            asChild>
-              <Link href={routes.reserve(props.slug , MultiStepFormEnum.WELCOME)}>
-                {t("reserveNow")}
-              </Link>
-            </Button>
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
               {carFeatures.map(({ id, icon, label }) => (
                 <div key={id} className="bg-muted rounded-lg shadow-xs p-4 text-center flex items-center flex-col">
 								{icon}

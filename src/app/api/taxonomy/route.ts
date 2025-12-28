@@ -1,13 +1,51 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { redis } from "@/lib/redis-store";
 import { generateTaxonomyData } from "@/lib/taxonomy-utils";
+import { prisma } from "@/lib/prisma";
 import fs from "fs/promises";
 import path from "path";
 
 const CACHE_KEY = "global_taxonomy_data";
 
-export const GET = async () => {
+export const GET = async (request: NextRequest) => {
   try {
+    const { searchParams } = new URL(request.url);
+    const all = searchParams.get("all") === "true";
+
+    if (all) {
+      const makeId = searchParams.get("make");
+      const modelId = searchParams.get("model");
+
+      const makes = await prisma.make.findMany({
+        orderBy: { name: 'asc' },
+        select: { id: true, name: true }
+      });
+
+      let models: { id: number; name: string }[] = [];
+      if (makeId) {
+        models = await prisma.model.findMany({
+          where: { makeId: Number(makeId) },
+          orderBy: { name: 'asc' },
+          select: { id: true, name: true }
+        });
+      }
+
+      let modelVariants: { id: number; name: string }[] = [];
+      if (modelId) {
+        modelVariants = await prisma.modelVariant.findMany({
+          where: { modelId: Number(modelId) },
+          orderBy: { name: 'asc' },
+          select: { id: true, name: true }
+        });
+      }
+
+      return NextResponse.json({
+        makes: makes.map(m => ({ label: m.name, value: String(m.id) })),
+        models: models.map(m => ({ label: m.name, value: String(m.id) })),
+        modelVariants: modelVariants.map(m => ({ label: m.name, value: String(m.id) }))
+      });
+    }
+
     // Static data only. No dynamic counts here.
     const cachedData = await redis.get(CACHE_KEY);
     if (cachedData) {

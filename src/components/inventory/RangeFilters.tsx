@@ -35,16 +35,24 @@ export const RangeFilter = (props: RangeFilterProps) => {
 
 	const initialState = useMemo(() => {
 		const state: FilterOptions<string, number> = [];
-		let iterator = defaultMin - (increment ?? 1);
+		const range = defaultMax - defaultMin;
+		
+		// Sensible default increment to prevent millions of items
+		let safeIncrement = increment;
+		if (!safeIncrement) {
+			if (range > 100000) safeIncrement = 10000;
+			else if (range > 10000) safeIncrement = 1000;
+			else if (range > 1000) safeIncrement = 100;
+			else safeIncrement = 1;
+		}
 
-		do {
-			if (increment) {
-				iterator = iterator + increment;
-			} else {
-				iterator++;
-			}
+		let iterator = defaultMin;
+		
+		// Safety: max 1000 items
+		const maxItems = 1000;
+		let count = 0;
 
-
+		while (iterator <= defaultMax && count < maxItems) {
 			if (currency) {
 				state.push({
 					label: formatPrice({
@@ -58,7 +66,10 @@ export const RangeFilter = (props: RangeFilterProps) => {
 			} else {
 				state.push({ label: iterator.toString(), value: iterator });
 			}
-		} while (iterator < defaultMax);
+			
+			iterator += safeIncrement;
+			count++;
+		}
 
 		return state;
 	}, [defaultMin, defaultMax, increment, currency, thousandSeparator]);

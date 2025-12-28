@@ -82,17 +82,17 @@ const CarCarousel = ({ images }: ClassifiedCarouselProps) => {
         >
           {images.map((image, index) => (
             <SwiperSlide key={image.id} virtualIndex={index}>
-              <ImgixImage
-               blurDataURL={image.blurhash}
-								placeholder="blur"
-								src={image.src}
-								alt={image.alt}
-								width={600}
-								height={400}
-								quality={100}
-								className="aspect-3/2 object-cover rounded-md cursor-pointer"
-                onClick={handleImageClick}
-              />
+              <div className="aspect-3/2 relative w-full overflow-hidden rounded-md cursor-pointer" onClick={handleImageClick}>
+                <ImgixImage
+                blurDataURL={image.blurhash}
+                                  placeholder="blur"
+                                  src={image.src}
+                                  alt={image.alt}
+                                  fill={true}
+                                  quality={100}
+                                  smartCover={true}
+                />
+              </div>
             </SwiperSlide>
           ))}
         </Swiper>
