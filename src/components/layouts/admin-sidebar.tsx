@@ -11,14 +11,19 @@ import {
       UserPlusIcon,
       StarIcon,
       FileCodeIcon,
+      ShieldCheckIcon,
     } from "lucide-react";import Image from "next/image";
 import Link from "next/link";
 import React, { useCallback, useState } from "react";
 import ActiveLink from "../ui/active-link";
 import { useTranslations } from "next-intl";
+import { useSession } from "next-auth/react";
+import { SUPER_ADMIN_EMAIL } from "@/config/constants";
 
 const AdminSidebar = () => {
   const t = useTranslations("Admin.sidebar");
+  const { data: session } = useSession();
+  
   const navigation = [
     {
       name: t("dashboard"),
@@ -55,12 +60,22 @@ const AdminSidebar = () => {
       href: routes.admin.emailTemplates,
       icon: FileCodeIcon,
     },
-    {
-      name: t("settings"),
-      href: routes.admin.settings,
-      icon: SettingsIcon,
-    },
   ];
+
+  // Only show User Management to the Founder
+  if (session?.user?.email === SUPER_ADMIN_EMAIL) {
+    navigation.push({
+      name: "User Management",
+      href: routes.admin.users,
+      icon: ShieldCheckIcon,
+    });
+  }
+
+  navigation.push({
+    name: t("settings"),
+    href: routes.admin.settings,
+    icon: SettingsIcon,
+  });
   const [isSidebarexpanded, setIsSidebarexpanded] = useState(false);
   const handleSidebarHover = useCallback((expanded: boolean) => {
     setIsSidebarexpanded(expanded);

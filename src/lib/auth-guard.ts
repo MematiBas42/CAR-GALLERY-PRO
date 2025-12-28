@@ -1,19 +1,24 @@
 import { auth } from "@/auth";
 import { forbidden } from "next/navigation";
 
-const ADMIN_EMAILS = ["admin@example.com", "info@rimglobalauto.com", "rakundusunen@gmail.com"];
-
 export async function requireAdmin() {
   const session = await auth();
   
-  if (!session?.user?.email) {
+  if (!session || !session.user || session.user.role !== "ADMIN") {
+    console.error(`Unauthorized access attempt by: ${session?.user?.email || "anonymous"}`);
     forbidden();
   }
+  
+  return session;
+}
 
-  // Şu an veritabanında rol yok, o yüzden email listesiyle kontrol ediyoruz.
-  // İleride veritabanına 'role' sütunu eklenirse burayı güncelleriz.
-  if (!ADMIN_EMAILS.includes(session.user.email)) {
-    console.error(`Unauthorized access attempt by: ${session.user.email}`);
+import { SUPER_ADMIN_EMAIL } from "@/config/constants";
+
+export async function requireSuperAdmin() {
+  const session = await auth();
+  
+  if (!session || !session.user || session.user.email !== SUPER_ADMIN_EMAIL) {
+    console.error(`Unauthorized SUPER ADMIN access attempt by: ${session?.user?.email || "anonymous"}`);
     forbidden();
   }
   

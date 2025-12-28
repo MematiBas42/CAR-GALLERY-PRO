@@ -6,10 +6,13 @@ export async function seedAdmin(prisma: PrismaClient) {
 
     const admin = await prisma.user.upsert({
         where: { email: "admin@example.com" },
-        update: {},
+        update: {
+            role: "ADMIN"
+        },
         create: {
             email: "admin@example.com",
             hashedPassword: password,
+            role: "ADMIN"
         }
     })
 

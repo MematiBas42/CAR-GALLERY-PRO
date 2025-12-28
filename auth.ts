@@ -47,6 +47,7 @@ export const {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.role = user.role;
       }
       
       // Check 2FA status from Redis
@@ -61,6 +62,7 @@ export const {
     session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
+        session.user.role = token.role;
       }
       // Pass the 2FA status to the session so middleware can read it
       // @ts-expect-error - requires2FA is likely not defined in the default types yet

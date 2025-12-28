@@ -1,4 +1,5 @@
 import z from "zod";
+import { Role } from "@prisma/client";
 
 export const SignInSchema = z.object({
   email: z
@@ -9,6 +10,12 @@ export const SignInSchema = z.object({
     .trim()
     .toLowerCase(),
   password: z.string().min(6, "Password must be at least 6 characters long"),
+});
+
+export const CreateUserSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+  role: z.nativeEnum(Role),
 });
 
 export const OTPSchema = z.object({
