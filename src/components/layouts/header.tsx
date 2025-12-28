@@ -2,7 +2,7 @@ import { routes } from "@/config/routes";
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "../ui/sheet";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger, SheetClose } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { HeartIcon, HomeIcon, LayoutDashboard, MenuIcon } from "lucide-react";
 import { Favourites } from "@/config/types";
@@ -122,29 +122,34 @@ const Header = async () => {
             </div>
             <nav className="flex flex-col gap-4">
                 {navLinks.map((link) => (
-                <Link
-                    key={link.id}
-                    href={link.href}
-                    className="text-lg font-medium text-foreground hover:text-primary border-b border-muted pb-2"
-                >
-                    {link.label}
-                </Link>
+                <SheetClose asChild key={link.id}>
+                  <Link
+                      href={link.href}
+                      className="text-lg font-medium text-foreground hover:text-primary border-b border-muted pb-2"
+                  >
+                      {link.label}
+                  </Link>
+                </SheetClose>
                 ))}
-                <Link
-                    href={routes.favourites}
-                    className="text-lg font-medium text-foreground hover:text-primary border-b border-muted pb-2 flex justify-between"
-                >
-                    {t("favorites")}
-                    <span className="bg-primary text-primary-foreground px-2 rounded-full text-sm">
-                        {liveFavCount}
-                    </span>
-                </Link>
+                <SheetClose asChild>
+                  <Link
+                      href={routes.favourites}
+                      className="text-lg font-medium text-foreground hover:text-primary border-b border-muted pb-2 flex justify-between"
+                  >
+                      {t("favorites")}
+                      <span className="bg-primary text-primary-foreground px-2 rounded-full text-sm">
+                          {liveFavCount}
+                      </span>
+                  </Link>
+                </SheetClose>
             </nav>
             {session && (
                 <div className="pt-4 border-t border-muted">
-                    <Link href={routes.admin.dashboard} className="flex items-center gap-2 text-primary font-bold mb-4">
-                        <LayoutDashboard className="w-5 h-5" /> Admin Panel
-                    </Link>
+                    <SheetClose asChild>
+                      <Link href={routes.admin.dashboard} className="flex items-center gap-2 text-primary font-bold mb-4">
+                          <LayoutDashboard className="w-5 h-5" /> Admin Panel
+                      </Link>
+                    </SheetClose>
                     <SignoutForm />
                 </div>
             )}

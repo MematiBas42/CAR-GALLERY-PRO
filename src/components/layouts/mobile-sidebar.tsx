@@ -16,7 +16,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import ActiveLink from "../ui/active-link";
 import { useTranslations } from "next-intl";
-import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 
 const MobileSidebar = () => {
@@ -90,15 +90,15 @@ const MobileSidebar = () => {
         <div className="flex flex-col gap-2 p-4">
           <nav className="flex flex-col gap-2">
             {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                onClick={() => setOpen(false)} // Close sidebar on click
-                className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-800 transition-colors"
-              >
-                <item.icon className="h-5 w-5 text-gray-400" />
-                <span className="font-medium">{item.name}</span>
-              </Link>
+              <SheetClose asChild key={item.name}>
+                <Link
+                  href={item.href}
+                  className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-800 transition-colors"
+                >
+                  <item.icon className="h-5 w-5 text-gray-400" />
+                  <span className="font-medium">{item.name}</span>
+                </Link>
+              </SheetClose>
             ))}
           </nav>
         </div>
