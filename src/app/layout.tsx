@@ -36,6 +36,19 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+  },
+  openGraph: {
+    type: "website",
+    siteName: "RIM GLOBAL",
+    title: "RIM GLOBAL | Premium Automotive Collection",
+    description: "Federal Way's Curated Automotive Collection",
+    images: ["/assets/logo.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "RIM GLOBAL | Premium Automotive Collection",
+    description: "Federal Way's Curated Automotive Collection",
+    images: ["/assets/logo.png"],
   }
 };
 

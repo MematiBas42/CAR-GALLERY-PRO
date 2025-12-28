@@ -2,6 +2,7 @@ import CarView from "@/components/car/car-view";
 import { routes } from "@/config/routes";
 import { PageProps } from "@/config/types";
 import { prisma } from "@/lib/prisma";
+import { getImageUrl } from "@/lib/utils";
 import { ClassifiedStatus } from "@prisma/client";
 import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
@@ -19,8 +20,8 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
   if (!car) return { title: "Car Not Found" };
 
   const title = `${car.year} ${car.make.name} ${car.model.name} - RIM GLOBAL`;
-  const description = car.description?.substring(0, 160) || `Check out this ${car.title} at RIM GLOBAL.`;
-  const image = car.images[0]?.src || "/assets/logo.png";
+  const description = car.description?.replace(/<[^>]*>?/gm, '').substring(0, 160) || `Check out this ${car.title} at RIM GLOBAL.`;
+  const image = getImageUrl(car.images[0]?.src);
 
   return {
     title,
@@ -29,6 +30,7 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
       title,
       description,
       images: [{ url: image }],
+      type: 'website',
     },
     twitter: {
       card: "summary_large_image",
