@@ -7,6 +7,7 @@ import { RangeFilter } from "../inventory/RangeFilters";
 import { useTranslations } from "next-intl";
 import React from "react";
 import { useTaxonomy } from "@/hooks/use-taxonomy";
+import { homepageFilterSchema } from "./homepage-clear-filters";
 
 interface HomepageTaxonomyFiltersProps extends SidebarProps {}
 
@@ -16,18 +17,7 @@ const HomepageTaxonomyFilters = ({
 }: HomepageTaxonomyFiltersProps) => {
   const t = useTranslations("Filters");
   const { _min, _max } = minMaxValue;
-  const [, setState] = useQueryStates(
-    {
-      make: parseAsString.withDefault(""),
-      model: parseAsString.withDefault(""),
-      modelVariant: parseAsString.withDefault(""),
-      minYear: parseAsString.withDefault(""),
-      maxYear: parseAsString.withDefault(""),
-      minPrice: parseAsString.withDefault(""),
-      maxPrice: parseAsString.withDefault(""),
-    },
-    { shallow: true }
-  );
+  const [, setState] = useQueryStates(homepageFilterSchema, { shallow: false });
 
   const { ranges } = useTaxonomy();
 
