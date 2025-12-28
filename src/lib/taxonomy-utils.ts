@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/prisma";
+import { redis } from "@/lib/redis-store";
 import fs from "fs/promises";
 import path from "path";
+
+const TAXONOMY_REDIS_KEY = "global_taxonomy_data";
 
 export async function generateTaxonomyData() {
   const classifieds = await prisma.classified.findMany({
@@ -18,7 +21,6 @@ export async function generateTaxonomyData() {
 
   if (classifieds.length === 0) return null;
 
-  // Hierarchical structure for Make -> Model -> Variant
   const makeMap = new Map();
   classifieds.forEach(c => {
     if (!c.make) return;
@@ -26,13 +28,11 @@ export async function generateTaxonomyData() {
       makeMap.set(c.make.id, { v: String(c.make.id), l: c.make.name, m: new Map() });
     }
     const makeEntry = makeMap.get(c.make.id);
-    
     if (c.model) {
       if (!makeEntry.m.has(c.model.id)) {
         makeEntry.m.set(c.model.id, { v: String(c.model.id), l: c.model.name, vr: new Map() });
       }
       const modelEntry = makeEntry.m.get(c.model.id);
-      
       if (c.modelVariant) {
         modelEntry.vr.set(c.modelVariant.id, { v: String(c.modelVariant.id), l: c.modelVariant.name });
       }
@@ -47,14 +47,12 @@ export async function generateTaxonomyData() {
     })).sort((a: any, b: any) => a.l.localeCompare(b.l))
   })).sort((a: any, b: any) => a.l.localeCompare(b.l));
 
-  // Ranges
   const ranges = {
     year: { min: Math.min(...classifieds.map(c => c.year)), max: Math.max(...classifieds.map(c => c.year)) },
     price: { min: Math.min(...classifieds.map(c => c.price)), max: Math.max(...classifieds.map(c => c.price)) },
     odoReading: { min: Math.min(...classifieds.map(c => c.odoReading)), max: Math.max(...classifieds.map(c => c.odoReading)) }
   };
 
-  // Attributes
   const unique = (arr: any[]) => Array.from(new Set(arr.filter(Boolean))).sort();
   const attributes = {
     fuelType: unique(classifieds.map(c => c.fuelType)),
@@ -68,14 +66,23 @@ export async function generateTaxonomyData() {
     seats: unique(classifieds.map(c => c.seats))
   };
 
-  const finalData = { taxonomyTree, ranges, attributes, updatedAt: new Date().toISOString() };
+  const finalData = { taxonomyTree, ranges, attributes, totalCount: classifieds.length, updatedAt: new Date().toISOString() };
 
+  // 1. Always update Redis (Primary Source for Production)
+  try {
+    await redis.set(TAXONOMY_REDIS_KEY, finalData, { ex: 86400 }); // 24h cache
+  } catch (e) {
+    console.error("Redis Sync Failed:", e);
+  }
+
+  // 2. Try to update static file (For Build optimization, fail gracefully on Serverless)
   try {
     const outputPath = path.join(process.cwd(), "public", "taxonomy-tree.json");
     await fs.writeFile(outputPath, JSON.stringify(finalData));
-    return finalData;
   } catch (error) {
-    console.error("Failed to write taxonomy file:", error);
-    return finalData;
+    // Expected in many serverless environments
+    console.warn("Static file write skipped (likely Serverless environment)");
   }
+
+  return finalData;
 }

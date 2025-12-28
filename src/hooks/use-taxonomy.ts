@@ -37,10 +37,10 @@ export interface TaxonomyData {
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export function useTaxonomy() {
-  const { data, error, isLoading } = useSWR<TaxonomyData>("/taxonomy-tree.json", fetcher, {
+  const { data, error, isLoading } = useSWR<TaxonomyData>("/api/taxonomy", fetcher, {
     revalidateOnFocus: false,
-    revalidateIfStale: false,
-    dedupingInterval: 3600000, 
+    revalidateIfStale: true, // Allow stale while revalidating from Redis
+    dedupingInterval: 60000, // 1 minute client-side deduplication
   });
 
   return {
@@ -49,7 +49,8 @@ export function useTaxonomy() {
     isError: error,
     taxonomy: data?.taxonomyTree || [],
     ranges: data?.ranges,
-    attributes: data?.attributes
+    attributes: data?.attributes,
+    totalCount: data?.totalCount || 0
   };
 }
 
