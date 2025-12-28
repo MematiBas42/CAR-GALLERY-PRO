@@ -73,7 +73,7 @@ If the VRM cannot be identified, return "UNKNOWN". Be as accurate and realistic 
 Return only the structured JSON object, with no extra text or explanation.
         `.trim()
 
-export const MAX_IMAGES = 8
+export const MAX_IMAGES = 50
 
 
 export const sortOrder = ["asc", "desc"] as const;

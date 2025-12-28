@@ -388,7 +388,7 @@
       "addNew": "Add new",
       "editTitle": "Edit Vehicle Details",
       "createTitle": "Create New Vehicle",
-      "imagesLabel": "Images (up to 8)",
+      "imagesLabel": "Images (up to 50)",
       "statusLabel": "Status",
       "updateButton": "Update Car",
       "createButton": "Create Car",
