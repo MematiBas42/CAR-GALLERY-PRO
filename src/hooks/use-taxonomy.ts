@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { setIsLoading } from "./use-loading";
 
 export interface TaxonomyOption {
@@ -34,21 +34,24 @@ export interface TaxonomyData {
     seats: number[];
   };
   totalCount: number;
+  filteredCount?: number; // Added via Fusion API
   updatedAt: string;
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export function useTaxonomy() {
-  const { data, error, isLoading } = useSWR<TaxonomyData>("/api/taxonomy", fetcher, {
+export function useTaxonomy(params?: string) {
+  const apiUrl = params ? `/api/taxonomy?${params}` : "/api/taxonomy";
+  
+  const { data, error, isLoading } = useSWR<TaxonomyData>(apiUrl, fetcher, {
     revalidateOnFocus: false,
     revalidateIfStale: true,
-    dedupingInterval: 60000, 
+    dedupingInterval: 10000, // 10 seconds for params-based queries
   });
 
   useEffect(() => {
-    setIsLoading(isLoading);
-    return () => setIsLoading(false);
+    setIsLoading(isLoading, "taxonomy-fetch");
+    return () => setIsLoading(false, "taxonomy-fetch");
   }, [isLoading]);
 
   const taxonomy = data?.taxonomyTree || [];
@@ -61,6 +64,7 @@ export function useTaxonomy() {
     ranges: data?.ranges,
     attributes: data?.attributes,
     totalCount: data?.totalCount || 0,
+    filteredCount: data?.filteredCount ?? data?.totalCount ?? 0,
     getModels: (makeId: string) => getModelsForMake(taxonomy, makeId),
     getVariants: (makeId: string, modelId: string) => getVariantsForModel(taxonomy, makeId, modelId)
   };

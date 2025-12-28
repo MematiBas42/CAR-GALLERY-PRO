@@ -84,8 +84,8 @@ const DialogFilters = ({
   const seatOptions = (attributes?.seats || []).map((val: any) => ({ label: val.toString(), value: val.toString() }));
 
   useEffect(() => {
-    setIsLoading(isPending);
-    return () => setIsLoading(false);
+    setIsLoading(isPending, "mobile-filter-update");
+    return () => setIsLoading(false, "mobile-filter-update");
   }, [isPending]);
 
   useEffect(() => {
