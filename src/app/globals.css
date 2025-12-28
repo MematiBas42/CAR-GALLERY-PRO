@@ -78,10 +78,37 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-/* World-class fix: Ensure Radix Popovers/Portals are always clickable above Dialogs */
+/* Global Premium UI Refinements */
 [data-radix-popper-content-wrapper] {
   z-index: 100000 !important;
   pointer-events: auto !important;
+}
+
+/* Glassmorphism for Popovers and Modals */
+.popover-content, 
+[data-radix-focus-guard] + [data-radix-popper-content-wrapper] > div,
+.dialog-content {
+  backdrop-filter: blur(12px);
+  background-color: var(--glass-bg, oklch(1 0 0 / 0.8));
+  border: 1px solid oklch(0.145 0 0 / 0.1);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+.dark .popover-content,
+.dark [data-radix-focus-guard] + [data-radix-popper-content-wrapper] > div,
+.dark .dialog-content {
+  background-color: oklch(0.25 0.03 265 / 0.85);
+  border: 1px solid oklch(0.985 0 0 / 0.1);
+}
+
+/* Command (Search) Styling */
+[data-radix-popper-content-wrapper] [cmdk-root] {
+  background: transparent;
+}
+
+[cmdk-item][data-selected="true"] {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
 }
 
 .dark {

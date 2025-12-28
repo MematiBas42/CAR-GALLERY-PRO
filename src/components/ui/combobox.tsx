@@ -65,10 +65,10 @@ export function Combobox({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full justify-between pr-2"
+            className="w-full justify-between pr-2 h-11 border-muted-foreground/20 hover:border-primary/50 transition-colors bg-background/50 backdrop-blur-sm shadow-sm"
             disabled={disabled}
           >
-            <span className="truncate">
+            <span className="truncate font-normal text-muted-foreground">
               {value
                 ? options.find((option) => String(option.value) === String(value))?.label || value
                 : placeholder}
@@ -77,37 +77,37 @@ export function Combobox({
                 {value && (
                     <div 
                         onClick={handleClear}
-                        className="rounded-full p-0.5 hover:bg-secondary cursor-pointer"
+                        className="rounded-full p-1 hover:bg-destructive/10 hover:text-destructive cursor-pointer transition-colors"
                     >
-                        <X className="h-3 w-3 opacity-50 hover:opacity-100" />
+                        <X className="h-3.5 w-3.5 opacity-70" />
                     </div>
                 )}
-                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                <ChevronsUpDown className="ml-1 h-4 w-4 shrink-0 opacity-40" />
             </div>
           </Button>
         </PopoverTrigger>
         <PopoverContent 
-          className="w-[--radix-popover-trigger-width] p-0" 
+          className="w-[--radix-popover-trigger-width] p-0 shadow-2xl border-primary/10" 
           align="start"
           onInteractOutside={(e) => {
-            // Prevent Dialog from stealing focus when clicking inside the popover
             e.preventDefault();
           }}
         >
           <Command className="max-h-[300px]">
-            <CommandInput placeholder={searchPlaceholder} className="h-9" />
+            <CommandInput placeholder={searchPlaceholder} className="h-10 text-sm border-none focus:ring-0" />
             <CommandList className="max-h-[250px] overflow-y-auto">
-              <CommandEmpty>{emptyText}</CommandEmpty>
-              <CommandGroup>
+              <CommandEmpty className="py-4 text-sm text-muted-foreground text-center">{emptyText}</CommandEmpty>
+              <CommandGroup className="p-1">
                 {options.map((option) => (
                   <CommandItem
                     key={option.value}
                     value={option.label}
                     onSelect={() => handleSelect(option.value)}
+                    className="rounded-md px-3 py-2 text-sm cursor-pointer transition-all"
                   >
                     <Check
                       className={cn(
-                        "mr-2 h-4 w-4",
+                        "mr-2 h-4 w-4 text-primary",
                         value === option.value ? "opacity-100" : "opacity-0"
                       )}
                     />

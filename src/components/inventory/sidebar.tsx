@@ -44,8 +44,6 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
       maxPrice: parseAsString.withDefault(""),
       minReading: parseAsString.withDefault(""),
       maxReading: parseAsString.withDefault(""),
-      currency: parseAsString.withDefault(""),
-      odoUnit: parseAsString.withDefault(""),
       transmission: parseAsString.withDefault(""),
       fuelType: parseAsString.withDefault(""),
       bodyType: parseAsString.withDefault(""),
@@ -56,7 +54,7 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
     },
     { 
         shallow: false,
-        startTransition // World-class transition handling by nuqs
+        startTransition 
     }
   );
 
@@ -71,10 +69,8 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
   const bodyTypeOptions = (attributes?.bodyType || []).map((val: any) => ({ label: tEnums(`BodyType.${val}`), value: val }));
   const colourOptions = (attributes?.colour || []).map((val: any) => ({ label: tEnums(`Colour.${val}`), value: val }));
   const ulezOptions = (attributes?.ulezCompliance || []).map((val: any) => ({ label: tEnums(`ULEZ.${val}`) || val, value: val })); 
-  const odoUnitOptions = (attributes?.odoUnit || []).map((val: any) => ({ label: tEnums(`OdoUnit.${val}`), value: val }));
-  const currencyOptions = (attributes?.currency || []).map((val: any) => ({ label: val, value: val })); 
-  const doorOptions = (attributes?.doors || []).map((val: any) => ({ label: val.toString(), value: val.toString() }));
-  const seatOptions = (attributes?.seats || []).map((val: any) => ({ label: val.toString(), value: val.toString() }));
+  const doorOptions = (attributes?.doors || []).map((val: number) => ({ label: val.toString(), value: val.toString() }));
+  const seatOptions = (attributes?.seats || []).map((val: number) => ({ label: val.toString(), value: val.toString() }));
 
   useEffect(() => {
     setIsLoading(isPending, "inventory-list-update");
@@ -154,8 +150,6 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
           searchParams={searchParams}
         />
 
-        <Select label={tLabels("currency")} name="currency" value={searchParams.currency} onChange={handleChange as any} options={currencyOptions} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
-        <Select label={tLabels("odometerUnit")} name="odoUnit" value={searchParams.odoUnit} onChange={handleChange as any} options={odoUnitOptions} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
         <Select label={tLabels("transmission")} name="transmission" value={searchParams.transmission} onChange={handleChange as any} options={transmissionOptions} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
         <Select label={tLabels("fuelType")} name="fuelType" value={searchParams.fuelType} onChange={handleChange as any} options={fuelTypeOptions} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
         <Select label={tLabels("bodyType")} name="bodyType" value={searchParams.bodyType} onChange={handleChange as any} options={bodyTypeOptions} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
