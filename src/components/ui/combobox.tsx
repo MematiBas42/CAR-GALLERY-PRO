@@ -89,9 +89,6 @@ export function Combobox({
         <PopoverContent 
           className="w-[--radix-popover-trigger-width] p-0 shadow-2xl border-primary/10" 
           align="start"
-          onInteractOutside={(e) => {
-            e.preventDefault();
-          }}
         >
           <Command className="max-h-[300px]">
             <CommandInput placeholder={searchPlaceholder} className="h-10 text-sm border-none focus:ring-0" />

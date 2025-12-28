@@ -124,11 +124,6 @@ const DialogFilters = ({
       </DialogTrigger>
       <DialogContent 
         className="sm:max-w-[425px] h-[100dvh] sm:h-[90vh] overflow-hidden flex flex-col p-0 gap-0 border-none sm:border-solid rounded-none sm:rounded-2xl z-[9999] shadow-2xl backdrop-blur-xl bg-background/95"
-        onPointerDownOutside={(e) => {
-            if (e.target instanceof Element && e.target.closest('[data-radix-popper-content-wrapper]')) {
-                e.preventDefault();
-            }
-        }}
       >
         <DialogHeader className="p-6 border-b bg-muted/30">
           <div className="flex items-center justify-between">
