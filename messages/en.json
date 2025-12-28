@@ -432,6 +432,7 @@
         "updateError": "Failed to update car",
         "deleteSuccess": "Car deleted successfully",
         "deleteError": "Failed to delete car",
+        "notFound": "Car not found",
         "genericError": "Something went wrong"
       }
     },

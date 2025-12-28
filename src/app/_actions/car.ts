@@ -76,43 +76,53 @@ export const createCarAction = async (data: CreateCarType) => {
 
       // AUTO-NOTIFICATION: New Inventory Arrival
       if (createdCar.status === "LIVE") {
-        try {
-          const template = await prisma.emailTemplate.findFirst({
-            where: { name: "New Inventory Arrival" }
-          });
-
-          if (template) {
-            const subscribers = await prisma.customer.findMany({
-              where: { status: CustomerStatus.SUBSCRIBER },
-              select: { email: true, firstName: true }
+          try {
+            console.log("📧 Starting New Arrival Email process...");
+            const template = await prisma.emailTemplate.findFirst({
+              where: { name: "New Inventory Arrival" }
             });
 
-            const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-            
-            const emailPromises = subscribers.map(sub => {
-                let { subject, content } = template;
-                const templateData = {
-                    name: sub.firstName,
-                    carTitle: createdCar.title,
-                    description: createdCar.description?.substring(0, 150).replace(/<[^>]*>?/gm, '') + "...",
-                    link: `${appUrl}/inventory/${createdCar.slug}`
-                };
-
-                Object.keys(templateData).forEach(key => {
-                    const placeholder = `{{${key}}}`;
-                    const value = templateData[key as keyof typeof templateData] || '';
-                    subject = subject.replace(new RegExp(placeholder, 'g'), value);
-                    content = content.replace(new RegExp(placeholder, 'g'), value);
+            if (!template) {
+                console.error("❌ Email Template 'New Inventory Arrival' not found in DB.");
+            } else {
+                const subscribers = await prisma.customer.findMany({
+                where: { status: CustomerStatus.SUBSCRIBER },
+                select: { email: true, firstName: true }
                 });
+                
+                console.log(`📧 Found ${subscribers.length} subscribers.`);
 
-                return sendEmailWithContent(sub.email, subject, content);
-            });
+                if (subscribers.length > 0) {
+                    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://rimglobalauto.com";
+                    
+                    const emailPromises = subscribers.map(sub => {
+                        let { subject, content } = template;
+                        const templateData = {
+                            name: sub.firstName,
+                            carTitle: createdCar.title,
+                            description: createdCar.description?.substring(0, 150).replace(/<[^>]*>?/gm, '') + "...",
+                            link: `${appUrl}/inventory/${createdCar.slug}`
+                        };
 
-            await Promise.all(emailPromises);
+                        Object.keys(templateData).forEach(key => {
+                            const placeholder = `{{${key}}}`;
+                            const value = templateData[key as keyof typeof templateData] || '';
+                            subject = subject.replace(new RegExp(placeholder, 'g'), value);
+                            content = content.replace(new RegExp(placeholder, 'g'), value);
+                        });
+
+                        return sendEmailWithContent(sub.email, subject, content);
+                    });
+
+                    const results = await Promise.all(emailPromises);
+                    console.log(`✅ Sent ${results.filter(r => r !== null).length} emails successfully.`);
+                } else {
+                    console.log("ℹ️ No subscribers found to send emails to.");
+                }
+            }
+          } catch (e) {
+            console.error("❌ New Arrival Email CRITICAL error:", e);
           }
-        } catch (e) {
-          console.error("New Arrival Email error:", e);
-        }
       }
     }
   } catch (err) {

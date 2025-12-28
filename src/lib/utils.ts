@@ -52,12 +52,12 @@ interface FormatPriceArgs {
   currency?: CurrencyCode | null;
 }
 
-export function formatPrice({ price }: FormatPriceArgs) {
+export function formatPrice({ price, currency }: FormatPriceArgs) {
   if (!price) return "$0";
 
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD",
+    currency: currency || "USD",
     maximumFractionDigits: 0,
   });
 
