@@ -61,7 +61,7 @@ const DialogFilters = ({
       seats: parseAsString.withDefault(""),
       ulezCompliance: parseAsString.withDefault(""),
     },
-    { shallow: true }
+    { shallow: false }
   );
 
   const adaptiveRanges = taxonomyRanges || {
@@ -100,10 +100,6 @@ const DialogFilters = ({
     if (name === "make") {
       setQueryStates({ model: null, modelVariant: null });
     }
-
-    React.startTransition(() => {
-        router.refresh();
-    });
   };
 
   return (

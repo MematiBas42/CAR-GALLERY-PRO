@@ -4,6 +4,7 @@ import { AwaitedPageProps } from "@/config/types";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { SearchButton } from "@/components/homepage/search-button";
+import { HomepageClearFilters } from "@/components/homepage/homepage-clear-filters";
 import { buildClassifiedFilterQuery } from "@/lib/utils";
 import { routes } from "@/config/routes";
 import { getTranslations } from "next-intl/server";
@@ -58,17 +59,7 @@ const HeroSection = async (props: AwaitedPageProps) => {
               />
             </div>
             <SearchButton initialCount={carsCount} label={t("discover")} />
-            {isFilterApplied && (
-							<Button
-								asChild
-								variant="outline"
-								className="w-full hover:bg-accent"
-							>
-								<Link href={routes.home}>
-									{t("clearFilters")} ({totalFiltersApplied})
-								</Link>
-							</Button>
-						)}
+            <HomepageClearFilters />
           </div>
         </div>
       </div>

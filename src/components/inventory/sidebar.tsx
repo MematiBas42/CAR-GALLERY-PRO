@@ -52,7 +52,7 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
       seats: parseAsString.withDefault(""),
       ulezCompliance: parseAsString.withDefault(""),
     },
-    { shallow: true }
+    { shallow: false }
   );
 
   const adaptiveRanges = taxonomyRanges || {
@@ -90,10 +90,6 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
     if (name === "make") {
       setQueryStates({ model: null, modelVariant: null });
     }
-
-    React.startTransition(() => {
-        router.refresh();
-    });
   };
 
   return (
