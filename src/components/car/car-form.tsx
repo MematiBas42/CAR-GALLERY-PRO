@@ -39,6 +39,7 @@ import { v4 as uuidv4 } from "uuid";
 import { endpoints } from "@/config/endpoints";
 import { api } from "@/lib/api-client";
 import { useTranslations } from "next-intl";
+import { setIsLoading as setGlobalLoading } from "@/hooks/use-loading";
 
 interface CarFormProps {
   car?: CarWithImages;
@@ -52,7 +53,12 @@ const CarForm = ({ car }: CarFormProps) => {
   const [makes, setMakes] = useState<FilterOptions<string, string>>([]);
   const [models, setModels] = useState<FilterOptions<string, string>>([]);
   const [modelVariants, setModelVariants] = useState<FilterOptions<string, string>>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isTaxonomyLoading, setIsTaxonomyLoading] = useState(true);
+
+  useEffect(() => {
+    setGlobalLoading(isPending, "car-form-submit");
+    return () => setGlobalLoading(false, "car-form-submit");
+  }, [isPending]);
 
   const defaultValues = isEditMode && car ? {
         id: car.id,
@@ -93,7 +99,8 @@ const CarForm = ({ car }: CarFormProps) => {
 
   useEffect(() => {
     const fetchTaxonomy = async () => {
-      setIsLoading(true);
+      setIsTaxonomyLoading(true);
+      setGlobalLoading(true, "admin-taxonomy-fetch");
       const url = new URL(endpoints.taxonomy, window.location.origin);
       url.searchParams.append("all", "true"); // Fetch all taxonomies for admin
       if (make) url.searchParams.append("make", make);
@@ -111,7 +118,8 @@ const CarForm = ({ car }: CarFormProps) => {
       } catch (error) {
         console.error("Failed to fetch taxonomy", error);
       } finally {
-        setIsLoading(false);
+        setIsTaxonomyLoading(false);
+        setGlobalLoading(false, "admin-taxonomy-fetch");
       }
     };
 
@@ -141,7 +149,7 @@ const CarForm = ({ car }: CarFormProps) => {
             makes={makes}
             models={models}
             modelVariants={modelVariants}
-            isLoading={isLoading}
+            isLoading={isTaxonomyLoading}
           />
           <div className="space-y-6">
             <FormField

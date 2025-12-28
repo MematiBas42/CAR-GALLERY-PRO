@@ -4,9 +4,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { contactFormSchema, ContactFormType } from "@/app/schemas/contact.schema";
 import { sendContactEmail } from "@/app/_actions/contact";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import { setIsLoading } from "@/hooks/use-loading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,6 +24,11 @@ import { Loader2 } from "lucide-react";
 export const ContactForm = () => {
   const t = useTranslations("Contact.form");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    setIsLoading(isSubmitting, "contact-form-submit");
+    return () => setIsLoading(false, "contact-form-submit");
+  }, [isSubmitting]);
 
   const form = useForm<ContactFormType>({
     resolver: zodResolver(contactFormSchema),

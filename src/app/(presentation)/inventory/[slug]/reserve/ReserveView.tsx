@@ -24,6 +24,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { CalendarIcon, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import { setIsLoading } from "@/hooks/use-loading";
+import { useEffect } from "react";
 
 // 1. Combine Schemas
 const reservationSchema = z.object({
@@ -46,6 +48,11 @@ const ReserveView = ({ car }: ReserveViewProps) => {
   const tReserve = useTranslations("Reserve.submitDetails");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    setIsLoading(isPending, "reservation-submit");
+    return () => setIsLoading(false, "reservation-submit");
+  }, [isPending]);
 
   const form = useForm<ReservationSchemaType>({
     resolver: zodResolver(reservationSchema),

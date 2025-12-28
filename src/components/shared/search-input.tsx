@@ -6,6 +6,7 @@ import { set } from "zod";
 import { SearchIcon, XIcon } from "lucide-react";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
+import { setIsLoading } from "@/hooks/use-loading";
 interface SearchInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string;
 }
@@ -22,8 +23,17 @@ function debounceFunc<T extends (...args: any) => any>(
 
 const SearchInput = (props: SearchInputProps) => {
   const { className, ...rest } = props;
-  const [q, setSearch] = useQueryState("q", { shallow: false });
+  const [isPending, startTransition] = React.useTransition();
+  const [q, setSearch] = useQueryState("q", { 
+      shallow: false,
+      startTransition 
+  });
   const inputRef = useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    setIsLoading(isPending, "search-input-update");
+    return () => setIsLoading(false, "search-input-update");
+  }, [isPending]);
 
   
 

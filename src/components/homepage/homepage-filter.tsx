@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 import React from "react";
 import { useTaxonomy } from "@/hooks/use-taxonomy";
 import { homepageFilterSchema } from "./homepage-clear-filters";
+import { setIsLoading } from "@/hooks/use-loading";
 
 interface HomepageTaxonomyFiltersProps extends SidebarProps {}
 
@@ -15,11 +16,20 @@ const HomepageTaxonomyFilters = ({
   minMaxValue,
   searchParams,
 }: HomepageTaxonomyFiltersProps) => {
+  const [isPending, startTransition] = React.useTransition();
   const t = useTranslations("Filters");
   const { _min, _max } = minMaxValue;
-  const [, setState] = useQueryStates(homepageFilterSchema, { shallow: false });
+  const [, setState] = useQueryStates(homepageFilterSchema, { 
+      shallow: false,
+      startTransition 
+  });
 
   const { ranges } = useTaxonomy();
+
+  React.useEffect(() => {
+    setIsLoading(isPending, "homepage-filter-update");
+    return () => setIsLoading(false, "homepage-filter-update");
+  }, [isPending]);
 
   const handleChange = async (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>

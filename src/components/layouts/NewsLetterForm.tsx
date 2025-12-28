@@ -9,6 +9,7 @@ import { Button } from "../ui/button";
 import { subscribeAction } from "@/app/_actions/subscribe";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import { setIsLoading } from "@/hooks/use-loading";
 
 const NewsLetterForm = () => {
   const t = useTranslations("Newsletter");
@@ -18,6 +19,11 @@ const NewsLetterForm = () => {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    setIsLoading(isPending, "newsletter-sub");
+    return () => setIsLoading(false, "newsletter-sub");
+  }, [isPending]);
 
   const form = useForm<SubscribeSchemaType>({
     resolver: zodResolver(SubscribeSchema),
