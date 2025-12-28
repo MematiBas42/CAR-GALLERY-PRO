@@ -1,7 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { SidebarProps } from "./sidebar";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { parseAsString, useQueryStates } from "nuqs";
 import { routes } from "@/config/routes";
 import {
@@ -13,13 +13,13 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Filter, X } from "lucide-react";
+import { Filter, X, Loader2 } from "lucide-react";
 import { RangeFilter } from "./RangeFilters";
 import TaxonomyFilters from "./TaxonomyFilters";
 import { Select } from "../ui/select";
 import { useTranslations } from "next-intl";
-import { useTaxonomy } from "@/hooks/use-taxonomy";
-import { useLoading, setIsLoading } from "@/hooks/use-loading";
+import { useTaxonomy, useClassifiedCount } from "@/hooks/use-taxonomy";
+import { setIsLoading } from "@/hooks/use-loading";
 
 interface DialogFiltersProps extends SidebarProps {
   count: number;
@@ -27,21 +27,20 @@ interface DialogFiltersProps extends SidebarProps {
 
 const DialogFilters = ({
   minMaxValue,
-  searchParams,
-  count,
+  searchParams: serverSearchParams,
+  count: initialCount,
 }: DialogFiltersProps) => {
-  const isLoadingGlobal = useLoading();
+  const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [isPending, startTransition] = React.useTransition();
+  
   const t = useTranslations("Inventory");
   const tLabels = useTranslations("Inventory.labels");
   const tEnums = useTranslations("Enums");
   const tFilters = useTranslations("Filters");
-  const [open, setOpen] = useState(false);
-  const router = useRouter();
-  const [filtersCount, setFiltersCount] = useState(0);
-  const { _min, _max } = minMaxValue;
-
-  const { ranges: taxonomyRanges, attributes, isLoading } = useTaxonomy();
+  
+  const { ranges: taxonomyRanges, attributes, isLoading: isTaxonomyLoading } = useTaxonomy();
 
   const [queryStates, setQueryStates] = useQueryStates(
     {
@@ -64,54 +63,60 @@ const DialogFilters = ({
       seats: parseAsString.withDefault(""),
       ulezCompliance: parseAsString.withDefault(""),
     },
-    { shallow: false }
+    { 
+        shallow: true // INSTANT UI FEEDBACK (Like Homepage)
+    }
   );
 
-  const adaptiveRanges = taxonomyRanges || {
-    year: { min: _min.year, max: _max.year },
-    price: { min: _min.price, max: _max.price },
-    odoReading: { min: _min.odoReading, max: _max.odoReading }
-  };
+  // Dynamic count for the "Show Results" button using the Fusion API hook
+  const queryString = useMemo(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      // Sync queryStates to params for accurate background count
+      Object.entries(queryStates).forEach(([key, value]) => {
+          if (value) params.set(key, value);
+          else params.delete(key);
+      });
+      params.delete("page");
+      return params.toString();
+  }, [searchParams, queryStates]);
 
-  const fuelTypeOptions = (attributes?.fuelType || []).map((val: any) => ({ label: tEnums(`FuelType.${val}`), value: val }));
-  const transmissionOptions = (attributes?.transmission || []).map((val: any) => ({ label: tEnums(`Transmission.${val}`), value: val }));
-  const bodyTypeOptions = (attributes?.bodyType || []).map((val: any) => ({ label: tEnums(`BodyType.${val}`), value: val }));
-  const colourOptions = (attributes?.colour || []).map((val: any) => ({ label: tEnums(`Colour.${val}`), value: val }));
-  const ulezOptions = (attributes?.ulezCompliance || []).map((val: any) => ({ label: tEnums(`ULEZ.${val}`) || val, value: val })); 
-  const odoUnitOptions = (attributes?.odoUnit || []).map((val: any) => ({ label: tEnums(`OdoUnit.${val}`), value: val }));
-  const currencyOptions = (attributes?.currency || []).map((val: any) => ({ label: val, value: val })); 
-  const doorOptions = (attributes?.doors || []).map((val: any) => ({ label: val.toString(), value: val.toString() }));
-  const seatOptions = (attributes?.seats || []).map((val: any) => ({ label: val.toString(), value: val.toString() }));
+  const { count: liveCount, isLoading: isCountLoading } = useClassifiedCount(queryString, initialCount);
 
   useEffect(() => {
-    setIsLoading(isPending, "mobile-filter-update");
+    setIsLoading(isPending || isCountLoading, "mobile-filter-update");
     return () => setIsLoading(false, "mobile-filter-update");
-  }, [isPending]);
+  }, [isPending, isCountLoading]);
 
-  useEffect(() => {
-    const params = typeof searchParams?.then === 'function' ? {} : searchParams;
-    const count = Object.entries(params as Record<string, string>)
-      .filter(([key, value]) => key !== "page" && value).length;
-    setFiltersCount(count);
-  }, [searchParams]); 
+  const filterCount = useMemo(() => {
+      return Object.values(queryStates).filter(Boolean).length;
+  }, [queryStates]);
 
   const clearAllFilter = () => {
     const url = new URL(routes.inventory, process.env.NEXT_PUBLIC_APP_URL);
+    setQueryStates({
+        make: null, model: null, modelVariant: null, minYear: null, maxYear: null,
+        minPrice: null, maxPrice: null, minReading: null, maxReading: null,
+        currency: null, odoUnit: null, transmission: null, fuelType: null,
+        bodyType: null, colour: null, doors: null, seats: null, ulezCompliance: null
+    });
     startTransition(() => {
         router.replace(url.toString());
-        setOpen(false);
     });
   };
 
   const handleChange = (e: { target: { name: string; value: string } }) => {
     const { name, value } = e.target;
     
-    startTransition(() => {
-        setQueryStates({ [name]: value || null });
+    // 1. Update UI Instantly via shallow state
+    setQueryStates({ [name]: value || null });
 
-        if (name === "make") {
-            setQueryStates({ model: null, modelVariant: null });
-        }
+    if (name === "make") {
+        setQueryStates({ model: null, modelVariant: null });
+    }
+
+    // 2. Trigger background server refresh for the list
+    startTransition(() => {
+        router.refresh();
     });
   };
 
@@ -121,9 +126,9 @@ const DialogFilters = ({
         <Button variant="outline" className="lg:hidden flex gap-2">
           <Filter className="w-4 h-4" />
           {t("sidebar.title")}
-          {filtersCount > 0 && (
+          {filterCount > 0 && (
             <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-[10px]">
-              {filtersCount}
+              {filterCount}
             </span>
           )}
         </Button>
@@ -131,7 +136,6 @@ const DialogFilters = ({
       <DialogContent 
         className="sm:max-w-[425px] h-[100dvh] sm:h-[90vh] overflow-hidden flex flex-col p-0 gap-0 border-none sm:border-solid rounded-none sm:rounded-xl z-[9999]"
         onPointerDownOutside={(e) => {
-            // Only prevent closing if clicking inside a radix portal (like our Combobox)
             if (e.target instanceof Element && e.target.closest('[data-radix-popper-content-wrapper]')) {
                 e.preventDefault();
             }
@@ -140,7 +144,7 @@ const DialogFilters = ({
         <DialogHeader className="p-6 border-b">
           <div className="flex items-center justify-between pr-6">
             <DialogTitle className="text-xl font-bold">{t("sidebar.title")}</DialogTitle>
-            {filtersCount > 0 && (
+            {filterCount > 0 && (
               <Button
                 variant="ghost"
                 size="sm"
@@ -161,46 +165,46 @@ const DialogFilters = ({
             label={tFilters("year")}
             minName="minYear"
             maxName="maxYear"
-            defaultMin={adaptiveRanges.year.min ?? _min.year ?? 1900}
-            defaultMax={adaptiveRanges.year.max ?? _max.year ?? new Date().getFullYear()}
+            defaultMin={taxonomyRanges?.year.min ?? minMaxValue._min.year ?? 1900}
+            defaultMax={taxonomyRanges?.year.max ?? minMaxValue._max.year ?? new Date().getFullYear()}
             handleChange={handleChange as any}
-            searchParams={searchParams}
+            searchParams={serverSearchParams}
           />
           <RangeFilter
             label={tFilters("price")}
             minName="minPrice"
             maxName="maxPrice"
-            defaultMin={adaptiveRanges.price.min ?? _min.price ?? 0}
-            defaultMax={adaptiveRanges.price.max ?? _max.price ?? 1000000}
+            defaultMin={taxonomyRanges?.price.min ?? minMaxValue._min.price ?? 0}
+            defaultMax={taxonomyRanges?.price.max ?? minMaxValue._max.price ?? 1000000}
             handleChange={handleChange as any}
             thousandSeparator={true}
             currency={{ currencyCode: "EUR" }}
-            searchParams={searchParams}
+            searchParams={serverSearchParams}
           />
           <RangeFilter
             label={tLabels("odometerReading")}
             minName="minReading"
             maxName="maxReading"
-            defaultMin={adaptiveRanges.odoReading.min ?? _min.odoReading ?? 0}
-            defaultMax={adaptiveRanges.odoReading.max ?? _max.odoReading ?? 1000000}
+            defaultMin={taxonomyRanges?.odoReading.min ?? minMaxValue._min.odoReading ?? 0}
+            defaultMax={taxonomyRanges?.odoReading.max ?? minMaxValue._max.odoReading ?? 1000000}
             handleChange={handleChange as any}
             thousandSeparator={true}
-            searchParams={searchParams}
+            searchParams={serverSearchParams}
           />
 
-          <Select label={tLabels("currency")} name="currency" value={queryStates.currency} onChange={handleChange as any} options={currencyOptions} disabled={isLoading} placeholder={tFilters("select")} />
-          <Select label={tLabels("odometerUnit")} name="odoUnit" value={queryStates.odoUnit} onChange={handleChange as any} options={odoUnitOptions} disabled={isLoading} placeholder={tFilters("select")} />
-          <Select label={tLabels("transmission")} name="transmission" value={queryStates.transmission} onChange={handleChange as any} options={transmissionOptions} disabled={isLoading} placeholder={tFilters("select")} />
-          <Select label={tLabels("fuelType")} name="fuelType" value={queryStates.fuelType} onChange={handleChange as any} options={fuelTypeOptions} disabled={isLoading} placeholder={tFilters("select")} />
-          <Select label={tLabels("bodyType")} name="bodyType" value={queryStates.bodyType} onChange={handleChange as any} options={bodyTypeOptions} disabled={isLoading} placeholder={tFilters("select")} />
-          <Select label={tLabels("colour")} name="colour" value={queryStates.colour} onChange={handleChange as any} options={colourOptions} disabled={isLoading} placeholder={tFilters("select")} />
-          <Select label={tLabels("ulezCompliance")} name="ulezCompliance" value={queryStates.ulezCompliance} onChange={handleChange as any} options={ulezOptions} disabled={isLoading} placeholder={tFilters("select")} />
-          <Select label={tLabels("doors")} name="doors" value={queryStates.doors} onChange={handleChange as any} options={doorOptions} disabled={isLoading} placeholder={tFilters("select")} />
-          <Select label={tLabels("seats")} name="seats" value={queryStates.seats} onChange={handleChange as any} options={seatOptions} disabled={isLoading} placeholder={tFilters("select")} />
+          <Select label={tLabels("currency")} name="currency" value={queryStates.currency} onChange={handleChange as any} options={(attributes?.currency || []).map(v => ({label: v, value: v}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+          <Select label={tLabels("odometerUnit")} name="odoUnit" value={queryStates.odoUnit} onChange={handleChange as any} options={(attributes?.odoUnit || []).map(v => ({label: tEnums(`OdoUnit.${v}`), value: v}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+          <Select label={tLabels("transmission")} name="transmission" value={queryStates.transmission} onChange={handleChange as any} options={(attributes?.transmission || []).map(v => ({label: tEnums(`Transmission.${v}`), value: v}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+          <Select label={tLabels("fuelType")} name="fuelType" value={queryStates.fuelType} onChange={handleChange as any} options={(attributes?.fuelType || []).map(v => ({label: tEnums(`FuelType.${v}`), value: v}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+          <Select label={tLabels("bodyType")} name="bodyType" value={queryStates.bodyType} onChange={handleChange as any} options={(attributes?.bodyType || []).map(v => ({label: tEnums(`BodyType.${v}`), value: v}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+          <Select label={tLabels("colour")} name="colour" value={queryStates.colour} onChange={handleChange as any} options={(attributes?.colour || []).map(v => ({label: tEnums(`Colour.${v}`), value: v}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+          <Select label={tLabels("ulezCompliance")} name="ulezCompliance" value={queryStates.ulezCompliance} onChange={handleChange as any} options={(attributes?.ulezCompliance || []).map(v => ({label: tEnums(`ULEZ.${v}`), value: v}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+          <Select label={tLabels("doors")} name="doors" value={queryStates.doors} onChange={handleChange as any} options={(attributes?.doors || []).map(v => ({label: String(v), value: String(v)}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+          <Select label={tLabels("seats")} name="seats" value={queryStates.seats} onChange={handleChange as any} options={(attributes?.seats || []).map(v => ({label: String(v), value: String(v)}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
         </div>
         <DialogFooter className="p-6 bg-background border-t mt-auto">
-          <Button onClick={() => setOpen(false)} className="w-full h-12 text-base font-semibold uppercase tracking-wide">
-            {t("sidebar.showResults", { count })}
+          <Button onClick={() => setOpen(false)} className="w-full h-12 text-base font-semibold uppercase tracking-wide flex items-center justify-center gap-2">
+            {isCountLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : t("sidebar.showResults", { count: liveCount })}
           </Button>
         </DialogFooter>
       </DialogContent>
