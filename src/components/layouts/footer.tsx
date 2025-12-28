@@ -65,8 +65,8 @@ const PublicFooter = async () => {
                 1505 S 356th Street, STE 114-4<br />Federal Way, WA 98003
                 </address>
                 <p>
-                <a href="mailto:rimglobalwa@gmail.com" className="text-foreground hover:text-primary">
-                    rimglobalwa@gmail.com
+                <a href="mailto:info@rimglobalauto.com" className="text-foreground hover:text-primary">
+                    info@rimglobalauto.com
                 </a>
                 </p>
             </div>
