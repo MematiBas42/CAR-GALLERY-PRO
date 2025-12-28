@@ -116,8 +116,14 @@ const DialogFilters = ({
         </Button>
       </DialogTrigger>
       <DialogContent 
-        className="sm:max-w-[425px] h-[100dvh] sm:h-[90vh] overflow-hidden flex flex-col p-0 gap-0 border-none sm:border-solid rounded-none sm:rounded-xl"
-        onOpenAutoFocus={(e) => e.preventDefault()} // Prevent focus fight with nested selects
+        className="sm:max-w-[425px] h-[100dvh] sm:h-[90vh] overflow-hidden flex flex-col p-0 gap-0 border-none sm:border-solid rounded-none sm:rounded-xl z-[9999]"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        onPointerDownOutside={(e) => {
+            // Prevent Dialog from closing when clicking on an external Popover/Portal
+            if (e.target instanceof Element && e.target.closest('[data-radix-popper-content-wrapper]')) {
+                e.preventDefault();
+            }
+        }}
       >
         <DialogHeader className="p-6 border-b">
           <div className="flex items-center justify-between pr-6">

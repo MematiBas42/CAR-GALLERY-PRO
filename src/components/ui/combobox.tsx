@@ -86,10 +86,17 @@ export function Combobox({
             </div>
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
-          <Command>
-            <CommandInput placeholder={searchPlaceholder} />
-            <CommandList>
+        <PopoverContent 
+          className="w-[--radix-popover-trigger-width] p-0" 
+          align="start"
+          onInteractOutside={(e) => {
+            // Prevent Dialog from stealing focus when clicking inside the popover
+            e.preventDefault();
+          }}
+        >
+          <Command className="max-h-[300px]">
+            <CommandInput placeholder={searchPlaceholder} className="h-9" />
+            <CommandList className="max-h-[250px] overflow-y-auto">
               <CommandEmpty>{emptyText}</CommandEmpty>
               <CommandGroup>
                 {options.map((option) => (
