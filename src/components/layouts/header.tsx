@@ -47,23 +47,25 @@ const Header = async () => {
   ];
 
   return (
-    <header className="flex items-center justify-between h-16 px-4 bg-transparent gap-x-6">
-      <div className="flex items-center justify-center md:justify-start flex-1 gap-x-4">
-        <Link href={routes.home} className="flex items-center gap-2">
+    <header className="flex items-center justify-between h-16 px-4 bg-transparent gap-x-2 md:gap-x-6 overflow-hidden">
+      <div className="flex items-center justify-start flex-1 gap-x-2 md:gap-x-4 min-w-0">
+        <Link href={routes.home} className="flex items-center gap-2 min-w-0 flex-shrink-0 md:flex-shrink">
           <Image
             src="/assets/logo.png"
             alt="RIM GLOBAL Logo"
-            width={60}
-            height={60}
-            className="relative dark:invert"
+            width={45}
+            height={45}
+            className="relative dark:invert flex-shrink-0 w-8 h-8 md:w-12 md:h-12"
             unoptimized
           />
-          <div className="text-left md:text-left">
-            <span className="text-xl font-bold text-primary">RIM GLOBAL</span>
-            <p className="text-sm text-muted-foreground text-right md:text-right -mt-1">auto sales</p>
+          <div className="flex flex-col min-w-0">
+            <span className="text-base md:text-xl font-bold text-primary truncate leading-tight">RIM GLOBAL</span>
+            <p className="text-[10px] md:text-sm text-muted-foreground leading-tight truncate">auto sales</p>
           </div>
         </Link>
-        <LanguageSwitcher />
+        <div className="flex-shrink-0">
+            <LanguageSwitcher />
+        </div>
       </div>
       <nav className="hidden md:flex items-center gap-x-4">
         <Button asChild variant="outline" size="icon">

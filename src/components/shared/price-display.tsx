@@ -80,8 +80,8 @@ export function PriceDisplay({ amount, className = "", showLocal = true }: Price
   }
 
   return (
-    <div className={`inline-flex items-baseline gap-1 ${className}`}>
-      <span className="font-bold">
+    <div className={`inline-flex items-baseline flex-wrap justify-center gap-x-2 gap-y-0.5 ${className}`}>
+      <span className="font-bold whitespace-nowrap">
         {new Intl.NumberFormat('en-US', {
           style: 'currency',
           currency: 'USD',
@@ -89,7 +89,7 @@ export function PriceDisplay({ amount, className = "", showLocal = true }: Price
         }).format(usdAmount)}
       </span>
       {localPriceString && (
-        <span className="text-[0.7em] opacity-70 font-normal italic whitespace-nowrap">
+        <span className="text-[0.6em] md:text-[0.7em] opacity-70 font-normal italic whitespace-nowrap">
           (≈ {localPriceString})
         </span>
       )}

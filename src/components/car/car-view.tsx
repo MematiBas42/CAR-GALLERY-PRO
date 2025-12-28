@@ -102,10 +102,10 @@ const CarView = async (props: CarWithImagesAndMake) => {
             </div>
           </div>
           
-          <div className="text-4xl font-bold my-4 w-full border border-slate-200
-            flex justify-center items-center rounded-xl py-12">
-              {t("ourPrice")} { ' '}
-              <PriceDisplay amount={props.price} className="text-4xl" />
+          <div className="text-xl md:text-2xl lg:text-4xl font-bold my-4 w-full border border-slate-200
+            flex flex-col sm:flex-row justify-center items-center rounded-xl py-8 md:py-12 gap-2 px-4 text-center">
+              <span className="text-muted-foreground sm:text-foreground">{t("ourPrice")}</span>
+              <PriceDisplay amount={props.price} className="text-2xl md:text-3xl lg:text-4xl" />
           </div>
 
           <Button 
