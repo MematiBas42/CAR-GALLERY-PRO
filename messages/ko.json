@@ -276,6 +276,7 @@
     "title": "전시장 방문 안내",
     "description": "RIM GLOBAL의 차이를 직접 경험하세요. 프리미엄 관람 경험을 위해 설계된 전시장입니다.",
     "getDirections": "Get Directions",
+    "whatsapp": "WhatsApp으로 문의하기",
     "form": {
       "title": "메시지 보내기",
       "name": "이름",

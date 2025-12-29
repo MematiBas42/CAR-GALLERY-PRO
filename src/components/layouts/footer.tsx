@@ -47,17 +47,17 @@ const PublicFooter = async () => {
   ];
 
   return (
-    <footer className="bg-secondary px-8 lg:px-0 py-12">
+    <footer className="bg-secondary px-8 lg:px-0 py-10">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left mb-12 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left mb-8 items-start">
           {/* Column 1: Branding */}
-          <div className="flex flex-col items-center md:items-start gap-y-6">
+          <div className="flex flex-col items-center md:items-start gap-y-4">
             <Link href={routes.home} className="flex flex-col sm:flex-row items-center gap-4">
               <Image
                 src="/assets/logo.png"
                 alt="RIM GLOBAL Logo"
-                width={280}
-                height={280}
+                width={220}
+                height={220}
                 className="dark:invert"
                 unoptimized
               />
@@ -74,7 +74,7 @@ const PublicFooter = async () => {
               <li key={link.id}>
                 <Link
                   href={link.href}
-                  className="text-foreground hover:text-primary"
+                  className="text-foreground hover:text-primary transition-colors"
                 >
                   {link.label}
                 </Link>
@@ -86,38 +86,38 @@ const PublicFooter = async () => {
           <div className="flex flex-col justify-between h-full items-center md:items-end">
             <div className="space-y-2 text-center md:text-right">
                 <h3 className="text-xl font-bold text-primary">{tFooter("contactUs")}</h3>
-                <address className="not-italic text-muted-foreground">
+                <address className="not-italic text-muted-foreground text-sm">
                 1505 S 356th Street, STE 114-4<br />Federal Way, WA 98003
                 </address>
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1 mt-2">
                   <a href="tel:+12532149003" className="text-lg md:text-xl font-extrabold text-foreground hover:text-primary transition-colors">
                       (253) 214-9003
                   </a>
                   <p>
-                  <a href="mailto:info@rimglobalauto.com" className="text-foreground hover:text-primary transition-colors">
+                  <a href="mailto:info@rimglobalauto.com" className="text-sm text-foreground hover:text-primary transition-colors">
                       info@rimglobalauto.com
                   </a>
                   </p>
                 </div>
             </div>
             <div className="mt-4">
-                <Button asChild variant="ghost" size="icon">
+                <Button asChild variant="ghost" size="icon" className="h-8 w-8 opacity-50 hover:opacity-100">
                     <a href={session ? routes.admin.dashboard : routes.signIn}>
-                        <LayoutDashboard className="w-6 h-6" />
+                        <LayoutDashboard className="w-5 h-5" />
                     </a>
                 </Button>
             </div>
           </div>
         </div>
 
-        {/* Social Icons - Centered on Page */}
-        <div className="flex flex-col items-center gap-y-4 mb-12">
-          <p className="text-base md:text-lg text-muted-foreground text-center max-w-2xl">
+        {/* Social Icons - Centered on Page - Compacted Spacing */}
+        <div className="flex flex-col items-center gap-y-3 mb-8">
+          <p className="text-sm md:text-base text-muted-foreground text-center max-w-2xl">
             {tFooter("followUs")}
           </p>
-          <div className="flex justify-center gap-6">
+          <div className="flex justify-center gap-4">
             {socialLinks.map((social) => (
-              <Button key={social.id} asChild variant="outline" size="icon" className={cn("rounded-full border-gray-700 bg-transparent transition-all duration-300 h-11 w-11", social.hoverClass)}>
+              <Button key={social.id} asChild variant="outline" size="icon" className={cn("rounded-full border-gray-700 bg-transparent transition-all duration-300 h-10 w-10", social.hoverClass)}>
                 <a href={social.href} target="_blank" rel="noopener noreferrer" title={social.label}>
                   {social.icon}
                 </a>
@@ -127,14 +127,14 @@ const PublicFooter = async () => {
         </div>
 
         {/* Newsletter Section - Centered */}
-        <div className="flex flex-col items-center text-center mt-12">
+        <div className="flex flex-col items-center text-center mt-8">
           <NewsLetterForm />
         </div>
 
         {/* Legal Links - Bottom */}
-        <div className="border-t border-gray-800 mt-12 pt-8 text-center text-sm text-muted-foreground">
+        <div className="border-t border-gray-800 mt-10 pt-6 text-center text-xs text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} RIM GLOBAL. All rights reserved.</p>
-          <div className="flex justify-center gap-6 mt-4">
+          <div className="flex justify-center gap-6 mt-3">
             <Link href="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link>
             <Link href="/terms-of-service" className="hover:text-primary transition-colors">Terms of Service</Link>
             <Link href="/disclaimer" className="hover:text-primary transition-colors">Disclaimer</Link>
