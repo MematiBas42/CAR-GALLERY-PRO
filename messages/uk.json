@@ -237,6 +237,7 @@
   "Car": {
     "reserve": "Забронювати",
     "reserveNow": "Забронювати зараз",
+    "reserveViaWhatsapp": "Забронювати через WhatsApp",
     "viewDetails": "Детальніше",
     "ourPrice": "Наша ціна:",
     "notAvailable": "Н/Д"

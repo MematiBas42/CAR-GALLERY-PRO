@@ -20,6 +20,7 @@ import {
 	GaugeIcon,
 	PowerIcon,
 	UsersIcon,
+    MessageCircle,
 	
 } from "lucide-react";
 
@@ -30,6 +31,9 @@ type CarWithImagesAndMake = Prisma.ClassifiedGetPayload<{
 const CarView = async (props: CarWithImagesAndMake) => {
   const t = await getTranslations("Car");
   const tEnums = await getTranslations("Enums");
+
+  const whatsappMessage = encodeURIComponent(`Hello, I am interested in the ${props.title}.`);
+  const whatsappUrl = `https://wa.me/12532149003?text=${whatsappMessage}`;
 
   const carFeatures = [
     {
@@ -108,14 +112,26 @@ const CarView = async (props: CarWithImagesAndMake) => {
               <PriceDisplay amount={props.price} className="text-2xl md:text-3xl lg:text-4xl" />
           </div>
 
-          <Button 
-             className="uppercase font-bold py-3 px-6 rounded
-             w-full mb-6"
-            asChild>
-              <Link href={routes.reserve(props.slug , MultiStepFormEnum.WELCOME)}>
-                {t("reserveNow")}
-              </Link>
-          </Button>
+          <div className="flex flex-col gap-3 mb-6">
+            <Button 
+                asChild 
+                className="w-full bg-[#25D366] hover:bg-[#20ba56] text-white font-bold h-12 gap-2 shadow-md uppercase"
+            >
+                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+                <MessageCircle className="w-5 h-5 fill-current" />
+                {t("reserveViaWhatsapp")}
+                </a>
+            </Button>
+
+            <Button 
+                className="uppercase font-bold py-3 px-6 rounded w-full h-12"
+                asChild
+            >
+                <Link href={routes.reserve(props.slug , MultiStepFormEnum.WELCOME)}>
+                    {t("reserveNow")}
+                </Link>
+            </Button>
+          </div>
 
           <div className="mt-4 flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
             <span className="bg-gray-200 text-gray-800 

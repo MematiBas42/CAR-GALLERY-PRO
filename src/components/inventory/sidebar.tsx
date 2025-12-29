@@ -98,6 +98,9 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
         if (name === "make") {
             setQueryStates({ model: null, modelVariant: null });
         }
+        if (name === "model") {
+            setQueryStates({ modelVariant: null });
+        }
     } else {
         // Batch update support
         setQueryStates(e);

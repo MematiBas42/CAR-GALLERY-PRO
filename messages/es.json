@@ -237,6 +237,7 @@
   "Car": {
     "reserve": "Reservar",
     "reserveNow": "Reservar ahora",
+    "reserveViaWhatsapp": "Reservar por WhatsApp",
     "viewDetails": "Ver detalles",
     "ourPrice": "Nuestro precio:",
     "notAvailable": "N/A"

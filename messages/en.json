@@ -241,6 +241,7 @@
   "Car": {
     "reserve": "Reserve",
     "reserveNow": "Reserve Now",
+    "reserveViaWhatsapp": "Reserve via WhatsApp",
     "viewDetails": "View details",
     "ourPrice": "Our Price:",
     "notAvailable": "N/A"

@@ -40,6 +40,9 @@ const HomepageTaxonomyFilters = ({
         if (name === "make") {
             setState({ model: null, modelVariant: null });
         }
+        if (name === "model") {
+            setState({ modelVariant: null });
+        }
     } else {
         setState(e);
     }

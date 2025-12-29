@@ -241,6 +241,7 @@
   "Car": {
     "reserve": "Rezerve Et",
     "reserveNow": "Şimdi Rezerve Et",
+    "reserveViaWhatsapp": "WhatsApp ile Rezerve Et",
     "viewDetails": "Detayları Gör",
     "ourPrice": "Fiyatımız:",
     "notAvailable": "N/A"

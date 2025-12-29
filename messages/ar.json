@@ -237,6 +237,7 @@
   "Car": {
     "reserve": "حجز",
     "reserveNow": "احجز الآن",
+    "reserveViaWhatsapp": "احجز عبر واتساب",
     "viewDetails": "عرض التفاصيل",
     "ourPrice": "سعرنا:",
     "notAvailable": "N/A"

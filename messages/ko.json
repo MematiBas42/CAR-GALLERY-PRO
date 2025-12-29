@@ -237,6 +237,7 @@
   "Car": {
     "reserve": "예약하기",
     "reserveNow": "지금 예약",
+    "reserveViaWhatsapp": "WhatsApp으로 예약하기",
     "viewDetails": "상세 보기",
     "ourPrice": "판매가:",
     "notAvailable": "N/A"

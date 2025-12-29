@@ -237,6 +237,7 @@
   "Car": {
     "reserve": "Đặt chỗ",
     "reserveNow": "Đặt ngay",
+    "reserveViaWhatsapp": "Đặt chỗ qua WhatsApp",
     "viewDetails": "Xem chi tiết",
     "ourPrice": "Giá của chúng tôi:",
     "notAvailable": "Không có sẵn"
