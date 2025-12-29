@@ -83,7 +83,8 @@
     }
   },
   "Footer": {
-    "contactUs": "문의하기"
+    "contactUs": "문의하기",
+    "followUs": "최신 매물 소식을 받으시려면 소셜 미디어를 팔로우하세요."
   },
   "Newsletter": {
     "placeholder": "이메일 주소를 입력하세요",

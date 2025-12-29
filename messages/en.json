@@ -83,7 +83,8 @@
     }
   },
   "Footer": {
-    "contactUs": "Contact Us"
+    "contactUs": "Contact Us",
+    "followUs": "Follow our social media to stay updated with our latest inventory."
   },
   "Newsletter": {
     "placeholder": "Enter your email",

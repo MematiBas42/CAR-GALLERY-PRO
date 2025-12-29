@@ -11,7 +11,7 @@ import { Metadata } from "next";
 import { Suspense } from "react";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("HomePage");
+  const t = await getTranslations("Homepage");
   return {
     title: t("metadata.title"),
     description: t("metadata.description"),

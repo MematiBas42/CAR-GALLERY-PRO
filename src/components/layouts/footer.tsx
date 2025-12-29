@@ -4,7 +4,8 @@ import React from "react";
 import NewsLetterForm from "./NewsLetterForm";
 import { auth } from "@/auth";
 import { Button } from "../ui/button";
-import { LayoutDashboard } from "lucide-react";
+import { LayoutDashboard, Facebook, Instagram, MessageCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
@@ -21,12 +22,36 @@ const PublicFooter = async () => {
     { id: 4, href: routes.contact, label: tNav("contact") },
   ];
 
+  const socialLinks = [
+    { 
+      id: "fb", 
+      href: "https://www.facebook.com/profile.php?id=61581943132077", 
+      icon: <Facebook className="w-6 h-6" />,
+      label: "Facebook",
+      hoverClass: "hover:text-blue-600"
+    },
+    { 
+      id: "ig", 
+      href: "https://www.instagram.com/rimglobal_autosales/", 
+      icon: <Instagram className="w-6 h-6" />,
+      label: "Instagram",
+      hoverClass: "hover:text-pink-600"
+    },
+    { 
+      id: "wa", 
+      href: "https://wa.me/12532149003", 
+      icon: <MessageCircle className="w-6 h-6" />,
+      label: "WhatsApp",
+      hoverClass: "hover:text-green-500"
+    },
+  ];
+
   return (
     <footer className="bg-secondary px-8 lg:px-0 py-12">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left mb-12 items-start">
           {/* Column 1: Branding */}
-          <div className="flex flex-col items-center md:items-start gap-y-2">
+          <div className="flex flex-col items-center md:items-start gap-y-6">
             <Link href={routes.home} className="flex flex-col sm:flex-row items-center gap-4">
               <Image
                 src="/assets/logo.png"
@@ -64,11 +89,16 @@ const PublicFooter = async () => {
                 <address className="not-italic text-muted-foreground">
                 1505 S 356th Street, STE 114-4<br />Federal Way, WA 98003
                 </address>
-                <p>
-                <a href="mailto:info@rimglobalauto.com" className="text-foreground hover:text-primary">
-                    info@rimglobalauto.com
-                </a>
-                </p>
+                <div className="flex flex-col gap-1">
+                  <a href="tel:+12532149003" className="text-lg md:text-xl font-extrabold text-foreground hover:text-primary transition-colors">
+                      (253) 214-9003
+                  </a>
+                  <p>
+                  <a href="mailto:info@rimglobalauto.com" className="text-foreground hover:text-primary transition-colors">
+                      info@rimglobalauto.com
+                  </a>
+                  </p>
+                </div>
             </div>
             <div className="mt-4">
                 <Button asChild variant="ghost" size="icon">
@@ -77,6 +107,22 @@ const PublicFooter = async () => {
                     </a>
                 </Button>
             </div>
+          </div>
+        </div>
+
+        {/* Social Icons - Centered on Page */}
+        <div className="flex flex-col items-center gap-y-4 mb-12">
+          <p className="text-base md:text-lg text-muted-foreground text-center max-w-2xl">
+            {tFooter("followUs")}
+          </p>
+          <div className="flex justify-center gap-6">
+            {socialLinks.map((social) => (
+              <Button key={social.id} asChild variant="outline" size="icon" className={cn("rounded-full border-gray-700 bg-transparent transition-all duration-300 h-11 w-11", social.hoverClass)}>
+                <a href={social.href} target="_blank" rel="noopener noreferrer" title={social.label}>
+                  {social.icon}
+                </a>
+              </Button>
+            ))}
           </div>
         </div>
 

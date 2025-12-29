@@ -83,7 +83,8 @@
     }
   },
   "Footer": {
-    "contactUs": "Contáctenos"
+    "contactUs": "Contáctenos",
+    "followUs": "Siga nuestras redes sociales para estar al tanto de nuestro último inventario."
   },
   "Newsletter": {
     "placeholder": "Introduzca su correo electrónico",

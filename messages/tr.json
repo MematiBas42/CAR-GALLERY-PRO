@@ -83,7 +83,8 @@
     }
   },
   "Footer": {
-    "contactUs": "Bize Ulaşın"
+    "contactUs": "Bize Ulaşın",
+    "followUs": "En yeni ilanlarımızdan haberdar olmak için sosyal medya hesaplarımızı takip edin."
   },
   "Newsletter": {
     "placeholder": "E-posta adresinizi girin",

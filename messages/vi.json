@@ -83,7 +83,8 @@
     }
   },
   "Footer": {
-    "contactUs": "Liên hệ với chúng tôi"
+    "contactUs": "Liên hệ với chúng tôi",
+    "followUs": "Theo dõi mạng xã hội của chúng tôi để cập nhật những mẫu xe mới nhất."
   },
   "Newsletter": {
     "placeholder": "Nhập email của bạn",
