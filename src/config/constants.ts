@@ -93,3 +93,15 @@ export const CustomerBadgeMap: Record<CustomerStatus, BadgeProps["variant"]> = {
 	[CustomerStatus.PURCHASED]: "warning",
 	[CustomerStatus.SUBSCRIBER]: "info",
 };
+
+export const SITE_CONFIG = {
+    phone: "(253) 214-9003",
+    phoneRaw: "+12532149003",
+    email: "info@rimglobalauto.com",
+    address: "1505 S 356th Street, STE 114-4, Federal Way, WA 98003",
+    socials: {
+        facebook: "https://www.facebook.com/profile.php?id=61581943132077",
+        instagram: "https://www.instagram.com/rimglobal_autosales/",
+        whatsapp: "https://wa.me/12532149003"
+    }
+};

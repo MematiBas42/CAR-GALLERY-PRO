@@ -34,7 +34,7 @@ const HeroSection = async (props: AwaitedPageProps) => {
         backgroundImage: `url('/assets/hero-bg.jpg')`,
       }}
     >
-      <div className="absolute inset-0 bg-gray-900 opacity-75" />
+      <div className="absolute inset-0 bg-gray-900 opacity-60" />
       <div className="container lg:grid space-y-12 grid-cols-2 items-center relative z-10">
         <div className="px-10 lg:px-0">
           <h1

@@ -11,6 +11,7 @@ import { MultiStepFormEnum } from "@/config/types";
 import { CheckIcon, XIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { PriceDisplay } from "../shared/price-display";
+import { SITE_CONFIG } from "@/config/constants";
 import {
 	CarFrontIcon,
 	CarIcon,
@@ -33,7 +34,7 @@ const CarView = async (props: CarWithImagesAndMake) => {
   const tEnums = await getTranslations("Enums");
 
   const whatsappMessage = encodeURIComponent(`Hello, I am interested in the ${props.title}.`);
-  const whatsappUrl = `https://wa.me/12532149003?text=${whatsappMessage}`;
+  const whatsappUrl = `${SITE_CONFIG.socials.whatsapp}?text=${whatsappMessage}`;
 
   const carFeatures = [
     {

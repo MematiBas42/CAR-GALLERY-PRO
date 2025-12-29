@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
 import { Button } from '@/components/ui/button';
 import { MessageCircle } from 'lucide-react';
+import { SITE_CONFIG } from '@/config/constants';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("SEO");
@@ -26,7 +27,7 @@ const ContactPage = async () => {
             asChild 
             className="w-full bg-[#25D366] hover:bg-[#20ba56] text-white font-bold h-12 gap-2 shadow-md"
           >
-            <a href="https://wa.me/12532149003" target="_blank" rel="noopener noreferrer">
+            <a href={SITE_CONFIG.socials.whatsapp} target="_blank" rel="noopener noreferrer">
               <MessageCircle className="w-5 h-5 fill-current" />
               {t("whatsapp")}
             </a>

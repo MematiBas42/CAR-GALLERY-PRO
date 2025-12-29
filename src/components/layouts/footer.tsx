@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
+import { SITE_CONFIG } from "@/config/constants";
 
 const PublicFooter = async () => {
   const tNav = await getTranslations("Navigation");
@@ -25,21 +26,21 @@ const PublicFooter = async () => {
   const socialLinks = [
     { 
       id: "fb", 
-      href: "https://www.facebook.com/profile.php?id=61581943132077", 
+      href: SITE_CONFIG.socials.facebook, 
       icon: <Facebook className="w-6 h-6" />,
       label: "Facebook",
       hoverClass: "hover:text-blue-600"
     },
     { 
       id: "ig", 
-      href: "https://www.instagram.com/rimglobal_autosales/", 
+      href: SITE_CONFIG.socials.instagram, 
       icon: <Instagram className="w-6 h-6" />,
       label: "Instagram",
       hoverClass: "hover:text-pink-600"
     },
     { 
       id: "wa", 
-      href: "https://wa.me/12532149003", 
+      href: SITE_CONFIG.socials.whatsapp, 
       icon: <MessageCircle className="w-6 h-6" />,
       label: "WhatsApp",
       hoverClass: "hover:text-green-500"
@@ -87,15 +88,15 @@ const PublicFooter = async () => {
             <div className="space-y-2 text-center md:text-right">
                 <h3 className="text-xl font-bold text-primary">{tFooter("contactUs")}</h3>
                 <address className="not-italic text-muted-foreground text-sm">
-                1505 S 356th Street, STE 114-4<br />Federal Way, WA 98003
+                {SITE_CONFIG.address}
                 </address>
                 <div className="flex flex-col gap-1 mt-2">
-                  <a href="tel:+12532149003" className="text-lg md:text-xl font-extrabold text-foreground hover:text-primary transition-colors">
-                      (253) 214-9003
+                  <a href={`tel:${SITE_CONFIG.phoneRaw}`} className="text-lg md:text-xl font-extrabold text-foreground hover:text-primary transition-colors">
+                      {SITE_CONFIG.phone}
                   </a>
                   <p>
-                  <a href="mailto:info@rimglobalauto.com" className="text-sm text-foreground hover:text-primary transition-colors">
-                      info@rimglobalauto.com
+                  <a href={`mailto:${SITE_CONFIG.email}`} className="text-sm text-foreground hover:text-primary transition-colors">
+                      {SITE_CONFIG.email}
                   </a>
                   </p>
                 </div>

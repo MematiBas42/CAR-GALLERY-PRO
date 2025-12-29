@@ -1,9 +1,9 @@
 'use client';
 import { routes } from "@/config/routes";
-import { CarWithImages, MultiStepFormEnum } from "@/config/types";
+import { CarWithImages } from "@/config/types";
 import { formatNumber } from "@/lib/utils";
 import { AnimatePresence } from "framer-motion";
-import { Cog, Fuel, GaugeCircle, Paintbrush2 } from "lucide-react";
+import { Cog, Fuel, GaugeCircle, MessageCircle, Paintbrush2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import parse from "html-react-parser";
@@ -13,6 +13,7 @@ import FavButton from "./fav-button";
 import { useTranslations } from "next-intl";
 import ImgixImage from "../ui/imgix-image";
 import { PriceDisplay } from "../shared/price-display";
+import { SITE_CONFIG } from "@/config/constants";
 
 interface CarCardProps {
   car: CarWithImages;
@@ -25,6 +26,9 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
   const [isFav, setIsFav] = useState(favourites.includes(car.id));
   const [isVisible, setIsVisible] = useState(true);
   const pathname = usePathname();
+
+  const whatsappMessage = encodeURIComponent(`Hello, I am interested in the ${car.title}.`);
+  const whatsappUrl = `${SITE_CONFIG.socials.whatsapp}?text=${whatsappMessage}`;
 
   const keyCarInfo = [
     {
@@ -63,7 +67,7 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
           id={car.slug || "slug"}
           className="bg-card relative rounded-md shadow-lg overflow-hidden flex flex-col border transition-shadow duration-300 hover:shadow-2xl"
         >
-          <div className="aspect-3/2 relative">
+          <div className="aspect-[4/3] relative">
             <Link href={routes.singleClassified(car.slug || "slug")}>
               <ImgixImage
                 placeholder="blur"
@@ -83,7 +87,6 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
           </div>
           
           <div className="p-4 flex flex-col flex-grow"> 
-            {/* Top Section */}
             <div>
               <Link
                 href={routes.singleClassified(car.slug || "slug")}
@@ -98,26 +101,26 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
               )}
             </div>
 
-            {/* Bottom Section - Pushed to the bottom */}
             <div className="mt-auto pt-3">
-              <ul className="text-xs md:text-sm text-muted-foreground xl:flex grid grid-cols-1 grid-rows-4 md:grid-cols-2 md:grid-rows-4 items-center justify-between w-full">
+              <div className="text-xs md:text-sm text-muted-foreground grid grid-cols-2 gap-2 w-full">
                 {keyCarInfo.map((info) => (
-                  <li key={info.id} className="font-semibold flex xl:flex-col items-center gap-x-1.5">
-                    {info.icon} {info.value ? info.value : t("notAvailable")}
-                  </li>
+                  <div key={info.id} className="font-semibold flex items-center gap-x-1.5 min-w-0">
+                    <span className="shrink-0">{info.icon}</span>
+                    <span className="truncate">{info.value ? info.value : t("notAvailable")}</span>
+                  </div>
                 ))}
-              </ul>
-              <div className="mt-4 flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:gap-x-2 w-full">
+              </div>
+              <div className="mt-4 flex flex-col gap-2 w-full">
                 <Button
-                  className="flex-1 transition-colors hover:border-white hover:bg-primary hover:text-white py-2 lg:py-2.5 h-full text-xs md:text-sm xl:text-base"
+                  className="w-full bg-[#25D366] hover:bg-[#20ba56] text-white font-bold py-2.5 h-10 text-xs xl:text-sm gap-2"
                   asChild
-                  variant={"outline"}
                 >
-                  <Link href={routes.reserve(car.slug || "slug", MultiStepFormEnum.WELCOME)}>
-                    {t("reserve")}
-                  </Link>
+                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+                    <MessageCircle className="w-4 h-4 fill-current" />
+                    {t("reserveViaWhatsapp")}
+                  </a>
                 </Button>
-                <Button className="flex-1 py-2 lg:py-2.5 h-full text-xs md:text-sm xl:text-base" asChild size={"sm"}>
+                <Button className="w-full py-2.5 h-10 text-xs xl:text-sm font-bold" asChild>
                   <Link href={routes.singleClassified(car.slug)}>{t("viewDetails")}</Link>
                 </Button>
               </div>
