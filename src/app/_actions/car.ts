@@ -227,6 +227,8 @@ export const updateCarAction = async (data: UpdateCarType) => {
             });
 
             const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+            // Prices are handled in cents (USD)
+            const priceInCents = Math.round(Number(data.price) * 100);
             const currencySymbol = "$";
 
             const emailPromises = interestedCustomers.map(customer => {

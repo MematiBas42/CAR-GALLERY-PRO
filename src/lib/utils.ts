@@ -70,7 +70,7 @@ export function formatNumber(
 ) {
   if (!num) return "0";
 
-  return new Intl.NumberFormat("en-GB", options).format(num);
+  return new Intl.NumberFormat("en-US", options).format(num);
 }
 
 export function formatOdometerUnit(unit: OdoUnit) {
