@@ -28,7 +28,7 @@ export async function getExchangeRates(): Promise<ExchangeRates | null> {
     // 2. Fetch from API (Frankfurter)
     // Note: Frankfurter uses EUR as base by default for free tier, but allows conversion.
     // We request conversion from USD to other major currencies.
-    const response = await fetch("https://api.frankfurter.app/latest?from=USD&to=EUR,GBP,TRY,KRW,CNY,JPY,CAD");
+    const response = await fetch("https://api.frankfurter.app/latest?from=USD&to=EUR,TRY,KRW,CNY,JPY,CAD");
     
     if (!response.ok) {
       console.error("Currency API Error:", response.statusText);

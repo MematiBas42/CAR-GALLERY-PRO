@@ -58,7 +58,7 @@ model Classified {
   fuelType       FuelType         @default(PETROL)
   bodyType       BodyType         @default(SEDAN)
   odoUnit        OdoUnit          @default(MILES)
-  currency       CurrencyCode     @default(GBP)
+  currency       CurrencyCode     @default(USD)
   status         ClassifiedStatus @default(DRAFT)
   isLatestArrival Boolean          @default(false) @map("is_latest_arrival")
   createdAt      DateTime         @default(now()) @map("created_at")

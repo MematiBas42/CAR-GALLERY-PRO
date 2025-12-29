@@ -28,7 +28,7 @@ INSERT INTO classifieds (
     45000, -- Odometer reading in miles
     4,     -- Number of doors
     7,     -- Number of seats (typical for a van)
-    28000, -- Price in pence (£280.00)
+    28000, -- Price in cents ($280.00)
     2,     -- make_id = 2 (Volkswagen)
     (SELECT id FROM models WHERE name = 'Van' AND make_id = 2),
     'YELLOW',
@@ -36,7 +36,7 @@ INSERT INTO classifieds (
     'DIESEL',  -- Typical fuel type for vans
     'MANUAL',
     'MILES',
-    'GBP',
+    'USD',
     'LIVE',
     NOW(),
     NOW()
