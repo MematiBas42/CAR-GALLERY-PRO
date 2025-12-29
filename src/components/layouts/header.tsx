@@ -135,10 +135,10 @@ const Header = async () => {
                 <SheetClose asChild>
                   <Link
                       href={routes.favourites}
-                      className="text-lg font-medium text-foreground hover:text-primary border-b border-muted pb-2 flex justify-between"
+                      className="text-lg font-medium text-foreground hover:text-primary border-b border-muted pb-2 flex justify-between items-center"
                   >
                       {t("favorites")}
-                      <span className="bg-primary text-primary-foreground px-2 rounded-full text-sm">
+                      <span className="bg-muted text-muted-foreground w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold">
                         <Suspense fallback="...">
                             <FavoriteCount sourceId={sourceId} />
                         </Suspense>

@@ -181,7 +181,7 @@
       "WAGON": "Wagon"
     },
     "FuelType": {
-      "PETROL": "Petrol",
+      "PETROL": "Gasoline",
       "DIESEL": "Diesel",
       "ELECTRIC": "Electric",
       "HYBRID": "Hybrid"

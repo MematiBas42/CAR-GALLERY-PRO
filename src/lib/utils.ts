@@ -88,7 +88,7 @@ export function formatSimpleDate(date: Date) {
 export function formatFuelType(fuelType: FuelType) {
   switch (fuelType) {
     case FuelType.PETROL:
-      return "Petrol";
+      return "Gasoline";
     case FuelType.DIESEL:
       return "Diesel";
     case FuelType.ELECTRIC:
