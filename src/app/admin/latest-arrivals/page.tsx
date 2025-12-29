@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { LatestArrivalSwitch } from "@/components/admin/cars/latest-arrival-switch";
 import { ClassifiedStatus } from "@prisma/client";
-import { getImageUrl } from "@/lib/utils";
+import { getImageUrl, formatPrice } from "@/lib/utils";
 
 const AdminLatestArrivalsPage = async () => {
   const cars = await prisma.classified.findMany({
@@ -50,10 +50,11 @@ const AdminLatestArrivalsPage = async () => {
                     <tr key={car.id} className="border-b border-gray-700/50 hover:bg-gray-700/30 transition-colors group">
                         <td className="p-4">
                         <div className="flex items-center gap-4">
-                                                  <div className="relative h-12 w-20 rounded shadow-md overflow-hidden bg-gray-900 border border-gray-700">
-                                                              {car.images[0] ? (
-                                                                  <Image src={getImageUrl(car.images[0].src)} alt={car.title || ""} fill className="object-cover" />
-                                                              ) : (                                    <div className="flex items-center justify-center h-full text-[10px] text-gray-600 italic">No image</div>
+                            <div className="relative h-12 w-20 rounded shadow-md overflow-hidden bg-gray-900 border border-gray-700">
+                                {car.images[0] ? (
+                                    <Image src={getImageUrl(car.images[0].src)} alt={car.title || ""} fill className="object-cover" />
+                                ) : (
+                                    <div className="flex items-center justify-center h-full text-[10px] text-gray-600 italic">No image</div>
                                 )}
                             </div>
                             <div>
@@ -63,7 +64,7 @@ const AdminLatestArrivalsPage = async () => {
                         </div>
                         </td>
                         <td className="p-4 text-slate-300 font-mono">
-                            ${(car.price / 100).toLocaleString()}
+                            {formatPrice({ price: car.price })}
                         </td>
                         <td className="p-4 text-center">
                         <div className="flex justify-center">
