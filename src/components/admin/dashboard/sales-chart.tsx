@@ -64,7 +64,7 @@ const SalesCharts = (props: SalesChartsProps) => {
               tickLine={false}
               axisLine={false}
               tickFormatter={(value) =>
-                formatPrice({ price: value, currency: "EUR" })
+                formatPrice({ price: value, currency: "USD" })
               }
               />
               <Tooltip
@@ -93,7 +93,7 @@ const CustomTooltip = ({
 		return (
 			<div className="bg-gray-800 border border-gray-700 p-2 rounded">
 				<p className="text-gray-100">
-					{`${label}: ${formatPrice({ price: payload[0].value as number, currency: "EUR" })}`}
+					{`${label}: ${formatPrice({ price: payload[0].value as number, currency: "USD" })}`}
 				</p>
 			</div>
 		);

@@ -141,7 +141,7 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
           defaultMax={adaptiveRanges.price.max ?? _max.price ?? 1000000}
           handleChange={handleChange as any}
           thousandSeparator={true}
-          currency={{ currencyCode: "EUR" }}
+          currency={{ currencyCode: "USD" }}
           searchParams={searchParams}
         />
         <RangeFilter

@@ -98,6 +98,10 @@
     "policy": "Privacy Policy"
   },
   "Homepage": {
+    "metadata": {
+      "title": "RIM GLOBAL | Premium Used Cars in Federal Way, WA",
+      "description": "Discover your next chapter with RIM GLOBAL. Meticulously curated collection of quality-inspected used cars in Federal Way. Transparent financing and elite service."
+    },
     "Hero": {
       "title": "Your Next Chapter, Curated.",
       "subtitle": "At RIM GLOBAL, we've reimagined the pre-owned car experience for Federal Way. Explore our meticulously curated collection of quality-inspected vehicles and discover the confidence of a transparent, hassle-free journey.",
@@ -111,6 +115,9 @@
     },
     "LatestArrivals": {
       "title": "Latest Arrivals"
+    },
+    "ComingSoon": {
+      "title": "Coming Soon"
     },
     "Brands": {
       "title": "A Curated Collection of Premier Brands",
@@ -222,7 +229,8 @@
       "ALL": "All",
       "LIVE": "Live",
       "SOLD": "Sold",
-      "DRAFT": "Draft"
+      "DRAFT": "Draft",
+      "COMING_SOON": "Coming Soon"
     },
     "ULEZ": {
       "EXEMPT": "Exempt",
@@ -421,7 +429,7 @@
         "fuelType": "Fuel Type",
         "bodyType": "Body Type",
         "colour": "Colour",
-        "ulez": "ULEZ Compliance",
+        "ulezCompliance": "ULEZ Compliance",
         "vrm": "Vehicle Registration Mark",
         "doors": "Doors",
         "seats": "Seats",

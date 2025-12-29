@@ -32,8 +32,8 @@ const SignInform = () => {
 
   useEffect(() => {
     if (state.success) {
-      // Redirect on success
-      window.location.href = routes.admin.dashboard;
+      // Redirect to challenge for 2FA
+      router.push(routes.challenge);
     }
   }, [state.success, state.message, router]); // Depend on state.message to re-trigger on new submissions
 

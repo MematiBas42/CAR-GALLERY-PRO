@@ -17,10 +17,10 @@ const localeToCurrency: Record<string, string> = {
 
 const currencySymbols: Record<string, string> = {
   USD: "$",
-  TRY: "₺",
-  KRW: "₩",
-  EUR: "€",
-  GBP: "£",
+  TRY: "$",
+  KRW: "$",
+  EUR: "$",
+  GBP: "$",
 };
 
 // Global client-side cache to prevent multiple fetches per page load

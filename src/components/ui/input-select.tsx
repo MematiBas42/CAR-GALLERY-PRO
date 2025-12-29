@@ -10,6 +10,7 @@ import {
 	FormMessage,
 } from "../ui/form";
 import { NumberInput } from "./number-input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./select";
 
 
 interface InputSelectProps extends NumericFormatProps {
@@ -32,9 +33,9 @@ const InputSelect = (props: InputSelectProps) => {
         <FormItem className="grid gap-2">
           {label && <FormLabel htmlFor={inputName}>{label}</FormLabel>}
           <FormControl>
-            <div className="flex items-center rounded-md border border-input focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px] h-10 py-2">
+            <div className="flex items-center rounded-md border border-input focus-within:ring-1 focus-within:ring-ring h-9 bg-transparent overflow-hidden">
               <NumberInput
-                className="flex-grow border-none focus:outline-none focus:ring-0 text-white min-w-0"
+                className="flex-grow border-none focus-visible:ring-0 text-white min-w-0 h-full py-0"
                 onValueChange={(values) => {
                   onChange(values.floatValue);
                 }}
@@ -48,18 +49,21 @@ const InputSelect = (props: InputSelectProps) => {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <select
-                          className={cn(
-                            "custom-select appearance-none bg-transparent pl-3 pr-8 text-white focus:outline-none"
-                          )}
-                          {...field}
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
                         >
-                          {options.map((option) => (
-                            <option key={option.value} value={option.value}>
-                              {option.label}
-                            </option>
-                          ))}
-                        </select>
+                          <SelectTrigger className="border-none focus:ring-0 h-full bg-transparent rounded-none px-4 min-w-[100px]">
+                            <SelectValue placeholder="Unit" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {options.map((option) => (
+                              <SelectItem key={option.value} value={option.value}>
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </FormControl>
                     </FormItem>
                   )}

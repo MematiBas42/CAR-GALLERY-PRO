@@ -98,6 +98,10 @@
     "policy": "Privacy Policy"
   },
   "Homepage": {
+    "metadata": {
+      "title": "RIM GLOBAL | Премиальные подержанные авто в Федерал Уэй, Вашингтон",
+      "description": "Откройте свою новую главу с RIM GLOBAL. Тщательно подобранная коллекция проверенных подержанных автомобилей в Федерал Уэй. Прозрачное финансирование и элитный сервис."
+    },
     "Hero": {
       "title": "Ваша следующая глава, выбранная с умом.",
       "subtitle": "В RIM GLOBAL мы переосмыслили опыт покупки подержанных автомобилей. Изучите нашу тщательно отобранную коллекцию проверенных автомобилей и почувствуйте уверенность в прозрачном и беспроблемном путешествии.",
@@ -421,7 +425,7 @@
         "fuelType": "Fuel Type",
         "bodyType": "Body Type",
         "colour": "Colour",
-        "ulez": "ULEZ Compliance",
+        "ulezCompliance": "ULEZ Compliance",
         "vrm": "Vehicle Registration Mark",
         "doors": "Doors",
         "seats": "Seats",

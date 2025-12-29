@@ -28,7 +28,7 @@ const CarsTableRow = ({ car }: { car: CarWithImages }) => {
       <TableCell className="">
         {formatPrice({
           price: car.price,
-          currency: car.currency || "EUR",
+          currency: car.currency || "USD",
         })}
       </TableCell>
       <TableCell className="hidden md:table-cell">{car.vrm}</TableCell>

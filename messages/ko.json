@@ -98,6 +98,10 @@
     "policy": "Privacy Policy"
   },
   "Homepage": {
+    "metadata": {
+      "title": "RIM GLOBAL | 워싱턴주 페더럴웨이 프리미엄 중고차",
+      "description": "RIM GLOBAL과 함께 당신의 다음 장을 시작하세요. 페더럴웨이에서 엄격하게 검수된 고품질 중고차 컬렉션. 투명한 금융 서비스와 엘리트 서비스를 제공합니다."
+    },
     "Hero": {
       "title": "당신의 다음 장, 엄선된 선택.",
       "subtitle": "RIM GLOBAL은 중고차 경험을 새롭게 정의합니다. 엄격한 검수를 거친 품질 높은 차량 컬렉션을 탐색하고, 투명하고 번거로움 없는 여정의 확신을 경험하세요.",
@@ -421,7 +425,7 @@
         "fuelType": "Fuel Type",
         "bodyType": "Body Type",
         "colour": "Colour",
-        "ulez": "ULEZ Compliance",
+        "ulezCompliance": "ULEZ Compliance",
         "vrm": "Vehicle Registration Mark",
         "doors": "Doors",
         "seats": "Seats",

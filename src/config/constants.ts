@@ -82,6 +82,7 @@ export const CarBadgeMap : Record<ClassifiedStatus,BadgeProps['variant']  >= {
         [ClassifiedStatus.DRAFT]: "secondary",
 	[ClassifiedStatus.LIVE]: "default",
 	[ClassifiedStatus.SOLD]: "destructive",
+	[ClassifiedStatus.COMING_SOON]: "outline",
 
 }
 

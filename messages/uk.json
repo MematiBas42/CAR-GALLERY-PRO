@@ -98,6 +98,10 @@
     "policy": "Privacy Policy"
   },
   "Homepage": {
+    "metadata": {
+      "title": "RIM GLOBAL | Преміальні вживані авто у Федерал Вей, Вашингтон",
+      "description": "Відкрийте свій наступний розділ з RIM GLOBAL. Ретельно підібрана колекція перевірених вживаних автомобілів у Федерал Вей. Прозоре фінансування та елітний сервіс."
+    },
     "Hero": {
       "title": "Ваша наступна глава, обрана з розумом.",
       "subtitle": "У RIM GLOBAL ми переосмислили досвід купівлі вживаних автомобілів. Вивчіть нашу ретельно відібрану колекцію перевірених автомобілів та відчуйте впевненість у прозорій та безпроблемній подорожі.",
@@ -421,7 +425,7 @@
         "fuelType": "Fuel Type",
         "bodyType": "Body Type",
         "colour": "Colour",
-        "ulez": "ULEZ Compliance",
+        "ulezCompliance": "ULEZ Compliance",
         "vrm": "Vehicle Registration Mark",
         "doors": "Doors",
         "seats": "Seats",

@@ -19,7 +19,7 @@ const SelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex h-11 w-full items-center justify-between whitespace-nowrap rounded-md border border-muted-foreground/20 bg-background/50 backdrop-blur-sm px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring hover:border-primary/50 transition-colors disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+      "flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring hover:border-primary/50 transition-colors disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
       className
     )}
     {...props}
@@ -185,7 +185,7 @@ const Select = ({ label, options, placeholder, className, onChange, value, defau
     <div className={cn("grid gap-2", className)}>
       {label && <label className="text-sm font-medium">{label}</label>}
       <SelectPrimitiveRoot value={value as string} onValueChange={handleValueChange} {...props}>
-        <SelectTrigger>
+        <SelectTrigger className="bg-transparent">
           <SelectValue placeholder={placeholder || "Select..."} />
         </SelectTrigger>
         <SelectContent>

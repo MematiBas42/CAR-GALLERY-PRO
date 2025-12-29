@@ -98,6 +98,10 @@
     "policy": "Política de Privacidad"
   },
   "Homepage": {
+    "metadata": {
+      "title": "RIM GLOBAL | Coches de Ocasión Premium en Federal Way, WA",
+      "description": "Descubra su próximo capítulo con RIM GLOBAL. Colección meticulosamente seleccionada de coches usados de calidad inspeccionada en Federal Way. Financiación transparente y servicio de élite."
+    },
     "Hero": {
       "title": "Su próximo capítulo, curado.",
       "subtitle": "En RIM GLOBAL, hemos reinventado la experiencia de coches de ocasión para Federal Way. Explore nuestra colección meticulosamente seleccionada de vehículos inspeccionados de calidad y descubra la confianza de un viaje transparente y sin complicaciones.",
@@ -421,7 +425,7 @@
         "fuelType": "Tipo de combustible",
         "bodyType": "Tipo de carrocería",
         "colour": "Color",
-        "ulez": "Cumplimiento ULEZ",
+        "ulezCompliance": "Cumplimiento ULEZ",
         "vrm": "Marca de registro del vehículo",
         "doors": "Puertas",
         "seats": "Asientos",

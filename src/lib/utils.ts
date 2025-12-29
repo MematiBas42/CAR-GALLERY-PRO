@@ -305,10 +305,17 @@ export function formatCarStatus (status: ClassifiedStatus) {
     case ClassifiedStatus.LIVE:
       return "Live";
     
-    case ClassifiedStatus.SOLD:
-      return "Sold";
-    case ClassifiedStatus.DRAFT:
-      return "Draft";
+        case ClassifiedStatus.SOLD:
+    
+          return "Sold";
+    
+        case ClassifiedStatus.COMING_SOON:
+    
+          return "Coming Soon";
+    
+        case ClassifiedStatus.DRAFT:
+    
+          return "Draft";
     default:
       return "Unknown";
   }

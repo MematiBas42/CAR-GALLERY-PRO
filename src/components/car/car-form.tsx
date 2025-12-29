@@ -86,7 +86,7 @@ const CarForm = ({ car }: CarFormProps) => {
           description: "", vrm: "", odoReading: undefined, price: undefined, doors: undefined, seats: undefined,
           fuelType: FuelType.PETROL, bodyType: BodyType.SEDAN, transmission: Transmission.AUTOMATIC,
           colour: Colour.BLACK, ulezCompliance: ULEZCompliance.EXEMPT, odoUnit: OdoUnit.MILES,
-          status: ClassifiedStatus.DRAFT, currency: CurrencyCode.GBP,
+          status: ClassifiedStatus.DRAFT, currency: CurrencyCode.USD,
   };
 
   const form = useForm<CreateCarType | UpdateCarType>({

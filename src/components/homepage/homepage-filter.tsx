@@ -71,7 +71,7 @@ const HomepageTaxonomyFilters = ({
         handleChange={handleChange as any}
         increment={100000}
         thousandSeparator={true}
-        currency={{ currencyCode: "EUR" }}
+        currency={{ currencyCode: "USD" }}
         searchParams={searchParams}
       />
     </div>

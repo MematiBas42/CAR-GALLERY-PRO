@@ -8,7 +8,7 @@ interface KPIcardsProps {
 
 import {
   CarIcon,
-  PoundSterling,
+  DollarSign,
   TrendingUpIcon,
   UsersIcon,
 } from "lucide-react";
@@ -51,10 +51,10 @@ const KpiCard = (props: DashboardItem) => {
       <CardContent className="flex items-center justify-between">
         <span className="text-2xl font-bold text-gray-100">
           {rest.style === "currency"
-            ? formatPrice({ price: rest.amount, currency: "EUR" })
+            ? formatPrice({ price: rest.amount, currency: "USD" })
             : formatNumber(rest.amount, {
                 style: rest.style,
-                currency: "EUR",
+                currency: "USD",
                 maximumFractionDigits: 0,
               })}
         </span>
@@ -95,7 +95,7 @@ const KPIcards = ({
       id: 1,
       title: t("totalSales"),
       description: t("totalSalesDesc"),
-      icon: PoundSterling,
+      icon: DollarSign,
       amount: totalSales,
       percentage: Math.round(salesPercentageChange),
       style: "currency",

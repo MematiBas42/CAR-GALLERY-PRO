@@ -170,7 +170,7 @@ const DialogFilters = ({
               defaultMax={taxonomyRanges?.price.max ?? minMaxValue._max.price ?? 1000000}
               handleChange={handleChange as any}
               thousandSeparator={true}
-              currency={{ currencyCode: "EUR" }}
+              currency={{ currencyCode: "USD" }}
               searchParams={serverSearchParams}
             />
             <RangeFilter

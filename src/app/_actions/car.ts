@@ -227,7 +227,7 @@ export const updateCarAction = async (data: UpdateCarType) => {
             });
 
             const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-            const currencySymbol = data.currency === "USD" ? "$" : data.currency === "GBP" ? "£" : "€";
+            const currencySymbol = "$";
 
             const emailPromises = interestedCustomers.map(customer => {
                 let { subject, content } = template;

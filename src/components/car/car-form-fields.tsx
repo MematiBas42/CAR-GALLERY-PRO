@@ -172,7 +172,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
               <NumberInput
                 {...rest}
                 placeholder="0"
-                className="text-white"
+                className="text-white bg-transparent border-input"
                 onValueChange={(values) => { onChange(values.floatValue); }}
               />
             </FormControl>
@@ -190,23 +190,25 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
         inputMode="numeric"
         placeholder="0"
       />
+
       <FormField
         control={form.control}
-        name="transmission"
+        name="vrm"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="transmission">{t("transmission")}</FormLabel>
+            <FormLabel htmlFor="vrm">{t("vrm")}</FormLabel>
             <FormControl>
-              <Select
+              <Input
                 {...field}
-                className="text-white"
-                options={Object.values(Transmission).map((value) => ({ label: formatTransmission(value), value }))}
+                placeholder="VRM"
+                className="text-white bg-transparent border-input"
               />
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
+
       <FormField
         control={form.control}
         name="fuelType"
@@ -216,14 +218,39 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
             <FormControl>
               <Select
                 {...field}
-                className="text-white"
-                options={Object.values(FuelType).map((value) => ({ label: formatFuelType(value), value }))}
+                options={Object.values(FuelType).map((val) => ({
+                  label: formatFuelType(val),
+                  value: val,
+                }))}
+                placeholder={t("fuelType") || "Select fuel type"}
               />
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
+
+      <FormField
+        control={form.control}
+        name="transmission"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel htmlFor="transmission">{t("transmission")}</FormLabel>
+            <FormControl>
+              <Select
+                {...field}
+                options={Object.values(Transmission).map((val) => ({
+                  label: formatTransmission(val),
+                  value: val,
+                }))}
+                placeholder={t("transmission") || "Select transmission"}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
       <FormField
         control={form.control}
         name="bodyType"
@@ -233,14 +260,18 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
             <FormControl>
               <Select
                 {...field}
-                className="text-white"
-                options={Object.values(BodyType).map((value) => ({ label: formatBodyType(value), value }))}
+                options={Object.values(BodyType).map((val) => ({
+                  label: formatBodyType(val),
+                  value: val,
+                }))}
+                placeholder={t("bodyType") || "Select body type"}
               />
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
+
       <FormField
         control={form.control}
         name="colour"
@@ -250,44 +281,39 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
             <FormControl>
               <Select
                 {...field}
-                className="text-white"
-                options={Object.values(Colour).map((value) => ({ label: formatColour(value), value }))}
+                options={Object.values(Colour).map((val) => ({
+                  label: formatColour(val),
+                  value: val,
+                }))}
+                placeholder={t("colour") || "Select colour"}
               />
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
+
       <FormField
         control={form.control}
         name="ulezCompliance"
         render={({ field }) => (
           <FormItem>
-            <FormLabel htmlFor="ulezCompliance">{t("ulez")}</FormLabel>
+            <FormLabel htmlFor="ulezCompliance">{t("ulezCompliance")}</FormLabel>
             <FormControl>
               <Select
                 {...field}
-                className="text-white"
-                options={Object.values(ULEZCompliance).map((value) => ({ label: value, value }))}
+                options={Object.values(ULEZCompliance).map((val) => ({
+                  label: val === ULEZCompliance.EXEMPT ? "Exempt" : "Non-Exempt",
+                  value: val,
+                }))}
+                placeholder={t("ulezCompliance") || "Select compliance"}
               />
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
-      <FormField
-        control={form.control}
-        name="vrm"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel htmlFor="vrm">{t("vrm")}</FormLabel>
-            <FormControl>
-              <Input placeholder="LA16 PYW" className="uppercase text-white bg-transparent border-input" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+
       <FormField
         control={form.control}
         name="doors"
@@ -300,7 +326,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
                 max={6}
                 min={1}
                 placeholder="0"
-                className="text-white"
+                className="text-white bg-transparent border-input"
                 onValueChange={(values) => { onChange(values.floatValue); }}
               />
             </FormControl>
@@ -320,7 +346,7 @@ const CarFormField = ({ makes, models, modelVariants, isLoading }: CarFormFieldP
                 max={8}
                 min={1}
                 placeholder="0"
-                className="text-white"
+                className="text-white bg-transparent border-input"
                 onValueChange={(values) => { onChange(values.floatValue); }}
               />
             </FormControl>

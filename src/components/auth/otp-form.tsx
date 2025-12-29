@@ -1,5 +1,6 @@
 "use client";
 import { OTPSchema, OTPSchemaType } from "@/app/schemas/auth.schema";
+import { routes } from "@/config/routes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState, useTransition } from "react";
@@ -34,6 +35,8 @@ const OtpForm = () => {
         });
         return;
       }
+      // Redirect to admin dashboard
+      router.push(routes.admin.dashboard);
     })
   };
   const sendCode = async () => {

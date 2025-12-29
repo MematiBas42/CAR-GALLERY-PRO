@@ -98,6 +98,10 @@
     "policy": "Privacy Policy"
   },
   "Homepage": {
+    "metadata": {
+      "title": "RIM GLOBAL | Xe đã qua sử dụng cao cấp tại Federal Way, WA",
+      "description": "Khám phá chương tiếp theo của bạn với RIM GLOBAL. Bộ sưu tập xe đã qua sử dụng được kiểm định chất lượng tỉ mỉ tại Federal Way. Tài chính minh bạch và dịch vụ đẳng cấp."
+    },
     "Hero": {
       "title": "Chương tiếp theo của bạn, được chọn lọc.",
       "subtitle": "Tại RIM GLOBAL, chúng tôi đã tái định nghĩa trải nghiệm mua xe cũ tại Federal Way. Khám phá bộ sưu tập xe đã được kiểm định chất lượng và tận hưởng hành trình minh bạch, không rắc rối.",
@@ -420,10 +424,9 @@
         "transmission": "Transmission",
         "fuelType": "Fuel Type",
         "bodyType": "Body Type",
-        "colour": "Colour",
-        "ulez": "ULEZ Compliance",
-        "vrm": "Vehicle Registration Mark",
-        "doors": "Doors",
+                "colour": "Màu sắc",
+                "ulezCompliance": "Tiêu chuẩn khí thải",
+                "vrm": "Vehicle Registration Mark",        "doors": "Doors",
         "seats": "Seats",
         "description": "Description"
       },

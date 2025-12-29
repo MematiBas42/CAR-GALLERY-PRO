@@ -211,6 +211,7 @@ enum ClassifiedStatus {
   LIVE
   DRAFT
   SOLD
+  COMING_SOON
 }
 
 enum CurrencyCode {
