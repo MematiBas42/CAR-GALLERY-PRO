@@ -368,7 +368,8 @@
       "messages": "Messages",
       "subscribers": "Subscribers",
       "latestArrivals": "Latest Arrivals",
-      "settings": "Settings"
+      "settings": "Settings",
+      "returnToHome": "Return to Home"
     },
     "latestArrivals": {
       "successAdded": "Vehicle added to Latest Arrivals",

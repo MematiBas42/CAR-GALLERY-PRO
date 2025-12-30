@@ -16,16 +16,12 @@ const remotePatterns = [
 const nextConfig: NextConfig = {
   /* config options here */
   compress: true,
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   images: {
 		remotePatterns: remotePatterns,
 	},
   experimental: {
     authInterrupts: true,
 		reactCompiler: true,
-		optimizeCss: true,
 		optimizeServerReact: true,
 		optimizePackageImports: ["lucide-react", "date-fns"],
   },

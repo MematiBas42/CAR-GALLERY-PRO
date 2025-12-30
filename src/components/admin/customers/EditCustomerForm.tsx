@@ -64,7 +64,7 @@ const EditCustomerForm = ({ customer }: EditCustomerFormProps) => {
             bookingDate: customer.bookingDate || undefined,
         });
     }
-  }, [customer, isEditMode, form.reset]);
+  }, [customer, isEditMode, form]);
 
   const onSubmit: SubmitHandler<EditCustomerType> = async (data) => {
     startTransition(async () => {

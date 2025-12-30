@@ -12,7 +12,7 @@ const PrivacyPolicyPage = async () => {
           <p>Son Güncelleme: {new Date().toLocaleDateString('tr-TR')}</p>
           <section>
             <h2 className="text-2xl font-semibold mb-4 text-foreground">1. Giriş</h2>
-            <p>RIM GLOBAL'e hoş geldiniz. Gizliliğinizi korumaya ve web sitemizi kullanırken güvenli bir deneyim yaşamanızı sağlamaya kararlıyız.</p>
+            <p>RIM GLOBAL&apos;e hoş geldiniz. Gizliliğinizi korumaya ve web sitemizi kullanırken güvenli bir deneyim yaşamanızı sağlamaya kararlıyız.</p>
           </section>
           <section>
             <h2 className="text-2xl font-semibold mb-4 text-foreground">2. Topladığımız Bilgiler</h2>

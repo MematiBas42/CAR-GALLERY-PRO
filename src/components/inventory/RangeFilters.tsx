@@ -33,9 +33,10 @@ export const RangeFilter = (props: RangeFilterProps) => {
 	const [maxVal, setMaxVal] = useState(searchParams?.[maxName]?.toString() || "");
 
 	useEffect(() => {
-		setMinVal(searchParams?.[minName]?.toString() || "");
-		setMaxVal(searchParams?.[maxName]?.toString() || "");
-	}, [searchParams?.[minName], searchParams?.[maxName], minName, maxName]);
+        if (!searchParams) return;
+		setMinVal(searchParams[minName]?.toString() || "");
+		setMaxVal(searchParams[maxName]?.toString() || "");
+	}, [searchParams, minName, maxName]);
 
 	const handleApply = () => {
 		let finalMin = minVal;

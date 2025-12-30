@@ -10,6 +10,7 @@ import {
   StarIcon,
   FileCodeIcon,
   MenuIcon,
+  HomeIcon,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -63,6 +64,11 @@ const MobileSidebar = () => {
       name: t("settings"),
       href: routes.admin.settings,
       icon: SettingsIcon,
+    },
+    {
+      name: t("returnToHome"),
+      href: routes.home,
+      icon: HomeIcon,
     },
   ];
 

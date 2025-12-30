@@ -71,7 +71,7 @@ const DragAndDrop = (props: DragAndDropProps) => {
   };
 
   const handleClick = () => inputRef.current?.click();
-  const handleDrop = (e: DragEvent) => {
+  const handleDrop = useCallback((e: any) => {
     e.preventDefault();
     e.stopPropagation();
     clearError();
@@ -86,13 +86,13 @@ const DragAndDrop = (props: DragAndDropProps) => {
         return;
       }
 
-      const fileSizeTooBig = Array.from(e.dataTransfer?.files)
+      const fileSizeTooBig = Array.from(e.dataTransfer?.files as FileList)
         .filter((file) => file.size > MAX_IMAGE_SIZE)
         .map((file) => file.name);
 
       handleFileRejected(fileSizeTooBig);
 
-      const validFiles = Array.from(e.dataTransfer?.files).filter(
+      const validFiles = Array.from(e.dataTransfer?.files as FileList).filter(
         (file) => file.size <= MAX_IMAGE_SIZE
       );
 
@@ -102,24 +102,27 @@ const DragAndDrop = (props: DragAndDropProps) => {
       }
     }
     e.dataTransfer?.clearData();
-  };
+  }, [items.length, handleFileRejected, setIsUploading, setFiles, clearError]);
 
-  const stopEvent = (e: DragEvent) => {
+  const stopEvent = useCallback((e: any) => {
     e.preventDefault();
     e.stopPropagation();
-  };
-  const handleDragEnter = (e: DragEvent) => {
-    stopEvent(e);
-  };
+  }, []);
 
-  const handleDragLeave = (e: DragEvent) => {
+  const handleDragEnter = useCallback((e: any) => {
+    stopEvent(e);
+  }, [stopEvent]);
+
+  const handleDragLeave = useCallback((e: any) => {
     stopEvent(e);
     setDraggingOver(false);
-  };
-  const handleDragOver = (e: DragEvent) => {
+  }, [stopEvent]);
+
+  const handleDragOver = useCallback((e: any) => {
     e.preventDefault();
     e.stopPropagation();
-  };
+  }, []);
+
   useEffect(() => {
     const div = dropref.current;
     if (div) {
@@ -137,7 +140,7 @@ const DragAndDrop = (props: DragAndDropProps) => {
         div.removeEventListener("dragleave", handleDragLeave);
       }
     };
-  }, []);
+  }, [handleDrop, handleDragOver, handleDragEnter, handleDragLeave]);
   useEffect(() => {
     if (filesRejected.length) {
       setIsError({

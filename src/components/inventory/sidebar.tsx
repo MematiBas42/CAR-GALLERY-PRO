@@ -78,9 +78,13 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
   }, [isPending]);
 
   useEffect(() => {
-    const params = typeof searchParams?.then === 'function' ? {} : searchParams;
+    // Check if searchParams is a Promise (Next.js 15) or object
+    const params = searchParams && typeof searchParams === 'object' && !('then' in searchParams) 
+        ? searchParams 
+        : {};
+        
     const count = Object.entries(params as Record<string, string>)
-      .filter(([key, value]) => key !== "page" && value).length;
+      .filter(([key, value]) => key !== "page" && value && typeof value === 'string').length;
     setFilterCount(count);
   }, [searchParams]); 
 

@@ -45,7 +45,7 @@ const SearchInput = (props: SearchInputProps) => {
       1000,
       { immediate: false }
     ),
-    [] // Add dependency array
+    [setSearch] 
   );
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {

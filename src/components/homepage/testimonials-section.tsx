@@ -29,7 +29,7 @@ const TestimonialsSection = () => {
           <div className="mt-8 grid gap-8 md:grid-cols-3">
             {testimonials.map((testimonial, index) => (
               <div key={index} className="bg-card p-6 rounded-lg shadow-md">
-                <p className="text-muted-foreground italic">"{testimonial.quote}"</p>
+                <p className="text-muted-foreground italic">&quot;{testimonial.quote}&quot;</p>
                 <p className="mt-4 font-semibold text-foreground">- {testimonial.name}</p>
                 <p className="text-sm text-muted-foreground">{testimonial.location}</p>
               </div>

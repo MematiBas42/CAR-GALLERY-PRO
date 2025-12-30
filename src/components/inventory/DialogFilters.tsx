@@ -27,9 +27,10 @@ interface DialogFiltersProps extends SidebarProps {
 
 const DialogFilters = ({
   minMaxValue,
-  searchParams: serverSearchParams,
+  searchParams: serverSearchParamsProp,
   count: initialCount,
 }: DialogFiltersProps) => {
+  const serverSearchParams = serverSearchParamsProp || {};
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();

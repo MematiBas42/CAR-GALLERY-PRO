@@ -149,4 +149,6 @@ const OTPInput = forwardRef<HTMLInputElement, PinCodeProps>(
   }
 );
 
+OTPInput.displayName = "OTPInput";
+
 export default OTPInput;

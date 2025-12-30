@@ -149,6 +149,7 @@ const SingleImageUploader = (props: SingleImageUploaderProps) => {
           disabled={isUploading}
         />
         {preview ? (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={preview}
             alt="Preview"

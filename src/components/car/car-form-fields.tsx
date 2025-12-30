@@ -19,19 +19,21 @@ import InputSelect from "../ui/input-select";
 import { NumberInput } from "../ui/number-input";
 import { useTranslations } from "next-intl";
 
+const RichTextEditorLoading = () => {
+  const t = useTranslations("Admin.cars.form");
+  return (
+    <div className="space-y-2 flex flex-col">
+      <Skeleton className="w-24 h-4" />
+      <Skeleton className="h-[200px] w-full" />
+    </div>
+  );
+};
+
 const RichTextEditor = dynamic(
   () => import("./rich-text-editor").then((mod) => mod.RichTextEditor),
   {
     ssr: false,
-    loading: () => {
-      const t = useTranslations("Admin.cars.form");
-      return (
-        <div className="space-y-2 flex flex-col">
-          <Skeleton className="w-24 h-4" />
-          <Skeleton className="h-[200px] w-full" />
-        </div>
-      );
-    },
+    loading: RichTextEditorLoading,
   }
 );
 

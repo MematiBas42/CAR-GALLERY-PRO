@@ -71,6 +71,7 @@ export const SimpleImageUploader = ({ value, onChange, className }: SimpleImageU
     <div className={cn("w-full", className)}>
       {preview ? (
         <div className="relative aspect-video w-full rounded-md border overflow-hidden bg-muted">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={preview}
             alt="Uploaded image"

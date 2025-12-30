@@ -212,7 +212,7 @@ export function SmartCombobox({
                          onClick={openCreateDialog}
                          >
                              <Plus className="mr-2 h-4 w-4" />
-                             Create "{searchValue}"
+                             Create &quot;{searchValue}&quot;
                          </Button>
                     )}
                 </CommandEmpty>
