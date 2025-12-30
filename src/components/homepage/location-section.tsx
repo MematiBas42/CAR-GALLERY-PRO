@@ -6,6 +6,8 @@ import { getTranslations } from "next-intl/server";
 const LocationSection = async () => {
   const t = await getTranslations("Contact");
   const googleMapsUrl = "https://www.google.com/maps/dir/?api=1&destination=47.322323,-122.312622";
+  // Free Google Maps Embed URL (No API Key needed)
+  const embedUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2703.62342080!2d-122.312622!3d47.322323!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDfCsDE5JzIwLjQiTiAxMjLCsDE4JzQ1LjQiVw!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus`;
 
   return (
     <section className="py-12 bg-secondary">
@@ -24,13 +26,14 @@ const LocationSection = async () => {
             </Button>
           </div>
           <iframe
-            src="https://www.openstreetmap.org/export/embed.html?bbox=-122.322622,47.317323,-122.302622,47.327323&layer=mapnik&marker=47.322323,-122.312622"
+            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d10814.49257691345!2d-122.312622!3d47.322323!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDfCsDE5JzIwLjQiTiAxMjLCsDE4JzQ1LjQiVw!5e0!3m2!1str!2str!4v1703950000000!5m2!1str!2str"
             width="100%"
             height="450"
             style={{ border: 0 }}
             allowFullScreen={true}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
+            className="grayscale hover:grayscale-0 transition-all duration-500"
           ></iframe>
         </div>
       </div>
