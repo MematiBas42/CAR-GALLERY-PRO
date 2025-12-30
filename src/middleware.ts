@@ -59,6 +59,6 @@ export default auth((req) => {
 
 export const config = {
   matcher:
-    "/((?!api/auth|_next/static|_next/image|favicon.ico|manifest.json|logo.svg).*)",
+    "/((?!api/auth|_next/static|_next/image|favicon.ico|manifest.json|logo.svg|sitemap.xml|robots.txt).*)",
     runtime: "nodejs",
 };

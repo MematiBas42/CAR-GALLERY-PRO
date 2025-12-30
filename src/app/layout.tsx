@@ -10,6 +10,7 @@ import {NextIntlClientProvider} from 'next-intl';
 import { cookies } from 'next/headers';
 import { GlobalLoader } from "@/components/shared/global-loader";
 import { FloatingPhoneButton } from "@/components/shared/floating-phone-button";
+import { Analytics } from "@vercel/analytics/next";
 
 const mulish = Mulish({
 	weight: "variable",
@@ -87,6 +88,7 @@ export default async function RootLayout({
             </NuqsAdapter>
             <FloatingPhoneButton />
             <Toaster />
+            <Analytics />
         </NextIntlClientProvider>
       </body>
     </html>

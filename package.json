@@ -38,6 +38,7 @@
     "@tinymce/tinymce-react": "^6.0.0",
     "@upstash/ratelimit": "^2.0.5",
     "@upstash/redis": "^1.34.4",
+    "@vercel/analytics": "^1.6.1",
     "ai": "^4.1.45",
     "aws-sdk": "^2.1692.0",
     "babel-plugin-react-compiler": "^19.0.0-beta-e1e972c-20250221",
