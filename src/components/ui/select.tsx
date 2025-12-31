@@ -19,7 +19,7 @@ const SelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring hover:border-primary/50 transition-colors disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+      "flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring hover:border-muted-foreground/40 transition-colors disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
       className
     )}
     {...props}
@@ -165,6 +165,13 @@ interface SelectProps extends React.ComponentPropsWithoutRef<typeof SelectPrimit
 }
 
 const Select = ({ label, options, placeholder, className, onChange, value, defaultValue, onValueChange, ...props }: SelectProps) => {
+  const lastLabelRef = React.useRef<string>("")
+  const [localValue, setLocalValue] = React.useState(value)
+
+  React.useEffect(() => {
+    setLocalValue(value)
+  }, [value])
+
   // If children are provided, behave like the Root primitive (shadcn standard)
   if (props.children) {
     return <SelectPrimitiveRoot value={value} onValueChange={onValueChange} defaultValue={defaultValue} {...props} />;
@@ -172,6 +179,7 @@ const Select = ({ label, options, placeholder, className, onChange, value, defau
 
   // Otherwise, behave like the legacy component using the new UI
   const handleValueChange = (val: string) => {
+    setLocalValue(val) // Instant feedback
     if (onValueChange) {
       onValueChange(val);
     }
@@ -181,12 +189,21 @@ const Select = ({ label, options, placeholder, className, onChange, value, defau
     }
   };
 
+  const currentLabel = React.useMemo(() => {
+    const found = options?.find(opt => String(opt.value) === String(localValue))?.label
+    if (found) {
+        lastLabelRef.current = found
+        return found
+    }
+    return lastLabelRef.current || placeholder || "Select..."
+  }, [localValue, options, placeholder])
+
   return (
     <div className={cn("grid gap-2", className)}>
       {label && <label className="text-sm font-medium">{label}</label>}
-      <SelectPrimitiveRoot value={value as string} onValueChange={handleValueChange} {...props}>
+      <SelectPrimitiveRoot value={localValue as string} onValueChange={handleValueChange} {...props}>
         <SelectTrigger className="bg-transparent">
-          <SelectValue placeholder={placeholder || "Select..."} />
+          <span className="truncate">{currentLabel}</span>
         </SelectTrigger>
         <SelectContent>
           {options?.map((option) => (

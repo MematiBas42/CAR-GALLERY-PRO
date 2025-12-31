@@ -11,14 +11,37 @@ import { useLoading } from "@/hooks/use-loading";
 export const SearchButton = ({ initialCount, label = "Search" }: { initialCount: number, label?: string }) => {
     const searchParams = useSearchParams();
     const router = useRouter();
-    const isGlobalLoading = useLoading();
     
+    // Track the search string locally to react to shallow updates instantly
+    const [currentSearch, setCurrentSearch] = React.useState(typeof window !== 'undefined' ? window.location.search : "");
+
+    React.useEffect(() => {
+        const handleLocationChange = () => {
+            setCurrentSearch(window.location.search);
+        };
+
+        window.addEventListener('popstate', handleLocationChange);
+        window.addEventListener('pushstate', handleLocationChange);
+        window.addEventListener('replacestate', handleLocationChange);
+
+        // Periodically check as a fallback for internal router changes
+        const interval = setInterval(handleLocationChange, 100);
+
+        return () => {
+            window.removeEventListener('popstate', handleLocationChange);
+            window.removeEventListener('pushstate', handleLocationChange);
+            window.removeEventListener('replacestate', handleLocationChange);
+            clearInterval(interval);
+        };
+    }, []);
+
     const queryString = useMemo(() => {
-        const params = new URLSearchParams(searchParams.toString());
+        const params = new URLSearchParams(currentSearch);
         params.delete("page");
         return params.toString();
-    }, [searchParams]);
+    }, [currentSearch]);
 
+    const isGlobalLoading = useLoading();
     const { count, slug, isLoading: isCountLoading } = useClassifiedCount(queryString, initialCount);
 
     const isInteractionPending = isGlobalLoading || isCountLoading;

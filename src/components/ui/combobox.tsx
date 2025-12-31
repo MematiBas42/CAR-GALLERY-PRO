@@ -45,16 +45,41 @@ export function Combobox({
   className,
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false)
+  const lastLabelRef = React.useRef<string>("")
+  
+  // Optimistic local state for instant feedback
+  const [localValue, setLocalValue] = React.useState(value)
+
+  // Sync local state with external value prop
+  React.useEffect(() => {
+    setLocalValue(value)
+  }, [value])
 
   const handleSelect = (val: string) => {
     setOpen(false)
+    setLocalValue(val) // Instant visual update
     onChange({ target: { name, value: val } })
   }
 
   const handleClear = (e: React.MouseEvent) => {
     e.stopPropagation()
+    setLocalValue("") // Instant visual clear
     onChange({ target: { name, value: "" } })
   }
+
+  // Update and persist the label whenever options or localValue changes
+  const displayLabel = React.useMemo(() => {
+    if (!localValue) {
+        lastLabelRef.current = ""
+        return placeholder
+    }
+    const found = options.find((opt) => String(opt.value) === String(localValue))
+    if (found) {
+        lastLabelRef.current = found.label
+        return found.label
+    }
+    return lastLabelRef.current || (isNaN(Number(localValue)) ? localValue : placeholder)
+  }, [localValue, options, placeholder])
 
   return (
     <div className={cn("grid gap-1", className)}>
@@ -65,16 +90,14 @@ export function Combobox({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full justify-between pr-2 h-9 border-muted-foreground/20 hover:border-primary/50 transition-colors bg-background/50 backdrop-blur-sm shadow-sm"
+            className="w-full justify-between pr-2 h-9 border-muted-foreground/20 hover:border-muted-foreground/40 transition-colors bg-background/50 backdrop-blur-sm shadow-sm"
             disabled={disabled}
           >
             <span className="truncate font-normal text-muted-foreground">
-              {value
-                ? options.find((option) => String(option.value) === String(value))?.label || (typeof value === 'string' && isNaN(Number(value)) ? value : placeholder)
-                : placeholder}
+              {displayLabel}
             </span>
             <div className="flex items-center gap-1">
-                {value && (
+                {localValue && (
                     <div 
                         onClick={handleClear}
                         className="rounded-full p-1 hover:bg-destructive/10 hover:text-destructive cursor-pointer transition-colors"

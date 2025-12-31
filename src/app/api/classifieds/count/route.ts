@@ -27,7 +27,9 @@ export const GET = async (request: NextRequest) => {
 
     return NextResponse.json({ count, slug }, {
       status: 200,
-      headers: { "Cache-Control": "private, no-cache" }
+      headers: { 
+          "Cache-Control": "public, s-maxage=30, stale-while-revalidate=59" 
+      }
     });
   } catch (error) {
     return NextResponse.json({ count: 0 }, { status: 500 });

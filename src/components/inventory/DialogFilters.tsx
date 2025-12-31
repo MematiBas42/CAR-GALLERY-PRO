@@ -63,7 +63,7 @@ const DialogFilters = ({
       ulezCompliance: parseAsString.withDefault(""),
     },
     { 
-        shallow: false,
+        shallow: true,
         startTransition
     }
   );
@@ -108,13 +108,21 @@ const DialogFilters = ({
     if ('target' in e) {
         const target = e.target as HTMLSelectElement;
         const name = target.name;
-        const value = target.value;
-        updates[name] = value || null;
-        if (name === "make") {
+        const value = target.value || null;
+        updates[name] = value;
+        
+        // Hierarchical clearing logic
+        if (name === "make" && !value) {
+            updates.model = null;
+            updates.modelVariant = null;
+        } else if (name === "make") {
             updates.model = null;
             updates.modelVariant = null;
         }
-        if (name === "model") {
+        
+        if (name === "model" && !value) {
+            updates.modelVariant = null;
+        } else if (name === "model") {
             updates.modelVariant = null;
         }
     } else {
