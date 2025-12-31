@@ -1,4 +1,4 @@
-import { Favourites } from '@/config/types'
+import { CarWithImages, Favourites } from '@/config/types'
 import { prisma } from '@/lib/prisma'
 import { redis } from '@/lib/redis-store'
 import { getSourceId } from '@/lib/source-id'
@@ -17,7 +17,7 @@ interface LastestArrivalProps {
 const LastestArrival = async ({ searchParams, carsCount, emptyMinMax }: LastestArrivalProps) => {
     // Fetch all potential candidates in ONE query
     // We fetch cars that are either manually selected OR are among the 6 newest
-    const cars = await prisma.classified.findMany({
+    const cars: CarWithImages[] = await prisma.classified.findMany({
         where: {
             status: ClassifiedStatus.LIVE,
         },
@@ -26,10 +26,29 @@ const LastestArrival = async ({ searchParams, carsCount, emptyMinMax }: LastestA
             { createdAt: 'desc' }        // Then by date
         ],
         take: 10, // Limit to top 10 total
-        include: {
-            images: true
+        select: {
+            id: true,
+            slug: true,
+            title: true,
+            price: true,
+            description: true,
+            odoReading: true,
+            odoUnit: true,
+            transmission: true,
+            fuelType: true,
+            colour: true,
+            status: true,
+            isLatestArrival: true,
+            images: {
+                select: {
+                    id: true,
+                    src: true,
+                    alt: true,
+                    blurhash: true,
+                }
+            }
         }
-    });
+    }) as any;
 
     // Filter logic: If we have manually selected ones, show ONLY them (up to 10)
     // If we have NONE manually selected, the query already returned the latest 10 by date.

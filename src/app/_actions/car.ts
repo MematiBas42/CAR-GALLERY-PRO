@@ -324,8 +324,26 @@ export const getComingSoonCars = async () => {
         orderBy: {
             createdAt: 'desc'
         },
-        include: {
-            images: true
+        select: {
+            id: true,
+            slug: true,
+            title: true,
+            price: true,
+            description: true,
+            odoReading: true,
+            odoUnit: true,
+            transmission: true,
+            fuelType: true,
+            colour: true,
+            status: true,
+            images: {
+                select: {
+                    id: true,
+                    src: true,
+                    alt: true,
+                    blurhash: true,
+                }
+            }
         }
     }) as any;
 };

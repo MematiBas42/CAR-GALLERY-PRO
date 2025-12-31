@@ -7,7 +7,7 @@ import { Cog, Fuel, GaugeCircle, MessageCircle, Paintbrush2 } from "lucide-react
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import parse from "html-react-parser";
-import React, { useEffect, useState, memo } from "react";
+import React, { useEffect, useState, memo, useMemo } from "react";
 import { Button } from "../ui/button";
 import FavButton from "./fav-button";
 import { useTranslations } from "next-intl";
@@ -20,7 +20,7 @@ interface CarCardProps {
   favourites: number[];
 }
 
-const CarCard = ({ car, favourites }: CarCardProps) => {
+const CarCard = memo(({ car, favourites }: CarCardProps) => {
   const t = useTranslations("Car");
   const tEnums = useTranslations("Enums");
   const [isFav, setIsFav] = useState(favourites.includes(car.id));
@@ -30,7 +30,7 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
   const whatsappMessage = encodeURIComponent(`Hello, I am interested in the ${car.title}.`);
   const whatsappUrl = `${SITE_CONFIG.socials.whatsapp}?text=${whatsappMessage}`;
 
-  const keyCarInfo = [
+  const keyCarInfo = useMemo(() => [
     {
       id: "odoReading",
       icon: <GaugeCircle className="w-4 h-4" />,
@@ -51,7 +51,7 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
       icon: <Paintbrush2 className="w-4 h-4" />,
       value: car?.colour ? tEnums(`Colour.${car.colour}`) : null,
     },
-  ];
+  ], [car, tEnums]);
 
   useEffect(() => {
     if (!isFav && pathname === routes.favourites) {
@@ -73,8 +73,8 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
                 src={car.images[0]?.src || "/placeholder.png"}
                 alt={car.images[0]?.alt || "Car Image"}
                 fill={true}
-                sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
-                quality={25}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                quality={60}
                 smartCover={true}
               />
             </Link>
@@ -128,6 +128,8 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
           </div>
         </div>
   );
-};
+});
+
+CarCard.displayName = "CarCard";
 
 export default CarCard;

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, memo } from 'react';
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Keyboard, EffectFade } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
@@ -18,7 +18,7 @@ interface ComingSoonCarouselProps {
     cars: CarWithImages[];
 }
 
-const ComingSoonCard = ({ car }: { car: CarWithImages }) => {
+const ComingSoonCard = memo(({ car }: { car: CarWithImages }) => {
     const innerSwiperRef = useRef<SwiperType | null>(null);
 
     const startInnerAutoplay = () => innerSwiperRef.current?.autoplay.start();
@@ -116,7 +116,9 @@ const ComingSoonCard = ({ car }: { car: CarWithImages }) => {
             </div>
         </Link>
     );
-};
+});
+
+ComingSoonCard.displayName = "ComingSoonCard";
 
 export const ComingSoonCarousel = ({ cars }: ComingSoonCarouselProps) => {
     const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);

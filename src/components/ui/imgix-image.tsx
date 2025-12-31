@@ -3,6 +3,7 @@ import Image, { type ImageProps } from 'next/image'
 import { useState } from 'react'
 import React from 'react'
 import { getImageUrl, cn } from '@/lib/utils'
+import { imgixLoader } from '@/lib/imgix-loader'
 
 interface ImgixImageProps extends Omit<ImageProps, 'priority' | 'loading'> {
     smartCover?: boolean;
@@ -19,6 +20,7 @@ const ImgixImage = ({ smartCover, className, alt, ...props }: ImgixImageProps) =
                 {/* Blurred background filler */}
                 <Image
                     {...rest}
+                    loader={imgixLoader}
                     src={finalSrc}
                     alt="Background blur"
                     fill
@@ -29,6 +31,7 @@ const ImgixImage = ({ smartCover, className, alt, ...props }: ImgixImageProps) =
                 {/* Main centered image */}
                 <Image
                     {...rest}
+                    loader={imgixLoader}
                     src={finalSrc}
                     alt={alt}
                     fill
@@ -56,6 +59,7 @@ const ImgixImage = ({ smartCover, className, alt, ...props }: ImgixImageProps) =
 		<Image
 			onError={() => setError(true)}
 			{...props}
+            loader={imgixLoader}
             src={finalSrc}
             alt={alt}
             className={className}
