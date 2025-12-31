@@ -31,7 +31,7 @@ const HeroSection = async (props: AwaitedPageProps) => {
 
   return (
     <section
-      className="relative flex flex-col items-center justify-start lg:justify-center min-h-[800px] lg:h-[calc(100vh-4rem)] lg:min-h-[600px] w-full bg-cover bg-center overflow-hidden pt-12 lg:pt-0"
+      className="relative flex flex-col items-center justify-start lg:justify-center min-h-[600px] lg:min-h-[calc(100vh-4rem)] w-full bg-cover bg-center pt-4 lg:pt-0 pb-12"
       style={{
         backgroundImage: `url('/assets/hero-bg.jpg')`,
       }}
@@ -39,7 +39,7 @@ const HeroSection = async (props: AwaitedPageProps) => {
       <div className="absolute inset-0 bg-gray-900 opacity-30 dark:opacity-50" />
       
       {/* Main Container */}
-      <div className="container relative z-10 flex flex-col gap-4 lg:gap-6 w-full max-w-[1920px] mx-auto py-2">
+      <div className="container relative z-10 flex flex-col gap-2 lg:gap-4 w-full max-w-[1920px] mx-auto py-2">
 
         {/* TOP: "Your Next Chapter" Text */}
         <div className="w-full flex justify-center px-4 shrink-0">

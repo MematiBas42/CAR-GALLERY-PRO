@@ -6,6 +6,7 @@ import { Autoplay, Navigation, Keyboard, EffectFade } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
 import "swiper/css/effect-fade";
+import "swiper/css/autoplay";
 import SwiperButton from "../shared/swiper-button";
 import { CarWithImages } from '@/config/types';
 import Link from "next/link";
@@ -35,6 +36,9 @@ const ComingSoonCard = ({ car }: { car: CarWithImages }) => {
             className="group/card block relative h-full"
             onMouseEnter={startInnerAutoplay}
             onMouseLeave={stopInnerAutoplay}
+            onTouchStart={startInnerAutoplay}
+            onTouchEnd={stopInnerAutoplay}
+            onTouchCancel={stopInnerAutoplay}
         >
             <div className={cn(
                 "relative aspect-[2/3] sm:aspect-[3/4] overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] bg-card border shadow-xl",
@@ -114,81 +118,105 @@ const ComingSoonCard = ({ car }: { car: CarWithImages }) => {
     );
 };
 
-
 export const ComingSoonCarousel = ({ cars }: ComingSoonCarouselProps) => {
     const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
     const [canScroll, setCanScroll] = useState(false);
+    const totalSlides = cars.length;
 
     useEffect(() => {
         if (!swiperInstance) return;
+
         const checkScrollability = () => {
-            const slidesPerView = swiperInstance.params.slidesPerView;
-            if (typeof slidesPerView === 'number') {
-                setCanScroll(cars.length > slidesPerView);
+            if (swiperInstance) {
+                const isScrollable = (swiperInstance as any).virtualSize > (swiperInstance as any).size;
+                setCanScroll(isScrollable);
             }
         };
+
         checkScrollability();
         swiperInstance.on('update', checkScrollability);
         swiperInstance.on('resize', checkScrollability);
+
         return () => {
             swiperInstance.off('update', checkScrollability);
             swiperInstance.off('resize', checkScrollability);
         };
-    }, [swiperInstance, cars]);
+    }, [swiperInstance, totalSlides]);
 
-    // Initially stop inner carousels
-    useEffect(() => {
-        if (swiperInstance) {
-            swiperInstance.slides.forEach(slide => {
-                const innerSwiper = (slide as any).swiper;
-                if (innerSwiper) innerSwiper.autoplay.stop();
-            });
+    let arrowPrevClass = "left-0 md:left-4";
+    let arrowNextClass = "right-0 md:right-4";
+
+    if (totalSlides === 1) {
+        arrowPrevClass = "left-[calc(50%-220px)] md:left-[calc(50%-260px)]";
+        arrowNextClass = "right-[calc(50%-220px)] md:right-[calc(50%-260px)]";
+    } else if (totalSlides === 2) {
+        arrowPrevClass = "lg:left-[calc(50%-440px)] left-0 md:left-4";
+        arrowNextClass = "lg:right-[calc(50%-440px)] right-0 md:right-4";
+    }
+
+    const handleInteractionStart = () => {
+        if (swiperInstance && swiperInstance.autoplay.running) {
+            swiperInstance.autoplay.stop();
         }
-    }, [swiperInstance]);
+    };
+
+    const handleInteractionEnd = () => {
+        if (swiperInstance && !swiperInstance.autoplay.running) {
+            swiperInstance.autoplay.start();
+        }
+    };
 
     return (
-        <div className="relative group max-w-7xl px-0 sm:px-4 md:px-12 mx-auto">
+        <div className="relative group w-full px-0 sm:px-12 md:px-24">
             <Swiper
                 onSwiper={setSwiperInstance}
-                speed={1000}
-                spaceBetween={30}
-                slidesPerView={1}
-                centeredSlides={true}
-                centerInsufficientSlides={true}
-                loop={true}
+                speed={800}
+                grabCursor={true}
+                rewind={true}
+                threshold={15}
+                noSwiping={true}
+                noSwipingClass="no-swipe"
+                onTouchStart={handleInteractionStart}
+                onTouchEnd={handleInteractionEnd}
                 autoplay={{
-                    delay: 5000,
+                    delay: 4000,
                     disableOnInteraction: false,
                     pauseOnMouseEnter: true
                 }}
-                keyboard={{ enabled: true }}
-                modules={[Autoplay, Navigation, Keyboard]}
-                breakpoints={{
-                    640: { slidesPerView: 2, centeredSlides: false },
-                    1024: { slidesPerView: 3, centeredSlides: false },
-                    1536: { slidesPerView: 4, centeredSlides: false },
+                keyboard={{
+                    enabled: true,
                 }}
-                className="!pb-8 !overflow-visible !px-4 sm:!px-0" // Allow cards to overflow vertically
+                modules={[Navigation, Autoplay, Keyboard]}
+                spaceBetween={12}
+                slidesPerView={1}
+                centerInsufficientSlides={true}
+                breakpoints={{
+                    640: { slidesPerView: 2, spaceBetween: 24 },
+                    1024: { slidesPerView: 3, spaceBetween: 32 },
+                    1536: { slidesPerView: 4, spaceBetween: 32 },
+                }}
+                className="!h-auto h-full !px-2 sm:!px-0 !pb-12"
             >
                 {cars.map((car) => (
-                    <SwiperSlide key={car.id} className="h-auto">
+                    <SwiperSlide key={car.id} className="!h-auto h-full">
                         <ComingSoonCard car={car} />
                     </SwiperSlide>
                 ))}
             </Swiper>
 
-            {/* Theme-aware Arrow Buttons */}
             <SwiperButton
-                prevClassName={`-left-8 sm:-left-6 lg:left-4 z-30 transition-all duration-300 h-14 w-14 bg-background/60 dark:bg-card/60 backdrop-blur-md border border-white/10 ${
-                    canScroll ? "opacity-100 md:opacity-0 md:group-hover:opacity-100" : "opacity-0 pointer-events-none"
-                }`}
-                nextClassName={`-right-8 sm:-right-6 lg:right-4 z-30 transition-all duration-300 h-14 w-14 bg-background/60 dark:bg-card/60 backdrop-blur-md border border-white/10 ${
-                    canScroll ? "opacity-100 md:opacity-0 md:group-hover:opacity-100" : "opacity-0 pointer-events-none"
-                }`}
-                onPrevClick={() => swiperInstance?.slidePrev()}
-                onNextClick={() => swiperInstance?.slideNext()}
-                onMouseEnter={() => swiperInstance?.autoplay.stop()}
-                onMouseLeave={() => swiperInstance?.autoplay.start()}
+                prevClassName={`${arrowPrevClass} latest-prev-button z-[60] transition-all duration-300 -left-8 sm:-left-6 lg:left-4 ${canScroll ? "opacity-100 md:opacity-0 md:group-hover:opacity-100" : "opacity-0 md:opacity-0 pointer-events-none"
+                    }`}
+                nextClassName={`${arrowNextClass} latest-next-button z-[60] transition-all duration-300 -right-8 sm:-right-6 lg:right-4 ${canScroll ? "opacity-100 md:opacity-0 md:group-hover:opacity-100" : "opacity-0 md:opacity-0 pointer-events-none"
+                    }`}
+                onPrevClick={() => {
+                    if (swiperInstance) swiperInstance.slidePrev();
+                }}
+                onNextClick={() => {
+                    if (swiperInstance) swiperInstance.slideNext();
+                }}
+                onMouseEnter={handleInteractionStart}
+                onMouseLeave={handleInteractionEnd}
             />
         </div>
     );

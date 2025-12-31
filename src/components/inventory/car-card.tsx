@@ -65,7 +65,7 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
       id={car.slug || "slug"}
       className="bg-card relative h-full rounded-md shadow-lg overflow-hidden flex flex-col border transition-shadow duration-300 hover:shadow-2xl"
     >
-      <div className="aspect-[3/2] sm:aspect-[4/3] relative">
+      <div className="aspect-[13/10] sm:aspect-[7/8] relative">
             <Link href={routes.singleClassified(car.slug || "slug")}>
               <ImgixImage
                 placeholder="blur"
