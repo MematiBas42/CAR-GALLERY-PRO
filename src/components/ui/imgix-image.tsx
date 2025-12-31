@@ -43,7 +43,6 @@ const ImgixImage = ({ smartCover, className, alt, ...props }: ImgixImageProps) =
     if (error) {
         return (
             <Image 
-                fetchPriority='high' 
                 {...props}
                 src={finalSrc}
                 unoptimized={true}
@@ -55,7 +54,6 @@ const ImgixImage = ({ smartCover, className, alt, ...props }: ImgixImageProps) =
 
     return (
 		<Image
-			fetchPriority="high"
 			onError={() => setError(true)}
 			{...props}
             src={finalSrc}

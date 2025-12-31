@@ -167,15 +167,16 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
   }
-  /* Fix for flickering icons/images during Swiper transitions */
-  .swiper-slide {
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
+
+  /* Prevent Swiper FOUC (Flash of Unstyled Content) */
+  .swiper:not(.swiper-initialized) {
+    opacity: 0;
+    visibility: hidden;
   }
-  svg {
-    shape-rendering: geometricPrecision;
+  .swiper.swiper-initialized {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease-in;
   }
 }
 
