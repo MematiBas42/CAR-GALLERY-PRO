@@ -36,8 +36,11 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
         if (!swiperInstance) return;
 
         const checkScrollability = () => {
-            // Check if the total width of all slides is greater than the container's width
-            setCanScroll(swiperInstance.virtualSize > swiperInstance.size);
+            if (swiperInstance) {
+                // Use actual slide count vs slidesPerView as a fallback for scrollability check
+                const isScrollable = (swiperInstance as any).virtualSize > (swiperInstance as any).size;
+                setCanScroll(isScrollable);
+            }
         };
 
         checkScrollability(); // Initial check

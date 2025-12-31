@@ -37,20 +37,16 @@ const SearchInput = (props: SearchInputProps) => {
 
   
 
-  const handleSearch = useCallback(
-    debounceFunc(
-      (value: string) => {
-        setSearch(value || null);
-      },
-      1000,
-      { immediate: false }
-    ),
-    [setSearch] 
+  const debouncedSearch = React.useMemo(
+    () => debounce((value: string) => {
+      setSearch(value || null);
+    }, 1000),
+    [setSearch]
   );
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newvalue = e.target.value;
-    handleSearch(newvalue);
+    debouncedSearch(newvalue);
   };
 
   const clearSearch = () => {
