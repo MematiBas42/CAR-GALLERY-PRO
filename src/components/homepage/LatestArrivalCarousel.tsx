@@ -128,7 +128,7 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
                                     />
                                 </div>
                                 <div className="pt-4 mt-auto border-t border-white/5 space-y-3"> 
-                                    <SearchButton initialCount={carsCount} label={t("discover")} />
+                                    <SearchButton initialCount={carsCount ?? 0} label={t("discover")} />
                                     <div className="min-h-[40px] flex justify-center">
                                         <HomepageClearFilters />
                                     </div>
