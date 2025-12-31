@@ -50,32 +50,32 @@ const PublicFooter = async () => {
   return (
     <footer className="bg-secondary px-8 lg:px-0 py-10">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left mb-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 text-center lg:text-left mb-8 items-start">
           {/* Column 1: Branding */}
-          <div className="flex flex-col items-center md:items-start gap-y-4">
-            <Link href={routes.home} className="flex flex-col sm:flex-row items-center gap-4">
+          <div className="flex flex-col items-center lg:items-start gap-y-4">
+            <Link href={routes.home} className="flex flex-row items-center gap-6 group">
               <Image
                 src="/assets/logo.png"
                 alt="RIM GLOBAL Logo"
-                width={220}
-                height={220}
-                className="dark:invert"
+                width={200}
+                height={200}
+                className="dark:invert transition-transform duration-300 group-hover:scale-105"
                 unoptimized
               />
-              <div>
-                <span className="text-2xl font-bold text-primary">RIM GLOBAL</span>
-                <p className="text-md text-muted-foreground text-right -mt-1">auto sales</p>
+              <div className="flex flex-col items-start text-left">
+                <span className="text-2xl font-bold text-primary tracking-tighter">RIM GLOBAL</span>
+                <p className="text-xs text-muted-foreground uppercase tracking-[0.3em] -mt-1">auto sales</p>
               </div>
             </Link>
           </div>
 
           {/* Column 2: Navigation */}
-          <ul className="space-y-2 flex flex-col items-center md:items-start">
+          <ul className="space-y-3 flex flex-col items-center lg:items-start lg:pt-4">
             {navLinks.map((link) => (
               <li key={link.id}>
                 <Link
                   href={link.href}
-                  className="text-foreground hover:text-primary transition-colors"
+                  className="text-foreground/80 hover:text-primary transition-colors text-lg font-medium"
                 >
                   {link.label}
                 </Link>
@@ -84,18 +84,18 @@ const PublicFooter = async () => {
           </ul>
 
           {/* Column 3: Contact Info & Admin Link */}
-          <div className="flex flex-col justify-between h-full items-center md:items-end">
-            <div className="space-y-2 text-center md:text-right">
+          <div className="flex flex-col justify-between h-full items-center lg:items-end lg:pt-4">
+            <div className="space-y-3 text-center lg:text-right">
                 <h3 className="text-xl font-bold text-primary">{tFooter("contactUs")}</h3>
-                <address className="not-italic text-muted-foreground text-sm">
+                <address className="not-italic text-muted-foreground text-sm max-w-[250px]">
                 {SITE_CONFIG.address}
                 </address>
-                <div className="flex flex-col gap-1 mt-2">
-                  <a href={`tel:${SITE_CONFIG.phoneRaw}`} className="text-lg md:text-xl font-extrabold text-foreground hover:text-primary transition-colors">
+                <div className="flex flex-col gap-1 mt-4">
+                  <a href={`tel:${SITE_CONFIG.phoneRaw}`} className="text-xl md:text-2xl font-black text-foreground hover:text-primary transition-colors">
                       {SITE_CONFIG.phone}
                   </a>
                   <p>
-                  <a href={`mailto:${SITE_CONFIG.email}`} className="text-sm text-foreground hover:text-primary transition-colors">
+                  <a href={`mailto:${SITE_CONFIG.email}`} className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors">
                       {SITE_CONFIG.email}
                   </a>
                   </p>

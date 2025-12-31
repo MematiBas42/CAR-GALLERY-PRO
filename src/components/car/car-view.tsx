@@ -97,15 +97,23 @@ const CarView = async (props: CarWithImagesAndMake) => {
             />
             <div className="text-center md:text-left">
               <h1 className="text-2xl md:text-3xl font-bold">
-                {props.title}
+                {props.title?.replace(/^0\s+/, '')}
               </h1>
             </div>
           </div>
           
-          <div className="text-xl md:text-2xl lg:text-4xl font-bold my-4 w-full border border-slate-200
+          <div className="text-xl md:text-2xl lg:text-4xl font-bold my-4 w-full border-2 border-primary/20 bg-primary/5 shadow-sm
             flex flex-col sm:flex-row justify-center items-center rounded-xl py-8 md:py-12 gap-2 px-4 text-center">
-              <span className="text-muted-foreground sm:text-foreground">{t("ourPrice")}</span>
-              <PriceDisplay amount={props.price} className="text-2xl md:text-3xl lg:text-4xl" />
+              {props.status === "COMING_SOON" ? (
+                <span className="text-2xl md:text-3xl lg:text-4xl uppercase tracking-widest text-primary font-black animate-pulse">
+                  {tEnums("ClassifiedStatus.COMING_SOON")}
+                </span>
+              ) : (
+                <>
+                  <span className="text-muted-foreground sm:text-foreground hidden">{t("ourPrice")}</span>
+                  <PriceDisplay amount={props.price} className="text-2xl md:text-3xl lg:text-4xl" />
+                </>
+              )}
           </div>
 
           <div className="flex flex-col gap-3 mb-6">
@@ -130,10 +138,12 @@ const CarView = async (props: CarWithImagesAndMake) => {
           </div>
 
           <div className="mt-4 flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
-            <span className="bg-gray-200 text-gray-800 
-            text-sm font-medium px-2.5 py-2.5 rounded-md">
-              {props.year}
-            </span>
+            {props.year !== 0 && (
+              <span className="bg-gray-200 text-gray-800 
+              text-sm font-medium px-2.5 py-2.5 rounded-md">
+                {props.year}
+              </span>
+            )}
             <span className="bg-gray-200 text-gray-800 
             text-sm font-medium px-2.5 py-2.5 rounded-md">
               {formatNumber(props.odoReading)} {' '}

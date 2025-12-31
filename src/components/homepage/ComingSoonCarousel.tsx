@@ -100,7 +100,7 @@ const ComingSoonCard = ({ car }: { car: CarWithImages }) => {
                     <div className="space-y-3 translate-y-6 group-hover/card:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]">
                         <div className="space-y-1">
                             <h3 className="text-2xl md:text-3xl font-black text-white leading-tight tracking-tighter drop-shadow-md">
-                                {car.title}
+                                {car.title?.replace(/^0\s+/, '')}
                             </h3>
                         </div>
                         <div className="h-1 w-10 group-hover/card:w-full bg-primary transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] delay-100" />

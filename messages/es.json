@@ -116,7 +116,11 @@
       "description": "Nos asociamos con prestamistas locales y nacionales de confianza para ofrecer soluciones de financiación flexibles. Nuestro equipo está aquí para guiarle hacia un plan que se alinee con su presupuesto, asegurando un proceso claro y transparente de principio a fin."
     },
     "LatestArrivals": {
-      "title": "Últimas llegadas"
+      "title": "Novedades"
+    },
+    "ComingSoon": {
+      "title": "Estamos preparando vehículos cuidadosamente seleccionados para usted",
+      "description": "Sea el primero en ver los vehículos especiales que pronto ocuparán su lugar en nuestro inventario."
     },
     "Brands": {
       "title": "Una colección seleccionada de marcas de prestigio",

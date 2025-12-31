@@ -118,6 +118,10 @@
     "LatestArrivals": {
       "title": "Xe mới về"
     },
+    "ComingSoon": {
+      "title": "Chúng tôi đang chuẩn bị những chiếc xe được tuyển chọn kỹ lưỡng dành cho bạn",
+      "description": "Hãy là người đầu tiên chiêm ngưỡng những chiếc xe đặc biệt sẽ sớm có mặt trong kho hàng của chúng tôi."
+    },
     "Brands": {
       "title": "Bộ sưu tập các thương hiệu hàng đầu",
       "description": "Danh mục của chúng tôi bao gồm các loại xe được tuyển chọn kỹ lưỡng từ những tên tuổi uy tín nhất thế giới. Hiện có {count} xe trong bộ sưu tập."
