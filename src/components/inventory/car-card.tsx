@@ -7,7 +7,7 @@ import { Cog, Fuel, GaugeCircle, MessageCircle, Paintbrush2 } from "lucide-react
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import parse from "html-react-parser";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { Button } from "../ui/button";
 import FavButton from "./fav-button";
 import { useTranslations } from "next-intl";
@@ -20,7 +20,7 @@ interface CarCardProps {
   favourites: number[];
 }
 
-const CarCard = ({ car, favourites }: CarCardProps) => {
+const CarCard = memo(({ car, favourites }: CarCardProps) => {
   const t = useTranslations("Car");
   const tEnums = useTranslations("Enums");
   const [isFav, setIsFav] = useState(favourites.includes(car.id));
@@ -30,7 +30,7 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
   const whatsappMessage = encodeURIComponent(`Hello, I am interested in the ${car.title}.`);
   const whatsappUrl = `${SITE_CONFIG.socials.whatsapp}?text=${whatsappMessage}`;
 
-  const keyCarInfo = [
+  const keyCarInfo = React.useMemo(() => [
     {
       id: "odoReading",
       icon: <GaugeCircle className="w-4 h-4" />,
@@ -51,7 +51,7 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
       icon: <Paintbrush2 className="w-4 h-4" />,
       value: car?.colour ? tEnums(`Colour.${car.colour}`) : null,
     },
-  ];
+  ], [car, tEnums]);
 
   useEffect(() => {
     if (!isFav && pathname === routes.favourites) {
@@ -60,14 +60,12 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
   }, [isFav, pathname]);
 
   return (
-    <AnimatePresence>
-      {isVisible && (
-        <div
-          key={car.id}
-          id={car.slug || "slug"}
-          className="bg-card relative h-full rounded-md shadow-lg overflow-hidden flex flex-col border transition-shadow duration-300 hover:shadow-2xl"
-        >
-          <div className="aspect-[3/2] sm:aspect-[4/3] relative">
+    <div
+      key={car.id}
+      id={car.slug || "slug"}
+      className="bg-card relative h-full rounded-md shadow-lg overflow-hidden flex flex-col border transition-shadow duration-300 hover:shadow-2xl"
+    >
+      <div className="aspect-[3/2] sm:aspect-[4/3] relative">
             <Link href={routes.singleClassified(car.slug || "slug")}>
               <ImgixImage
                 placeholder="blur"
@@ -129,8 +127,6 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
             </div>
           </div>
         </div>
-      )}
-    </AnimatePresence>
   );
 };
 

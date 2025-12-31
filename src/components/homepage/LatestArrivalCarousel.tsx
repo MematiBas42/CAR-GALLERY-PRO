@@ -159,9 +159,9 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
       </Swiper>
 
       <SwiperButton
-        prevClassName={`${arrowPrevClass} latest-prev-button z-[60] transition-all duration-300 -left-6 sm:left-4 ${canScroll ? "opacity-100 md:opacity-0 md:group-hover:opacity-100" : "opacity-0 pointer-events-none"
+        prevClassName={`${arrowPrevClass} latest-prev-button z-[60] transition-all duration-300 -left-8 sm:-left-6 lg:left-4 ${canScroll ? "opacity-100 md:opacity-0 md:group-hover:opacity-100" : "opacity-0 md:opacity-0 pointer-events-none"
           }`}
-        nextClassName={`${arrowNextClass} latest-next-button z-[60] transition-all duration-300 -right-6 sm:right-4 ${canScroll ? "opacity-100 md:opacity-0 md:group-hover:opacity-100" : "opacity-0 pointer-events-none"
+        nextClassName={`${arrowNextClass} latest-next-button z-[60] transition-all duration-300 -right-8 sm:-right-6 lg:right-4 ${canScroll ? "opacity-100 md:opacity-0 md:group-hover:opacity-100" : "opacity-0 md:opacity-0 pointer-events-none"
           }`}
         onPrevClick={() => {
           if (swiperInstance) swiperInstance.slidePrev();

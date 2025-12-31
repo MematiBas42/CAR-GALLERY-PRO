@@ -17,7 +17,7 @@ interface ComingSoonCarouselProps {
     cars: CarWithImages[];
 }
 
-const ComingSoonCard = ({ car }: { car: CarWithImages }) => {
+const ComingSoonCard = React.memo(({ car }: { car: CarWithImages }) => {
     const innerSwiperRef = useRef<SwiperType | null>(null);
 
     const startInnerAutoplay = () => innerSwiperRef.current?.autoplay.start();
@@ -179,10 +179,10 @@ export const ComingSoonCarousel = ({ cars }: ComingSoonCarouselProps) => {
 
             {/* Theme-aware Arrow Buttons */}
             <SwiperButton
-                prevClassName={`-left-6 sm:left-4 z-30 transition-all duration-300 h-14 w-14 bg-background/60 dark:bg-card/60 backdrop-blur-md border border-white/10 ${
+                prevClassName={`-left-8 sm:-left-6 lg:left-4 z-30 transition-all duration-300 h-14 w-14 bg-background/60 dark:bg-card/60 backdrop-blur-md border border-white/10 ${
                     canScroll ? "opacity-100 md:opacity-0 md:group-hover:opacity-100" : "opacity-0 pointer-events-none"
                 }`}
-                nextClassName={`-right-6 sm:right-4 z-30 transition-all duration-300 h-14 w-14 bg-background/60 dark:bg-card/60 backdrop-blur-md border border-white/10 ${
+                nextClassName={`-right-8 sm:-right-6 lg:right-4 z-30 transition-all duration-300 h-14 w-14 bg-background/60 dark:bg-card/60 backdrop-blur-md border border-white/10 ${
                     canScroll ? "opacity-100 md:opacity-0 md:group-hover:opacity-100" : "opacity-0 pointer-events-none"
                 }`}
                 onPrevClick={() => swiperInstance?.slidePrev()}
