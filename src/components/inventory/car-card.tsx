@@ -69,9 +69,9 @@ const CarCard = memo(({ car, isFavourite, priority }: CarCardProps) => {
     <div
       key={car.id}
       id={car.slug || "slug"}
-      className="bg-card relative h-full rounded-md shadow-lg overflow-hidden flex flex-col border transition-shadow duration-300 hover:shadow-2xl"
+      className="bg-card relative h-full rounded-xl shadow-lg overflow-hidden flex flex-col border transition-shadow duration-300 hover:shadow-2xl"
     >
-      <div className="aspect-car-card sm:aspect-car-card-sm relative">
+      <div className="aspect-car-card sm:aspect-car-card-sm relative rounded-t-xl overflow-hidden">
             <Link href={routes.singleClassified(car.slug || "slug")}>
               <ImgixImage
                 placeholder="blur"
@@ -92,10 +92,10 @@ const CarCard = memo(({ car, isFavourite, priority }: CarCardProps) => {
           </div>
           
           <div className="p-3 sm:p-4 flex flex-col flex-grow"> 
-            <div className="space-y-1 sm:space-y-2">
+            <div className="flex-grow flex items-center justify-center text-center px-1">
               <Link
                 href={routes.singleClassified(car.slug || "slug")}
-                className="text-sm sm:text-base md:text-lg font-bold line-clamp-1 transition-colors hover:text-primary"
+                className="text-base sm:text-lg md:text-xl font-bold line-clamp-2 transition-colors hover:text-primary leading-tight"
               >
                 {car.title}
               </Link>
@@ -103,10 +103,10 @@ const CarCard = memo(({ car, isFavourite, priority }: CarCardProps) => {
 
             <div className="mt-auto pt-2 sm:pt-4 space-y-3 sm:space-y-6">
               <div className="pt-2 sm:pt-4 border-t border-white/5">
-                <div className="text-[10px] md:text-sm text-muted-foreground grid grid-cols-2 gap-x-2 gap-y-1 sm:gap-x-4 sm:gap-y-2 w-full">
+                <div className="text-xs md:text-base text-muted-foreground grid grid-cols-2 gap-x-2 gap-y-1 sm:gap-x-4 sm:gap-y-2 w-full">
                   {keyCarInfo.map((info) => (
-                    <div key={info.id} className="font-semibold flex items-center gap-x-1 sm:gap-x-1.5 min-w-0">
-                      <span className="shrink-0 scale-90 sm:scale-100">{info.icon}</span>
+                    <div key={info.id} className="font-semibold flex items-center gap-x-1.5 sm:gap-x-2 min-w-0">
+                      <span className="shrink-0 scale-100 md:scale-110">{info.icon}</span>
                       <span className="truncate">{info.value ? info.value : t("notAvailable")}</span>
                     </div>
                   ))}
