@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 export const FeaturesSection = async () => {
   const t = await getTranslations("Homepage.Features");
   return (
-    <div className="bg-background py-16 sm:py-24">
+    <div className="bg-background pt-0 pb-16 sm:pb-24">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-8xl text-center">
           <h2 className="text-base md:text-2xl font-semibold leading-7">

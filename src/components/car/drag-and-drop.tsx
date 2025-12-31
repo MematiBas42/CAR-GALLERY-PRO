@@ -101,7 +101,6 @@ const DragAndDrop = (props: DragAndDropProps) => {
         setFiles(validFiles);
       }
     }
-    e.dataTransfer?.clearData();
   }, [items.length, handleFileRejected, setIsUploading, setFiles, clearError]);
 
   const stopEvent = useCallback((e: any) => {

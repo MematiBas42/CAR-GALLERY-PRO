@@ -40,8 +40,8 @@ export const createCarAction = async (data: CreateCarType) => {
       if (modelVariant) title = `${title} ${modelVariant.name}`;
     }
 
-    const slug = slugify(`${title} ${data.vrm}`, { lower: true });
-    const cleanDescription = sanitizeHtml(data.description, {
+    const slug = slugify(`${title} ${data.vrm || 'coming-soon-' + Date.now()}`, { lower: true });
+    const cleanDescription = sanitizeHtml(data.description || "", {
       allowedTags: [ 'p', 'a', 'strong', 'b', 'em', 'i', 'u', 'strike', 'br', 'ul', 'ol', 'li' ],
       allowedAttributes: { 'a': [ 'href', 'rel', 'target' ] }
     });
@@ -50,12 +50,12 @@ export const createCarAction = async (data: CreateCarType) => {
       data: {
         slug, title, year: Number(data.year), makeId, modelId,
         ...(modelVariantId && { modelVariantId }),
-        vrm: data.vrm, price: data.price * 100, currency: data.currency,
-        odoReading: data.odoReading, odoUnit: data.odoUnit,
+        vrm: data.vrm || null, price: (data.price || 0) * 100, currency: data.currency,
+        odoReading: data.odoReading || 0, odoUnit: data.odoUnit,
         fuelType: data.fuelType, bodyType: data.bodyType,
         transmission: data.transmission, colour: data.colour,
         ulezCompliance: data.ulezCompliance, description: cleanDescription,
-        doors: data.doors, seats: data.seats, status: data.status,
+        doors: data.doors || 5, seats: data.seats || 5, status: data.status,
         images: {
           create: await Promise.all(
             data.images.map(async ({ src }, index) => {
@@ -184,21 +184,21 @@ export const updateCarAction = async (data: UpdateCarType) => {
         })
       );
       const images = await prisma.image.createManyAndReturn({ data: imagesData });
-      const cleanDescription = sanitizeHtml(data.description, {
+      const cleanDescription = sanitizeHtml(data.description || "", {
         allowedTags: [ 'p', 'a', 'strong', 'b', 'em', 'i', 'u', 'strike', 'br', 'ul', 'ol', 'li' ],
         allowedAttributes: { 'a': [ 'href', 'rel', 'target' ] }
       });
       await prisma.classified.update({
         where: { id: data.id },
         data: {
-          slug: slugify(`${title} ${data.vrm}`, { lower: true }), title, year: Number(data.year),
+          slug: slugify(`${title} ${data.vrm || 'cs-' + data.id}`, { lower: true }), title, year: Number(data.year),
           makeId, modelId, ...(modelVariantId && { modelVariantId }),
-          vrm: data.vrm, price: newPrice, currency: data.currency,
-          odoReading: data.odoReading, odoUnit: data.odoUnit,
+          vrm: data.vrm || null, price: newPrice, currency: data.currency,
+          odoReading: data.odoReading || 0, odoUnit: data.odoUnit,
           fuelType: data.fuelType, bodyType: data.bodyType,
           transmission: data.transmission, colour: data.colour,
           ulezCompliance: data.ulezCompliance, description: cleanDescription,
-          doors: data.doors, seats: data.seats, status: data.status,
+          doors: data.doors || 5, seats: data.seats || 5, status: data.status,
           images: { set: images.map((image) => ({ id: image.id })) },
         },
       });
@@ -314,4 +314,18 @@ export const toggleLatestArrivalAction = async (id: number, isLatest: boolean) =
   } catch (error) {
     return { success: false, message: "Failed to update status" };
   }
+};
+
+export const getComingSoonCars = async () => {
+    return await prisma.classified.findMany({
+        where: {
+            status: "COMING_SOON",
+        },
+        orderBy: {
+            createdAt: 'desc'
+        },
+        include: {
+            images: true
+        }
+    }) as any;
 };

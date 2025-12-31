@@ -4,7 +4,6 @@ import { FeaturesSection } from "@/components/homepage/features-section";
 import LastestArrival from "@/components/homepage/lastest-arrival";
 import ComingSoon from "@/components/homepage/coming-soon";
 import OurBrandSection from "@/components/homepage/our-brands-section";
-import TestimonialsSection from "@/components/homepage/testimonials-section";
 import LocationSection from "@/components/homepage/location-section";
 import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
@@ -27,7 +26,6 @@ export default async function HomePage(props: PageProps) {
         <ComingSoon />
       </Suspense>
       <FeaturesSection />
-      <TestimonialsSection />
       <OurBrandSection  />
       <LocationSection />
     </>
