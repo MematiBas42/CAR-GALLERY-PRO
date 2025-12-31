@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
   compress: true,
   images: {
 		remotePatterns: remotePatterns,
+        qualities: [1, 10, 25, 60, 75, 80, 90],
 	},
   experimental: {
     authInterrupts: true,

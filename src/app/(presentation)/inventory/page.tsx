@@ -37,10 +37,29 @@ const getInventory = async (searchParams: AwaitedPageProps["searchParams"]) => {
   
   return prisma.classified.findMany({
     where: buildClassifiedFilterQuery(searchParams),
-    include: {
-      images: {
-        take: 1,
-      },
+    select: {
+        id: true,
+        slug: true,
+        title: true,
+        price: true,
+        odoReading: true,
+        odoUnit: true,
+        transmission: true,
+        fuelType: true,
+        colour: true,
+        bodyType: true,
+        status: true,
+        images: {
+            select: {
+                id: true,
+                src: true,
+                alt: true,
+                blurhash: true,
+                classifiedId: true,
+                isMain: true,
+            },
+            take: 1,
+        }
     },
     skip: offset,
     take: CARS_PER_PAGE,

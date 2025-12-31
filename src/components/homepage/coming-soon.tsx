@@ -2,10 +2,16 @@ import React from 'react'
 import { getComingSoonCars } from '@/app/_actions/car';
 import { ComingSoonCarousel } from './ComingSoonCarousel';
 import { getTranslations } from "next-intl/server";
+import { getSourceId } from '@/lib/source-id';
+import { redis } from '@/lib/redis-store';
+import { Favourites } from '@/config/types';
 
 const ComingSoon = async () => {
     const cars = await getComingSoonCars();
     const t = await getTranslations("Homepage.ComingSoon");
+    
+    const sourceId = await getSourceId();
+	const favourites = await redis.get<Favourites>(sourceId || "");
 
     if (cars.length === 0) return null;
 
@@ -21,7 +27,7 @@ const ComingSoon = async () => {
                     </p>
                 </div>
                 
-                <ComingSoonCarousel cars={cars} />
+                <ComingSoonCarousel cars={cars} favourites={favourites ? favourites.ids : []} />
 			</div>
 		</section>
     )

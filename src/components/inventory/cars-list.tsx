@@ -1,9 +1,9 @@
-import { CarWithImages, Favourites } from '@/config/types'
+import { CarCardData, CarWithImages, Favourites } from '@/config/types'
 import React from 'react'
 import CarCard from './car-card'
 
 interface CarsListProps {
-    cars: CarWithImages[]
+    cars: CarCardData[]
     favourites: number[]
 }
 
@@ -12,9 +12,8 @@ const CarsList = ({cars,favourites}: CarsListProps) => {
     <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
       {cars.map((car) => (
         <CarCard key={car.id} car={car} 
-favourites={favourites}
+            isFavourite={favourites.includes(car.id)}
         />
-
       ))}
     </div>
   )

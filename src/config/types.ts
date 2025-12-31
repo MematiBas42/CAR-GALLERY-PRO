@@ -20,6 +20,12 @@ export type CarWithImages = Prisma.ClassifiedGetPayload<{
     }
 }>
 
+export type CarCardData = Pick<Classified, 
+    'id' | 'slug' | 'title' | 'price' | 'odoReading' | 'odoUnit' | 'transmission' | 'fuelType' | 'colour' | 'bodyType' | 'status'
+> & {
+    images: Pick<Prisma.ImageGetPayload<{}>, 'id' | 'src' | 'alt' | 'blurhash' | 'classifiedId' | 'isMain'>[];
+};
+
 export type CustomerWithCar = Prisma.CustomerGetPayload<{
 	include: { classified: true };
 }>;

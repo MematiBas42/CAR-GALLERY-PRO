@@ -31,12 +31,12 @@ const LastestArrival = async ({ searchParams, carsCount, emptyMinMax }: LastestA
             slug: true,
             title: true,
             price: true,
-            description: true,
             odoReading: true,
             odoUnit: true,
             transmission: true,
             fuelType: true,
             colour: true,
+            bodyType: true,
             status: true,
             isLatestArrival: true,
             images: {
@@ -45,6 +45,8 @@ const LastestArrival = async ({ searchParams, carsCount, emptyMinMax }: LastestA
                     src: true,
                     alt: true,
                     blurhash: true,
+                    classifiedId: true,
+                    isMain: true,
                 }
             }
         }

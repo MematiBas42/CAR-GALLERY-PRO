@@ -19,10 +19,16 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage(props: PageProps) {
-  const searchParams = await props.searchParams;
+  const [t, searchParams] = await Promise.all([
+    getTranslations("Homepage"),
+    props.searchParams
+  ]);
+
   return (
     <>
-      <HeroSection searchParams={searchParams} />
+      <Suspense fallback={<SectionSkeleton type="vertical" />}>
+        <HeroSection searchParams={searchParams} />
+      </Suspense>
       
       <Suspense fallback={<SectionSkeleton type="vertical" />}>
         <ComingSoon />

@@ -29,8 +29,21 @@ const TaxonomyFilters = ({ handleChange }: TaxonomyFiltersProps) => {
       return getVariantsForModel(taxonomy, queryStates.make, queryStates.model).map(v => ({ label: v.l, value: v.v }));
   }, [taxonomy, queryStates.make, queryStates.model]);
 
+  if (isLoading) {
+    return (
+        <div className="flex flex-col gap-4">
+            {[1, 2, 3].map((i) => (
+                <div key={i} className="grid gap-1">
+                    <div className="h-4 w-16 bg-white/10 animate-pulse rounded" />
+                    <div className="h-9 w-full bg-white/5 animate-pulse rounded-md border border-white/10" />
+                </div>
+            ))}
+        </div>
+    );
+  }
+
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       <Combobox
         label={t("make")}
         name="make"

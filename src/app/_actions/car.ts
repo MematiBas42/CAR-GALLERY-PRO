@@ -329,12 +329,12 @@ export const getComingSoonCars = async () => {
             slug: true,
             title: true,
             price: true,
-            description: true,
             odoReading: true,
             odoUnit: true,
             transmission: true,
             fuelType: true,
             colour: true,
+            bodyType: true,
             status: true,
             images: {
                 select: {
@@ -342,6 +342,8 @@ export const getComingSoonCars = async () => {
                     src: true,
                     alt: true,
                     blurhash: true,
+                    classifiedId: true,
+                    isMain: true,
                 }
             }
         }

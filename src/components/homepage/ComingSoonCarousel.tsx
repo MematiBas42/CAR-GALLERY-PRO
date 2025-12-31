@@ -8,17 +8,18 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/autoplay";
 import SwiperButton from "../shared/swiper-button";
-import { CarWithImages } from '@/config/types';
+import { CarCardData, CarWithImages } from '@/config/types';
 import Link from "next/link";
 import { routes } from "@/config/routes";
 import ImgixImage from "../ui/imgix-image";
 import { cn } from '@/lib/utils';
 
 interface ComingSoonCarouselProps {
-    cars: CarWithImages[];
+    cars: CarCardData[];
+    favourites: number[];
 }
 
-const ComingSoonCard = memo(({ car }: { car: CarWithImages }) => {
+const ComingSoonCard = memo(({ car, isFavourite, priority }: { car: CarCardData, isFavourite: boolean, priority?: boolean }) => {
     const innerSwiperRef = useRef<SwiperType | null>(null);
 
     const startInnerAutoplay = () => innerSwiperRef.current?.autoplay.start();
@@ -65,7 +66,7 @@ const ComingSoonCard = memo(({ car }: { car: CarWithImages }) => {
                         className="w-full h-full"
                     >
                         {car.images && car.images.length > 0 ? (
-                            car.images.map(image => (
+                            car.images.map((image, idx) => (
                                 <SwiperSlide key={image.id}>
                                     <ImgixImage
                                         src={image.src}
@@ -73,6 +74,7 @@ const ComingSoonCard = memo(({ car }: { car: CarWithImages }) => {
                                         fill
                                         className="object-cover transition-transform duration-1000 ease-in-out group-hover/card:scale-105"
                                         quality={80}
+                                        priority={priority && idx === 0}
                                     />
                                 </SwiperSlide>
                             ))
@@ -120,7 +122,7 @@ const ComingSoonCard = memo(({ car }: { car: CarWithImages }) => {
 
 ComingSoonCard.displayName = "ComingSoonCard";
 
-export const ComingSoonCarousel = ({ cars }: ComingSoonCarouselProps) => {
+export const ComingSoonCarousel = ({ cars, favourites }: ComingSoonCarouselProps) => {
     const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
     const [canScroll, setCanScroll] = useState(false);
     const totalSlides = cars.length;
@@ -199,9 +201,13 @@ export const ComingSoonCarousel = ({ cars }: ComingSoonCarouselProps) => {
                 }}
                 className="!h-auto h-full !px-2 sm:!px-0 !pb-12"
             >
-                {cars.map((car) => (
+                {cars.map((car, index) => (
                     <SwiperSlide key={car.id} className="!h-auto h-full">
-                        <ComingSoonCard car={car} />
+                        <ComingSoonCard 
+                            car={car} 
+                            isFavourite={favourites.includes(car.id)}
+                            priority={index < 2}
+                        />
                     </SwiperSlide>
                 ))}
             </Swiper>

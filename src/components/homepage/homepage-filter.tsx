@@ -60,7 +60,7 @@ const HomepageTaxonomyFilters = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       <TaxonomyFilters handleChange={handleChange as any} />
       <RangeFilter
         label={t("year")}

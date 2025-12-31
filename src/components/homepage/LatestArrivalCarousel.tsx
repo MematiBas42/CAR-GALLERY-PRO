@@ -119,9 +119,13 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
         }}
         className="!h-auto h-full !px-2 sm:!px-0 !pb-12"
       >
-        {cars.map((car) => (
+        {cars.map((car, index) => (
           <SwiperSlide key={car.id} className="!h-auto h-full">
-            <CarCard car={car} favourites={favourites} />
+            <CarCard 
+                car={car} 
+                isFavourite={favourites.includes(car.id)} 
+                priority={index < 2}
+            />
           </SwiperSlide>
         ))}
 

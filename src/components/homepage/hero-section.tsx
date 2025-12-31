@@ -12,17 +12,19 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 
 const HeroSection = async (props: AwaitedPageProps) => {
-  const t = await getTranslations("Homepage.Hero");
   const { searchParams } = props;
+
+  const [t, carsCount] = await Promise.all([
+    getTranslations("Homepage.Hero"),
+    prisma.classified.count({
+        where: buildClassifiedFilterQuery(searchParams),
+    })
+  ]);
   
   const filterParams = Object.entries(searchParams || {})
     .filter(([key, value]) => key !== "page" && value);
   const totalFiltersApplied = filterParams.length;
   const isFilterApplied = totalFiltersApplied > 0;
-
-  const carsCount = await prisma.classified.count({
-    where: buildClassifiedFilterQuery(searchParams),
-  });
 
   const emptyMinMax = {
     _min: { year: 1900, price: 0, odoReading: 0 },

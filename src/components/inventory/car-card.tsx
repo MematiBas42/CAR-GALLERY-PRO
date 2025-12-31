@@ -1,6 +1,6 @@
 'use client';
 import { routes } from "@/config/routes";
-import { CarWithImages } from "@/config/types";
+import { CarCardData, CarWithImages } from "@/config/types";
 import { formatNumber } from "@/lib/utils";
 import { AnimatePresence } from "framer-motion";
 import { Cog, Fuel, GaugeCircle, MessageCircle, Paintbrush2 } from "lucide-react";
@@ -16,16 +16,22 @@ import { PriceDisplay } from "../shared/price-display";
 import { SITE_CONFIG } from "@/config/constants";
 
 interface CarCardProps {
-  car: CarWithImages;
-  favourites: number[];
+  car: CarCardData;
+  isFavourite: boolean;
+  priority?: boolean;
 }
 
-const CarCard = memo(({ car, favourites }: CarCardProps) => {
+const CarCard = memo(({ car, isFavourite, priority }: CarCardProps) => {
   const t = useTranslations("Car");
   const tEnums = useTranslations("Enums");
-  const [isFav, setIsFav] = useState(favourites.includes(car.id));
+  const [isFav, setIsFav] = useState(isFavourite);
   const [isVisible, setIsVisible] = useState(true);
   const pathname = usePathname();
+
+  // Sync internal state with prop
+  useEffect(() => {
+    setIsFav(isFavourite);
+  }, [isFavourite]);
 
   const whatsappMessage = encodeURIComponent(`Hello, I am interested in the ${car.title}.`);
   const whatsappUrl = `${SITE_CONFIG.socials.whatsapp}?text=${whatsappMessage}`;
@@ -65,7 +71,7 @@ const CarCard = memo(({ car, favourites }: CarCardProps) => {
       id={car.slug || "slug"}
       className="bg-card relative h-full rounded-md shadow-lg overflow-hidden flex flex-col border transition-shadow duration-300 hover:shadow-2xl"
     >
-      <div className="aspect-[13/10] sm:aspect-[7/8] relative">
+      <div className="aspect-car-card sm:aspect-car-card-sm relative">
             <Link href={routes.singleClassified(car.slug || "slug")}>
               <ImgixImage
                 placeholder="blur"
@@ -76,6 +82,7 @@ const CarCard = memo(({ car, favourites }: CarCardProps) => {
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                 quality={60}
                 smartCover={true}
+                priority={priority}
               />
             </Link>
             <FavButton setIsFav={setIsFav} isFav={isFav} id={car.id} />
@@ -92,11 +99,6 @@ const CarCard = memo(({ car, favourites }: CarCardProps) => {
               >
                 {car.title}
               </Link>
-              {car.description && (
-                <div className="text-[12px] sm:text-sm xl:text-base text-muted-foreground line-clamp-8 md:line-clamp-3 prose dark:prose-invert max-w-none">
-                  {parse(car.description)}
-                </div>
-              )}
             </div>
 
             <div className="mt-auto pt-6 sm:pt-4 space-y-6">
@@ -128,6 +130,16 @@ const CarCard = memo(({ car, favourites }: CarCardProps) => {
           </div>
         </div>
   );
+}, (prevProps, nextProps) => {
+    return (
+        prevProps.isFavourite === nextProps.isFavourite &&
+        prevProps.priority === nextProps.priority &&
+        prevProps.car.id === nextProps.car.id &&
+        prevProps.car.price === nextProps.car.price &&
+        prevProps.car.status === nextProps.car.status &&
+        prevProps.car.title === nextProps.car.title &&
+        prevProps.car.images?.[0]?.src === nextProps.car.images?.[0]?.src
+    );
 });
 
 CarCard.displayName = "CarCard";
