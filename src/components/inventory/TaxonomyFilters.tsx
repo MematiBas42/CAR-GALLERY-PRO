@@ -30,7 +30,7 @@ const TaxonomyFilters = ({ handleChange }: TaxonomyFiltersProps) => {
   }, [taxonomy, queryStates.make, queryStates.model]);
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-4">
       <Combobox
         label={t("make")}
         name="make"
