@@ -30,25 +30,24 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
 
       const totalSlides = Object.keys(searchParams).length > 0 ? cars.length + 1 : cars.length;
   
-      useEffect(() => {
-          if (!swiperInstance) return;
-  
-          const checkScrollability = () => {
-              if (swiperInstance) {
-                  // Use actual slide count vs slidesPerView as a fallback for scrollability check
-                  const isScrollable = (swiperInstance as any).virtualSize > (swiperInstance as any).size;
-                  setCanScroll(isScrollable);
-              }
-          };
-  
-          checkScrollability();    swiperInstance.on('update', checkScrollability);
+  useEffect(() => {
+    if (!swiperInstance) return;
+
+    const checkScrollability = () => {
+      // Use actual slide count vs slidesPerView as a fallback for scrollability check
+      const isScrollable = (swiperInstance as any).virtualSize > (swiperInstance as any).size;
+      setCanScroll(isScrollable);
+    };
+
+    checkScrollability();
+    swiperInstance.on('update', checkScrollability);
     swiperInstance.on('resize', checkScrollability);
 
     return () => {
       swiperInstance.off('update', checkScrollability);
       swiperInstance.off('resize', checkScrollability);
     };
-  }, [swiperInstance, totalSlides]);
+  }, [swiperInstance]);
 
   let arrowPrevClass = "left-0 md:left-4";
   let arrowNextClass = "right-0 md:right-4";

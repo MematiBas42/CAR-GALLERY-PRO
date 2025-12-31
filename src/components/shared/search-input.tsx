@@ -1,24 +1,13 @@
 "use client";
 import { useQueryState } from "nuqs";
-import React, { ChangeEvent, useCallback, useRef } from "react";
+import React, { ChangeEvent, useRef } from "react";
 import debounce from "debounce";
-import { set } from "zod";
 import { SearchIcon, XIcon } from "lucide-react";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import { setIsLoading } from "@/hooks/use-loading";
 interface SearchInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string;
-}
-
-function debounceFunc<T extends (...args: any) => any>(
-  func: T,
-  wait: number,
-  opts: {
-    immediate: boolean;
-  }
-) {
-  return debounce(func, wait, opts);
 }
 
 const SearchInput = (props: SearchInputProps) => {
@@ -35,14 +24,19 @@ const SearchInput = (props: SearchInputProps) => {
     return () => setIsLoading(false, "search-input-update");
   }, [isPending]);
 
-  
-
   const debouncedSearch = React.useMemo(
     () => debounce((value: string) => {
       setSearch(value || null);
     }, 1000),
     [setSearch]
   );
+
+  // Clean up debounce on unmount
+  React.useEffect(() => {
+    return () => {
+      debouncedSearch.clear();
+    };
+  }, [debouncedSearch]);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newvalue = e.target.value;
