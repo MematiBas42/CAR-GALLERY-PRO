@@ -119,3 +119,16 @@ export async function generateTaxonomyData(): Promise<TaxonomyData | null> {
     await redis.del(TAXONOMY_LOCK_KEY);
   }
 }
+
+export async function getTaxonomyData(): Promise<TaxonomyData | null> {
+  try {
+    const cached = await redis.get<TaxonomyData>(TAXONOMY_REDIS_KEY);
+    if (cached) return cached;
+
+    const filePath = path.join(process.cwd(), "public", "taxonomy-tree.json");
+    const content = await fs.readFile(filePath, "utf-8");
+    return JSON.parse(content);
+  } catch (error) {
+    return null;
+  }
+}

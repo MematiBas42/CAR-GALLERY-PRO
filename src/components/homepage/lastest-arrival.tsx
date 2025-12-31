@@ -6,6 +6,7 @@ import { ClassifiedStatus } from '@prisma/client'
 import React from 'react'
 import { LatestArrivalsCarousel } from './LatestArrivalCarousel'
 import { getTranslations } from "next-intl/server";
+import { getTaxonomyData } from '@/lib/taxonomy-utils'
 
 interface LastestArrivalProps {
     searchParams?: any;
@@ -39,13 +40,30 @@ const LastestArrival = async ({ searchParams, carsCount, emptyMinMax }: LastestA
     const sourceId = await getSourceId();
 	const favourites = await redis.get<Favourites>(sourceId || "");
 
+    let finalEmptyMinMax = emptyMinMax;
+    if (!finalEmptyMinMax) {
+        const taxonomy = await getTaxonomyData();
+        if (taxonomy) {
+            finalEmptyMinMax = {
+                _min: {
+                    year: taxonomy.ranges.year.min,
+                    price: taxonomy.ranges.price.min,
+                },
+                _max: {
+                    year: taxonomy.ranges.year.max,
+                    price: taxonomy.ranges.price.max,
+                }
+            };
+        }
+    }
+
   return (
     <LatestArrivalsCarousel
         cars={finalCars}
         favourites={favourites ? favourites.ids : []}
         searchParams={searchParams}
         carsCount={carsCount}
-        emptyMinMax={emptyMinMax}
+        emptyMinMax={finalEmptyMinMax}
     />
   )
 }

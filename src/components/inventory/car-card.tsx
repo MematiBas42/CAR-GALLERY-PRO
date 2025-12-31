@@ -65,7 +65,7 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
         <div
           key={car.id}
           id={car.slug || "slug"}
-          className="bg-card relative rounded-md shadow-lg overflow-hidden flex flex-col border transition-shadow duration-300 hover:shadow-2xl"
+          className="bg-card relative h-full rounded-md shadow-lg overflow-hidden flex flex-col border transition-shadow duration-300 hover:shadow-2xl"
         >
           <div className="aspect-[4/3] relative">
             <Link href={routes.singleClassified(car.slug || "slug")}>
@@ -87,15 +87,15 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
           </div>
           
           <div className="p-4 flex flex-col flex-grow"> 
-            <div>
+            <div className="min-h-[110px] md:min-h-[130px]">
               <Link
                 href={routes.singleClassified(car.slug || "slug")}
-                className="text-sm md:text-base lg:text-lg font-semibold line-clamp-1 transition-colors hover:text-primary"
+                className="text-sm md:text-base lg:text-lg font-bold line-clamp-1 transition-colors hover:text-primary"
               >
                 {car.title}
               </Link>
               {car.description && (
-                <div className="mt-2 text-xs md:text-sm xl:text-base text-muted-foreground line-clamp-2 prose dark:prose-invert max-w-none">
+                <div className="mt-2 text-xs md:text-sm xl:text-base text-muted-foreground line-clamp-3 prose dark:prose-invert max-w-none">
                   {parse(car.description)}
                 </div>
               )}

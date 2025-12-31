@@ -8,6 +8,7 @@ import LocationSection from "@/components/homepage/location-section";
 import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
 import { Suspense } from "react";
+import { SectionSkeleton } from "@/components/shared/section-skeleton";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Homepage");
@@ -22,9 +23,11 @@ export default async function HomePage(props: PageProps) {
   return (
     <>
       <HeroSection searchParams={searchParams} />
-      <Suspense fallback={<div className="h-64 animate-pulse bg-background" />}>
+      
+      <Suspense fallback={<SectionSkeleton type="vertical" />}>
         <ComingSoon />
       </Suspense>
+
       <FeaturesSection />
       <OurBrandSection  />
       <LocationSection />

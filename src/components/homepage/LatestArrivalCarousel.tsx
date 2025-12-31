@@ -100,9 +100,10 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
 					1024: { slidesPerView: 3, spaceBetween: 32 },
 					1536: { slidesPerView: 4, spaceBetween: 32 },
 				}}
+                className="!h-auto"
 			>
 				{cars.map((car) => (
-					<SwiperSlide key={car.id}>
+					<SwiperSlide key={car.id} className="!h-auto">
 						<CarCard car={car} favourites={favourites} />
 					</SwiperSlide>
 				))}
@@ -113,21 +114,21 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
                             onMouseEnter={handleInteractionStart}
                             onMouseLeave={handleInteractionEnd}
                             onFocus={handleInteractionStart}
-                            className="group relative h-full w-full overflow-hidden rounded-xl bg-secondary border border-white/10 shadow-lg flex flex-col justify-center p-3 md:p-4 hover:border-gray-500/50 transition-colors antialiased"
+                            className="group relative h-full w-full overflow-hidden rounded-md bg-secondary border border-white/10 shadow-lg flex flex-col p-4 hover:border-primary/50 transition-all duration-300 antialiased"
                         >
-                            <div className="flex flex-col gap-2 h-full justify-center">
-                                <h3 className="text-lg md:text-xl font-bold text-center mb-1 text-primary">{t("filterTitle")}</h3>
-                                <div className="space-y-1">
+                            <div className="flex flex-col gap-4 h-full">
+                                <h3 className="text-xl font-bold text-center text-primary">{t("filterTitle")}</h3>
+                                <div className="space-y-1 flex-grow overflow-y-auto pr-1 custom-scrollbar">
                                     <HomepageTaxonomyFilters
                                         searchParams={searchParams}
                                         minMaxValue={emptyMinMax}
                                     />
                                 </div>
-                                <div className="pt-2 mt-auto"> 
+                                <div className="pt-4 mt-auto border-t border-white/5 space-y-3"> 
                                     <SearchButton initialCount={carsCount} label={t("discover")} />
-                                </div>
-                                <div className="min-h-[40px]">
-                                    <HomepageClearFilters />
+                                    <div className="min-h-[40px] flex justify-center">
+                                        <HomepageClearFilters />
+                                    </div>
                                 </div>
                             </div>
                         </div>
