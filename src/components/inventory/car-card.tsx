@@ -20,7 +20,7 @@ interface CarCardProps {
   favourites: number[];
 }
 
-const CarCard = memo(({ car, favourites }: CarCardProps) => {
+const CarCard = ({ car, favourites }: CarCardProps) => {
   const t = useTranslations("Car");
   const tEnums = useTranslations("Enums");
   const [isFav, setIsFav] = useState(favourites.includes(car.id));
@@ -30,7 +30,7 @@ const CarCard = memo(({ car, favourites }: CarCardProps) => {
   const whatsappMessage = encodeURIComponent(`Hello, I am interested in the ${car.title}.`);
   const whatsappUrl = `${SITE_CONFIG.socials.whatsapp}?text=${whatsappMessage}`;
 
-  const keyCarInfo = React.useMemo(() => [
+  const keyCarInfo = [
     {
       id: "odoReading",
       icon: <GaugeCircle className="w-4 h-4" />,
@@ -51,7 +51,7 @@ const CarCard = memo(({ car, favourites }: CarCardProps) => {
       icon: <Paintbrush2 className="w-4 h-4" />,
       value: car?.colour ? tEnums(`Colour.${car.colour}`) : null,
     },
-  ], [car, tEnums]);
+  ];
 
   useEffect(() => {
     if (!isFav && pathname === routes.favourites) {

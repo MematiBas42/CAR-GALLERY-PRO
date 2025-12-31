@@ -17,7 +17,7 @@ interface ComingSoonCarouselProps {
     cars: CarWithImages[];
 }
 
-const ComingSoonCard = React.memo(({ car }: { car: CarWithImages }) => {
+const ComingSoonCard = ({ car }: { car: CarWithImages }) => {
     const innerSwiperRef = useRef<SwiperType | null>(null);
 
     const startInnerAutoplay = () => innerSwiperRef.current?.autoplay.start();

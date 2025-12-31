@@ -130,13 +130,23 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
             <div
               onMouseEnter={handleInteractionStart}
               onMouseLeave={handleInteractionEnd}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
+              onFocusCapture={() => {
+                if (swiperInstance) {
+                  swiperInstance.allowTouchMove = false;
+                  swiperInstance.autoplay.stop();
+                }
+              }}
+              onBlurCapture={() => {
+                if (swiperInstance) {
+                  swiperInstance.allowTouchMove = true;
+                  swiperInstance.autoplay.start();
+                }
+              }}
               // Prevent any touch event from reaching Swiper
               onTouchStart={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
               onTouchEnd={(e) => e.stopPropagation()}
-              className="no-swipe group relative h-full w-full overflow-hidden rounded-md bg-secondary border border-white/10 shadow-lg flex flex-col p-4 hover:border-primary/50 transition-all duration-300 antialiased touch-pan-y"
+              className="group relative h-full w-full overflow-hidden rounded-md bg-secondary border border-white/10 shadow-lg flex flex-col p-4 hover:border-primary/50 transition-all duration-300 antialiased touch-pan-y"
             >
               <div className="flex flex-col gap-4 h-full">
                 <h3 className="text-xl font-bold text-center text-primary">{t("filterTitle")}</h3>
