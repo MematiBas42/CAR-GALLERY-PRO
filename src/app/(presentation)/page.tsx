@@ -23,9 +23,6 @@ export default async function HomePage(props: PageProps) {
   return (
     <>
       <HeroSection searchParams={searchParams} />
-      <Suspense fallback={<div className="h-96 animate-pulse bg-muted" />}>
-        <LastestArrival />
-      </Suspense>
       <Suspense fallback={<div className="h-64 animate-pulse bg-background" />}>
         <ComingSoon />
       </Suspense>

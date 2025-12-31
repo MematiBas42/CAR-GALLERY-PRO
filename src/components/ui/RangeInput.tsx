@@ -27,8 +27,8 @@ export const RangeInput = (props: RangeInputProps) => {
 	};
 
 	return (
-		<div className="grid gap-2">
-			{label && <h4 className="text-sm font-medium">{label}</h4>}
+		<div className="grid gap-0">
+			{label && <h4 className="text-sm font-medium mb-1">{label}</h4>}
 			<div className="flex gap-2 items-center">
 				<div className="flex-1">
 					<Input

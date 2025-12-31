@@ -48,11 +48,6 @@ const CarView = async (props: CarWithImagesAndMake) => {
         label: tEnums(`ULEZ.${props.ulezCompliance}`),
     },
     {
-        id: 2,
-        icon: <Fingerprint className="w-6 h-6 mx-auto text-gray-500" />,
-        label: props.vrm,
-    },
-    {
         id: 3,
         icon: <CarIcon className="w-6 h-6 mx-auto text-gray-500" />,
         label: tEnums(`BodyType.${props.bodyType}`),

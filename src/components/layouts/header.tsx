@@ -46,7 +46,7 @@ const Header = async () => {
   ];
 
   return (
-    <header className="flex items-center justify-between h-16 px-4 bg-transparent gap-x-2 overflow-hidden">
+    <header className="sticky top-0 z-50 flex items-center justify-between h-16 px-4 bg-background/80 backdrop-blur-md border-b border-white/5 gap-x-2 overflow-hidden">
       <div className="flex items-center justify-start flex-1 gap-x-1 md:gap-x-4 min-w-0">
         <Link href={routes.home} className="flex items-center gap-2 min-w-0 flex-shrink-0">
           <div className="relative flex-shrink-0 h-8 w-auto md:h-12">
@@ -68,7 +68,7 @@ const Header = async () => {
             <LanguageSwitcher />
         </div>
       </div>
-      <nav className="hidden md:flex items-center gap-x-4">
+      <nav className="hidden lg:flex items-center gap-x-2">
         <Button asChild variant="outline" size="icon">
           <Link href={routes.home}>
             <HomeIcon className="w-6 h-6" />
@@ -78,7 +78,7 @@ const Header = async () => {
           <Link
             key={link.id}
             href={link.href}
-            className="px-4 py-2 text-sm uppercase font-medium text-foreground hover:text-primary"
+            className="px-4 py-2 text-sm uppercase font-medium text-foreground hover:text-primary flex-shrink"
           >
             {link.label}
           </Link>
@@ -94,7 +94,7 @@ const Header = async () => {
             </Link>
         </Button>
       </nav>
-      <div className="items-center md:flex gap-x-2 hidden">
+      <div className="items-center lg:flex gap-x-2 hidden">
         {session ? (
             <>
                 <Button asChild variant={'outline'} size={"icon"}>
@@ -110,7 +110,7 @@ const Header = async () => {
     
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant={"link"} className="md:hidden border-none">
+          <Button variant={"link"} className="lg:hidden border-none">
             <MenuIcon className="w-6 h-6 text-foreground" />
             <SheetTitle className="sr-only">Navigate RIM GLOBAL</SheetTitle>
           </Button>

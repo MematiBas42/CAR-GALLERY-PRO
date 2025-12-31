@@ -6,6 +6,7 @@ import { X } from "lucide-react";
 import Link from "next/link";
 import { useQueryStates, parseAsString } from "nuqs";
 import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
 
 export const homepageFilterSchema = {
   make: parseAsString,

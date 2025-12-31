@@ -106,8 +106,9 @@
     "Hero": {
       "title": "Chương tiếp theo của bạn, được chọn lọc.",
       "subtitle": "Tại RIM GLOBAL, chúng tôi đã tái định nghĩa trải nghiệm mua xe cũ tại Federal Way. Khám phá bộ sưu tập xe đã được kiểm định chất lượng và tận hưởng hành trình minh bạch, không rắc rối.",
-      "discover": "Khám phá bộ sưu tập",
-      "clearFilters": "Xóa bộ lọc"
+      "discover": "Khám phá Bộ sưu tập",
+      "clearFilters": "Xóa bộ lọc",
+      "filterTitle": "Tìm kiếm"
     },
     "Features": {
       "trust": "Nền tảng của sự tin cậy",

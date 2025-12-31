@@ -54,7 +54,7 @@ const HomepageTaxonomyFilters = ({
   };
 
   return (
-    <div>
+    <div className="space-y-1">
       <TaxonomyFilters handleChange={handleChange as any} />
       <RangeFilter
         label={t("year")}

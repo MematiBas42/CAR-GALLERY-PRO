@@ -7,9 +7,13 @@ import React from 'react'
 import { LatestArrivalsCarousel } from './LatestArrivalCarousel'
 import { getTranslations } from "next-intl/server";
 
-const LastestArrival = async () => {
-    const t = await getTranslations("Homepage.LatestArrivals");
-    
+interface LastestArrivalProps {
+    searchParams?: any;
+    carsCount?: number;
+    emptyMinMax?: any;
+}
+
+const LastestArrival = async ({ searchParams, carsCount, emptyMinMax }: LastestArrivalProps) => {
     // Fetch all potential candidates in ONE query
     // We fetch cars that are either manually selected OR are among the 6 newest
     const cars = await prisma.classified.findMany({
@@ -36,17 +40,13 @@ const LastestArrival = async () => {
 	const favourites = await redis.get<Favourites>(sourceId || "");
 
   return (
-    <section className="py-16 sm:py-24 bg-secondary">
-			<div className="container mx-auto max-w-[80vw]">
-				<h2 className="mt-2 uppercase text-2xl font-bold tracking-tight text-foreground sm:text-4xl text-center">
-					{t("title")}
-				</h2>
-				<LatestArrivalsCarousel
-					cars={finalCars}
-					favourites={favourites ? favourites.ids : []}
-				/>
-			</div>
-		</section>
+    <LatestArrivalsCarousel
+        cars={finalCars}
+        favourites={favourites ? favourites.ids : []}
+        searchParams={searchParams}
+        carsCount={carsCount}
+        emptyMinMax={emptyMinMax}
+    />
   )
 }
 

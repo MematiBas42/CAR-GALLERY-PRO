@@ -57,7 +57,7 @@ export function Combobox({
   }
 
   return (
-    <div className={cn("grid gap-2", className)}>
+    <div className={cn("grid gap-1", className)}>
       {label && <label className="text-sm font-medium">{label}</label>}
       <Popover open={open} onOpenChange={setOpen} modal={true}>
         <PopoverTrigger asChild>
@@ -65,7 +65,7 @@ export function Combobox({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full justify-between pr-2 h-11 border-muted-foreground/20 hover:border-primary/50 transition-colors bg-background/50 backdrop-blur-sm shadow-sm"
+            className="w-full justify-between pr-2 h-9 border-muted-foreground/20 hover:border-primary/50 transition-colors bg-background/50 backdrop-blur-sm shadow-sm"
             disabled={disabled}
           >
             <span className="truncate font-normal text-muted-foreground">

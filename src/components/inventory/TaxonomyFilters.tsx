@@ -30,7 +30,7 @@ const TaxonomyFilters = ({ handleChange }: TaxonomyFiltersProps) => {
   }, [taxonomy, queryStates.make, queryStates.model]);
 
   return (
-    <>
+    <div className="space-y-1">
       <Combobox
         label={t("make")}
         name="make"
@@ -61,7 +61,7 @@ const TaxonomyFilters = ({ handleChange }: TaxonomyFiltersProps) => {
         placeholder={!queryStates.model ? t("select") : (isLoading ? t("loading") : t("select"))}
         searchPlaceholder={t("search")}
       />
-    </>
+    </div>
   );
 };
 
