@@ -29,7 +29,7 @@ const HeroSection = async (props: AwaitedPageProps) => {
 
   return (
     <section
-      className="relative flex flex-col items-center justify-center h-[calc(100vh-4rem)] min-h-[600px] w-full bg-cover bg-center overflow-hidden"
+      className="relative flex flex-col items-center justify-start lg:justify-center min-h-[850px] lg:h-[calc(100vh-4rem)] lg:min-h-[600px] w-full bg-cover bg-center overflow-hidden pt-20 lg:pt-0"
       style={{
         backgroundImage: `url('/assets/hero-bg.jpg')`,
       }}
@@ -37,10 +37,10 @@ const HeroSection = async (props: AwaitedPageProps) => {
       <div className="absolute inset-0 bg-gray-900 opacity-30 dark:opacity-50" />
       
       {/* Main Container */}
-      <div className="container relative z-10 flex flex-col gap-4 lg:gap-6 w-full h-full max-w-[1920px] mx-auto justify-center py-4">
+      <div className="container relative z-10 flex flex-col gap-6 lg:gap-8 w-full max-w-[1920px] mx-auto py-4">
 
         {/* TOP: "Your Next Chapter" Text */}
-        <div className="w-full flex justify-center px-4">
+        <div className="w-full flex justify-center px-4 shrink-0">
             <div className="px-6 py-4 md:px-10 md:py-5 bg-black/20 backdrop-blur-md rounded-2xl text-center max-w-5xl w-full mx-auto border border-white/5 shadow-xl">
                 <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl uppercase font-bold text-white leading-none tracking-tight text-balance drop-shadow-lg">
                 {t("title")}
@@ -61,7 +61,7 @@ const HeroSection = async (props: AwaitedPageProps) => {
 
             {/* Carousel Container */}
             <div className="w-full lg:scale-95 origin-center px-6 lg:px-0">
-                <Suspense fallback={<div className="h-[300px] w-full animate-pulse bg-white/5 rounded-2xl border border-white/10" />}>
+                <Suspense fallback={<div className="h-[450px] md:h-[500px] w-full animate-pulse bg-white/5 rounded-2xl border border-white/10" />}>
                     <div className="[&_section]:bg-transparent [&_section]:py-0 [&_div.container]:max-w-full [&_div.container]:px-0">
                         <LastestArrival 
                             searchParams={searchParams}

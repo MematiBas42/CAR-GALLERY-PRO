@@ -37,7 +37,7 @@ const ComingSoonCard = ({ car }: { car: CarWithImages }) => {
             onMouseLeave={stopInnerAutoplay}
         >
             <div className={cn(
-                "relative aspect-[3/4] overflow-hidden rounded-[2.5rem] bg-card border shadow-xl",
+                "relative aspect-[2/3] sm:aspect-[3/4] overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] bg-card border shadow-xl",
                 "border-black/10 dark:border-white/10",
                 "transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]",
                 "group-hover/card:shadow-2xl group-hover/card:shadow-primary/40 dark:group-hover/card:shadow-primary/60 group-hover/card:-translate-y-3 group-hover/card:border-primary/50"
@@ -147,7 +147,7 @@ export const ComingSoonCarousel = ({ cars }: ComingSoonCarouselProps) => {
     }, [swiperInstance]);
 
     return (
-        <div className="relative group max-w-7xl px-4 md:px-12 mx-auto">
+        <div className="relative group max-w-7xl px-0 sm:px-4 md:px-12 mx-auto">
             <Swiper
                 onSwiper={setSwiperInstance}
                 speed={1000}
@@ -168,7 +168,7 @@ export const ComingSoonCarousel = ({ cars }: ComingSoonCarouselProps) => {
                     1024: { slidesPerView: 3, centeredSlides: false },
                     1536: { slidesPerView: 4, centeredSlides: false },
                 }}
-                className="!pb-8 !overflow-visible" // Allow cards to overflow vertically
+                className="!pb-8 !overflow-visible !px-4 sm:!px-0" // Allow cards to overflow vertically
             >
                 {cars.map((car) => (
                     <SwiperSlide key={car.id} className="h-auto">
@@ -179,10 +179,10 @@ export const ComingSoonCarousel = ({ cars }: ComingSoonCarouselProps) => {
 
             {/* Theme-aware Arrow Buttons */}
             <SwiperButton
-                prevClassName={`left-0 md:left-4 z-30 transition-all duration-300 h-14 w-14 bg-background/60 dark:bg-card/60 backdrop-blur-md border border-white/10 ${
+                prevClassName={`-left-6 sm:left-4 z-30 transition-all duration-300 h-14 w-14 bg-background/60 dark:bg-card/60 backdrop-blur-md border border-white/10 ${
                     canScroll ? "opacity-100 md:opacity-0 md:group-hover:opacity-100" : "opacity-0 pointer-events-none"
                 }`}
-                nextClassName={`right-0 md:right-4 z-30 transition-all duration-300 h-14 w-14 bg-background/60 dark:bg-card/60 backdrop-blur-md border border-white/10 ${
+                nextClassName={`-right-6 sm:right-4 z-30 transition-all duration-300 h-14 w-14 bg-background/60 dark:bg-card/60 backdrop-blur-md border border-white/10 ${
                     canScroll ? "opacity-100 md:opacity-0 md:group-hover:opacity-100" : "opacity-0 pointer-events-none"
                 }`}
                 onPrevClick={() => swiperInstance?.slidePrev()}

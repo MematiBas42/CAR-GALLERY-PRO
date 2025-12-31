@@ -9,7 +9,7 @@ interface SectionSkeletonProps {
 export const SectionSkeleton = ({ type = "vertical", hasHeader = true }: SectionSkeletonProps) => {
   return (
     <div className={cn(
-        "container mx-auto px-6 md:px-12",
+        "container mx-auto px-4 sm:px-6 md:px-12",
         type === "vertical" ? "py-24" : "py-16"
     )}>
       {hasHeader && (
@@ -18,13 +18,14 @@ export const SectionSkeleton = ({ type = "vertical", hasHeader = true }: Section
           <Skeleton className="h-6 w-1/2 rounded-lg" />
         </div>
       )}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      {/* Mimic Swiper Layout to prevent jump */}
+      <div className="flex gap-6 overflow-hidden">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="space-y-4">
+          <div key={i} className="min-w-full sm:min-w-[calc(50%-1.5rem)] lg:min-w-[calc(25%-1.5rem)] space-y-4 shrink-0">
             <Skeleton 
               className={cn(
-                "w-full rounded-[2rem]",
-                type === "vertical" ? "aspect-[3/4]" : "aspect-[4/3]"
+                "w-full rounded-[1.5rem] sm:rounded-[2rem]",
+                type === "vertical" ? "aspect-[2/3] sm:aspect-[3/4]" : "aspect-video sm:aspect-[4/3]"
               )} 
             />
             <div className="space-y-2">
