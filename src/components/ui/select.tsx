@@ -172,6 +172,15 @@ const Select = ({ label, options, placeholder, className, onChange, value, defau
     setLocalValue(value)
   }, [value])
 
+  const currentLabel = React.useMemo(() => {
+    const found = options?.find(opt => String(opt.value) === String(localValue))?.label
+    if (found) {
+        lastLabelRef.current = found
+        return found
+    }
+    return lastLabelRef.current || placeholder || "Select..."
+  }, [localValue, options, placeholder])
+
   // If children are provided, behave like the Root primitive (shadcn standard)
   if (props.children) {
     return <SelectPrimitiveRoot value={value} onValueChange={onValueChange} defaultValue={defaultValue} {...props} />;
@@ -188,15 +197,6 @@ const Select = ({ label, options, placeholder, className, onChange, value, defau
       onChange({ target: { name: props.name, value: val } });
     }
   };
-
-  const currentLabel = React.useMemo(() => {
-    const found = options?.find(opt => String(opt.value) === String(localValue))?.label
-    if (found) {
-        lastLabelRef.current = found
-        return found
-    }
-    return lastLabelRef.current || placeholder || "Select..."
-  }, [localValue, options, placeholder])
 
   return (
     <div className={cn("grid gap-2", className)}>
