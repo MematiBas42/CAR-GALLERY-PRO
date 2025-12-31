@@ -28,20 +28,20 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [canScroll, setCanScroll] = useState(false);
 
-  const totalSlides = Object.keys(searchParams).length > 0 ? cars.length + 1 : cars.length;
-
-  useEffect(() => {
-    if (!swiperInstance) return;
-
-    const checkScrollability = () => {
-      if (swiperInstance) {
-        const isScrollable = (swiperInstance as any).virtualSize > (swiperInstance as any).size;
-        setCanScroll(isScrollable);
-      }
-    };
-
-    checkScrollability();
-    swiperInstance.on('update', checkScrollability);
+      const totalSlides = Object.keys(searchParams).length > 0 ? cars.length + 1 : cars.length;
+  
+      useEffect(() => {
+          if (!swiperInstance) return;
+  
+          const checkScrollability = () => {
+              if (swiperInstance) {
+                  // Use actual slide count vs slidesPerView as a fallback for scrollability check
+                  const isScrollable = (swiperInstance as any).virtualSize > (swiperInstance as any).size;
+                  setCanScroll(isScrollable);
+              }
+          };
+  
+          checkScrollability();    swiperInstance.on('update', checkScrollability);
     swiperInstance.on('resize', checkScrollability);
 
     return () => {
@@ -76,14 +76,14 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
   const handleFocus = () => {
     if (swiperInstance) {
       swiperInstance.autoplay.stop();
-      swiperInstance.allowTouchMove = false; // Disable swiping while typing
+      swiperInstance.allowTouchMove = false; 
     }
   };
 
   const handleBlur = () => {
     if (swiperInstance) {
       swiperInstance.autoplay.start();
-      swiperInstance.allowTouchMove = true; // Re-enable swiping after blur
+      swiperInstance.allowTouchMove = true;
     }
   };
 
@@ -94,7 +94,10 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
         speed={800}
         grabCursor={true}
         rewind={true}
-        threshold={10} // Ignore small movements
+        threshold={15} // Slightly higher threshold to prioritize vertical scroll
+        noSwiping={true}
+        noSwipingClass="no-swipe"
+        noSwipingSelector="input, select, button, .no-swipe, [role='combobox']"
         onTouchStart={handleInteractionStart}
         onTouchEnd={handleInteractionEnd}
         autoplay={{
@@ -129,7 +132,11 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
               onMouseLeave={handleInteractionEnd}
               onFocus={handleFocus}
               onBlur={handleBlur}
-              className="group relative h-full w-full overflow-hidden rounded-md bg-secondary border border-white/10 shadow-lg flex flex-col p-4 hover:border-primary/50 transition-all duration-300 antialiased"
+              // Prevent any touch event from reaching Swiper
+              onTouchStart={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
+              onTouchEnd={(e) => e.stopPropagation()}
+              className="no-swipe group relative h-full w-full overflow-hidden rounded-md bg-secondary border border-white/10 shadow-lg flex flex-col p-4 hover:border-primary/50 transition-all duration-300 antialiased touch-pan-y"
             >
               <div className="flex flex-col gap-4 h-full">
                 <h3 className="text-xl font-bold text-center text-primary">{t("filterTitle")}</h3>

@@ -95,7 +95,7 @@ const CarCard = ({ car, favourites }: CarCardProps) => {
                 {car.title}
               </Link>
               {car.description && (
-                <div className="text-[11px] sm:text-sm xl:text-base text-muted-foreground line-clamp-4 prose dark:prose-invert max-w-none">
+                <div className="text-[12px] sm:text-sm xl:text-base text-muted-foreground line-clamp-8 md:line-clamp-3 prose dark:prose-invert max-w-none">
                   {parse(car.description)}
                 </div>
               )}
