@@ -70,7 +70,7 @@ export function Combobox({
           >
             <span className="truncate font-normal text-muted-foreground">
               {value
-                ? options.find((option) => String(option.value) === String(value))?.label || value
+                ? options.find((option) => String(option.value) === String(value))?.label || (typeof value === 'string' && isNaN(Number(value)) ? value : placeholder)
                 : placeholder}
             </span>
             <div className="flex items-center gap-1">

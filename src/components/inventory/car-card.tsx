@@ -104,11 +104,11 @@ const CarCard = memo(({ car, isFavourite, priority }: CarCardProps) => {
 
             <div className="mt-auto pt-2 sm:pt-4 space-y-3 sm:space-y-6">
               <div className="pt-2 sm:pt-4 border-t border-white/5">
-                <div className="text-[10px] sm:text-xs md:text-base text-muted-foreground grid grid-cols-2 gap-x-1.5 gap-y-1 sm:gap-x-4 sm:gap-y-2 w-full">
+                <div className="text-[9px] xs:text-[10px] sm:text-xs md:text-base text-muted-foreground grid grid-cols-2 gap-x-1.5 gap-y-1 sm:gap-x-4 sm:gap-y-2 w-full">
                   {keyCarInfo.map((info) => (
                     <div key={info.id} className="font-semibold flex items-center gap-x-1 sm:gap-x-2 min-w-0">
-                      <span className="shrink-0 scale-[0.85] sm:scale-100 md:scale-110">{info.icon}</span>
-                      <span className="leading-tight truncate sm:whitespace-normal">{info.value ? info.value : t("notAvailable")}</span>
+                      <span className="shrink-0 scale-[0.75] xs:scale-[0.85] sm:scale-100 md:scale-110">{info.icon}</span>
+                      <span className="leading-none truncate sm:whitespace-normal">{info.value ? info.value : t("notAvailable")}</span>
                     </div>
                   ))}
                 </div>

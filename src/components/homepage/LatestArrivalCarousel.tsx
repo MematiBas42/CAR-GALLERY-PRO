@@ -116,7 +116,7 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
           1024: { slidesPerView: 3, spaceBetween: 32 },
           1536: { slidesPerView: 4, spaceBetween: 32 },
         }}
-        className="!h-auto h-full !px-2 sm:!px-0 !pb-12"
+        className="!h-auto h-full !px-0 !pt-4 !pb-12"
       >
         {cars.map((car, index) => (
           <SwiperSlide key={car.id} className="!h-auto h-full">
@@ -149,7 +149,7 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
               onTouchStart={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
               onTouchEnd={(e) => e.stopPropagation()}
-              className="group relative h-full w-full overflow-hidden rounded-md bg-secondary border border-white/10 shadow-lg flex flex-col p-3 sm:p-4 hover:border-primary/50 transition-all duration-300 antialiased touch-pan-y"
+              className="group relative h-full w-full overflow-hidden rounded-xl bg-secondary border border-white/10 shadow-lg flex flex-col p-3 sm:p-4 hover:border-primary/50 transition-all duration-300 antialiased touch-pan-y"
             >
               <div className="flex flex-col gap-2 sm:gap-4 h-full">
                 <h3 className="text-lg sm:text-xl font-bold text-center text-primary">{t("filterTitle")}</h3>

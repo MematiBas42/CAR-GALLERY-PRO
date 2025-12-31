@@ -38,20 +38,29 @@ const HomepageTaxonomyFilters = ({
   }, [isPending]);
 
   const handleChange = async (
-    e: any
+    e: React.ChangeEvent<HTMLSelectElement> | Record<string, string | null>
   ) => {
-    if (e.target && typeof e.target === 'object' && 'name' in e.target) {
-        const { name, value } = e.target;
-        setState({ [name]: value || null });
+    const updates: Record<string, string | null> = {};
+
+    if ('target' in e) {
+        const target = e.target as HTMLSelectElement;
+        const name = target.name;
+        const value = target.value;
+        updates[name] = value || null;
         if (name === "make") {
-            setState({ model: null, modelVariant: null });
+            updates.model = null;
+            updates.modelVariant = null;
         }
         if (name === "model") {
-            setState({ modelVariant: null });
+            updates.modelVariant = null;
         }
     } else {
-        setState(e);
+        Object.assign(updates, e);
     }
+
+    startTransition(() => {
+        setState(updates);
+    });
   };
 
   const adaptiveRanges = ranges || {

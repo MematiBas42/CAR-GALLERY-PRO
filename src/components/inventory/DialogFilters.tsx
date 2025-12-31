@@ -102,20 +102,28 @@ const DialogFilters = ({
     });
   };
 
-  const handleChange = (e: any) => {
-    if (e.target && typeof e.target === 'object' && 'name' in e.target) {
-        const { name, value } = e.target;
-        setQueryStates({ [name]: value || null });
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement> | Record<string, string | null>) => {
+    const updates: Record<string, string | null> = {};
+
+    if ('target' in e) {
+        const target = e.target as HTMLSelectElement;
+        const name = target.name;
+        const value = target.value;
+        updates[name] = value || null;
         if (name === "make") {
-            setQueryStates({ model: null, modelVariant: null });
+            updates.model = null;
+            updates.modelVariant = null;
         }
         if (name === "model") {
-            setQueryStates({ modelVariant: null });
+            updates.modelVariant = null;
         }
     } else {
-        // Batch update support
-        setQueryStates(e);
+        Object.assign(updates, e);
     }
+
+    startTransition(() => {
+        setQueryStates(updates);
+    });
   };
 
   return (

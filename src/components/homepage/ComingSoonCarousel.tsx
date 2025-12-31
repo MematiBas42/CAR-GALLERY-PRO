@@ -199,7 +199,7 @@ export const ComingSoonCarousel = ({ cars, favourites }: ComingSoonCarouselProps
                     1024: { slidesPerView: 3, spaceBetween: 32 },
                     1536: { slidesPerView: 4, spaceBetween: 32 },
                 }}
-                className="!h-auto h-full !px-2 sm:!px-0 !pb-12"
+                className="!h-auto h-full !px-2 sm:!px-0 !pt-4 !pb-16"
             >
                 {cars.map((car, index) => (
                     <SwiperSlide key={car.id} className="!h-auto h-full">

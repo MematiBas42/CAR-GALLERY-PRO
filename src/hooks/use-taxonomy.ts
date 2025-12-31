@@ -42,24 +42,27 @@ export function useTaxonomy() {
 
 // World-class Reactivity: Fetch dynamic counts separately
 export function useClassifiedCount(queryString: string, initialCount: number) {
-    const { data, isLoading } = useSWR(
+    const { data, isLoading, isValidating } = useSWR(
         queryString ? `/api/classifieds/count?${queryString}` : null,
         fetcher,
         {
             revalidateOnFocus: false,
-            dedupingInterval: 2000,
+            dedupingInterval: 500,
+            keepPreviousData: true, 
         }
     );
 
+    const isFetching = isLoading || isValidating;
+
     useEffect(() => {
-        setIsLoading(isLoading, "count-fetch");
+        setIsLoading(isFetching, "count-fetch");
         return () => setIsLoading(false, "count-fetch");
-    }, [isLoading]);
+    }, [isFetching]);
 
     return {
         count: data?.count ?? initialCount,
         slug: data?.slug ?? null,
-        isLoading
+        isLoading: isFetching
     };
 }
 
