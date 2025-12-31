@@ -150,19 +150,19 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
               onTouchStart={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
               onTouchEnd={(e) => e.stopPropagation()}
-              className="group relative h-full w-full overflow-hidden rounded-md bg-secondary border border-white/10 shadow-lg flex flex-col p-4 hover:border-primary/50 transition-all duration-300 antialiased touch-pan-y"
+              className="group relative h-full w-full overflow-hidden rounded-md bg-secondary border border-white/10 shadow-lg flex flex-col p-3 sm:p-4 hover:border-primary/50 transition-all duration-300 antialiased touch-pan-y"
             >
-              <div className="flex flex-col gap-4 h-full">
-                <h3 className="text-xl font-bold text-center text-primary">{t("filterTitle")}</h3>
+              <div className="flex flex-col gap-2 sm:gap-4 h-full">
+                <h3 className="text-lg sm:text-xl font-bold text-center text-primary">{t("filterTitle")}</h3>
                 <div className="space-y-1 flex-grow overflow-y-auto pr-1 custom-scrollbar">
                   <HomepageTaxonomyFilters
                     searchParams={searchParams}
                     minMaxValue={emptyMinMax}
                   />
                 </div>
-                <div className="pt-4 mt-auto border-t border-white/5 space-y-3">
+                <div className="pt-2 sm:pt-4 mt-auto border-t border-white/5 space-y-2 sm:space-y-3">
                   <SearchButton initialCount={carsCount ?? 0} label={t("discover")} />
-                  <div className="min-h-[40px] flex justify-center">
+                  <div className="min-h-[32px] sm:min-h-[40px] flex justify-center">
                     <HomepageClearFilters />
                   </div>
                 </div>
