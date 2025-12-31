@@ -1,7 +1,6 @@
 'use client';
 import { routes } from "@/config/routes";
 import { CarCardData, CarWithImages } from "@/config/types";
-import { formatNumber } from "@/lib/utils";
 import { AnimatePresence } from "framer-motion";
 import { Cog, Fuel, GaugeCircle, MessageCircle, Paintbrush2 } from "lucide-react";
 import Link from "next/link";
@@ -10,10 +9,11 @@ import parse from "html-react-parser";
 import React, { useEffect, useState, memo, useMemo } from "react";
 import { Button } from "../ui/button";
 import FavButton from "./fav-button";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import ImgixImage from "../ui/imgix-image";
 import { PriceDisplay } from "../shared/price-display";
 import { SITE_CONFIG } from "@/config/constants";
+import { cn, formatNumber } from "@/lib/utils";
 
 interface CarCardProps {
   car: CarCardData;
@@ -24,6 +24,7 @@ interface CarCardProps {
 const CarCard = memo(({ car, isFavourite, priority }: CarCardProps) => {
   const t = useTranslations("Car");
   const tEnums = useTranslations("Enums");
+  const locale = useLocale();
   const [isFav, setIsFav] = useState(isFavourite);
   const [isVisible, setIsVisible] = useState(true);
   const pathname = usePathname();
@@ -103,23 +104,26 @@ const CarCard = memo(({ car, isFavourite, priority }: CarCardProps) => {
 
             <div className="mt-auto pt-2 sm:pt-4 space-y-3 sm:space-y-6">
               <div className="pt-2 sm:pt-4 border-t border-white/5">
-                <div className="text-xs md:text-base text-muted-foreground grid grid-cols-2 gap-x-2 gap-y-1 sm:gap-x-4 sm:gap-y-2 w-full">
+                <div className="text-[10px] sm:text-xs md:text-base text-muted-foreground grid grid-cols-2 gap-x-1.5 gap-y-1 sm:gap-x-4 sm:gap-y-2 w-full">
                   {keyCarInfo.map((info) => (
-                    <div key={info.id} className="font-semibold flex items-center gap-x-1.5 sm:gap-x-2 min-w-0">
-                      <span className="shrink-0 scale-100 md:scale-110">{info.icon}</span>
-                      <span className="truncate">{info.value ? info.value : t("notAvailable")}</span>
+                    <div key={info.id} className="font-semibold flex items-center gap-x-1 sm:gap-x-2 min-w-0">
+                      <span className="shrink-0 scale-[0.85] sm:scale-100 md:scale-110">{info.icon}</span>
+                      <span className="leading-tight truncate sm:whitespace-normal">{info.value ? info.value : t("notAvailable")}</span>
                     </div>
                   ))}
                 </div>
               </div>
               <div className="flex flex-col gap-1.5 sm:gap-2 w-full">
                 <Button
-                  className="w-full bg-[#25D366] hover:bg-[#20ba56] text-white font-bold h-8 sm:h-10 text-[10px] sm:text-sm gap-1.5 sm:gap-2"
+                  className={cn(
+                    "w-full bg-[#25D366] hover:bg-[#20ba56] text-white font-bold h-auto min-h-8 sm:h-10 py-1.5 sm:py-0 gap-1 sm:gap-2 px-1 sm:px-2",
+                    "text-[11px] sm:text-sm"
+                  )}
                   asChild
                 >
-                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-                    <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" />
-                    <span>{t("reserveViaWhatsapp")}</span>
+                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="flex flex-col sm:flex-row items-center justify-center text-center">
+                    <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current shrink-0" />
+                    <span className="leading-tight whitespace-normal">{t("reserveViaWhatsapp")}</span>
                   </a>
                 </Button>
                 <Button className="w-full h-8 sm:h-10 text-[10px] sm:text-sm font-bold" asChild>

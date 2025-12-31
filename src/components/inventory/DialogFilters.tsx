@@ -62,7 +62,10 @@ const DialogFilters = ({
       seats: parseAsString.withDefault(""),
       ulezCompliance: parseAsString.withDefault(""),
     },
-    { shallow: true }
+    { 
+        shallow: false,
+        startTransition
+    }
   );
 
   const queryString = useMemo(() => {
@@ -113,9 +116,6 @@ const DialogFilters = ({
         // Batch update support
         setQueryStates(e);
     }
-    startTransition(() => {
-        router.refresh();
-    });
   };
 
   return (

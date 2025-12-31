@@ -53,18 +53,19 @@ const PublicFooter = async () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 text-center lg:text-left mb-8 items-start">
           {/* Column 1: Branding */}
           <div className="flex flex-col items-center lg:items-start gap-y-4">
-            <Link href={routes.home} className="flex flex-row items-center gap-6 group">
-              <Image
-                src="/assets/logo.png"
-                alt="RIM GLOBAL Logo"
-                width={200}
-                height={200}
-                className="dark:invert transition-transform duration-300 group-hover:scale-105"
-                unoptimized
-              />
+            <Link href={routes.home} className="flex flex-row items-center gap-4 md:gap-6 group">
+              <div className="relative w-16 h-16 md:w-24 md:h-24 shrink-0">
+                <Image
+                  src="/assets/logo.png"
+                  alt="RIM GLOBAL Logo"
+                  fill
+                  className="dark:invert transition-transform duration-300 group-hover:scale-105 object-contain"
+                  unoptimized
+                />
+              </div>
               <div className="flex flex-col items-start text-left">
-                <span className="text-2xl font-bold text-primary tracking-tighter">RIM GLOBAL</span>
-                <p className="text-xs text-muted-foreground uppercase tracking-[0.3em] -mt-1">auto sales</p>
+                <span className="text-xl md:text-2xl font-bold text-primary tracking-tighter leading-tight">RIM GLOBAL</span>
+                <p className="text-[10px] md:text-xs text-muted-foreground uppercase tracking-[0.3em] -mt-0.5">auto sales</p>
               </div>
             </Link>
           </div>

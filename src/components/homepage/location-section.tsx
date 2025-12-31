@@ -21,8 +21,8 @@ const LocationSection = async () => {
           {t("description")}
         </p>
         <div className="mt-8 border rounded-lg overflow-hidden relative group">
-          <div className="absolute top-4 right-4 z-10">
-            <Button asChild className="bg-white text-black hover:bg-gray-100 shadow-lg gap-2">
+          <div className="absolute z-10 bottom-4 left-1/2 -translate-x-1/2 md:bottom-auto md:top-4 md:right-4 md:left-auto md:translate-x-0">
+            <Button asChild className="bg-white text-black hover:bg-gray-100 shadow-lg gap-2 whitespace-nowrap">
                 <Link href={googleMapsUrl} target="_blank" rel="noopener noreferrer">
                     <Navigation className="w-4 h-4 fill-current" />
                     {t("getDirections")}
