@@ -87,7 +87,7 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
   };
 
   return (
-    <div className="mt-8 relative group w-full px-0 sm:px-12 md:px-24">
+    <div className="mt-0 relative group w-full px-0 sm:px-12 md:px-24">
       <Swiper
         onSwiper={setSwiperInstance}
         speed={800}
@@ -108,6 +108,8 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
           enabled: true,
         }}
         modules={[Navigation, Autoplay, Keyboard]}
+        touchStartPreventDefault={false}
+        touchMoveStopPropagation={true}
         spaceBetween={12}
         slidesPerView={1}
         centerInsufficientSlides={true}
@@ -116,18 +118,8 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
           1024: { slidesPerView: 3, spaceBetween: 32 },
           1536: { slidesPerView: 4, spaceBetween: 32 },
         }}
-        className="!h-auto h-full !px-0 !pt-4 !pb-12"
+        className="!h-auto h-full !px-0 !pt-0 !pb-12"
       >
-        {cars.map((car, index) => (
-          <SwiperSlide key={car.id} className="!h-auto h-full">
-            <CarCard 
-                car={car} 
-                isFavourite={favourites.includes(car.id)} 
-                priority={index < 2}
-            />
-          </SwiperSlide>
-        ))}
-
         {searchParams && (
           <SwiperSlide className="!h-auto h-full">
             <div
@@ -149,19 +141,18 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
               onTouchStart={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
               onTouchEnd={(e) => e.stopPropagation()}
-              className="group relative h-full w-full overflow-hidden rounded-xl bg-secondary border border-white/10 shadow-lg flex flex-col p-3 sm:p-4 hover:border-primary/50 transition-all duration-300 antialiased touch-pan-y"
+              className="group relative h-full w-full overflow-hidden rounded-xl bg-card border shadow-lg flex flex-col hover:border-primary/50 transition-all duration-300 antialiased touch-pan-y"
             >
-              <div className="flex flex-col gap-2 sm:gap-4 h-full">
-                <h3 className="text-lg sm:text-xl font-bold text-center text-primary">{t("filterTitle")}</h3>
-                <div className="space-y-1 flex-grow overflow-y-auto pr-1 custom-scrollbar">
+              <div className="p-2 sm:p-3 flex flex-col h-full">
+                <div className="flex-grow overflow-y-auto pr-1 custom-scrollbar scrollbar-hide [&_label]:text-[10px] [&_label]:font-bold [&_label]:uppercase [&_label]:mb-1">
                   <HomepageTaxonomyFilters
                     searchParams={searchParams}
                     minMaxValue={emptyMinMax}
                   />
                 </div>
-                <div className="pt-2 sm:pt-4 mt-auto border-t border-white/5 space-y-2 sm:space-y-3">
-                  <SearchButton initialCount={carsCount ?? 0} label={t("discover")} />
-                  <div className="min-h-[32px] sm:min-h-[40px] flex justify-center">
+                <div className="pt-2 mt-auto border-t border-white/5 space-y-1.5">
+                  <SearchButton initialCount={carsCount ?? 0} label={t("discover")} size="sm" />
+                  <div className="flex justify-center scale-90 origin-center">
                     <HomepageClearFilters />
                   </div>
                 </div>
@@ -169,6 +160,16 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
             </div>
           </SwiperSlide>
         )}
+
+        {cars.map((car, index) => (
+          <SwiperSlide key={car.id} className="!h-auto h-full">
+            <CarCard 
+                car={car} 
+                isFavourite={favourites.includes(car.id)} 
+                priority={index < 2}
+            />
+          </SwiperSlide>
+        ))}
       </Swiper>
 
       <SwiperButton

@@ -1,9 +1,16 @@
 import {getRequestConfig} from 'next-intl/server';
-import {cookies} from 'next/headers';
+import {cookies, headers} from 'next/headers';
 
 export default getRequestConfig(async () => {
   const cookieStore = await cookies();
-  const locale = cookieStore.get('NEXT_LOCALE')?.value || 'en';
+  const headersList = await headers();
+  const pathname = headersList.get('x-next-intl-pathname') || '';
+  
+  // Force 'en' for admin routes
+  let locale = cookieStore.get('NEXT_LOCALE')?.value || 'en';
+  if (pathname.startsWith('/admin')) {
+    locale = 'en';
+  }
 
   let messages;
   try {

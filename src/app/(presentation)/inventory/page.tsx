@@ -14,6 +14,7 @@ import { buildClassifiedFilterQuery } from "@/lib/utils";
 import { ClassifiedStatus, Prisma } from "@prisma/client";
 import React, { Suspense } from "react";
 import { z } from "zod";
+import { CarFinderCTA } from "@/components/inventory/car-finder-cta";
 import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
 
@@ -145,6 +146,11 @@ const InventoryPage = async (props: PageProps) => {
               paginationLinkActive: "bg-primary text-primary-foreground",
             }}
           />
+        </div>
+
+        {/* Car Finder CTA - Captures leads when user can't find a car */}
+        <div className="mt-12 mb-8">
+            <CarFinderCTA />
         </div>
       </div>
     </div>

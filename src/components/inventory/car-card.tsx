@@ -66,17 +66,33 @@ const CarCard = memo(({ car, isFavourite, priority }: CarCardProps) => {
     }
   }, [isFav, pathname]);
 
+  // Dynamic Labels Logic
+  const labels = [];
+  if (car.status === "RESERVED") {
+      labels.push({ text: "Sale Pending", color: "bg-amber-500 text-white" });
+  } else {
+      if (car.isLatestArrival) {
+          labels.push({ text: "Just Arrived", color: "bg-blue-600 text-white" });
+      }
+      if (car.previousPrice && car.previousPrice > car.price) {
+          const discount = car.previousPrice - car.price;
+          // Format discount nicely (e.g. $500 off)
+          const discountText = `Price Drop`; 
+          labels.push({ text: discountText, color: "bg-red-600 text-white" });
+      }
+  }
+
   return (
     <div
       key={car.id}
       id={car.slug || "slug"}
-      className="bg-card relative h-full rounded-xl shadow-lg overflow-hidden flex flex-col border transition-shadow duration-300 hover:shadow-2xl"
+      className="bg-card relative h-full rounded-xl shadow-md md:shadow-lg overflow-hidden flex flex-col border transition-shadow duration-300 hover:shadow-xl md:hover:shadow-2xl"
     >
-      <div className="aspect-car-card sm:aspect-car-card-sm relative rounded-t-xl overflow-hidden">
-            <Link href={routes.singleClassified(car.slug || "slug")}>
+      <div className="aspect-car-card sm:aspect-car-card-sm relative rounded-t-xl overflow-hidden group/image">
+            <Link href={routes.singleClassified(car.slug || "slug")} className="block w-full h-full relative">
+              {/* Main Image */}
               <ImgixImage
-                placeholder="blur"
-                blurDataURL={car.images[0]?.blurhash || ""}
+                placeholder="empty"
                 src={car.images[0]?.src || "/placeholder.png"}
                 alt={car.images[0]?.alt || "Car Image"}
                 fill={true}
@@ -84,54 +100,71 @@ const CarCard = memo(({ car, isFavourite, priority }: CarCardProps) => {
                 quality={60}
                 smartCover={true}
                 priority={priority}
+                className="relative z-10 transition-transform duration-500 group-hover/image:scale-105"
               />
             </Link>
+            
+            {/* Dynamic Labels Overlay */}
+            <div className="absolute top-2 left-2 z-20 flex flex-col gap-1 pointer-events-none">
+                {labels.map((label, idx) => (
+                    <span key={idx} className={cn(
+                        "px-2 py-0.5 rounded text-[10px] sm:text-xs font-bold shadow-md uppercase tracking-wider",
+                        label.color
+                    )}>
+                        {label.text}
+                    </span>
+                ))}
+            </div>
+
             <FavButton setIsFav={setIsFav} isFav={isFav} id={car.id} />
             <div className="absolute top-2 right-2 sm:top-3 sm:right-3 bg-primary/95 text-primary-foreground font-bold px-2 py-0.5 sm:px-3 sm:py-1.5 rounded-lg shadow-xl z-20">
               <PriceDisplay amount={car.price} showLocal={false} className="text-xs sm:text-sm lg:text-base" />
             </div>
           </div>
           
-          <div className="p-3 sm:p-4 flex flex-col flex-grow"> 
-            <div className="flex-grow flex items-center justify-center text-center px-1">
+          <div className="p-1.5 sm:p-2 flex flex-col flex-grow"> 
+            <div className="flex items-center justify-center text-center px-1 mb-1 min-h-[2.5rem]">
               <Link
                 href={routes.singleClassified(car.slug || "slug")}
-                className="text-base sm:text-lg md:text-xl font-bold line-clamp-2 transition-colors hover:text-primary leading-tight"
+                className="text-xs sm:text-sm md:text-base font-bold line-clamp-2 transition-colors hover:text-primary leading-tight"
               >
                 {car.title}
               </Link>
             </div>
 
-            <div className="mt-auto pt-2 sm:pt-4 space-y-3 sm:space-y-6">
-              <div className="pt-2 sm:pt-4 border-t border-white/5">
-                <div className="text-[9px] xs:text-[10px] sm:text-xs md:text-base text-muted-foreground grid grid-cols-2 gap-x-1.5 gap-y-1 sm:gap-x-4 sm:gap-y-2 w-full">
+            <div className="space-y-2 mt-auto">
+              <div className="pt-1 border-t border-white/5">
+                <div className="text-[10px] xs:text-[11px] sm:text-sm md:text-base text-muted-foreground grid grid-cols-2 gap-x-1.5 gap-y-0.5 sm:gap-x-4 sm:gap-y-1 w-full">
                   {keyCarInfo.map((info) => (
                     <div key={info.id} className="font-semibold flex items-center gap-x-1 sm:gap-x-2 min-w-0">
-                      <span className="shrink-0 scale-[0.75] xs:scale-[0.85] sm:scale-100 md:scale-110">{info.icon}</span>
+                      <span className="shrink-0 scale-[0.85] xs:scale-[0.95] sm:scale-100 md:scale-110">{info.icon}</span>
                       <span className="leading-none truncate sm:whitespace-normal">{info.value ? info.value : t("notAvailable")}</span>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="flex flex-col gap-1.5 sm:gap-2 w-full">
-                <Button
-                  className={cn(
-                    "w-full bg-[#25D366] hover:bg-[#20ba56] text-white font-bold h-auto min-h-8 sm:h-10 py-1.5 sm:py-0 gap-1 sm:gap-2 px-1 sm:px-2",
-                    "text-[11px] sm:text-sm"
-                  )}
-                  asChild
-                >
-                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="flex flex-col sm:flex-row items-center justify-center text-center">
-                    <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current shrink-0" />
-                    <span className="leading-tight whitespace-normal">{t("reserveViaWhatsapp")}</span>
-                  </a>
-                </Button>
-                <Button className="w-full h-8 sm:h-10 text-[10px] sm:text-sm font-bold" asChild>
+              
+              <Button 
+                className="w-full h-7 sm:h-9 text-[10px] sm:text-sm font-bold bg-gray-200 text-gray-900 hover:bg-gray-300 dark:bg-white/10 dark:text-white dark:hover:bg-white/20 border-none transition-colors" 
+                asChild
+              >
                   <Link href={routes.singleClassified(car.slug)}>{t("viewDetails")}</Link>
-                </Button>
-              </div>
+              </Button>
             </div>
           </div>
+
+          <Button
+            className={cn(
+              "w-full bg-[#25D366] hover:bg-[#20ba56] text-white font-bold h-10 sm:h-12 rounded-none border-none",
+              "text-[12px] sm:text-sm uppercase tracking-wider"
+            )}
+            asChild
+          >
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
+              <MessageCircle className="w-4 h-4 fill-current shrink-0" />
+              <span>{t("reserveViaWhatsapp")}</span>
+            </a>
+          </Button>
         </div>
   );
 }, (prevProps, nextProps) => {

@@ -62,7 +62,7 @@ const FavButton = ({
     }}
     size={"icon"}
     variant={"ghost"}
-     className={cn(`absolute top-2.5 left-3.5 rounded-full
+     className={cn(`absolute top-12 left-3.5 rounded-full
          z-10 group !h-6 !w-6 lg:!h-8 lg:!w-8 xl:!h-10 xl:!w-10 transition-all duration-200`,
          isFav ? 'bg-red-500 hover:bg-red-600 shadow-lg' : 'bg-gray-200 hover:bg-red-500/20')}
     >

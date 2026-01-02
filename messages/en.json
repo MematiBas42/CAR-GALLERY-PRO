@@ -106,15 +106,47 @@
     "Hero": {
       "title": "Your Next Chapter, Curated.",
       "subtitle": "At RIM GLOBAL, we've reimagined the pre-owned car experience for Federal Way. Explore our meticulously curated collection of quality-inspected vehicles and discover the confidence of a transparent, hassle-free journey.",
+      "marketingTitle": "Curated for You, Trusted by All.",
+      "marketingSubtitle": "A seamless, secure, and transparent car buying journey.",
       "discover": "Discover The Collection",
       "clearFilters": "Clear Filters",
       "filterTitle": "Search",
       "viewAll": "View Full Collection"
     },
-    "Features": {
-      "trust": "A Foundation of Trust",
-      "financing": "Financing That Fits Your Life",
-      "description": "We partner with trusted local and national lenders to offer flexible financing solutions. Our team is here to guide you to a plan that aligns with your budget, ensuring a clear and transparent process from start to finish."
+    "TradeIn": {
+      "subTitle": "Top Dollar Paid",
+      "title": "We Want Your Car",
+      "description": "Skip the hassle of private selling. Get a competitive, instant offer for your vehicle today. We buy all makes and models.",
+      "benefit1": "Instant Offer",
+      "benefit2": "Hassle-Free Process",
+      "benefit3": "Fast Payment",
+      "cardTitle": "Get Your Offer",
+      "cta": "Get Value",
+      "disclaimer": "No purchase necessary. Offer valid for 7 days.",
+      "Tracking": {
+        "pageTitle": "Trade-In Status",
+        "offerAmount": "Your Offer",
+        "callUs": "Call Us",
+        "chatWithUs": "Chat with Expert",
+        "acceptOffer": "Finalize Offer via WhatsApp",
+        "contactToRenew": "Contact to Renew Offer",
+        "status": {
+          "pending": "Under Review",
+          "offered": "Offer Ready!",
+          "rejected": "Application Declined",
+          "expired": "Offer Expired"
+        },
+        "desc": {
+          "pending": "Our valuation experts are currently reviewing your vehicle details. We will notify you once the offer is ready.",
+          "offered": "Great news! We have prepared a competitive offer for your vehicle based on current market data.",
+          "rejected": "Unfortunately, we cannot make an offer on this vehicle at this time. Please contact us for more details.",
+          "expired": "Your offer validity period has ended. Market prices change daily, please contact us to refresh your quote."
+        },
+        "faq": {
+            "step1": { "title": "1. Appraisal", "desc": "We review your details and market data to determine the best price." },
+            "step2": { "title": "2. Inspection & Payment", "desc": "Bring your car in for a quick verify, hand over the keys, and get paid instantly." }
+        }
+      }
     },
     "LatestArrivals": {
       "title": "Latest Arrivals"
@@ -129,6 +161,7 @@
     },
     "Testimonials": {
       "title": "What Our Customers Say",
+      "leaveReview": "Don't forget to leave us a review!",
       "items": {
         "0": {
           "quote": "The most seamless car buying experience I've ever had. The team was professional, transparent, and incredibly helpful. I got a great car at a fair price.",
@@ -234,7 +267,8 @@
       "LIVE": "Live",
       "SOLD": "Sold",
       "DRAFT": "Draft",
-      "COMING_SOON": "Coming Soon"
+      "COMING_SOON": "Coming Soon",
+      "RESERVED": "Reserved"
     },
     "ULEZ": {
       "EXEMPT": "Exempt",

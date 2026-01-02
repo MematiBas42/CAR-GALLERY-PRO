@@ -30,7 +30,7 @@ const TaxonomyFilters = ({ handleChange }: TaxonomyFiltersProps) => {
   }, [taxonomy, queryStates.make, queryStates.model]);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-2 sm:gap-4">
       <Combobox
         label={t("make")}
         name="make"
@@ -41,26 +41,28 @@ const TaxonomyFilters = ({ handleChange }: TaxonomyFiltersProps) => {
         searchPlaceholder={t("search")}
         disabled={isLoading && !makes.length}
       />
-      <Combobox
-        label={t("model")}
-        name="model"
-        value={queryStates.model}
-        options={models}
-        onChange={handleChange as any}
-        disabled={!queryStates.make || (isLoading && !models.length)}
-        placeholder={!queryStates.make ? t("select") : (isLoading && !models.length ? t("loading") : t("select"))}
-        searchPlaceholder={t("search")}
-      />
-      <Combobox
-        label={t("modelVariant")}
-        name="modelVariant"
-        value={queryStates.modelVariant}
-        options={modelVariants}
-        onChange={handleChange as any}
-        disabled={!queryStates.model || (isLoading && !modelVariants.length)}
-        placeholder={!queryStates.model ? t("select") : (isLoading && !modelVariants.length ? t("loading") : t("select"))}
-        searchPlaceholder={t("search")}
-      />
+      <div className="grid grid-cols-2 gap-2 sm:gap-4">
+        <Combobox
+            label={t("model")}
+            name="model"
+            value={queryStates.model}
+            options={models}
+            onChange={handleChange as any}
+            disabled={!queryStates.make || (isLoading && !models.length)}
+            placeholder={!queryStates.make ? t("select") : (isLoading && !models.length ? t("loading") : t("select"))}
+            searchPlaceholder={t("search")}
+        />
+        <Combobox
+            label={t("modelVariant")}
+            name="modelVariant"
+            value={queryStates.modelVariant}
+            options={modelVariants}
+            onChange={handleChange as any}
+            disabled={!queryStates.model || (isLoading && !modelVariants.length)}
+            placeholder={!queryStates.model ? t("select") : (isLoading && !modelVariants.length ? t("loading") : t("select"))}
+            searchPlaceholder={t("search")}
+        />
+      </div>
     </div>
   );
 };

@@ -108,8 +108,21 @@
       "subtitle": "Tại RIM GLOBAL, chúng tôi đã tái định nghĩa trải nghiệm mua xe cũ tại Federal Way. Khám phá bộ sưu tập xe đã được kiểm định chất lượng và tận hưởng hành trình minh bạch, không rắc rối.",
       "discover": "Khám phá Bộ sưu tập",
       "clearFilters": "Xóa bộ lọc",
+      "marketingTitle": "Được tuyển chọn cho bạn, tin cậy bởi mọi người.",
+      "marketingSubtitle": "Hành trình mua xe liền mạch, an toàn và minh bạch.",
       "filterTitle": "Tìm kiếm",
       "viewAll": "Xem tất cả Bộ sưu tập"
+    },
+    "TradeIn": {
+      "subTitle": "Trả giá cao nhất",
+      "title": "Chúng tôi muốn mua xe của bạn",
+      "description": "Bỏ qua những rắc rối khi tự bán xe. Nhận lời đề nghị cạnh tranh, tức thì cho chiếc xe của bạn ngay hôm nay. Chúng tôi mua tất cả các hãng và dòng xe.",
+      "benefit1": "Ưu đãi tức thì",
+      "benefit2": "Quy trình không rắc rối",
+      "benefit3": "Thanh toán nhanh chóng",
+      "cardTitle": "Nhận ưu đãi của bạn",
+      "cta": "Xem giá trị",
+      "disclaimer": "Không bắt buộc mua. Ưu đãi có hiệu lực trong 7 ngày."
     },
     "Features": {
       "trust": "Nền tảng của sự tin cậy",
@@ -129,6 +142,7 @@
     },
     "Testimonials": {
       "title": "Khách hàng nói gì về chúng tôi",
+      "leaveReview": "Đừng quên để lại đánh giá cho chúng tôi nhé!",
       "items": {
         "0": {
           "quote": "Trải nghiệm mua xe mượt mà nhất tôi từng có. Đội ngũ chuyên nghiệp, minh bạch và cực kỳ hữu ích. Tôi đã mua được xe tốt với giá hời.",
@@ -233,7 +247,8 @@
       "ALL": "Tất cả",
       "LIVE": "Đang bán",
       "SOLD": "Đã bán",
-      "DRAFT": "Bản nháp"
+      "DRAFT": "Bản nháp",
+      "RESERVED": "Đã đặt chỗ"
     },
     "ULEZ": {
       "EXEMPT": "Miễn trừ",

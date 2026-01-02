@@ -4,8 +4,14 @@ import React from "react";
 import { Phone } from "lucide-react";
 import { SITE_CONFIG } from "@/config/constants";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 export const FloatingPhoneButton = () => {
+  const pathname = usePathname();
+  const isAdminPage = pathname?.startsWith('/admin');
+
+  if (isAdminPage) return null;
+
   return (
     <div 
       className="fixed bottom-6 right-6 z-[2147483647] flex items-center justify-end pointer-events-none"
@@ -31,7 +37,7 @@ export const FloatingPhoneButton = () => {
           className={cn(
             "flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary text-primary-foreground shadow-2xl shrink-0 pointer-events-auto",
             "transition-all duration-300 ease-in-out hover:scale-110 active:scale-90",
-            "animate-bounce-slow group-hover/phone-container:animate-none"
+            "md:animate-bounce-slow group-hover/phone-container:animate-none"
           )}
           aria-label="Call Us"
         >

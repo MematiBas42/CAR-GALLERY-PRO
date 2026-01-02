@@ -11,6 +11,8 @@ import { Suspense } from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 
+import { HeroVideo } from "./hero-video";
+
 const HeroSection = async (props: AwaitedPageProps) => {
   const { searchParams } = props;
 
@@ -33,7 +35,7 @@ const HeroSection = async (props: AwaitedPageProps) => {
 
   return (
     <section
-      className="relative flex flex-col items-center justify-start lg:justify-center min-h-[600px] lg:min-h-[calc(100vh-4rem)] w-full bg-cover bg-center pt-4 lg:pt-0 pb-12"
+      className="relative flex flex-col items-center justify-start min-h-[600px] lg:min-h-[calc(100vh-4rem)] w-full bg-cover bg-center pt-2 lg:pt-6 pb-12"
       style={{
         backgroundImage: `url('/assets/hero-bg.jpg')`,
       }}
@@ -41,30 +43,18 @@ const HeroSection = async (props: AwaitedPageProps) => {
       <div className="absolute inset-0 bg-gray-900 opacity-30 dark:opacity-50" />
       
       {/* Main Container */}
-      <div className="container relative z-10 flex flex-col gap-2 lg:gap-4 w-full max-w-[1920px] mx-auto py-2">
+      <div className="container relative z-10 flex flex-col gap-4 lg:gap-8 w-full max-w-[1920px] mx-auto py-2">
 
-        {/* TOP: "Your Next Chapter" Text */}
-        <div className="w-full flex justify-center px-4 shrink-0">
-            <div className="px-6 py-3 md:px-10 md:py-4 bg-black/20 backdrop-blur-md rounded-2xl text-center max-w-5xl w-full mx-auto border border-white/5 shadow-xl">
-                <h1 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl uppercase font-bold text-white leading-none tracking-tight text-balance drop-shadow-lg">
-                {t("title")}
-                </h1>
-                <h2 className="mt-1 uppercase text-[10px] sm:text-sm md:text-lg lg:text-xl text-white/90 font-medium tracking-wide text-balance">
-                {t("subtitle")}
-                </h2>
-            </div>
-        </div>
-
-        {/* BOTTOM: Carousel (Filter is inside now) */}
-        <div className="w-full flex flex-col items-center gap-0">
+        {/* TOP: Carousel (Now at the very top) */}
+        <div className="w-full flex flex-col items-center gap-y-4">
             
             {/* Title */}
-            <h2 className="uppercase text-[10px] md:text-sm font-bold tracking-wider text-white px-3 py-0.5 bg-black/30 backdrop-blur-md rounded-full border border-white/10 shadow-lg mb-1">
+            <h2 className="uppercase text-sm md:text-base font-black tracking-[0.25em] text-white px-6 py-2 bg-white/10 md:backdrop-blur-md rounded-full border border-white/20 md:shadow-xl shrink-0">
                 Latest Arrivals
             </h2>
 
             {/* Carousel Container */}
-            <div className="w-full lg:scale-95 origin-center px-6 lg:px-0">
+            <div className="w-full px-6 lg:px-0">
                 <Suspense fallback={<div className="h-[400px] md:h-[500px] w-full animate-pulse bg-white/5 rounded-2xl border border-white/10" />}>
                     <div className="[&_section]:bg-transparent [&_section]:py-0 [&_div.container]:max-w-full [&_div.container]:px-0">
                         <LastestArrival 
@@ -76,19 +66,30 @@ const HeroSection = async (props: AwaitedPageProps) => {
                 </Suspense>
             </div>
 
-            {/* View All Cars Button - Flush with carousel */}
+            {/* View All Cars Button */}
             <div className="mt-[-12px] md:mt-[-24px] flex justify-center relative z-30">
                 <Button
                     asChild
                     variant="secondary"
-                    className="h-8 md:h-10 px-8 rounded-full font-bold transition-all duration-300 shadow-2xl border border-white/10
-                    bg-gray-200 text-gray-900 hover:bg-gray-300 
-                    dark:bg-white dark:text-black dark:hover:bg-gray-100"
+                    className="h-8 md:h-10 px-10 rounded-full font-bold transition-all duration-300 shadow-2xl border border-white/10
+                    bg-white text-black hover:bg-gray-100 hover:scale-105"
                 >
                     <Link href={routes.inventory}>
                         {t("viewAll")}
                     </Link>
                 </Button>
+            </div>
+        </div>
+
+        {/* BOTTOM: Punchy Marketing Text */}
+        <div className="w-full flex justify-center px-4 mt-4">
+            <div className="text-center max-w-4xl space-y-4">
+                <h1 className="text-3xl md:text-5xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none drop-shadow-2xl">
+                    {t("marketingTitle")}
+                </h1>
+                <p className="text-white/90 text-sm md:text-lg font-semibold tracking-widest uppercase drop-shadow-md">
+                    {t("marketingSubtitle")}
+                </p>
             </div>
         </div>
 

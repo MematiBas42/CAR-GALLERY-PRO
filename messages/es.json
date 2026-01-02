@@ -108,8 +108,21 @@
       "subtitle": "En RIM GLOBAL, hemos reinventado la experiencia de coches de ocasión para Federal Way. Explore nuestra colección meticulosamente seleccionada de vehículos inspeccionados de calidad y descubra la confianza de un viaje transparente y sin complicaciones.",
       "discover": "Descubra la Colección",
       "clearFilters": "Limpiar filtros",
+      "marketingTitle": "Curado para Usted, Confiado por Todos.",
+      "marketingSubtitle": "Un viaje de compra de coches fluido, seguro y transparente.",
       "filterTitle": "Buscar",
       "viewAll": "Ver toda la colección"
+    },
+    "TradeIn": {
+      "subTitle": "Mejor Precio Pagado",
+      "title": "Queremos Su Coche",
+      "description": "Evite las complicaciones de la venta privada. Obtenga una oferta competitiva e instantánea por su vehículo hoy mismo. Compramos todas las marcas y modelos.",
+      "benefit1": "Oferta Instantánea",
+      "benefit2": "Proceso sin Complicaciones",
+      "benefit3": "Pago Rápido",
+      "cardTitle": "Obtenga su Oferta",
+      "cta": "Obtener Valor",
+      "disclaimer": "Sin obligación de compra. Oferta válida por 7 días."
     },
     "Features": {
       "trust": "Una base de confianza",
@@ -129,6 +142,7 @@
     },
     "Testimonials": {
       "title": "Lo que dicen nuestros clientes",
+      "leaveReview": "¡No olvide dejarnos una reseña!",
       "items": {
         "0": {
           "quote": "La experiencia de compra de un coche más fluida que he tenido nunca. El equipo fue profesional, transparente e increíblemente servicial. Conseguí un gran coche a un precio justo.",
@@ -233,7 +247,8 @@
       "ALL": "Todos",
       "LIVE": "En vivo",
       "SOLD": "Vendido",
-      "DRAFT": "Borrador"
+      "DRAFT": "Borrador",
+      "RESERVED": "Reservado"
     },
     "ULEZ": {
       "EXEMPT": "Exento",

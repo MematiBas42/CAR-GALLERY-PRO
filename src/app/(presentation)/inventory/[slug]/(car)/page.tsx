@@ -57,6 +57,13 @@ const CarPage = async (props: PageProps) => {
   });
 
   if (!car) notFound();
+
+  // Increment view count asynchronously
+  prisma.classified.update({
+    where: { id: car.id },
+    data: { views: { increment: 1 } }
+  }).catch(err => console.error("Failed to increment view count", err));
+
   if (car.status === ClassifiedStatus.SOLD) {
     redirect(routes.notAvailable(slug));
   }

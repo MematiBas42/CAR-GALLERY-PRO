@@ -11,6 +11,8 @@ import {
   FileCodeIcon,
   MenuIcon,
   HomeIcon,
+  DollarSign,
+  Search,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,6 +31,16 @@ const MobileSidebar = () => {
       name: t("dashboard"),
       href: routes.admin.dashboard,
       icon: LayoutDashboardIcon,
+    },
+    {
+      name: "Trade-In Requests",
+      href: routes.admin.tradeIn,
+      icon: DollarSign,
+    },
+    {
+      name: "Car Finder",
+      href: routes.admin.carFinder,
+      icon: Search,
     },
     {
       name: t("cars"),
@@ -83,14 +95,16 @@ const MobileSidebar = () => {
       <SheetContent side="left" className="w-[300px] sm:w-[400px] bg-gray-900 border-r-gray-800 p-0 text-gray-100">
         <SheetHeader className="p-4 border-b border-gray-800">
           <SheetTitle className="text-left">
-             <div className="relative h-[40px] w-[120px]">
-                <Image
-                    alt="RIM GLOBAL logo"
-                    src={"/logo.svg"}
-                    fill={true}
-                    className="object-contain object-left invert"
-                />
-             </div>
+             <SheetClose asChild>
+                <Link href={routes.home} className="block relative h-[40px] w-[120px]">
+                    <Image
+                        alt="RIM GLOBAL logo"
+                        src={"/logo.svg"}
+                        fill={true}
+                        className="object-contain object-left invert"
+                    />
+                </Link>
+             </SheetClose>
           </SheetTitle>
         </SheetHeader>
         <div className="flex flex-col gap-2 p-4">

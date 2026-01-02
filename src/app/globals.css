@@ -43,8 +43,8 @@
   --font-body: var(--font-body), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --animate-bounce-slow: bounce-slow 3s infinite;
 
-  --aspect-car-card: 1 / 1;
-  --aspect-car-card-sm: 4 / 5;
+  --aspect-car-card: 4 / 3;
+  --aspect-car-card-sm: 16 / 9;
 
   @keyframes bounce-slow {
     0%, 100% {

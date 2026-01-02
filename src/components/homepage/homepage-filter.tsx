@@ -9,6 +9,7 @@ import React from "react";
 import { useTaxonomy } from "@/hooks/use-taxonomy";
 import { homepageFilterSchema } from "./homepage-clear-filters";
 import { setIsLoading } from "@/hooks/use-loading";
+import { Badge } from "../ui/badge";
 
 interface HomepageTaxonomyFiltersProps extends SidebarProps {}
 
@@ -77,7 +78,7 @@ const HomepageTaxonomyFilters = ({
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-2">
       <TaxonomyFilters handleChange={handleChange as any} />
       <RangeFilter
         label={t("year")}

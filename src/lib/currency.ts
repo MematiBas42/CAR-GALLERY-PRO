@@ -63,3 +63,11 @@ export async function convertCurrency(amountInUsd: number, targetCurrency: strin
   const rate = ratesData.rates[targetCurrency];
   return amountInUsd * rate;
 }
+
+export function formatCurrency(amount: number) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  }).format(amount);
+}

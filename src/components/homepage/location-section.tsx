@@ -14,7 +14,7 @@ const LocationSection = async () => {
   const embedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2705.428434823456!2d-122.3174553!3d47.2820686!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x549057a7ee97c8fd%3A0x15d5b1734a48d50d!2sRim%20Global%20Auto%20Sales!5e0!3m2!1sen!2sus!4v1735580000000!5m2!1sen!2sus";
 
   return (
-    <section className="py-12 bg-secondary">
+    <section className="pt-8 pb-12 bg-secondary">
       <div className="container mx-auto px-4 text-center">
         <h2 className="text-3xl font-bold text-foreground">{t("title")}</h2>
         <p className="mt-2 text-lg text-muted-foreground">

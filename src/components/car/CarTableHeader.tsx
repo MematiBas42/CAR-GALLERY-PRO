@@ -69,8 +69,8 @@ const CarTableHeader = (props: CarTableHeaderProps) => {
           </div>
         </TableHead>
         <TableHead className="text-muted w-[80px]">{t("image")}</TableHead>
-        <TableHead className="text-muted w-[150px]">{t("title")}</TableHead>
-        <TableHead className="text-muted w-[150px]">
+        <TableHead className="text-muted md:w-[150px]">{t("title")}</TableHead>
+        <TableHead className="text-muted md:w-[150px]">
 					<div
 						className="flex items-center gap-2 cursor-pointer"
 						onClick={() => handleSort("price")}
@@ -84,7 +84,7 @@ const CarTableHeader = (props: CarTableHeaderProps) => {
 						/>
 					</div>
 				</TableHead>
-				<TableHead className="text-muted w-[150px]">
+				<TableHead className="text-muted w-[150px] hidden md:table-cell">
 					<div
 						className="flex items-center gap-2 cursor-pointer"
 						onClick={() => handleSort("vrm")}
@@ -98,7 +98,7 @@ const CarTableHeader = (props: CarTableHeaderProps) => {
 						/>
 					</div>
 				</TableHead>
-				<TableHead className="text-muted w-[150px]">
+				<TableHead className="text-muted w-[150px] hidden md:table-cell">
 					<div
 						className="flex items-center gap-2 cursor-pointer"
 						onClick={() => handleSort("colour")}
@@ -140,7 +140,7 @@ const CarTableHeader = (props: CarTableHeaderProps) => {
 						/>
 					</div>
 				</TableHead>
-				<TableHead className="text-muted hidden md:table-cell">
+				<TableHead className="text-muted">
 					<div
 						className="flex items-center gap-2 cursor-pointer"
 						onKeyDown={() => handleSort("views")}

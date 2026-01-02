@@ -1,0 +1,33 @@
+
+model TradeInRequest {
+  id             Int            @id @default(autoincrement())
+  token          String         @unique @default(cuid()) // Secure Token for Tracking Link
+  vin            String?
+  plate          String?
+  year           Int?
+  make           String?
+  model          String?
+  trim           String?
+  mileage        Int?
+  firstName      String         @map("first_name")
+  lastName       String         @map("last_name")
+  email          String
+  phone          String
+  status         TradeInStatus  @default(PENDING)
+  offeredPrice   Int?           @map("offered_price")
+  offerExpiresAt DateTime?      @map("offer_expires_at")
+  adminNotes     String?        @map("admin_notes")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  @@map("trade_in_requests")
+}
+
+enum TradeInStatus {
+  PENDING
+  REVIEWED
+  OFFERED
+  REJECTED
+  EXPIRED
+  COMPLETED
+}

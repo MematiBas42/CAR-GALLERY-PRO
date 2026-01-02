@@ -25,6 +25,7 @@ function setRequestHeaders(requestHeaders: Headers) {
 export default auth((req) => {
   const nextUrl = req.nextUrl.clone();
   const requestHeaders = new Headers(req.headers);
+  requestHeaders.set('x-next-intl-pathname', nextUrl.pathname);
 
   if (req.auth) {
     if (req.auth.requires2FA) {

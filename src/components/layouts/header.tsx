@@ -46,7 +46,7 @@ const Header = async () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 flex items-center justify-between h-16 px-4 bg-background/80 backdrop-blur-md border-b border-white/5 gap-x-2 overflow-hidden">
+    <header className="sticky top-0 z-50 flex items-center justify-between h-16 px-4 bg-background/80 md:backdrop-blur-md border-b border-white/5 gap-x-2 overflow-hidden">
       <div className="flex items-center justify-start flex-1 gap-x-1 md:gap-x-4 min-w-0">
         <Link href={routes.home} className="flex items-center gap-2 min-w-0 flex-shrink-0">
           <div className="relative flex-shrink-0 h-8 w-auto md:h-12">

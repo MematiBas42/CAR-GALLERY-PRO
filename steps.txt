@@ -1,0 +1,28 @@
+BARAAN LLC ANALİZİ VE CAR-GALLERY-PRO GELİŞTİRME YOL HARİTASI
+
+ADIM 1: MEVCUT "FINANCING" BÖLÜMÜNÜN KALDIRILMASI VE YENİLENMESİ
+- Mevcut durağan "Financing" bölümü ve arka plan görseli kaldırılacak.
+- Yerine "Trade-In & Sell Your Car" (Takas ve Aracınızı Satın) modülü eklenecek.
+- Bu modül; VIN, Marka, Model ve Kilometre bilgilerini alan hızlı bir form içerecek.
+
+ADIM 2: "CAR FINDER" (ARAÇ BULUCU) ÖZELLİĞİ
+- Kullanıcıların aradığı ancak stokta bulamadığı araçlar için "Find It For Me" formu oluşturulacak.
+- Bu form, Hero section veya Inventory sayfasının sonuna entegre edilecek.
+
+ADIM 3: DİNAMİK ENVANTER ETİKETLERİ (FOMO ETKİSİ)
+- Araç kartlarına "Sale Pending" (Satış Bekleniyor), "Just Arrived" (Yeni Geldi) ve "Price Drop" (İndirim) etiketleri eklenecek.
+- Bu etiketler görsel olarak belirgin ve premium bir tasarıma sahip olacak.
+
+ADIM 4: HIZLI FİYAT FİLTRELERİ
+- Ana sayfada veya filtre bölümünde "5.000$ Altı Araçlar", "Aile Araçları (SUV/Minivan)" gibi hızlı erişim butonları oluşturulacak.
+
+ADIM 5: GÜVEN VE SOSYAL KANIT KATMANI
+- Google Reviews veya yerel müşteri yorumlarını içeren "Testimonials" (Müşteri Görüşleri) slider'ı eklenecek.
+- "Neden Biz?" başlığı altında (Hızlı Teslimat, Güvenli Ödeme, Ekspertiz Garantisi) ikonları yerleştirilecek.
+
+ADIM 6: PROAKTİF İLETİŞİM KANALLARI
+- WhatsApp butonunun yanına "Request a Callback" (Sizi Arayalım) hızlı form butonu eklenecek.
+- Mesai saatleri dışında "Bize SMS Gönderin" yönlendirmesi yapılacak.
+
+ADIM 7: TESLİMAT VE LOJİSTİK BİLGİSİ
+- Araç detay sayfalarına "Doorstep Delivery Available" (Kapıya Teslimat) ibaresi ve şehir bazlı tahmini nakliye bilgisi eklenecek.

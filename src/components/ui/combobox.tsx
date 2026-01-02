@@ -90,7 +90,7 @@ export function Combobox({
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full justify-between pr-2 h-9 border-muted-foreground/20 hover:border-muted-foreground/40 transition-colors bg-background/50 backdrop-blur-sm shadow-sm"
+            className="w-full justify-between pr-2 h-9 border-muted-foreground/20 hover:border-muted-foreground/40 transition-colors bg-background/50 md:backdrop-blur-sm shadow-sm"
             disabled={disabled}
           >
             <span className="truncate font-normal text-muted-foreground">

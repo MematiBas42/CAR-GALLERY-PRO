@@ -21,7 +21,7 @@ export type CarWithImages = Prisma.ClassifiedGetPayload<{
 }>
 
 export type CarCardData = Pick<Classified, 
-    'id' | 'slug' | 'title' | 'price' | 'odoReading' | 'odoUnit' | 'transmission' | 'fuelType' | 'colour' | 'bodyType' | 'status'
+    'id' | 'slug' | 'title' | 'price' | 'previousPrice' | 'odoReading' | 'odoUnit' | 'transmission' | 'fuelType' | 'colour' | 'bodyType' | 'status' | 'isLatestArrival'
 > & {
     images: Pick<Prisma.ImageGetPayload<{}>, 'id' | 'src' | 'alt' | 'blurhash' | 'classifiedId' | 'isMain'>[];
 };

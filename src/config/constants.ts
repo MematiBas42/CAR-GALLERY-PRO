@@ -79,11 +79,11 @@ export const MAX_IMAGES = 50
 export const sortOrder = ["asc", "desc"] as const;
 
 export const CarBadgeMap : Record<ClassifiedStatus,BadgeProps['variant']  >= {
-        [ClassifiedStatus.DRAFT]: "secondary",
-	[ClassifiedStatus.LIVE]: "default",
+    [ClassifiedStatus.DRAFT]: "secondary",
+	[ClassifiedStatus.LIVE]: "success",
 	[ClassifiedStatus.SOLD]: "destructive",
-	[ClassifiedStatus.COMING_SOON]: "outline",
-
+	[ClassifiedStatus.COMING_SOON]: "info",
+	[ClassifiedStatus.RESERVED]: "warning",
 }
 
 export const CustomerBadgeMap: Record<CustomerStatus, BadgeProps["variant"]> = {

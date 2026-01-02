@@ -49,6 +49,7 @@ model Classified {
   doors          Int              @default(2)
   seats          Int              @default(5)
   price          Int              @default(0) @map("price")
+  previousPrice  Int?             @map("previous_price")
   makeId         Int              @map("make_id")
   modelId        Int              @map("model_id")
   modelVariantId Int?             @map("model_variant_id")
@@ -212,6 +213,7 @@ enum ClassifiedStatus {
   DRAFT
   SOLD
   COMING_SOON
+  RESERVED
 }
 
 enum CurrencyCode {
@@ -273,4 +275,64 @@ enum CustomerStatus {
   CONTACTED
   PURCHASED
   COLD
+}
+model TradeInRequest {
+  id             Int            @id @default(autoincrement())
+  token          String         @unique @default(cuid())
+  vin            String?
+  plate          String?
+  year           Int?
+  make           String?
+  model          String?
+  trim           String?
+  mileage        Int?
+  firstName      String         @map("first_name")
+  lastName       String         @map("last_name")
+  email          String
+  phone          String
+  status         TradeInStatus  @default(PENDING)
+  offeredPrice   Int?           @map("offered_price")
+  offerExpiresAt DateTime?      @map("offer_expires_at")
+  adminNotes     String?        @map("admin_notes")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  @@map("trade_in_requests")
+}
+
+enum TradeInStatus {
+  PENDING
+  REVIEWED
+  OFFERED
+  REJECTED
+  EXPIRED
+  COMPLETED
+}
+
+model CarFinderRequest {
+  id             Int            @id @default(autoincrement())
+  budget         String?
+  yearMin        Int?           @map("year_min")
+  yearMax        Int?           @map("year_max")
+  make           String
+  model          String
+  transmission   String?
+  color          String?
+  firstName      String         @map("first_name")
+  lastName       String         @map("last_name")
+  email          String
+  phone          String
+  message        String?
+  status         FinderStatus   @default(NEW)
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  @@map("car_finder_requests")
+}
+
+enum FinderStatus {
+  NEW
+  SEARCHING
+  FOUND
+  CLOSED
 }

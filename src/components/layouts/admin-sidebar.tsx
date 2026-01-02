@@ -12,6 +12,8 @@ import {
       StarIcon,
       FileCodeIcon,
       ShieldCheckIcon,
+      DollarSign,
+      SearchIcon,
     } from "lucide-react";import Image from "next/image";
 import Link from "next/link";
 import React, { useCallback, useState } from "react";
@@ -29,6 +31,16 @@ const AdminSidebar = () => {
       name: t("dashboard"),
       href: routes.admin.dashboard,
       icon: LayoutDashboardIcon,
+    },
+    {
+      name: "Trade-In Requests",
+      href: routes.admin.tradeIn,
+      icon: DollarSign,
+    },
+    {
+      name: "Car Finder",
+      href: routes.admin.carFinder,
+      icon: SearchIcon,
     },
     {
       name: t("cars"),

@@ -106,10 +106,23 @@
     "Hero": {
       "title": "Sıradaki Bölümünüz, Özenle Seçildi.",
       "subtitle": "RIM GLOBAL'de Federal Way için ikinci el araç deneyimini yeniden tasarladık. Kalite kontrolünden geçmiş özenle seçilmiş koleksiyonumuzu keşfedin ve şeffaf, sorunsuz bir yolculuğun güvenini yaşayın.",
+      "marketingTitle": "Sizin İçin Seçildi, Güvenle Sunuldu.",
+      "marketingSubtitle": "Hızlı, şeffaf ve kusursuz bir araç alım süreci.",
       "discover": "Koleksiyonu Keşfet",
       "clearFilters": "Filtreleri Temizle",
       "filterTitle": "Ara",
       "viewAll": "Tüm Koleksiyonu Gör"
+    },
+    "TradeIn": {
+      "subTitle": "En İyi Fiyat Garantisi",
+      "title": "Aracınızı Alıyoruz",
+      "description": "Bireysel satış zahmetinden kurtulun. Aracınız için bugün rekabetçi ve anında bir teklif alın. Tüm marka ve modelleri satın alıyoruz.",
+      "benefit1": "Anında Teklif",
+      "benefit2": "Sorunsuz Süreç",
+      "benefit3": "Hızlı Ödeme",
+      "cardTitle": "Teklifinizi Alın",
+      "cta": "Değerini Gör",
+      "disclaimer": "Satın alma zorunluluğu yoktur. Teklif 7 gün geçerlidir."
     },
     "Features": {
       "trust": "Güven Temeli",
@@ -129,6 +142,7 @@
     },
     "Testimonials": {
       "title": "Müşterilerimiz Ne Diyor?",
+      "leaveReview": "Bize yorum bırakmayı unutmayın!",
       "items": {
         "0": {
           "quote": "Şimdiye kadar yaşadığım en sorunsuz araba satın alma deneyimiydi. Ekip profesyonel, şeffaf ve inanılmaz yardımcıydı. Uygun fiyata harika bir araba aldım.",
@@ -234,7 +248,8 @@
       "LIVE": "Yayında",
       "SOLD": "Satıldı",
       "DRAFT": "Taslak",
-      "COMING_SOON": "Çok Yakında"
+      "COMING_SOON": "Çok Yakında",
+      "RESERVED": "Rezerve"
     },
     "ULEZ": {
       "EXEMPT": "Muaf",

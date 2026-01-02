@@ -27,6 +27,8 @@ export const routes = {
         emailTemplates: "/admin/email-templates",
         users: "/admin/users",
         settings: "/admin/settings",
+        tradeIn: "/admin/trade-in",
+        carFinder: "/admin/car-finder",
     },
     notAvailable: (slug: string) => `/inventory/${slug}/not-available`,
 }

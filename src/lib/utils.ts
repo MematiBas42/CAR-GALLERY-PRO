@@ -316,6 +316,8 @@ export function formatCarStatus (status: ClassifiedStatus) {
         case ClassifiedStatus.DRAFT:
     
           return "Draft";
+        case ClassifiedStatus.RESERVED:
+          return "Reserved";
     default:
       return "Unknown";
   }
