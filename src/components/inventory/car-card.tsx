@@ -90,6 +90,19 @@ const CarCard = memo(({ car, isFavourite, priority }: CarCardProps) => {
     >
       <div className="aspect-car-card sm:aspect-car-card-sm relative rounded-t-xl overflow-hidden group/image">
             <Link href={routes.singleClassified(car.slug || "slug")} className="block w-full h-full relative">
+              {/* Optimized Ambilight Effect (Mobile & Desktop) */}
+              <div className="absolute inset-0 z-0 transform scale-110 blur-lg opacity-60">
+                 <ImgixImage
+                    src={car.images[0]?.src || "/placeholder.png"}
+                    alt=""
+                    fill={true}
+                    sizes="10vw" 
+                    quality={5} /* Ultra low quality for performance */
+                    className="object-cover"
+                    aria-hidden="true"
+                 />
+              </div>
+
               {/* Main Image */}
               <ImgixImage
                 placeholder="empty"
