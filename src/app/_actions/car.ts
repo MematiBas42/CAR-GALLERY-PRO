@@ -349,3 +349,22 @@ export const getComingSoonCars = async () => {
         }
     }) as any;
 };
+
+export const reorderLatestArrivalsAction = async (items: { id: number; order: number }[]) => {
+  const session = await requireAdmin();
+  try {
+    const updates = items.map((item) =>
+      prisma.classified.update({
+        where: { id: item.id },
+        data: { latestArrivalOrder: item.order },
+      })
+    );
+    await prisma.$transaction(updates);
+    revalidatePath("/admin/latest-arrivals");
+    revalidatePath("/");
+    return { success: true };
+  } catch (error) {
+    console.error("Reorder error:", error);
+    return { success: false, message: "Failed to reorder items" };
+  }
+};

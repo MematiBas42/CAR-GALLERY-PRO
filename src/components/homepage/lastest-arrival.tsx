@@ -23,6 +23,7 @@ const LastestArrival = async ({ searchParams, carsCount, emptyMinMax }: LastestA
         },
         orderBy: [
             { isLatestArrival: 'desc' }, // Manually selected ones first
+            { latestArrivalOrder: 'asc' }, // Then by manual sort order
             { createdAt: 'desc' }        // Then by date
         ],
         take: 10, // Limit to top 10 total
