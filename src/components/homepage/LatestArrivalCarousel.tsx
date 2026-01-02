@@ -142,6 +142,7 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
               onTouchMove={(e) => e.stopPropagation()}
               onTouchEnd={(e) => e.stopPropagation()}
               className="group relative h-full w-full overflow-hidden rounded-3xl bg-card shadow-lg flex flex-col hover:border-primary/50 transition-all duration-300 antialiased touch-pan-y"
+              style={{ isolation: 'isolate' }}
             >
               <div className="p-2 sm:p-3 flex flex-col h-full">
                 <div className="flex-grow overflow-y-auto pr-1 custom-scrollbar scrollbar-hide [&_label]:text-[10px] [&_label]:font-bold [&_label]:uppercase [&_label]:mb-1">
