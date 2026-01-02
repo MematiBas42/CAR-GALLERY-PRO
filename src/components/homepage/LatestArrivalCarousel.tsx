@@ -53,19 +53,19 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
         const peekAmount = -(slideWidth * 0.25); 
 
         // 1. Move slightly to the next
-        swiperInstance.setTransition(700); // smooth slower speed
-        swiperInstance.setTranslate(peekAmount);
+        (swiperInstance as any).setTransition(700); // smooth slower speed
+        (swiperInstance as any).setTranslate(peekAmount);
         
         // 2. Move back after a brief pause
         setTimeout(() => {
              if (swiperInstance.destroyed) return;
-             swiperInstance.setTranslate(0);
+             (swiperInstance as any).setTranslate(0);
              
              // 3. Start Autoplay after return animation completes
              setTimeout(() => {
                  if (swiperInstance.destroyed) return;
                  // Reset transition to default just in case
-                 swiperInstance.setTransition(0); 
+                 (swiperInstance as any).setTransition(0); 
                  swiperInstance.autoplay.start();
              }, 700);
         }, 800); // Wait in the peeked state briefly
@@ -134,7 +134,7 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
           disableOnInteraction: false,
           pauseOnMouseEnter: true,
           enabled: false // Start manually after animation
-        }}
+        } as any}
         keyboard={{
           enabled: true,
         }}
