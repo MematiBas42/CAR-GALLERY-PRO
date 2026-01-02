@@ -75,6 +75,19 @@ const CarCarousel = ({ images }: ClassifiedCarouselProps) => {
           {images.map((image, index) => (
             <SwiperSlide key={image.id} virtualIndex={index}>
               <div className="aspect-3/2 relative w-full overflow-hidden rounded-md cursor-pointer" onClick={handleImageClick}>
+                 {/* Optimized Ambilight Effect */}
+                 <div className="absolute inset-0 z-0 transform scale-[1.15] blur-xl opacity-80 saturate-[3] pointer-events-none">
+                    <ImgixImage
+                        src={image.src}
+                        alt=""
+                        fill={true}
+                        sizes="10vw" 
+                        quality={5}
+                        className="object-cover"
+                        aria-hidden="true"
+                    />
+                 </div>
+
                 <ImgixImage
                 blurDataURL={image.blurhash}
                                   placeholder="blur"
@@ -83,6 +96,7 @@ const CarCarousel = ({ images }: ClassifiedCarouselProps) => {
                                   fill={true}
                                   quality={100}
                                   smartCover={true}
+                                  className="relative z-10"
                 />
               </div>
             </SwiperSlide>
