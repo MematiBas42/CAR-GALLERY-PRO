@@ -7,7 +7,7 @@ import { RangeFilter } from "../inventory/RangeFilters";
 import { useTranslations } from "next-intl";
 import React from "react";
 import { useTaxonomy } from "@/hooks/use-taxonomy";
-import { homepageFilterSchema } from "./homepage-clear-filters";
+import { homepageFilterSchema, HomepageClearFilters } from "./homepage-clear-filters";
 import { setIsLoading } from "@/hooks/use-loading";
 import { Badge } from "../ui/badge";
 
@@ -26,7 +26,7 @@ const HomepageTaxonomyFilters = ({
   const _maxYear = minMaxValue?._max?.year ?? new Date().getFullYear();
   const _maxPrice = minMaxValue?._max?.price ?? 1000000;
 
-  const [, setState] = useQueryStates(homepageFilterSchema, { 
+  const [query, setState] = useQueryStates(homepageFilterSchema, { 
       shallow: true,
       startTransition 
   });
@@ -79,7 +79,10 @@ const HomepageTaxonomyFilters = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <TaxonomyFilters handleChange={handleChange as any} />
+      <TaxonomyFilters 
+        handleChange={handleChange as any} 
+        afterMakeLabel={<HomepageClearFilters />}
+      />
       <RangeFilter
         label={t("year")}
         minName="minYear"
@@ -87,7 +90,7 @@ const HomepageTaxonomyFilters = ({
         defaultMin={adaptiveRanges.year.min ?? _minYear}
         defaultMax={adaptiveRanges.year.max ?? _maxYear}
         handleChange={handleChange as any}
-        searchParams={searchParams}
+        searchParams={query as any}
       />
       <RangeFilter
         label={t("price")}
@@ -99,7 +102,7 @@ const HomepageTaxonomyFilters = ({
         increment={100000}
         thousandSeparator={true}
         currency={{ currencyCode: "USD" }}
-        searchParams={searchParams}
+        searchParams={query as any}
       />
     </div>
   );

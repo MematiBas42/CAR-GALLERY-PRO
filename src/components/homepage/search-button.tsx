@@ -8,14 +8,16 @@ import React, { useMemo } from "react";
 import { useClassifiedCount } from "@/hooks/use-taxonomy";
 import { useLoading } from "@/hooks/use-loading";
 
-export const SearchButton = ({ initialCount, label = "Search", size = "default" }: { initialCount: number, label?: string, size?: "default" | "sm" | "lg" | "icon" }) => {
+export const SearchButton = ({ initialCount, label = "Search", size = "default", className }: { initialCount: number, label?: string, size?: "default" | "sm" | "lg" | "icon", className?: string }) => {
     const searchParams = useSearchParams();
     const router = useRouter();
     
     // Track the search string locally to react to shallow updates instantly
-    const [currentSearch, setCurrentSearch] = React.useState(typeof window !== 'undefined' ? window.location.search : "");
+    const [currentSearch, setCurrentSearch] = React.useState("");
 
     React.useEffect(() => {
+        setCurrentSearch(window.location.search);
+        
         const handleLocationChange = () => {
             setCurrentSearch(window.location.search);
         };
@@ -64,7 +66,7 @@ export const SearchButton = ({ initialCount, label = "Search", size = "default" 
 
 	return (
 		<Button 
-            className="w-full relative overflow-hidden font-semibold transition-all h-auto"
+            className={className}
             onClick={handleNavigate}
             disabled={isInteractionPending}
             size={size}

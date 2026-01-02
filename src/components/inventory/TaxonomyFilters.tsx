@@ -7,9 +7,10 @@ import { useTaxonomy, getModelsForMake, getVariantsForModel } from "@/hooks/use-
 
 interface TaxonomyFiltersProps {
     handleChange: (e: { target: { name: string; value: string } }) => void;
+    afterMakeLabel?: React.ReactNode;
 }
 
-const TaxonomyFilters = ({ handleChange }: TaxonomyFiltersProps) => {
+const TaxonomyFilters = ({ handleChange, afterMakeLabel }: TaxonomyFiltersProps) => {
   const t = useTranslations("Filters");
   const { taxonomy, isLoading } = useTaxonomy();
   
@@ -31,16 +32,24 @@ const TaxonomyFilters = ({ handleChange }: TaxonomyFiltersProps) => {
 
   return (
     <div className="flex flex-col gap-2 sm:gap-4">
-      <Combobox
-        label={t("make")}
-        name="make"
-        value={queryStates.make}
-        options={makes}
-        onChange={handleChange as any}
-        placeholder={isLoading && !makes.length ? t("loading") : t("select")}
-        searchPlaceholder={t("search")}
-        disabled={isLoading && !makes.length}
-      />
+      <div className="flex flex-col gap-1.5">
+          <div className="flex items-center justify-between min-h-[1.25rem]">
+              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  {t("make")}
+              </label>
+              {afterMakeLabel}
+          </div>
+          <Combobox
+            label="" // Hide default label as we rendered custom one above
+            name="make"
+            value={queryStates.make}
+            options={makes}
+            onChange={handleChange as any}
+            placeholder={isLoading && !makes.length ? t("loading") : t("select")}
+            searchPlaceholder={t("search")}
+            disabled={isLoading && !makes.length}
+          />
+      </div>
       <div className="grid grid-cols-2 gap-2 sm:gap-4">
         <Combobox
             label={t("model")}

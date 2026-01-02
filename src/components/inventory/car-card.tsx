@@ -19,9 +19,10 @@ interface CarCardProps {
   car: CarCardData;
   isFavourite: boolean;
   priority?: boolean;
+  smartCover?: boolean;
 }
 
-const CarCard = memo(({ car, isFavourite, priority }: CarCardProps) => {
+const CarCard = memo(({ car, isFavourite, priority, smartCover = true }: CarCardProps) => {
   const t = useTranslations("Car");
   const tEnums = useTranslations("Enums");
   const locale = useLocale();
@@ -112,9 +113,12 @@ const CarCard = memo(({ car, isFavourite, priority }: CarCardProps) => {
                 fill={true}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                 quality={60}
-                smartCover={true}
+                smartCover={smartCover}
                 priority={priority}
-                className="relative z-10 transition-transform duration-500 group-hover/image:scale-105"
+                className={cn(
+                    "relative z-10 transition-transform duration-500 group-hover/image:scale-105",
+                    !smartCover && "object-cover"
+                )}
               />
             </Link>
             
@@ -131,28 +135,36 @@ const CarCard = memo(({ car, isFavourite, priority }: CarCardProps) => {
             </div>
 
             <FavButton setIsFav={setIsFav} isFav={isFav} id={car.id} />
+            
+            {/* Title Overlay (Standardized for all - Full Visibility) */}
+            <div className="absolute bottom-2 inset-x-0 z-20 flex justify-center px-2">
+                <div className="relative group/title px-3 py-1.5 overflow-hidden rounded-xl shadow-lg w-fit max-w-[95%]">
+                    {/* Background Layer with Backdrop Blur - No border/ring to prevent bleeding */}
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-md" />
+                    
+                    {/* Pure Text Layer */}
+                    <Link
+                        href={routes.singleClassified(car.slug || "slug")}
+                        className="relative z-10 text-[12px] sm:text-[14px] font-black text-white uppercase tracking-tighter text-center block leading-tight"
+                    >
+                        {car.title}
+                    </Link>
+                </div>
+            </div>
+
             <div className="absolute top-2 right-2 sm:top-3 sm:right-3 bg-primary/95 text-primary-foreground font-bold px-2 py-0.5 sm:px-3 sm:py-1.5 rounded-lg shadow-xl z-20">
               <PriceDisplay amount={car.price} showLocal={false} className="text-xs sm:text-sm lg:text-base" />
             </div>
           </div>
           
           <div className="p-1.5 sm:p-2 flex flex-col flex-grow"> 
-            <div className="flex items-center justify-center text-center px-1 mb-1 min-h-[2.5rem]">
-              <Link
-                href={routes.singleClassified(car.slug || "slug")}
-                className="text-xs sm:text-sm md:text-base font-bold line-clamp-2 transition-colors hover:text-primary leading-tight"
-              >
-                {car.title}
-              </Link>
-            </div>
-
             <div className="space-y-2 mt-auto">
-              <div className="pt-1 border-t border-white/5">
+              <div className="pt-1">
                 <div className="text-[10px] xs:text-[11px] sm:text-sm md:text-base text-muted-foreground grid grid-cols-2 gap-x-1.5 gap-y-0.5 sm:gap-x-4 sm:gap-y-1 w-full">
                   {keyCarInfo.map((info) => (
-                    <div key={info.id} className="font-semibold flex items-center gap-x-1 sm:gap-x-2 min-w-0">
-                      <span className="shrink-0 scale-[0.85] xs:scale-[0.95] sm:scale-100 md:scale-110">{info.icon}</span>
-                      <span className="leading-none truncate sm:whitespace-normal">{info.value ? info.value : t("notAvailable")}</span>
+                    <div key={info.id} className="font-semibold flex items-center gap-x-1 sm:gap-x-2 min-w-0 min-h-[20px] sm:min-h-[24px]">
+                      <span className="shrink-0 scale-[0.85] xs:scale-[0.95] sm:scale-100 md:scale-110 flex items-center">{info.icon}</span>
+                      <span className="leading-none truncate sm:whitespace-normal flex items-center">{info.value ? info.value : t("notAvailable")}</span>
                     </div>
                   ))}
                 </div>

@@ -40,11 +40,11 @@ export const HomepageClearFilters = () => {
     <Button
       type="button"
       onClick={handleClear}
-      variant="outline"
-      className="w-full hover:bg-accent mt-2 animate-in fade-in slide-in-from-top-1"
+      variant="ghost"
+      className="h-auto p-0 text-red-600 hover:text-red-700 hover:bg-transparent font-bold text-xs uppercase tracking-wider animate-in fade-in zoom-in-95"
     >
-      <X className="w-4 h-4 mr-2" />
-      {t("clearFilters")} ({filterCount})
+      <X className="w-3 h-3 mr-1" />
+      {t("clearFilters")}
     </Button>
   );
 };

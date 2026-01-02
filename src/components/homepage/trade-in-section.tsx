@@ -90,7 +90,7 @@ export const TradeInSection = () => {
   };
 
   return (
-    <section className="relative w-full py-12 lg:py-16 overflow-hidden bg-white dark:bg-background border-t border-black/5 dark:border-white/5">
+    <section className="relative w-full py-8 lg:py-12 overflow-hidden bg-white dark:bg-background border-t border-black/5 dark:border-white/5">
       {/* Background Decor */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
          <div className="absolute top-[15%] right-[-2%] w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl" />
@@ -132,17 +132,20 @@ export const TradeInSection = () => {
           </div>
 
           {/* Right Column: Interactive Card */}
-          <div className="relative w-full max-w-md mx-auto lg:max-w-none py-12">
+          <div className="relative w-full max-w-md mx-auto lg:max-w-none py-6 lg:py-8 group/card">
+            {/* Gradient Border Glow Effect */}
+            <div className="absolute -inset-1 bg-linear-to-r from-primary/20 via-secondary/20 to-primary/20 rounded-[2rem] blur-xl opacity-50 group-hover/card:opacity-100 transition-opacity duration-500" />
+            
             {/* Glass Card */}
-            <div className="relative bg-white/5 md:backdrop-blur-2xl border border-white/10 rounded-3xl p-6 md:p-8 md:shadow-2xl transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-3xl pointer-events-none" />
+            <div className="relative bg-white/80 dark:bg-card/90 backdrop-blur-2xl border border-primary/20 rounded-[2rem] p-6 md:p-8 shadow-2xl transition-all duration-500 group-hover/card:border-primary/40 group-hover/card:translate-y-[-4px]">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/5 rounded-[2rem] pointer-events-none" />
               
               <div className="relative z-10 min-h-[300px] flex flex-col justify-center">
                 
                 {/* STEP 1: INITIAL ENTRY */}
                 {step === 1 && (
                     <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-                        <h3 className="text-2xl font-bold mb-6 text-center">{t("cardTitle") || "Get Your Offer"}</h3>
+                        <h3 className="text-2xl font-black mb-6 text-center bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent uppercase tracking-tight">{t("cardTitle") || "Get Your Offer"}</h3>
                         <Tabs defaultValue="vin" className="w-full">
                         <TabsList className="grid w-full grid-cols-2 mb-6">
                             <TabsTrigger value="vin">By VIN</TabsTrigger>

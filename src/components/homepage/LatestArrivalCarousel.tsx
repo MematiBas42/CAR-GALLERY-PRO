@@ -43,9 +43,39 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
     swiperInstance.on('update', checkScrollability);
     swiperInstance.on('resize', checkScrollability);
 
+    // Initial Peek Animation
+    const peekAnimation = setTimeout(() => {
+        if (swiperInstance.destroyed) return;
+
+        // Calculate peek amount (approx 1/4 of a card width or a fixed visual amount)
+        // We use a safe value that works on mobile and desktop
+        const slideWidth = swiperInstance.slides[0]?.offsetWidth || 300;
+        const peekAmount = -(slideWidth * 0.25); 
+
+        // 1. Move slightly to the next
+        swiperInstance.setTransition(700); // smooth slower speed
+        swiperInstance.setTranslate(peekAmount);
+        
+        // 2. Move back after a brief pause
+        setTimeout(() => {
+             if (swiperInstance.destroyed) return;
+             swiperInstance.setTranslate(0);
+             
+             // 3. Start Autoplay after return animation completes
+             setTimeout(() => {
+                 if (swiperInstance.destroyed) return;
+                 // Reset transition to default just in case
+                 swiperInstance.setTransition(0); 
+                 swiperInstance.autoplay.start();
+             }, 700);
+        }, 800); // Wait in the peeked state briefly
+
+    }, 500); // 0.5s initial delay
+
     return () => {
       swiperInstance.off('update', checkScrollability);
       swiperInstance.off('resize', checkScrollability);
+      clearTimeout(peekAnimation);
     };
   }, [swiperInstance]);
 
@@ -102,7 +132,8 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
         autoplay={{
           delay: 4000,
           disableOnInteraction: false,
-          pauseOnMouseEnter: true
+          pauseOnMouseEnter: true,
+          enabled: false // Start manually after animation
         }}
         keyboard={{
           enabled: true,
@@ -144,18 +175,15 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
               className="group relative h-full w-full overflow-hidden rounded-3xl bg-card shadow-lg flex flex-col hover:border-primary/50 transition-all duration-300 antialiased touch-pan-y"
               style={{ isolation: 'isolate' }}
             >
-              <div className="p-2 sm:p-3 flex flex-col h-full">
-                <div className="flex-grow overflow-y-auto pr-1 custom-scrollbar scrollbar-hide [&_label]:text-[10px] [&_label]:font-bold [&_label]:uppercase [&_label]:mb-1">
+              <div className="p-4 sm:p-6 flex flex-col h-full">
+                <div className="flex-grow overflow-y-auto px-1 custom-scrollbar scrollbar-hide [&_label]:text-[10px] [&_label]:font-bold [&_label]:uppercase [&_label]:mb-1">
                   <HomepageTaxonomyFilters
                     searchParams={searchParams}
                     minMaxValue={emptyMinMax}
                   />
                 </div>
-                <div className="pt-2 mt-auto border-t border-white/5 space-y-1.5">
-                  <SearchButton initialCount={carsCount ?? 0} label={t("discover")} size="sm" />
-                  <div className="flex justify-center scale-90 origin-center">
-                    <HomepageClearFilters />
-                  </div>
+                <div className="pt-4 mt-auto border-t border-white/5">
+                  <SearchButton initialCount={carsCount ?? 0} label={t("discover")} size="lg" className="w-full font-black uppercase tracking-widest h-12 text-base shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]" />
                 </div>
               </div>
             </div>
@@ -168,6 +196,7 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
                 car={car} 
                 isFavourite={favourites.includes(car.id)} 
                 priority={index < 2}
+                smartCover={false}
             />
           </SwiperSlide>
         ))}

@@ -42,7 +42,7 @@ const ComingSoonCard = memo(({ car, isFavourite, priority }: { car: CarCardData,
             onTouchCancel={stopInnerAutoplay}
         >
             <div className={cn(
-                "relative aspect-[2/3] sm:aspect-[3/4] overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] bg-card border shadow-xl",
+                "relative aspect-square sm:aspect-[3/4] overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] bg-card border shadow-xl",
                 "border-black/10 dark:border-white/10",
                 "transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]",
                 "group-hover/card:shadow-2xl group-hover/card:shadow-primary/40 dark:group-hover/card:shadow-primary/60 group-hover/card:-translate-y-3 group-hover/card:border-primary/50"

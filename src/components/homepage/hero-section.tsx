@@ -71,8 +71,8 @@ const HeroSection = async (props: AwaitedPageProps) => {
                 <Button
                     asChild
                     variant="secondary"
-                    className="h-8 md:h-10 px-10 rounded-full font-bold transition-all duration-300 shadow-2xl border border-white/10
-                    bg-white text-black hover:bg-gray-100 hover:scale-105"
+                    className="h-10 md:h-12 px-12 rounded-full text-sm md:text-base font-black transition-all duration-300 shadow-2xl border border-white/10
+                    bg-white text-black hover:bg-gray-100 hover:scale-105 uppercase tracking-wider"
                 >
                     <Link href={routes.inventory}>
                         {t("viewAll")}
@@ -83,13 +83,15 @@ const HeroSection = async (props: AwaitedPageProps) => {
 
         {/* BOTTOM: Punchy Marketing Text */}
         <div className="w-full flex justify-center px-4 mt-4">
-            <div className="text-center max-w-4xl space-y-4">
+            <div className="text-center max-w-4xl space-y-2">
+                <div className="w-fit mx-auto px-4 py-1 bg-black/20 backdrop-blur-sm rounded-full">
+                    <p className="text-slate-300 text-xs md:text-sm font-semibold tracking-widest uppercase">
+                        {t("marketingSubtitle")}
+                    </p>
+                </div>
                 <h1 className="text-3xl md:text-5xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none drop-shadow-2xl">
                     {t("marketingTitle")}
                 </h1>
-                <p className="text-white/90 text-sm md:text-lg font-semibold tracking-widest uppercase drop-shadow-md">
-                    {t("marketingSubtitle")}
-                </p>
             </div>
         </div>
 

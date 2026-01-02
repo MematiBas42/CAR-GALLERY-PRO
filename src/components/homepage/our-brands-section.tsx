@@ -27,8 +27,8 @@ const OurBrandSection = async() => {
 	});
 
     return (
-    <div className="py-16 sm:py-24 bg-background">
-			<div className="max-w-7xl mx-auto px-6 lg:px-8 space-y-12">
+    <div className="py-8 sm:py-12 bg-background">
+			<div className="max-w-7xl mx-auto px-6 lg:px-8 space-y-8">
                 <div className="px-6 lg:px-8 text-center">
                     <h2 className="mt-2 uppercase text-2xl font-bold tracking-tight text-foreground sm:text-4xl">
                         {t("title")} 
