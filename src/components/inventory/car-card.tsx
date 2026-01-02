@@ -86,9 +86,9 @@ const CarCard = memo(({ car, isFavourite, priority }: CarCardProps) => {
     <div
       key={car.id}
       id={car.slug || "slug"}
-      className="bg-card relative h-full rounded-xl shadow-md md:shadow-lg overflow-hidden flex flex-col border transition-shadow duration-300 hover:shadow-xl md:hover:shadow-2xl"
+      className="bg-card relative h-full rounded-3xl shadow-md md:shadow-lg overflow-hidden flex flex-col transition-shadow duration-300 hover:shadow-xl md:hover:shadow-2xl"
     >
-      <div className="aspect-car-card sm:aspect-car-card-sm relative rounded-t-xl overflow-hidden group/image">
+      <div className="aspect-car-card sm:aspect-car-card-sm relative rounded-t-3xl overflow-hidden group/image">
             <Link href={routes.singleClassified(car.slug || "slug")} className="block w-full h-full relative">
               {/* Optimized Ambilight Effect (Mobile & Desktop) */}
               <div className="absolute inset-0 z-0 transform scale-110 blur-lg opacity-60">
