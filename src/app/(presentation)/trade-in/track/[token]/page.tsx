@@ -2,7 +2,6 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { formatCurrency } from "@/lib/utils"; // Assuming utils has this or create inline
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,9 +10,9 @@ import Link from "next/link";
 import { SITE_CONFIG } from "@/config/constants";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     token: string;
-  };
+  }>;
 }
 
 // Simple currency formatter if needed
@@ -119,7 +118,7 @@ export default async function TradeInTrackingPage(props: PageProps) {
                 
                 {/* Call Button (Always visible) */}
                 <Button variant="outline" size="lg" className="w-full sm:w-auto h-12 gap-2" asChild>
-                    <a href={`tel:${SITE_CONFIG.contact.phone}`}>
+                    <a href={`tel:${SITE_CONFIG.phoneRaw}`}>
                         <Phone className="w-4 h-4" />
                         {t("callUs") || "Call Us"}
                     </a>

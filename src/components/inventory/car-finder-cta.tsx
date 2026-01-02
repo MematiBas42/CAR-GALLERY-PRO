@@ -66,7 +66,7 @@ export const CarFinderCTA = () => {
             </div>
             <h3 className="text-2xl font-bold mb-2">Request Received!</h3>
             <p className="text-muted-foreground max-w-lg mx-auto mb-6">
-                We've started the search for your <span className="text-foreground font-bold">{formData.make} {formData.model}</span>. 
+                We&apos;ve started the search for your <span className="text-foreground font-bold">{formData.make} {formData.model}</span>. 
                 Our team will scour our network and notify you as soon as we find a match.
             </p>
             <Button variant="outline" onClick={() => { setIsSuccess(false); setIsOpen(false); setFormData({ ...formData, make: "", model: "" }); }}>
@@ -87,10 +87,10 @@ export const CarFinderCTA = () => {
                 <span>Concierge Service</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-black tracking-tight leading-none">
-                Can't Find What You're Looking For?
+                Can&apos;t Find What You&apos;re Looking For?
             </h2>
             <p className="text-muted-foreground text-lg">
-                Let us do the heavy lifting. Tell us exactly what you want, and we'll use our nationwide network to find your dream car.
+                Let us do the heavy lifting. Tell us exactly what you want, and we&apos;ll use our nationwide network to find your dream car.
             </p>
             {!isOpen && (
                 <Button size="lg" className="mt-4 font-bold text-base h-12 px-8" onClick={() => setIsOpen(true)}>

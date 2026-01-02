@@ -43,6 +43,7 @@ const getInventory = async (searchParams: AwaitedPageProps["searchParams"]) => {
         slug: true,
         title: true,
         price: true,
+        previousPrice: true,
         odoReading: true,
         odoUnit: true,
         transmission: true,
@@ -50,6 +51,7 @@ const getInventory = async (searchParams: AwaitedPageProps["searchParams"]) => {
         colour: true,
         bodyType: true,
         status: true,
+        isLatestArrival: true,
         images: {
             select: {
                 id: true,

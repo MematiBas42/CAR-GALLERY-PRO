@@ -8,7 +8,7 @@ import React, { useMemo } from "react";
 import { useClassifiedCount } from "@/hooks/use-taxonomy";
 import { useLoading } from "@/hooks/use-loading";
 
-export const SearchButton = ({ initialCount, label = "Search" }: { initialCount: number, label?: string }) => {
+export const SearchButton = ({ initialCount, label = "Search", size = "default" }: { initialCount: number, label?: string, size?: "default" | "sm" | "lg" | "icon" }) => {
     const searchParams = useSearchParams();
     const router = useRouter();
     
@@ -64,9 +64,10 @@ export const SearchButton = ({ initialCount, label = "Search" }: { initialCount:
 
 	return (
 		<Button 
-            className="w-full relative overflow-hidden h-12 text-base font-semibold transition-all"
+            className="w-full relative overflow-hidden font-semibold transition-all h-auto"
             onClick={handleNavigate}
             disabled={isInteractionPending}
+            size={size}
         >
 			{label} 
             <span className="ml-2 inline-flex items-center min-w-[1.5rem] justify-center bg-gray-500/20 px-2 py-0.5 rounded-full text-sm">

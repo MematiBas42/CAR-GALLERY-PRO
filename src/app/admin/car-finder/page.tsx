@@ -126,6 +126,9 @@ export default async function CarFinderAdminPage({
                     totalPages={totalPages} 
                     styles={{
                         paginationRoot: "justify-end",
+                        paginationPrevious: "",
+                        paginationNext: "",
+                        paginationLink: "",
                         paginationLinkActive: "bg-primary text-primary-foreground"
                     }}
                 />

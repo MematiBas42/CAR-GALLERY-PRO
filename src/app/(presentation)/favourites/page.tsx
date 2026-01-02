@@ -38,6 +38,7 @@ const FavsPage = async (props: PageProps) => {
         slug: true,
         title: true,
         price: true,
+        previousPrice: true,
         odoReading: true,
         odoUnit: true,
         transmission: true,
@@ -45,6 +46,7 @@ const FavsPage = async (props: PageProps) => {
         colour: true,
         bodyType: true,
         status: true,
+        isLatestArrival: true,
         images: {
             select: {
                 id: true,
