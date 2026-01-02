@@ -45,30 +45,39 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
 
     // Initial Peek Animation
     const peekAnimation = setTimeout(() => {
-        if (swiperInstance.destroyed) return;
+        if (!swiperInstance || swiperInstance.destroyed) return;
+
+        const isScrollable = (swiperInstance as any).virtualSize > (swiperInstance as any).size;
+        
+        // Only animate if there is content to scroll to
+        if (!isScrollable) {
+            swiperInstance.autoplay.start();
+            return;
+        }
 
         // Calculate peek amount (approx 1/4 of a card width or a fixed visual amount)
-        // We use a safe value that works on mobile and desktop
         const slideWidth = swiperInstance.slides[0]?.offsetWidth || 300;
         const peekAmount = -(slideWidth * 0.25); 
 
         // 1. Move slightly to the next
-        (swiperInstance as any).setTransition(700); // smooth slower speed
+        (swiperInstance as any).setTransition(700); 
         (swiperInstance as any).setTranslate(peekAmount);
         
         // 2. Move back after a brief pause
         setTimeout(() => {
              if (swiperInstance.destroyed) return;
-             (swiperInstance as any).setTranslate(0);
+             
+             // Use slideTo(0) for a cleaner reset that respects Swiper's internal state
+             // We pass 700ms speed to match our visual rhythm
+             swiperInstance.slideTo(0, 700);
              
              // 3. Start Autoplay after return animation completes
              setTimeout(() => {
                  if (swiperInstance.destroyed) return;
-                 // Reset transition to default just in case
                  (swiperInstance as any).setTransition(0); 
                  swiperInstance.autoplay.start();
              }, 700);
-        }, 800); // Wait in the peeked state briefly
+        }, 800); 
 
     }, 500); // 0.5s initial delay
 
