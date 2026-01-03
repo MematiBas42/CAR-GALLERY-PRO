@@ -28,21 +28,37 @@ export default auth((req) => {
   requestHeaders.set('x-next-intl-pathname', nextUrl.pathname);
 
   if (req.auth) {
-    if (req.auth.requires2FA && nextUrl.pathname.startsWith("/admin")) {
+    const { requires2FA } = req.auth;
+
+    // CASE 1: User is logged in but needs 2FA
+    if (requires2FA) {
+      // Always allow access to the challenge page
       if (nextUrl.pathname === routes.challenge) {
         return NextResponse.next();
       }
+      
+      // If user tries to access Admin or Sign In page while pending 2FA, send to Challenge
+      if (nextUrl.pathname.startsWith("/admin") || nextUrl.pathname === routes.signIn) {
+        const challengeUrl = new URL(routes.challenge, req.nextUrl.origin);
+        return NextResponse.redirect(challengeUrl);
+      }
 
-      const challengeurl = new URL(routes.challenge, req.nextUrl.origin);
-      return NextResponse.redirect(challengeurl);
+      // Allow access to all other public pages (Home, Inventory, etc.)
+      return NextResponse.next({
+        request: {
+          headers: requestHeaders,
+        },
+      });
     }
-    if (nextUrl.pathname === routes.challenge ||
-      nextUrl.pathname === routes.signIn
-    ) {
+
+    // CASE 2: User is fully authenticated (2FA completed)
+    // Redirect Login or Challenge pages to Admin Dashboard
+    if (nextUrl.pathname === routes.challenge || nextUrl.pathname === routes.signIn) {
       const adminUrl = new URL(routes.admin.dashboard, req.nextUrl.origin);
       return NextResponse.redirect(adminUrl);
     }
   } else {
+    // User is NOT logged in
     if (
       nextUrl.pathname.startsWith("/admin") ||
       nextUrl.pathname === routes.challenge

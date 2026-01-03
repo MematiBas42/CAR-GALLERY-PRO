@@ -55,7 +55,9 @@ export async function completeChallenge(userId: string, code: string) {
         // Since we are using JWT strategy, we can't update a database session.
         // Instead, we mark the user as verified in Redis.
         // The auth.ts jwt callback will check this key.
-        await redis.setex(`session_verified:uid-${userId}`, 24 * 60 * 60, "true");
+        // SECURITY: Short expiry (2 mins) is enough for the JWT promotion to happen. 
+        // We do NOT want this to persist for long (e.g. 24h) to prevent bypass on re-login.
+        await redis.setex(`session_verified:uid-${userId}`, 2 * 60, "true");
         await redis.del(`${REDIS_PREFIX}:uid-${userId}`);
 
         return {

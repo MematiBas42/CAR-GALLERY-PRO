@@ -131,6 +131,7 @@ const OTPInput = forwardRef<HTMLInputElement, PinCodeProps>(
                   autoCorrect="off"
                   autoComplete="off"
                   onChange={(e) => handleChange(e, index)}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
                   onPaste={(e) => handlePaste(e, index)}
                   className={cn(
                     inputClassNames.base,
