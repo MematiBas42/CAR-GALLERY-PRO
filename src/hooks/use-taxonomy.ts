@@ -43,7 +43,7 @@ export function useTaxonomy() {
 // World-class Reactivity: Fetch dynamic counts separately
 export function useClassifiedCount(queryString: string, initialCount: number) {
     const { data, isLoading, isValidating } = useSWR(
-        queryString ? `/api/classifieds/count?${queryString}` : null,
+        `/api/classifieds/count?${queryString}`,
         fetcher,
         {
             revalidateOnFocus: false,
