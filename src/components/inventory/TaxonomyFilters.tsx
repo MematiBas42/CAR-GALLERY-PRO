@@ -8,17 +8,21 @@ import { useTaxonomy, getModelsForMake, getVariantsForModel } from "@/hooks/use-
 interface TaxonomyFiltersProps {
     handleChange: (e: { target: { name: string; value: string } }) => void;
     afterMakeLabel?: React.ReactNode;
+    values?: { make: string; model: string; modelVariant: string };
 }
 
-const TaxonomyFilters = ({ handleChange, afterMakeLabel }: TaxonomyFiltersProps) => {
+const TaxonomyFilters = ({ handleChange, afterMakeLabel, values }: TaxonomyFiltersProps) => {
   const t = useTranslations("Filters");
   const { taxonomy, isLoading } = useTaxonomy();
   
-  const [queryStates] = useQueryStates({
+  const [urlQueryStates] = useQueryStates({
     make: parseAsString.withDefault(""),
     model: parseAsString.withDefault(""),
     modelVariant: parseAsString.withDefault(""),
   });
+
+  // Use provided values (controlled) or fall back to URL state
+  const queryStates = values || urlQueryStates;
 
   const makes = useMemo(() => taxonomy.map(m => ({ label: m.l, value: m.v })), [taxonomy]);
   

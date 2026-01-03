@@ -18,28 +18,22 @@ export const homepageFilterSchema = {
   maxPrice: parseAsString,
 };
 
-export const HomepageClearFilters = () => {
-  const t = useTranslations("Homepage.Hero");
-  const [query, setQuery] = useQueryStates(homepageFilterSchema, { shallow: false });
+interface HomepageClearFiltersProps {
+    filters: Record<string, any>;
+    onClear: () => void;
+}
 
-  const filterCount = Object.values(query).filter(Boolean).length;
+export const HomepageClearFilters = ({ filters, onClear }: HomepageClearFiltersProps) => {
+  const t = useTranslations("Homepage.Hero");
+
+  const filterCount = Object.values(filters).filter(Boolean).length;
 
   if (filterCount === 0) return null;
-
-  const handleClear = () => {
-    // Dynamically clear all keys defined in the schema
-    const clearedQuery = Object.keys(homepageFilterSchema).reduce((acc, key) => {
-      acc[key as keyof typeof homepageFilterSchema] = null;
-      return acc;
-    }, {} as any);
-    
-    setQuery(clearedQuery);
-  };
 
   return (
     <Button
       type="button"
-      onClick={handleClear}
+      onClick={onClear}
       variant="ghost"
       className="h-auto p-0 text-red-600 hover:text-red-700 hover:bg-transparent font-bold text-xs uppercase tracking-wider animate-in fade-in zoom-in-95"
     >

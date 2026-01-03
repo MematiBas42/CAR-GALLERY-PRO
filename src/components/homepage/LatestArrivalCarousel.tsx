@@ -27,6 +27,9 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
   const t = useTranslations("Homepage.Hero");
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [canScroll, setCanScroll] = useState(false);
+  
+  // Local Filter State (Draft Mode)
+  const [filters, setFilters] = useState<Record<string, any>>(searchParams);
 
       const totalSlides = Object.keys(searchParams).length > 0 ? cars.length + 1 : cars.length;
   
@@ -187,12 +190,19 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
               <div className="p-4 sm:p-6 flex flex-col h-full">
                 <div className="flex-grow overflow-y-auto px-1 custom-scrollbar scrollbar-hide [&_label]:text-[10px] [&_label]:font-bold [&_label]:uppercase [&_label]:mb-1">
                   <HomepageTaxonomyFilters
-                    searchParams={searchParams}
+                    filters={filters}
+                    setFilters={setFilters}
                     minMaxValue={emptyMinMax}
                   />
                 </div>
                 <div className="pt-4 mt-auto border-t border-white/5">
-                  <SearchButton initialCount={carsCount ?? 0} label={t("discover")} size="lg" className="w-full font-black uppercase tracking-widest h-12 text-base shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]" />
+                  <SearchButton 
+                    currentFilters={filters}
+                    initialCount={carsCount ?? 0} 
+                    label={t("discover")} 
+                    size="lg" 
+                    className="w-full font-black uppercase tracking-widest h-12 text-base shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]" 
+                   />
                 </div>
               </div>
             </div>

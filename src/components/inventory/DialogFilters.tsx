@@ -43,63 +43,47 @@ const DialogFilters = ({
   
   const { ranges: taxonomyRanges, attributes, isLoading: isTaxonomyLoading } = useTaxonomy();
 
-  const [queryStates, setQueryStates] = useQueryStates(
-    {
-      make: parseAsString.withDefault(""),
-      model: parseAsString.withDefault(""),
-      modelVariant: parseAsString.withDefault(""),
-      minYear: parseAsString.withDefault(""),
-      maxYear: parseAsString.withDefault(""),
-      minPrice: parseAsString.withDefault(""),
-      maxPrice: parseAsString.withDefault(""),
-      minReading: parseAsString.withDefault(""),
-      maxReading: parseAsString.withDefault(""),
-      transmission: parseAsString.withDefault(""),
-      fuelType: parseAsString.withDefault(""),
-      bodyType: parseAsString.withDefault(""),
-      colour: parseAsString.withDefault(""),
-      doors: parseAsString.withDefault(""),
-      seats: parseAsString.withDefault(""),
-      ulezCompliance: parseAsString.withDefault(""),
-    },
-    { 
-        shallow: true,
-        startTransition
-    }
-  );
+  // Draft Mode State
+  const [draftFilters, setDraftFilters] = useState<Record<string, any>>({});
+
+  // Sync Draft State with URL when Dialog Opens
+  useEffect(() => {
+      if (open) {
+          const currentParams = Object.fromEntries(searchParams.entries());
+          setDraftFilters(currentParams);
+      }
+  }, [open, searchParams]);
 
   const queryString = useMemo(() => {
-      const params = new URLSearchParams(searchParams.toString());
-      Object.entries(queryStates).forEach(([key, value]) => {
-          if (value) params.set(key, value);
-          else params.delete(key);
+      const params = new URLSearchParams();
+      Object.entries(draftFilters).forEach(([key, value]) => {
+          if (value) params.set(key, String(value));
       });
-      params.delete("page");
       return params.toString();
-  }, [searchParams, queryStates]);
+  }, [draftFilters]);
 
   const { count: liveCount, isLoading: isCountLoading } = useClassifiedCount(queryString, initialCount);
 
-  useEffect(() => {
-    setIsLoading(isPending || isCountLoading, "mobile-filter-update");
-    return () => setIsLoading(false, "mobile-filter-update");
-  }, [isPending, isCountLoading]);
+  // Apply Filters to URL (The only time navigation happens)
+  const handleApply = () => {
+      const params = new URLSearchParams();
+      Object.entries(draftFilters).forEach(([key, value]) => {
+          if (value) params.set(key, String(value));
+      });
+      params.delete("page"); // Reset page on filter change
+      
+      startTransition(() => {
+          router.push(`${routes.inventory}?${params.toString()}`);
+          setOpen(false);
+      });
+  };
 
   const filterCount = useMemo(() => {
-      return Object.values(queryStates).filter(Boolean).length;
-  }, [queryStates]);
+      return Object.values(draftFilters).filter(Boolean).length;
+  }, [draftFilters]);
 
   const clearAllFilter = () => {
-    const url = new URL(routes.inventory, process.env.NEXT_PUBLIC_APP_URL);
-    setQueryStates({
-        make: null, model: null, modelVariant: null, minYear: null, maxYear: null,
-        minPrice: null, maxPrice: null, minReading: null, maxReading: null,
-        transmission: null, fuelType: null,
-        bodyType: null, colour: null, doors: null, seats: null, ulezCompliance: null
-    });
-    startTransition(() => {
-        router.replace(url.toString());
-    });
+    setDraftFilters({});
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement> | Record<string, string | null>) => {
@@ -112,26 +96,19 @@ const DialogFilters = ({
         updates[name] = value;
         
         // Hierarchical clearing logic
-        if (name === "make" && !value) {
-            updates.model = null;
-            updates.modelVariant = null;
-        } else if (name === "make") {
+        if (name === "make") {
             updates.model = null;
             updates.modelVariant = null;
         }
         
-        if (name === "model" && !value) {
-            updates.modelVariant = null;
-        } else if (name === "model") {
+        if (name === "model") {
             updates.modelVariant = null;
         }
     } else {
         Object.assign(updates, e);
     }
 
-    startTransition(() => {
-        setQueryStates(updates);
-    });
+    setDraftFilters(prev => ({ ...prev, ...updates }));
   };
 
   return (
@@ -169,7 +146,7 @@ const DialogFilters = ({
 
         <div className="flex-1 overflow-y-auto p-6 space-y-8 scrollbar-hide">
           <div className="space-y-4">
-            <TaxonomyFilters handleChange={handleChange as any} />
+            <TaxonomyFilters handleChange={handleChange as any} values={draftFilters as any} />
           </div>
 
           <div className="space-y-6 pt-2 border-t border-muted">
@@ -180,7 +157,8 @@ const DialogFilters = ({
               defaultMin={taxonomyRanges?.year.min ?? minMaxValue._min.year ?? 1900}
               defaultMax={taxonomyRanges?.year.max ?? minMaxValue._max.year ?? new Date().getFullYear()}
               handleChange={handleChange as any}
-              searchParams={serverSearchParams}
+              searchParams={draftFilters}
+              applyOnBlur={true}
             />
             <RangeFilter
               label={tFilters("price")}
@@ -191,7 +169,8 @@ const DialogFilters = ({
               handleChange={handleChange as any}
               thousandSeparator={true}
               currency={{ currencyCode: "USD" }}
-              searchParams={serverSearchParams}
+              searchParams={draftFilters}
+              applyOnBlur={true}
             />
             <RangeFilter
               label={tLabels("odometerReading")}
@@ -201,22 +180,23 @@ const DialogFilters = ({
               defaultMax={taxonomyRanges?.odoReading.max ?? minMaxValue._max.odoReading ?? 1000000}
               handleChange={handleChange as any}
               thousandSeparator={true}
-              searchParams={serverSearchParams}
+              searchParams={draftFilters}
+              applyOnBlur={true}
             />
           </div>
 
           <div className="space-y-4 pt-6 border-t border-muted">
-            <Select label={tLabels("transmission")} name="transmission" value={queryStates.transmission} onChange={handleChange as any} options={(attributes?.transmission || []).map(v => ({label: tEnums(`Transmission.${v}`), value: v}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
-            <Select label={tLabels("fuelType")} name="fuelType" value={queryStates.fuelType} onChange={handleChange as any} options={(attributes?.fuelType || []).map(v => ({label: tEnums(`FuelType.${v}`), value: v}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
-            <Select label={tLabels("bodyType")} name="bodyType" value={queryStates.bodyType} onChange={handleChange as any} options={(attributes?.bodyType || []).map(v => ({label: tEnums(`BodyType.${v}`), value: v}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
-            <Select label={tLabels("colour")} name="colour" value={queryStates.colour} onChange={handleChange as any} options={(attributes?.colour || []).map(v => ({label: tEnums(`Colour.${v}`), value: v}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
-            <Select label={tLabels("ulezCompliance")} name="ulezCompliance" value={queryStates.ulezCompliance} onChange={handleChange as any} options={(attributes?.ulezCompliance || []).map(v => ({label: tEnums(`ULEZ.${v}`), value: v}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
-            <Select label={tLabels("doors")} name="doors" value={queryStates.doors} onChange={handleChange as any} options={(attributes?.doors || []).map(v => ({label: String(v), value: String(v)}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
-            <Select label={tLabels("seats")} name="seats" value={queryStates.seats} onChange={handleChange as any} options={(attributes?.seats || []).map(v => ({label: String(v), value: String(v)}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+            <Select label={tLabels("transmission")} name="transmission" value={draftFilters.transmission || ""} onChange={handleChange as any} options={(attributes?.transmission || []).map(v => ({label: tEnums(`Transmission.${v}`), value: v}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+            <Select label={tLabels("fuelType")} name="fuelType" value={draftFilters.fuelType || ""} onChange={handleChange as any} options={(attributes?.fuelType || []).map(v => ({label: tEnums(`FuelType.${v}`), value: v}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+            <Select label={tLabels("bodyType")} name="bodyType" value={draftFilters.bodyType || ""} onChange={handleChange as any} options={(attributes?.bodyType || []).map(v => ({label: tEnums(`BodyType.${v}`), value: v}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+            <Select label={tLabels("colour")} name="colour" value={draftFilters.colour || ""} onChange={handleChange as any} options={(attributes?.colour || []).map(v => ({label: tEnums(`Colour.${v}`), value: v}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+            <Select label={tLabels("ulezCompliance")} name="ulezCompliance" value={draftFilters.ulezCompliance || ""} onChange={handleChange as any} options={(attributes?.ulezCompliance || []).map(v => ({label: tEnums(`ULEZ.${v}`), value: v}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+            <Select label={tLabels("doors")} name="doors" value={draftFilters.doors || ""} onChange={handleChange as any} options={(attributes?.doors || []).map(v => ({label: String(v), value: String(v)}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
+            <Select label={tLabels("seats")} name="seats" value={draftFilters.seats || ""} onChange={handleChange as any} options={(attributes?.seats || []).map(v => ({label: String(v), value: String(v)}))} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />
           </div>
         </div>
         <DialogFooter className="p-6 bg-background border-t mt-auto shadow-[0_-10px_20px_-15px_rgba(0,0,0,0.1)]">
-          <Button onClick={() => setOpen(false)} className="w-full h-14 text-base font-bold uppercase tracking-widest flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-all">
+          <Button onClick={handleApply} className="w-full h-14 text-base font-bold uppercase tracking-widest flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-all">
             {isCountLoading ? <Loader2 className="h-5 w-5 animate-spin opacity-70" /> : t("sidebar.showResults", { count: liveCount })}
           </Button>
         </DialogFooter>

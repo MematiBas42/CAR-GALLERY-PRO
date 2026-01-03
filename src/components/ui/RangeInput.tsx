@@ -14,11 +14,13 @@ interface RangeInputProps {
 	minInput: InputType;
 	maxInput: InputType;
 	onApply: () => void;
+    applyOnBlur?: boolean;
+    onFocusChange?: (focused: "min" | "max" | null) => void;
 }
 
 export const RangeInput = (props: RangeInputProps) => {
 	const t = useTranslations("Filters");
-	const { label, minInput, maxInput, onApply } = props;
+	const { label, minInput, maxInput, onApply, applyOnBlur = false, onFocusChange } = props;
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		if (e.key === "Enter") {
@@ -35,7 +37,11 @@ export const RangeInput = (props: RangeInputProps) => {
 						{...minInput}
 						type="number"
 						onKeyDown={handleKeyDown}
-                        onBlur={onApply}
+                        onFocus={() => onFocusChange?.("min")}
+                        onBlur={() => {
+                            onFocusChange?.(null);
+                            if (applyOnBlur) onApply();
+                        }}
 						className="h-10 bg-background/50 border-muted-foreground/20 focus-visible:ring-1"
 					/>
 				</div>
@@ -44,7 +50,11 @@ export const RangeInput = (props: RangeInputProps) => {
 						{...maxInput}
 						type="number"
 						onKeyDown={handleKeyDown}
-                        onBlur={onApply}
+                        onFocus={() => onFocusChange?.("max")}
+                        onBlur={() => {
+                            onFocusChange?.(null);
+                            if (applyOnBlur) onApply();
+                        }}
 						className="h-10 bg-background/50 border-muted-foreground/20 focus-visible:ring-1"
 					/>
 				</div>

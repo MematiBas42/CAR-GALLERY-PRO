@@ -1,7 +1,7 @@
 import type { TaxonomyFiltersProps } from "@/config/types";
 import { formatNumber, formatPrice } from "@/lib/utils";
 import type { CurrencyCode } from "@prisma/client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { RangeInput } from "../ui/RangeInput";
 
 interface RangeFilterProps extends TaxonomyFiltersProps {
@@ -16,6 +16,7 @@ interface RangeFilterProps extends TaxonomyFiltersProps {
 		currencyCode: CurrencyCode;
 	};
 	placeholder?: string;
+    applyOnBlur?: boolean;
 }
 
 export const RangeFilter = (props: RangeFilterProps) => {
@@ -27,16 +28,31 @@ export const RangeFilter = (props: RangeFilterProps) => {
 		currency,
 		handleChange,
 		searchParams,
+        applyOnBlur,
 	} = props;
 
 	const [minVal, setMinVal] = useState(searchParams?.[minName]?.toString() || "");
 	const [maxVal, setMaxVal] = useState(searchParams?.[maxName]?.toString() || "");
+    const [focusedField, setFocusedField] = useState<"min" | "max" | null>(null);
+    const prevSearchParams = useRef(searchParams);
 
 	useEffect(() => {
         if (!searchParams) return;
-		setMinVal(searchParams[minName]?.toString() || "");
-		setMaxVal(searchParams[maxName]?.toString() || "");
-	}, [searchParams, minName, maxName]);
+        
+        // Only update if searchParams actually changed to avoid stale overwrites on focus change
+        // We compare the specific values we care about
+        const prevMin = prevSearchParams.current?.[minName]?.toString() || "";
+        const currentMin = searchParams[minName]?.toString() || "";
+        const prevMax = prevSearchParams.current?.[maxName]?.toString() || "";
+        const currentMax = searchParams[maxName]?.toString() || "";
+
+        if (prevMin !== currentMin || prevMax !== currentMax) {
+             if (focusedField !== "min") setMinVal(currentMin);
+             if (focusedField !== "max") setMaxVal(currentMax);
+        }
+        
+        prevSearchParams.current = searchParams;
+	}, [searchParams, minName, maxName, focusedField]);
 
 	const handleApply = () => {
 		let finalMin = minVal;
@@ -73,6 +89,8 @@ export const RangeFilter = (props: RangeFilterProps) => {
 				placeholder: "Max",
 			}}
 			onApply={handleApply}
+            applyOnBlur={applyOnBlur}
+            onFocusChange={setFocusedField}
 		/>
 	);
 };

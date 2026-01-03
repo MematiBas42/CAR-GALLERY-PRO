@@ -139,6 +139,7 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
           defaultMax={adaptiveRanges.year.max ?? _max.year ?? new Date().getFullYear()}
           handleChange={handleChange as any}
           searchParams={searchParams}
+          applyOnBlur={true}
         />
         <RangeFilter
           label={tFilters("price")}
@@ -150,6 +151,7 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
           thousandSeparator={true}
           currency={{ currencyCode: "USD" }}
           searchParams={searchParams}
+          applyOnBlur={true}
         />
         <RangeFilter
           label={tLabels("odometerReading")}
@@ -160,6 +162,7 @@ const Sidebar = ({ minMaxValue, searchParams }: SidebarProps) => {
           handleChange={handleChange as any}
           thousandSeparator={true}
           searchParams={searchParams}
+          applyOnBlur={true}
         />
 
         <Select label={tLabels("transmission")} name="transmission" value={searchParams.transmission} onChange={handleChange as any} options={transmissionOptions} disabled={isTaxonomyLoading} placeholder={tFilters("select")} />

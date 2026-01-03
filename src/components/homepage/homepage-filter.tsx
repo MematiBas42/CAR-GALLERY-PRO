@@ -11,13 +11,16 @@ import { homepageFilterSchema, HomepageClearFilters } from "./homepage-clear-fil
 import { setIsLoading } from "@/hooks/use-loading";
 import { Badge } from "../ui/badge";
 
-interface HomepageTaxonomyFiltersProps extends SidebarProps {}
+interface HomepageTaxonomyFiltersProps extends SidebarProps {
+    filters: Record<string, any>;
+    setFilters: React.Dispatch<React.SetStateAction<Record<string, any>>>;
+}
 
 const HomepageTaxonomyFilters = ({
   minMaxValue,
-  searchParams,
+  filters,
+  setFilters
 }: HomepageTaxonomyFiltersProps) => {
-  const [isPending, startTransition] = React.useTransition();
   const t = useTranslations("Filters");
   
   // Safe extraction of min/max values with sensible defaults
@@ -26,19 +29,9 @@ const HomepageTaxonomyFilters = ({
   const _maxYear = minMaxValue?._max?.year ?? new Date().getFullYear();
   const _maxPrice = minMaxValue?._max?.price ?? 1000000;
 
-  const [query, setState] = useQueryStates(homepageFilterSchema, { 
-      shallow: true,
-      startTransition 
-  });
-
   const { ranges } = useTaxonomy();
 
-  React.useEffect(() => {
-    setIsLoading(isPending, "homepage-filter-update");
-    return () => setIsLoading(false, "homepage-filter-update");
-  }, [isPending]);
-
-  const handleChange = async (
+  const handleChange = (
     e: React.ChangeEvent<HTMLSelectElement> | Record<string, string | null>
   ) => {
     const updates: Record<string, string | null> = {};
@@ -67,9 +60,7 @@ const HomepageTaxonomyFilters = ({
         Object.assign(updates, e);
     }
 
-    startTransition(() => {
-        setState(updates);
-    });
+    setFilters(prev => ({ ...prev, ...updates }));
   };
 
   const adaptiveRanges = ranges || {
@@ -81,7 +72,8 @@ const HomepageTaxonomyFilters = ({
     <div className="flex flex-col gap-2">
       <TaxonomyFilters 
         handleChange={handleChange as any} 
-        afterMakeLabel={<HomepageClearFilters />}
+        values={filters as any}
+        afterMakeLabel={<HomepageClearFilters filters={filters} onClear={() => setFilters({})} />}
       />
       <RangeFilter
         label={t("year")}
@@ -90,7 +82,8 @@ const HomepageTaxonomyFilters = ({
         defaultMin={adaptiveRanges.year.min ?? _minYear}
         defaultMax={adaptiveRanges.year.max ?? _maxYear}
         handleChange={handleChange as any}
-        searchParams={query as any}
+        searchParams={filters}
+        applyOnBlur={true}
       />
       <RangeFilter
         label={t("price")}
@@ -102,7 +95,8 @@ const HomepageTaxonomyFilters = ({
         increment={100000}
         thousandSeparator={true}
         currency={{ currencyCode: "USD" }}
-        searchParams={query as any}
+        searchParams={filters}
+        applyOnBlur={true}
       />
     </div>
   );

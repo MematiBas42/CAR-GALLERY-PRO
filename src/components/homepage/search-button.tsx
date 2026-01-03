@@ -8,7 +8,7 @@ import React, { useMemo } from "react";
 import { useClassifiedCount } from "@/hooks/use-taxonomy";
 import { useLoading } from "@/hooks/use-loading";
 
-export const SearchButton = ({ initialCount, label = "Search", size = "default", className }: { initialCount: number, label?: string, size?: "default" | "sm" | "lg" | "icon", className?: string }) => {
+export const SearchButton = ({ initialCount, label = "Search", size = "default", className, currentFilters }: { initialCount: number, label?: string, size?: "default" | "sm" | "lg" | "icon", className?: string, currentFilters?: Record<string, any> }) => {
     const searchParams = useSearchParams();
     const router = useRouter();
     
@@ -16,32 +16,36 @@ export const SearchButton = ({ initialCount, label = "Search", size = "default",
     const [currentSearch, setCurrentSearch] = React.useState("");
 
     React.useEffect(() => {
-        setCurrentSearch(window.location.search);
-        
-        const handleLocationChange = () => {
+        if (!currentFilters) {
             setCurrentSearch(window.location.search);
-        };
-
-        window.addEventListener('popstate', handleLocationChange);
-        window.addEventListener('pushstate', handleLocationChange);
-        window.addEventListener('replacestate', handleLocationChange);
-
-        // Periodically check as a fallback for internal router changes
-        const interval = setInterval(handleLocationChange, 100);
-
-        return () => {
-            window.removeEventListener('popstate', handleLocationChange);
-            window.removeEventListener('pushstate', handleLocationChange);
-            window.removeEventListener('replacestate', handleLocationChange);
-            clearInterval(interval);
-        };
-    }, []);
+            const handleLocationChange = () => setCurrentSearch(window.location.search);
+            window.addEventListener('popstate', handleLocationChange);
+            window.addEventListener('pushstate', handleLocationChange);
+            window.addEventListener('replacestate', handleLocationChange);
+            const interval = setInterval(handleLocationChange, 100);
+            return () => {
+                window.removeEventListener('popstate', handleLocationChange);
+                window.removeEventListener('pushstate', handleLocationChange);
+                window.removeEventListener('replacestate', handleLocationChange);
+                clearInterval(interval);
+            };
+        }
+    }, [currentFilters]);
 
     const queryString = useMemo(() => {
+        if (currentFilters) {
+            const params = new URLSearchParams();
+            Object.entries(currentFilters).forEach(([key, value]) => {
+                if (value !== null && value !== undefined && value !== "") {
+                    params.set(key, String(value));
+                }
+            });
+            return params.toString();
+        }
         const params = new URLSearchParams(currentSearch);
         params.delete("page");
         return params.toString();
-    }, [currentSearch]);
+    }, [currentSearch, currentFilters]);
 
     const isGlobalLoading = useLoading();
     const { count, slug, isLoading: isCountLoading } = useClassifiedCount(queryString, initialCount);
@@ -51,15 +55,9 @@ export const SearchButton = ({ initialCount, label = "Search", size = "default",
     const handleNavigate = (e: React.MouseEvent) => {
         e.preventDefault();
         
-        // 1. Get the LATEST query string directly from window to avoid closure staleness
-        const currentParams = new URLSearchParams(window.location.search);
-        currentParams.delete("page");
-        const currentQuery = currentParams.toString();
-
-        // 2. Navigate based on the LATEST known state
         const targetUrl = count === 1 && slug 
             ? routes.singleClassified(slug)
-            : `${routes.inventory}?${currentQuery}`;
+            : `${routes.inventory}?${queryString}`;
             
         router.push(targetUrl);
     };
