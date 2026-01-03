@@ -35,6 +35,7 @@ export const RangeInput = (props: RangeInputProps) => {
 						{...minInput}
 						type="number"
 						onKeyDown={handleKeyDown}
+                        onBlur={onApply}
 						className="h-10 bg-background/50 border-muted-foreground/20 focus-visible:ring-1"
 					/>
 				</div>
@@ -43,6 +44,7 @@ export const RangeInput = (props: RangeInputProps) => {
 						{...maxInput}
 						type="number"
 						onKeyDown={handleKeyDown}
+                        onBlur={onApply}
 						className="h-10 bg-background/50 border-muted-foreground/20 focus-visible:ring-1"
 					/>
 				</div>
