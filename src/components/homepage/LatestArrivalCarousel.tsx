@@ -8,30 +8,21 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
 import CarCard from "../inventory/car-card";
 import SwiperButton from "../shared/swiper-button";
-import HomepageTaxonomyFilters from "@/components/homepage/homepage-filter";
-import { SearchButton } from "@/components/homepage/search-button";
-import { HomepageClearFilters } from "@/components/homepage/homepage-clear-filters";
 import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
 
 interface LatestArrivalCarouselProps {
   cars: CarWithImages[];
   favourites: number[];
-  searchParams?: any;
-  carsCount?: number;
-  emptyMinMax?: any;
 }
 
 export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
-  const { cars, favourites, searchParams = {}, carsCount, emptyMinMax } = props;
+  const { cars, favourites } = props;
   const t = useTranslations("Homepage.Hero");
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [canScroll, setCanScroll] = useState(false);
-  
-  // Local Filter State (Draft Mode)
-  const [filters, setFilters] = useState<Record<string, any>>(searchParams);
 
-      const totalSlides = Object.keys(searchParams).length > 0 ? cars.length + 1 : cars.length;
+      const totalSlides = cars.length;
   
   useEffect(() => {
     if (!swiperInstance) return;
@@ -163,52 +154,6 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
         }}
         className="!h-auto h-full !px-0 !pt-0 !pb-12"
       >
-        {searchParams && (
-          <SwiperSlide className="!h-auto h-full">
-            <div
-              onMouseEnter={handleInteractionStart}
-              onMouseLeave={handleInteractionEnd}
-              onFocusCapture={() => {
-                if (swiperInstance) {
-                  swiperInstance.allowTouchMove = false;
-                  swiperInstance.autoplay.stop();
-                }
-              }}
-              onBlurCapture={() => {
-                if (swiperInstance) {
-                  swiperInstance.allowTouchMove = true;
-                  swiperInstance.autoplay.start();
-                }
-              }}
-              // Prevent any touch event from reaching Swiper
-              onTouchStart={(e) => e.stopPropagation()}
-              onTouchMove={(e) => e.stopPropagation()}
-              onTouchEnd={(e) => e.stopPropagation()}
-              className="group relative h-full w-full overflow-hidden rounded-3xl bg-card shadow-lg flex flex-col hover:border-primary/50 transition-all duration-300 antialiased touch-pan-y"
-              style={{ isolation: 'isolate' }}
-            >
-              <div className="p-4 sm:p-6 flex flex-col h-full">
-                <div className="flex-grow overflow-y-auto px-1 custom-scrollbar scrollbar-hide [&_label]:text-[10px] [&_label]:font-bold [&_label]:uppercase [&_label]:mb-1">
-                  <HomepageTaxonomyFilters
-                    filters={filters}
-                    setFilters={setFilters}
-                    minMaxValue={emptyMinMax}
-                  />
-                </div>
-                <div className="pt-4 mt-auto border-t border-white/5">
-                  <SearchButton 
-                    currentFilters={filters}
-                    initialCount={carsCount ?? 0} 
-                    label={t("discover")} 
-                    size="lg" 
-                    className="w-full font-black uppercase tracking-widest h-12 text-base shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98]" 
-                   />
-                </div>
-              </div>
-            </div>
-          </SwiperSlide>
-        )}
-
         {cars.map((car, index) => (
           <SwiperSlide key={car.id} className="!h-auto h-full">
             <CarCard 

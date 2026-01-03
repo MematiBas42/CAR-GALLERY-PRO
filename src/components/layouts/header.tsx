@@ -15,6 +15,8 @@ import { redis } from "@/lib/redis-store";
 import { prisma } from "@/lib/prisma";
 import { getTranslations } from "next-intl/server";
 
+import { HomepageFilterDialog } from "../homepage/HomepageFilterDialog";
+
 const getLiveFavCount = cache(async (sourceId: string | undefined) => {
   if (!sourceId) return 0;
   try {
@@ -69,6 +71,7 @@ const Header = async () => {
         </div>
       </div>
       <nav className="hidden lg:flex items-center gap-x-2">
+        <HomepageFilterDialog />
         <Button asChild variant="outline" size="icon">
           <Link href={routes.home}>
             <HomeIcon className="w-6 h-6" />
