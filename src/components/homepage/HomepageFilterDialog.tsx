@@ -12,12 +12,11 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Filter, X, Loader2 } from "lucide-react";
+import { Filter, Loader2 } from "lucide-react";
 import { RangeFilter } from "../inventory/RangeFilters";
 import TaxonomyFilters from "../inventory/TaxonomyFilters";
 import { useTranslations } from "next-intl";
 import { useTaxonomy, useClassifiedCount } from "@/hooks/use-taxonomy";
-import { setIsLoading } from "@/hooks/use-loading";
 import { HomepageClearFilters } from "./homepage-clear-filters";
 
 export const HomepageFilterDialog = () => {
@@ -29,15 +28,11 @@ export const HomepageFilterDialog = () => {
   
   const t = useTranslations("Homepage.Hero");
   const tFilters = useTranslations("Filters");
-  const tSidebar = useTranslations("Inventory.sidebar");
   
-  const { ranges: taxonomyRanges, isLoading: isTaxonomyLoading } = useTaxonomy();
+  const { ranges: taxonomyRanges } = useTaxonomy();
 
   // Draft Mode State
   const [filters, setFilters] = useState<Record<string, any>>({});
-
-  // Only show on Homepage
-  if (pathname !== routes.home) return null;
 
   // Sync Draft State with URL when Dialog Opens
   useEffect(() => {
@@ -94,7 +89,8 @@ export const HomepageFilterDialog = () => {
     setFilters(prev => ({ ...prev, ...updates }));
   };
 
-  const filterCount = Object.values(filters).filter(Boolean).length;
+  // Only show on Homepage
+  if (pathname !== routes.home) return null;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
