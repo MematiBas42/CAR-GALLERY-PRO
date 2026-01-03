@@ -50,11 +50,29 @@ export const {
         token.role = user.role;
       }
       
-      // Check 2FA status from Redis
+      // Check 2FA status
+      // STRATEGY: Hybrid "State Promotion"
+      // 1. If the token is ALREADY verified (from a previous Redis check), trust it. (Stateless)
+      // 2. If not, check Redis. (Stateful)
+      // 3. If Redis says yes, WRITE it to the token so we don't need Redis next time.
       if (token.id) {
-        const isVerified = await redis.get(`session_verified:uid-${token.id}`);
-        // If verified in Redis, requireF2A is false. Otherwise true.
-        token.requires2FA = !isVerified;
+        if (token.isVerified) {
+             token.requires2FA = false;
+        } else {
+             try {
+                const isVerifiedInRedis = await redis.get(`session_verified:uid-${token.id}`);
+                if (isVerifiedInRedis) {
+                    token.isVerified = true; // Promote to JWT
+                    token.requires2FA = false;
+                } else {
+                    token.requires2FA = true;
+                }
+             } catch (error) {
+                console.error("Redis 2FA check failed:", error);
+                // Fail-secure: If Redis is down and we aren't verified yet, lock it.
+                token.requires2FA = true; 
+             }
+        }
       }
 
       return token;

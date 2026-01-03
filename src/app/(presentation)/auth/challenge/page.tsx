@@ -1,11 +1,12 @@
+import { auth } from '@/auth'
 import OtpForm from '@/components/auth/otp-form'
 import React from 'react'
 
-const ChallengePage = () => {
-
+const ChallengePage = async () => {
+  const session = await auth();
   
   return (
-    <OtpForm  />
+    <OtpForm email={session?.user?.email || ""} />
   )
 }
 

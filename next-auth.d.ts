@@ -18,5 +18,6 @@ declare module "next-auth/jwt" {
   interface JWT {
     role?: "ADMIN" | "USER";
     requires2FA?: boolean;
+    isVerified?: boolean;
   }
 }

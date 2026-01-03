@@ -87,7 +87,7 @@ export default async function RootLayout({
                 </Suspense>
             </NuqsAdapter>
             <FloatingPhoneButton />
-            <Toaster />
+            <Toaster position="top-center" richColors />
             <Analytics />
         </NextIntlClientProvider>
       </body>

@@ -28,7 +28,7 @@ export default auth((req) => {
   requestHeaders.set('x-next-intl-pathname', nextUrl.pathname);
 
   if (req.auth) {
-    if (req.auth.requires2FA) {
+    if (req.auth.requires2FA && nextUrl.pathname.startsWith("/admin")) {
       if (nextUrl.pathname === routes.challenge) {
         return NextResponse.next();
       }
