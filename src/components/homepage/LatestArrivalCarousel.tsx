@@ -135,7 +135,7 @@ export const LatestArrivalsCarousel = (props: LatestArrivalCarouselProps) => {
         threshold={15} // Slightly higher threshold to prioritize vertical scroll
         noSwiping={true}
         noSwipingClass="no-swipe"
-        noSwipingSelector="input, select, button, .no-swipe, [role='combobox']"
+        noSwipingSelector=".no-swipe"
         onTouchStart={handleInteractionStart}
         onTouchEnd={handleInteractionEnd}
         autoplay={{

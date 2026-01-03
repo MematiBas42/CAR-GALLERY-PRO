@@ -52,8 +52,8 @@ export const RangeFilter = (props: RangeFilterProps) => {
 
 		// Perform batch update to trigger only ONE server-side count/refresh
 		handleChange({
-			[minName]: finalMin || null,
-			[maxName]: finalMax || null,
+			[minName]: finalMin && finalMin !== "" ? finalMin : null,
+			[maxName]: finalMax && finalMax !== "" ? finalMax : null,
 		} as any);
 	};
 

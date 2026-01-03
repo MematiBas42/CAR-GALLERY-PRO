@@ -197,10 +197,17 @@ export const buildClassifiedFilterQuery = (
       } else if (key in rangeFilters) {
         const field = rangeFilters[key as keyof typeof rangeFilters];
         acc[field] = acc[field] || {};
+        
+        let numericValue = Number(value);
+        // If filtering by price, convert dollars to cents
+        if (key === "minPrice" || key === "maxPrice") {
+            numericValue *= 100;
+        }
+
         if (key.startsWith("min")) {
-          acc[field].gte = Number(value);
+          acc[field].gte = numericValue;
         } else if (key.startsWith("max")) {
-          acc[field].lte = Number(value);
+          acc[field].lte = numericValue;
         }
       }
 
